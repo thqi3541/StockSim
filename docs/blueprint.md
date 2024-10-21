@@ -30,4 +30,8 @@ so that I can make informed decisions about when to buy or sell stocks.
 
 ## Proposed API for the Project
 
+- [Alpha Advantage](https://www.alphavantage.co/)
+
 ## Scheduled Meeting Times + Mode of Communication
+
+- Every Monday 5pm-6pm in person
