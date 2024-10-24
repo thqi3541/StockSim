@@ -28,6 +28,44 @@ so that I can make informed decisions about when to buy or sell stocks.
 
 ## Proposed Entities for the Domain
 
+1. User
+   - Instance Variables:
+     - String username
+     - String email [OPTIONAL] 
+     - String password 
+     - double balance [cash?] //not need?
+     - Cash cash
+     - Portfolio portfolio
+   - Methods:
+     - getUsername()
+     - getCash() { return this.cash }
+     - getPortfolio() { return this.portfolio }
+
+2. NetAsset [Abstract Class]
+   - Instance Variables:
+     - double totalBalance
+   - Methods:
+     - getValue(User user) { return this.totalBalance = User1.getCash().getValue() + User1.getPortfolio().getValue() }
+
+2. Portfolio [Extends Asset]
+   - Instance Variables:
+     - List<Stock> stocks
+   - Methods:
+     - getValue() { [some calculation] }
+
+3. Cash [Extends Asset]
+   - Instance Variables:
+     - double cash
+   - Methods:
+     - getValue() { return this.cash }
+
+3. Stock
+   - Instance Variables:
+     - String ticker
+   - Methods:
+     - cost(priceOfLastTrade)
+
+
 ## Proposed API for the Project
 
 - [Alpha Vantage](https://www.alphavantage.co/)
