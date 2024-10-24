@@ -30,40 +30,40 @@ so that I can make informed decisions about when to buy or sell stocks.
 
 1. User
    - Instance Variables:
-     - String username
-     - String email [OPTIONAL] 
-     - String password 
-     - double balance [cash?] //not need?
-     - Cash cash
-     - Portfolio portfolio
+     - `String username`
+     - `String email` [OPTIONAL]
+     - `String password`
+     - `double balance` [cash?] // not need?
+     - `Cash cash`
+     - `Portfolio portfolio`
    - Methods:
-     - getUsername()
-     - getCash() { return this.cash }
-     - getPortfolio() { return this.portfolio }
+     - `getUsername()`
+     - `getCash() { return this.cash }`
+     - `getPortfolio() { return this.portfolio }`
 
 2. NetAsset [Abstract Class]
    - Instance Variables:
-     - double totalBalance
+     - `double totalBalance`
    - Methods:
-     - getValue(User user) { return this.totalBalance = User1.getCash().getValue() + User1.getPortfolio().getValue() }
+     - `getValue(User user) { return this.totalBalance = User1.getCash().getValue() + User1.getPortfolio().getValue() }`
 
-2. Portfolio [Extends Asset]
+3. Portfolio [Extends Asset]
    - Instance Variables:
-     - List<Stock> stocks
+     - `List<Stock> stocks`
    - Methods:
-     - getValue() { [some calculation] }
+     - `getValue() { [some calculation] }`
 
-3. Cash [Extends Asset]
+4. Cash [Extends Asset]
    - Instance Variables:
-     - double cash
+     - `double cash`
    - Methods:
-     - getValue() { return this.cash }
+     - `getValue() { return this.cash }`
 
-3. Stock
+5. Stock
    - Instance Variables:
-     - String ticker
+     - `String ticker`
    - Methods:
-     - cost(priceOfLastTrade)
+     - `cost(priceOfLastTrade)`
 
 
 ## Proposed API for the Project
