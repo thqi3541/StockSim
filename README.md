@@ -1,2 +1,5 @@
 # StockSim
-Angel Chen - AngelChen09
+
+## Members
+- Angel Chen - AngelChen09
+- Yue Cheng - ivorkchan
