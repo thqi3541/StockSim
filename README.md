@@ -47,15 +47,19 @@ Use Case 3: Execute Trades
 Use Case 4: View Portfolio(Position)
 - User Story: Check
   
-Use Case 5: Game Over Monitor
+Use Case 5: View Transaction History
 - User Story:
 
 Below are some other use cases we might consider implementing:
-Use Case 6: Password Reset
-Use Case 7: Email Verification
+
+Use Case 6: View Ranking
+
+Use Case 7: Password Reset + Email Verification
   We can either use JavaMail API
+  
 Use Case 8: Feedback / Support
   Users can report technical issues
+  
 Use Case 9: Minimum number of trades
 
 Ask TA/prof where to store data
