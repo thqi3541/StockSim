@@ -60,6 +60,7 @@ Use Case 4: View Portfolio(Position)
 Use Case 5: View Transaction History
 - User Story:
   - As a trader, I want to access my transaction history and check bought and/or sold price, quantity, current market price, profit/loss per share, total profit/loss, and [Optional for sold stocks] current mp profit/loss per share, current mp total profit/loss
+  - As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantity.
 - Implementation:
   - Interactor: UserHistory
   - Controller: HistoryController
