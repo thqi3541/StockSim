@@ -47,7 +47,7 @@ Use Case 3: Execute Trades
 Use Case 4: View Portfolio(Position)
 - User Story:
   - As a trader, I want to access my current stock holdings and check bought price, quantity, current market price, profit/loss per share, and total profit/loss so I can make better trades.
-  - As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantity so I can view certain trades.
+  - [Optional] As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantity so I can view certain trades.
 - Implementation:
   - Interactor: UserPortfolio
   - Controller: PortfolioController
@@ -60,7 +60,7 @@ Use Case 4: View Portfolio(Position)
 Use Case 5: View Transaction History
 - User Story:
   - As a trader, I want to access my transaction history and check bought and/or sold price, quantity, current market price, profit/loss per share, total profit/loss, and [Optional for sold stocks] current mp profit/loss per share, current mp total profit/loss so I can learn from past trades. 
-  - As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantity so I can view certain trades.
+  - [Optional] As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantity so I can view certain trades.
 - Implementation:
   - Interactor: UserHistory
   - Controller: HistoryController
