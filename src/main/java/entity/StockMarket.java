@@ -2,18 +2,19 @@ package entity;
 
 import data_access.IStockDataAccess;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class StockMarket {
 
     // A thread-safe Singleton instance
     private static volatile StockMarket instance = null;
 
-    private Map<String, Stock> stocks = new HashMap<>();
+    private final Map<String, Stock> stocks = new HashMap<>();
     private IStockDataAccess dataAccess;
 
-    private StockMarket() {}
+    private StockMarket() {
+    }
 
     public static StockMarket Instance() {
         if (instance == null) {
