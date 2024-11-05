@@ -7,7 +7,7 @@ public class User {
     private final String username;
     private final String password;
     private final double balance;
-    private Position portfolio;
+    private Portfolio portfolio;
     private TransactionHistory transactionHistory;
 
     // TODO: difficulty level?
@@ -27,7 +27,7 @@ public class User {
         return balance;
     }
 
-    public Position getPortfolio() {
+    public Portfolio getPortfolio() {
         return portfolio;
     }
 
