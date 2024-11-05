@@ -23,10 +23,10 @@ public class Portfolio {
                 if (price > 0) {
                     this.stocks.put(ticker, new UserStock(stock, price, quantity));
                 } else {
-                    System.err.println("Invalid price for stock: " + ticker);
+                    throw new IllegalArgumentException("Invalid price for stock: " + ticker);
                 }
             } else {
-                System.err.println("No stock found for ticker: " + ticker);
+                throw new IllegalArgumentException("No stock found for ticker: " + ticker);
             }
         });
     }
