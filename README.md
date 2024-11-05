@@ -1,5 +1,19 @@
 # StockSim
 
+- [StockSim](#stocksim)
+  - [Members](#members)
+  - [User Stories and Use Cases](#user-stories-and-use-cases)
+    - [Use Case 1: User Registration](#use-case-1-user-registration)
+    - [Use Case 2: User Login](#use-case-2-user-login)
+    - [Use Case 3: Execute Trades](#use-case-3-execute-trades)
+    - [Use Case 4: View Portfolio (Position)](#use-case-4-view-portfolio-position)
+    - [Use Case 5: View Transaction History](#use-case-5-view-transaction-history)
+    - [Use Case 6: View Ranking](#use-case-6-view-ranking)
+    - [Use Case 7: Password Reset + Email Verification](#use-case-7-password-reset--email-verification)
+    - [Use Case 8: Feedback / Support](#use-case-8-feedback--support)
+    - [Use Case 9: Minimum number of trades](#use-case-9-minimum-number-of-trades)
+  - [Prototype](#prototype)
+
 ## Members
 
 | Name          | GitHub Username                                         |
@@ -88,3 +102,19 @@ We can either use JavaMail API.
 Users can report technical issues.
 
 ### Use Case 9: Minimum number of trades
+
+## Prototype
+
+[View in Figma](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=0%3A1&node-id=1-3&node-type=canvas&viewport=112%2C276%2C0.21&t=eb23w81NZYAyvS8O-1&scaling=contain&content-scaling=fixed&starting-point-node-id=1%3A3)
+
+**Log in page**
+
+![Log in](/assets/images/01.png)
+
+**Logged in page**
+
+![Logged in](/assets/images/02.png)
+
+**Trade page**
+
+![Trade](/assets/images/03.png)
