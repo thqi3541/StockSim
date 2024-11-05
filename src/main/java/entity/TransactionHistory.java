@@ -12,6 +12,10 @@ public class TransactionHistory {
         this.transactions = new ArrayList<>();
     }
 
+    public TransactionHistory(List<Transaction> existingTransactions) {
+        this.transactions = new ArrayList<>(existingTransactions);
+    }
+
     public void addTransaction(Transaction transaction) {
         this.transactions.add(transaction);
     }

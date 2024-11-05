@@ -1,22 +1,22 @@
 package entity;
 
-import javax.swing.text.Position;
-
 public class User {
 
     private final String username;
     private final String password;
     private final double balance;
-    private Portfolio portfolio;
-    private TransactionHistory transactionHistory;
+    private final Portfolio portfolio;
+    private final TransactionHistory transactionHistory;
 
     // TODO: difficulty level?
     // TODO: password need to be encrypted?
 
-    public User(String username, String password, double balance) {
+    public User(String username, String password, double balance, Portfolio portfolio, TransactionHistory transactionHistory) {
         this.username = username;
         this.password = password;
         this.balance = balance;
+        this.portfolio = portfolio;
+        this.transactionHistory = transactionHistory;
     }
 
     public String getUsername() {

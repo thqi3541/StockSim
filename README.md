@@ -106,15 +106,3 @@ Users can report technical issues.
 ## Prototype
 
 [View in Figma](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=0%3A1&node-id=1-3&node-type=canvas&viewport=112%2C276%2C0.21&t=eb23w81NZYAyvS8O-1&scaling=contain&content-scaling=fixed&starting-point-node-id=1%3A3)
-
-**Log in page**
-
-![Log in](/assets/images/01.png)
-
-**Logged in page**
-
-![Logged in](/assets/images/02.png)
-
-**Trade page**
-
-![Trade](/assets/images/03.png)
