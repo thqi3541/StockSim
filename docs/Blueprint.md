@@ -15,25 +15,26 @@ The Trading Simulation App aims to provide users with a practice environment to 
 ## User Stories
 
 1. As a new user,
-I want to register an account and receive an initial virtual balance,
-so that I can start practicing trades in the simulation environment.
+   I want to register an account and receive an initial virtual balance,
+   so that I can start practicing trades in the simulation environment.
 
 2. As a user participating in the trading simulation,
-I want to buy or sell stocks through the trading window,
-so that I can practice trading strategies and see how market fluctuations impact my portfolio.
+   I want to buy or sell stocks through the trading window,
+   so that I can practice trading strategies and see how market fluctuations impact my portfolio.
 
 3. As a user with active trades,
-I want to monitor my portfolio in real time,
-so that I can make informed decisions about when to buy or sell stocks.
+   I want to monitor my portfolio in real time,
+   so that I can make informed decisions about when to buy or sell stocks.
 
 ## Proposed Entities for the Domain
 
 1. User
+
    - Instance Variables:
      - `String username`
-     - `String email` [OPTIONAL]
+     - `String email`
      - `String password`
-     - `double balance` [cash?] // not need?
+     - `double balance`
      - `Cash cash`
      - `Portfolio portfolio`
    - Methods:
@@ -42,18 +43,21 @@ so that I can make informed decisions about when to buy or sell stocks.
      - `getPortfolio() { return this.portfolio }`
 
 2. NetAsset [Abstract Class]
+
    - Instance Variables:
      - `double totalBalance`
    - Methods:
      - `getValue(User user) { return this.totalBalance = User1.getCash().getValue() + User1.getPortfolio().getValue() }`
 
 3. Portfolio [Extends Asset]
+
    - Instance Variables:
      - `List<Stock> stocks`
    - Methods:
      - `getValue() { [some calculation] }`
 
 4. Cash [Extends Asset]
+
    - Instance Variables:
      - `double cash`
    - Methods:
@@ -64,7 +68,6 @@ so that I can make informed decisions about when to buy or sell stocks.
      - `String ticker`
    - Methods:
      - `cost(priceOfLastTrade)`
-
 
 ## Proposed API for the Project
 

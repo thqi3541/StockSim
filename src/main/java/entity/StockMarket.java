@@ -15,7 +15,8 @@ public class StockMarket {
     private IStockDataAccess dataAccess;
     private boolean initialized = false;
 
-    private StockMarket() {}
+    private StockMarket() {
+    }
 
     public static StockMarket Instance() {
         if (instance == null) {
