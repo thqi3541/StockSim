@@ -13,3 +13,4 @@
 - Added Use Cases 4 and 5.
 - Implemented entities for stock and stock market.
 - Implemented entities for user, portfolio, and transaction.
+- Add synchronization checks and null checks in StockMarket

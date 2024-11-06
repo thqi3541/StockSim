@@ -2,16 +2,18 @@ package entity;
 
 import data_access.IStockDataAccess;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StockMarket {
 
     // A thread-safe Singleton instance
     private static volatile StockMarket instance = null;
 
-    private final Map<String, Stock> stocks = new HashMap<>();
+    private final Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private IStockDataAccess dataAccess;
+    private boolean initialized = false;
 
     private StockMarket() {
     }
@@ -28,24 +30,28 @@ public class StockMarket {
     }
 
     // initialize the stock market with data access object
-    public void initialize(IStockDataAccess dataAccess) {
+    public synchronized void initialize(IStockDataAccess dataAccess) {
+        if (this.initialized) {
+            throw new IllegalStateException("StockMarket is already initialized.");
+        }
         this.dataAccess = dataAccess;
+        this.initialized = true;
     }
 
-    public Stock getStock(String ticker) {
-        return stocks.get(ticker);
+    public Optional<Stock> getStock(String ticker) {
+        return Optional.ofNullable(stocks.get(ticker));
     }
 
     public void updateStockPrices() {
+        if (dataAccess == null) {
+            throw new IllegalStateException("StockMarket has not been initialized with a data access object.");
+        }
         Map<String, Double> prices = dataAccess.getStockPrices();
         for (Map.Entry<String, Double> entry : prices.entrySet()) {
             String ticker = entry.getKey();
             double price = entry.getValue();
-            if (stocks.containsKey(ticker)) {
-                stocks.get(ticker).updatePrice(price);
-            } else {
-                stocks.put(ticker, new Stock(ticker, price));
-            }
+            // create a new map entry if stock does not exist, and then update price.
+            stocks.computeIfAbsent(ticker, k -> new Stock(ticker, price)).updatePrice(price);
         }
     }
 }
