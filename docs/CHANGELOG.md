@@ -13,6 +13,7 @@
 - Added Use Cases 4 and 5.
 - Implemented entities for stock and stock market.
 - Implemented entities for user, portfolio, and transaction.
-- Add synchronization checks and null checks in StockMarket
-- Modify `Portfolio` constructor to match the optional return value of `StockMarket.getStock`
+- Added synchronization checks and null checks in `StockMarket`
+- Modified `Portfolio` constructor to match the optional return value of `StockMarket.getStock`
+- Modified `Portfolio` constructor to take `Map<String, UserStock>` as parameter and remove synchronization with `StockMarket` data
 - Updated `UserStock.java`: Rename `PurchasePrice` to `cost`
