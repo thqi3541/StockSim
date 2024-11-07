@@ -11,7 +11,12 @@ public class Portfolio {
         this.stocks = new HashMap<>();
     }
 
-    // Constructor that initializes Portfolio with a map of tickers and their respective quantities
+    /** Constructor for Portfolio class.
+     * Portfolio contains all the stocks a user is holding: tickers -> quantities(position).
+     * @param stocks a map of tickers and the number of shares the user holds.     *
+     */
+    // TODO: change the input to Map<String, Stock/UserStock> stocks
+    // 异常处理有待商榷
     public Portfolio(Map<String, Integer> stocks) {
         this.stocks = new HashMap<>();
         StockMarket stockMarket = StockMarket.Instance();
@@ -38,7 +43,7 @@ public class Portfolio {
         double result = 0.0;
 
         for (UserStock stock : stocks.values()) {
-            result += stock.getCurrentTotalPrice();
+            result += stock.getCurrentMarketValue();
         }
 
         return result;

@@ -6,6 +6,12 @@ public class UserStock {
     private double cost;
     private int quantity;
 
+    /**
+     * Constructor for UserStock class.
+     * @param stock: the stock object
+     * @param cost: the cost basis of the stock
+     * @param quantity: the quantity of the stock
+     */
     public UserStock(Stock stock, double cost, int quantity) {
         this.stock = stock;
         this.cost = cost;
