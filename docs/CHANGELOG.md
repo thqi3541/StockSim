@@ -15,3 +15,4 @@
 - Implemented entities for user, portfolio, and transaction.
 - Add synchronization checks and null checks in StockMarket
 - Modify `Portfolio` constructor to match the optional return value of `StockMarket.getStock`
+- Updated `UserStock.java`: Rename `PurchasePrice` to `cost`
