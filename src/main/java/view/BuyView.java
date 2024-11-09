@@ -13,27 +13,17 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import interface_adapter.execute_buy.ExecuteBuyViewModel;
+import interface_adapter.execute_buy.ExecuteBuyController;
 /**
  * The View for when the user is on the trade screen.
  */
-public class BuyView extends JPanel implements PropertyChangeListener {
+public class BuyView {
 
     private final String viewName = "buy";
-    private final ExecuteBuyViewModel executeViewModel;
     private ExecuteBuyController executeBuyController;
 
-    public BuyView(ExecuteBuyViewModel executeBuyViewModel) {
-        this.executeBuyViewModel = executeBuyViewModel;
-        this.executeBuyViewModel.addPropertyChangeListener(this);
+    final JLabel title = new JLabel("Buy Stocks Here");
 
-        final JLabel title = new JLabel("Buy Stocks Here");
-        title.setAlighmentX(Component.CENTER_ALIGNMENT);
-
-
-    }
-
-    public String getViewName() {
-        return viewName;
-    }
 
 }

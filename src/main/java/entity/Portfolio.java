@@ -2,6 +2,7 @@ package entity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Portfolio {
 
@@ -29,9 +30,13 @@ public class Portfolio {
         return result;
     }
 
-    public int getStockQuantity(String ticker) {
-        return stocks.get(ticker).getQuantity();
+    public Optional<UserStock> getUserStock(String ticker) { return Optional.ofNullable(stocks.get(ticker));  }
+
+    public void addStock(UserStock userStock) {
+        stocks.put(userStock.getStock().getTicker(), userStock);
     }
 
-    // TODO: add a method to update portfolio
+    public void removeStock(UserStock userStock) {
+        stocks.remove(userStock.getStock().getTicker());
+    }
 }

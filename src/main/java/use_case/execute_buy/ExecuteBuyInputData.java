@@ -1,5 +1,7 @@
 package use_case.execute_buy;
 
+import entity.*;
+
 public class ExecuteBuyInputData {
 
     private final User user;

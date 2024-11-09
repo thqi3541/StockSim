@@ -7,7 +7,7 @@ public interface ExecuteBuyInputBoundary {
 
     /**
      * Execute the Buy Use Case.
-     * @param input the intput data for this use case
+     * @param input the input data for this use case
      */
     void execute(ExecuteBuyInputData input);
 
