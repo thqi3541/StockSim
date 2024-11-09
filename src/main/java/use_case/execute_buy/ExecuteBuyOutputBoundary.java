@@ -9,4 +9,6 @@ public interface ExecuteBuyOutputBoundary {
     void prepareInsufficientFundsView();
 
     void prepareStockNotFoundView();
+
+    void prepareValidationErrorView();
 }

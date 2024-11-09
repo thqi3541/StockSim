@@ -28,10 +28,10 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
     }
 
     @Override
-    public void prepareInvalidInputView() {
-        viewModel.firePropertyChanged("invalidInput");
-    }
+    public void prepareStockNotFoundView() { viewModel.firePropertyChanged("stockNotFound"); }
 
     @Override
-    public void prepareStockNotFoundView() { viewModel.firePropertyChanged("stockNotFound"); }
+    public void prepareValidationErrorView() { viewModel.firePropertyChanged("validationError"); }
+
+
 }
