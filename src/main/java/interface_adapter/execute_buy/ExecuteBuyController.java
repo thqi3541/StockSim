@@ -2,6 +2,7 @@ package interface_adapter.execute_buy;
 
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInputData;
+import use_case.session.SessionManager;
 
 public class ExecuteBuyController {
 
@@ -11,7 +12,7 @@ public class ExecuteBuyController {
         this.interactor = interactor;
     }
 
-    public void execute(String ticker, String quantity) {
-        interactor.execute(new ExecuteBuyInputData(ticker, Integer.parseInt(quantity)));
+    public void execute(ExecuteBuyInputData data) {
+        interactor.execute(data);
     }
 }

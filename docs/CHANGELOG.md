@@ -4,6 +4,8 @@
 
 ### New Features:
 
+- Added `SessionManager` to handle user validation.
+
 ### Bug Fixes:
 
 ### Internal Changes:
