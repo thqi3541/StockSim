@@ -13,15 +13,10 @@ import java.util.Date;
  */
 public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
-    private final SessionService sessionService;
     private final ExecuteBuyDataAccess dataAccess;
     private final ExecuteBuyOutputBoundary outputPresenter;
 
-    public ExecuteBuyInteractor(SessionService sessionService,
-                                ExecuteBuyDataAccess dataAccess,
-                                ExecuteBuyOutputBoundary outputBoundary
-    ) {
-        this.sessionService = sessionService;
+    public ExecuteBuyInteractor(ExecuteBuyDataAccess dataAccess, ExecuteBuyOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
     }
