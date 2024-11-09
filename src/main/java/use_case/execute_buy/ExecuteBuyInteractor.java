@@ -17,7 +17,10 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     private final ExecuteBuyDataAccess dataAccess;
     private final ExecuteBuyOutputBoundary outputPresenter;
 
-    public ExecuteBuyInteractor(SessionService sessionService, ExecuteBuyDataAccess dataAccess, ExecuteBuyOutputBoundary outputBoundary) {
+    public ExecuteBuyInteractor(SessionService sessionService,
+                                ExecuteBuyDataAccess dataAccess,
+                                ExecuteBuyOutputBoundary outputBoundary
+    ) {
         this.sessionService = sessionService;
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
@@ -28,13 +31,12 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         User currentUser = dataAccess.getUser(sessionService.getCurrentUsername());
         String ticker = data.ticker();
         int quantity = data.quantity();
-        Stock stock = StockMarket.Instance().getStock(ticker).orElse(null);
 
         try {
+            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
             if (currentUser.getBalance() >= getTotalCost(ticker, quantity)) {
                 // then the transaction is valid
                 Date timestamp = new Date();
-                assert stock != null;
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, stock.getPrice());
                 // call portfolio to add the transaction
                 currentUser.getPortfolio().addTransaction(transaction);
@@ -48,6 +50,8 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             outputPresenter.prepareInvalidInputView();
         } catch (InsufficientFundsException e) {
             outputPresenter.prepareInsufficientFundsView();
+        } catch (StockNotFoundException e) {
+            outputPresenter.prepareStockNotFoundView();
         }
     }
 
@@ -67,9 +71,9 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     }
 
     // custom exceptions
-    static class InvalidInputException extends Exception {
-    }
+    static class InvalidInputException extends Exception {}
 
-    static class InsufficientFundsException extends Exception {
-    }
+    static class InsufficientFundsException extends Exception {}
+
+    static class StockNotFoundException extends Exception {}
 }

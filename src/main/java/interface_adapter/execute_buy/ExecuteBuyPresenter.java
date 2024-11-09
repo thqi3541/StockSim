@@ -33,7 +33,5 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
     }
 
     @Override
-    public void prepareInsufficientStocksView() {
-        viewModel.firePropertyChanged("insufficientStocks");
-    }
+    public void prepareStockNotFoundView() { viewModel.firePropertyChanged("stockNotFound"); }
 }

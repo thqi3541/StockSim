@@ -10,5 +10,5 @@ public interface ExecuteBuyOutputBoundary {
 
     void prepareInvalidInputView();
 
-    void prepareInsufficientStocksView();
+    void prepareStockNotFoundView();
 }
