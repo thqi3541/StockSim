@@ -32,10 +32,13 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
         try {
             if (currentUser.getBalance() >= getTotalCost(ticker, quantity)) {
+                // then the transaction is valid
                 Date timestamp = new Date();
                 assert stock != null;
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, stock.getPrice());
+                // call portfolio to add the transaction
                 currentUser.getPortfolio().addTransaction(transaction);
+                // TODO: return some fancy output data
                 final ExecuteBuyOutputData outputData = new ExecuteBuyOutputData("wow.");
                 outputPresenter.prepareSuccessView(outputData);
             } else {

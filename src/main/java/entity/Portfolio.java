@@ -47,6 +47,9 @@ public class Portfolio {
     public void addTransaction(Transaction transaction) {
         // TODO: placeholder function, the logic should be changed
         // after transaction is created, portfolio accept it and call the user stock to handle it
+        // 1. check if the stock is in the portfolio
+        // 2. if not, create a new user stock
+        // 3. if is, update the quantity and check if it is 0 and remove it
         UserStock userStock = stocks.get(transaction.ticker());
         if (userStock == null) {
             return;

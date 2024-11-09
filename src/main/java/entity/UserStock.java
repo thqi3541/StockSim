@@ -67,6 +67,8 @@ public class UserStock {
         this.quantity += quantity;
     }
 
+    // TODO: placeholder method, name and logic should change
+    // if the portfolio asks user stock to change, then handle the update
     public void addTransaction(Transaction transaction) {
         updateUserStock(transaction.price(), transaction.quantity());
     }
