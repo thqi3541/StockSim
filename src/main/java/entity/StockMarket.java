@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class StockMarket {
 
-    // A thread-safe Singleton instance
+    // thread-safe Singleton instance
     private static volatile StockMarket instance = null;
 
     private final Map<String, Stock> stocks = new ConcurrentHashMap<>();
@@ -50,7 +50,7 @@ public class StockMarket {
         for (Map.Entry<String, Double> entry : prices.entrySet()) {
             String ticker = entry.getKey();
             double price = entry.getValue();
-            // create a new map entry if stock does not exist, and then update price.
+            // create a new map entry if stock does not exist, and then update price
             stocks.computeIfAbsent(ticker, k -> new Stock(ticker, price)).updatePrice(price);
         }
     }
