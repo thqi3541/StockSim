@@ -8,7 +8,5 @@ public interface ExecuteBuyOutputBoundary {
 
     void prepareInsufficientFundsView();
 
-    void prepareInvalidInputView();
-
     void prepareStockNotFoundView();
 }

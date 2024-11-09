@@ -23,13 +23,13 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
     @Override
     public void execute(ExecuteBuyInputData data) {
-        User currentUser = dataAccess.getUser(sessionService.getCurrentUsername());
+        User currentUser = dataAccess.getUser("user name");
         String ticker = data.ticker();
         int quantity = data.quantity();
 
         try {
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
-            if (currentUser.getBalance() >= getTotalCost(ticker, quantity)) {
+            if (currentUser.getBalance() >= stock.getPrice() * quantity) {
                 // then the transaction is valid
                 Date timestamp = new Date();
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, stock.getPrice());
@@ -41,8 +41,6 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             } else {
                 throw new InsufficientFundsException();
             }
-        } catch (InvalidInputException e) {
-            outputPresenter.prepareInvalidInputView();
         } catch (InsufficientFundsException e) {
             outputPresenter.prepareInsufficientFundsView();
         } catch (StockNotFoundException e) {
@@ -50,24 +48,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         }
     }
 
-    /**
-     * Calculate the total cost of buying a stock.
-     *
-     * @param ticker:   The stock ticker.
-     * @param quantity: The quantity of stock to buy.
-     * @return The total cost of buying the stock.
-     */
-    private double getTotalCost(String ticker, int quantity) throws InvalidInputException {
-        // TODO: we assume the ticker is only alphabetic, but in real world, it can be alphanumeric
-        // TODO: handle invalid input like indentation, space, etc.
-        return StockMarket.Instance().getStock(ticker).map(
-                stock -> stock.getPrice() * quantity
-        ).orElseThrow(InvalidInputException::new);
-    }
-
     // custom exceptions
-    static class InvalidInputException extends Exception {}
-
     static class InsufficientFundsException extends Exception {}
 
     static class StockNotFoundException extends Exception {}
