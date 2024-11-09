@@ -1,13 +1,7 @@
 package app;
 
-import interface_adapter.execute_buy.ExecuteBuyViewModel;
-import use_case.execute_buy.ExecuteBuyInteractor;
-
-import java.awt.CardLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -17,14 +11,15 @@ import javax.swing.WindowConstants;
  */
 public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
-    private final CardLayout cardLayout = new CardLayout();
 
     public AppBuilder() {
+        CardLayout cardLayout = new CardLayout();
         cardPanel.setLayout(cardLayout);
     }
 
     /**
      * Adds the Buy View to the application.
+     *
      * @return this builder
      */
     public AppBuilder addBuyView() {

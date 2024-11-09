@@ -12,8 +12,10 @@ public class Portfolio {
         this.stocks = new HashMap<>();
     }
 
-    /** Constructor for Portfolio class.
+    /**
+     * Constructor for Portfolio class.
      * Portfolio contains all the stocks a user is holding: tickers -> quantities(position).
+     *
      * @param stocks a map of tickers and the stocks user hold
      */
     public Portfolio(Map<String, UserStock> stocks) {
@@ -30,7 +32,9 @@ public class Portfolio {
         return result;
     }
 
-    public Optional<UserStock> getUserStock(String ticker) { return Optional.ofNullable(stocks.get(ticker));  }
+    public Optional<UserStock> getUserStock(String ticker) {
+        return Optional.ofNullable(stocks.get(ticker));
+    }
 
     public void addStock(UserStock userStock) {
         stocks.put(userStock.getStock().getTicker(), userStock);
@@ -38,5 +42,15 @@ public class Portfolio {
 
     public void removeStock(UserStock userStock) {
         stocks.remove(userStock.getStock().getTicker());
+    }
+
+    public void addTransaction(Transaction transaction) {
+        // TODO: placeholder function, the logic should be changed
+        // after transaction is created, portfolio accept it and call the user stock to handle it
+        UserStock userStock = stocks.get(transaction.ticker());
+        if (userStock == null) {
+            return;
+        }
+        userStock.addTransaction(transaction);
     }
 }
