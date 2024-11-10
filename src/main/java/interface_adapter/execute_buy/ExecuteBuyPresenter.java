@@ -23,8 +23,13 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
     }
 
     @Override
+    public void prepareStockNotFoundView() {
+
+    }
+
+    @Override
     public void prepareValidationErrorView() {
-        viewModel.firePropertyChanged("validationError");
+
     }
 
 
