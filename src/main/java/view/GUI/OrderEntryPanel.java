@@ -8,7 +8,7 @@ public class OrderEntryPanel extends JPanel {
     private JButton buyButton, sellButton;
 
     public OrderEntryPanel() {
-        setLayout(new GridLayout(3, 2));  // 三行两列的网格布局
+        setLayout(new GridLayout(3, 2));
         add(new JLabel("Ticker:"));
         tickerField = new JTextField();
         add(tickerField);

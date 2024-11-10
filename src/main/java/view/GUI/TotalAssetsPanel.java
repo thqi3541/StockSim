@@ -12,7 +12,7 @@ public class TotalAssetsPanel extends JPanel {
     private JLabel stockLabel;
 
     public TotalAssetsPanel() {
-        // 设置面板布局为垂直布局（两行一列）
+
         // TODO: BoxLayout改成BorderLayout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

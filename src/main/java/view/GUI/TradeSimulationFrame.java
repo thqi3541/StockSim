@@ -9,16 +9,14 @@ public class TradeSimulationFrame extends JFrame {
     public TradeSimulationFrame() {
         setTitle("Trade Simulation");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // setLayout(new BorderLayout(10, 10));
         setSize(1000, 800);
 
-        JPanel mainPanel = new JPanel();  // 创建一个 JPanel 作为主容器
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));  // 设置布局为垂直 BoxLayout
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        // 设置标题
         JLabel titleLabel = new JLabel("Trade Simulation", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));  // 设置字体为Arial，加粗，24号
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));  // 设置边距
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
         JPanel upperLeftPanel = new JPanel(new BorderLayout());
         upperLeftPanel.add(new MarketSearchPanel(), BorderLayout.NORTH);

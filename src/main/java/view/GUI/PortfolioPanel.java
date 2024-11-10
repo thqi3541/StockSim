@@ -3,21 +3,6 @@ package view.GUI;
 import javax.swing.*;
 import java.awt.*;
 
-/**public class PortfolioPanel extends JPanel {
-    private JTable table;
-    private JScrollPane scrollPane;
-
-    public PortfolioPanel() {
-        setLayout(new BorderLayout());
-        String[] columnNames = {"Ticker", "Average Cost", "Quantity", "Market Price", "Profit/Loss"};
-        Object[][] data = {};  // 填入数据
-
-        table = new JTable(data, columnNames);
-        scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
-    }
-}
-    */
 
 public class PortfolioPanel extends JPanel {
     private JTable table;
