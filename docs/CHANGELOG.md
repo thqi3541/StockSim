@@ -21,3 +21,4 @@
 - Updated `UserStock.java`: Rename `PurchasePrice` to `cost`
 - Implement framework for execute buy use case
 - Implement framework for view component update
+- Added GUI for buy use case
