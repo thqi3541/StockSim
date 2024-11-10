@@ -1,4 +1,4 @@
-package use_case.session;
+package session;
 
 import java.util.HashMap;
 import java.util.Map;

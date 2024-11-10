@@ -4,7 +4,7 @@ import entity.Stock;
 import entity.StockMarket;
 import entity.Transaction;
 import entity.User;
-import use_case.session.SessionManager;
+import session.SessionManager;
 
 import java.util.Date;
 
@@ -39,8 +39,10 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, stock.getPrice(), "buy");
                 // call portfolio to add the transaction
                 currentUser.getPortfolio().addTransaction(transaction);
-                // TODO: return some fancy output data
-                final ExecuteBuyOutputData outputData = new ExecuteBuyOutputData("wow.");
+                final ExecuteBuyOutputData outputData = new ExecuteBuyOutputData(
+                        currentUser.getBalance(),
+                        currentUser.getPortfolio()
+                );
                 outputPresenter.prepareSuccessView(outputData);
             } else {
                 throw new InsufficientFundsException();
