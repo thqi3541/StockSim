@@ -3,13 +3,10 @@ package view.GUI;
 import javax.swing.*;
 import java.awt.*;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class TotalAssetsPanel extends JPanel {
-    private JLabel totalAssetsLabel;
-    private JLabel cashLabel;
-    private JLabel stockLabel;
+    private final JLabel totalAssetsLabel;
+    private final JLabel cashLabel;
+    private final JLabel stockLabel;
 
     public TotalAssetsPanel() {
 
