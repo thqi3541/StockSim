@@ -55,9 +55,12 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     }
 
     // custom exceptions
-    static class InsufficientFundsException extends Exception {}
+    static class InsufficientFundsException extends Exception {
+    }
 
-    static class StockNotFoundException extends Exception {}
+    static class StockNotFoundException extends Exception {
+    }
 
-    static class ValidationException extends Exception {}
+    static class ValidationException extends Exception {
+    }
 }
