@@ -26,6 +26,7 @@ public class SessionManager {
     }
 
     // create a new session and return the unique credential key
+    // TODO: consider hashing the credential key
     public String createSession(String username) {
         String credentialKey = UUID.randomUUID().toString();
         sessions.put(credentialKey, username);

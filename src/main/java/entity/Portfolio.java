@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * A class representing a user's portfolio
+ */
 public class Portfolio {
 
     private final Map<String, UserStock> stocks;
@@ -12,10 +15,20 @@ public class Portfolio {
         this.stocks = new HashMap<>();
     }
 
+    /**
+     * Create a portfolio with the given stocks
+     *
+     * @param stocks the stocks in the portfolio
+     */
     public Portfolio(Map<String, UserStock> stocks) {
         this.stocks = new HashMap<>(stocks);
     }
 
+    /**
+     * Get the value of all stocks in the portfolio
+     *
+     * @return the value of all stocks in the portfolio
+     */
     public double getTotalValue() {
         double result = 0.0;
 

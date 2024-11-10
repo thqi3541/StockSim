@@ -26,7 +26,7 @@ class ExecuteBuyInteractorTest {
     }
 
     @Test
-    void successTest() throws ExecuteBuyDataAccessInterface.ValidationException {
+    void successTest() throws ExecuteBuyDataAccessInterface.ValidationError {
         User mockUser = userFactory.create("testUser", "password");
         double initialBalance = 10000.0;
         mockUser.addBalance(initialBalance);
@@ -72,7 +72,7 @@ class ExecuteBuyInteractorTest {
     }
 
     @Test
-    void insufficientBalanceTest() throws ExecuteBuyDataAccessInterface.ValidationException {
+    void insufficientBalanceTest() throws ExecuteBuyDataAccessInterface.ValidationError {
         // prepare user with insufficient balance
         User mockUser = userFactory.create("testUser", "password");
         mockUser.addBalance(500.0);
@@ -99,7 +99,7 @@ class ExecuteBuyInteractorTest {
             interactor.execute(inputData);
 
             // check if unique view is prepared
-            verify(outputPresenter).prepareInsufficientFundsView();
+            verify(outputPresenter).prepareInsufficientBalanceErrorView();
 
             // check if user portfolio does not contain the stock
             assertFalse(mockUser.getPortfolio().getUserStock("XXXX").isPresent(), "Portfolio should not contain the ticker XXXX due to insufficient funds");

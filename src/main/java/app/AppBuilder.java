@@ -1,37 +1,52 @@
 package app;
 
+import view.gui_components.TradeSimulationFrame;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * The AppBuilder class is responsible for putting together the pieces of
- * out CA architecture; piece by piece.
- * <p/>
- * This is done by adding each View and then adding related Use Cases.
+ * A builder class for the application
  */
 public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
+    private final CardLayout cardLayout = new CardLayout();
 
     public AppBuilder() {
-        CardLayout cardLayout = new CardLayout();
         cardPanel.setLayout(cardLayout);
     }
 
     /**
-     * Adds the Buy View to the application.
+     * Add the trade simulation to the application
      *
-     * @return this builder
+     * @return the builder
      */
-    public AppBuilder addBuyView() {
+    public AppBuilder addTradeSimulation() {
+        TradeSimulationFrame tradeSimulationFrame = new TradeSimulationFrame();
+
+        JPanel tradePanel = (JPanel) tradeSimulationFrame.getContentPane().getComponent(0);
+        cardPanel.add(tradePanel, "TradeSimulation");
+
         return this;
     }
 
+    /**
+     * Build the application
+     *
+     * @return the application
+     */
     public JFrame build() {
-        final JFrame application = new JFrame("Buy Example");
+        final JFrame application = new JFrame("Application");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+        application.setSize(1000, 800);
         application.add(cardPanel);
-
         return application;
+    }
+
+    /**
+     * Show the trade simulation
+     */
+    public void showTradeSimulation() {
+        cardLayout.show(cardPanel, "TradeSimulation");
     }
 }

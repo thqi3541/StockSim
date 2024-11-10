@@ -2,13 +2,13 @@ package view;
 
 import view.view_event.ViewEvent;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ViewBase {
 
-    private String name;
-    private List<IComponent> components;
+    private final String name;
+    private final List<IComponent> components;
 
     public ViewBase(String name) {
         this.name = name;
@@ -23,7 +23,9 @@ public abstract class ViewBase {
         this.components.remove(component);
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     // broadcast event to components
     public void receiveViewEvent(ViewEvent event) {

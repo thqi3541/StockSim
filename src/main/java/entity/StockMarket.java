@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * A singleton class representing the stock market
+ */
 public class StockMarket {
 
     // thread-safe Singleton instance
@@ -42,6 +45,9 @@ public class StockMarket {
         return Optional.ofNullable(stocks.get(ticker));
     }
 
+    /**
+     * Update the stock prices in the stock market
+     */
     public void updateStockPrices() {
         if (dataAccess == null) {
             throw new IllegalStateException("StockMarket has not been initialized with a data access object.");
