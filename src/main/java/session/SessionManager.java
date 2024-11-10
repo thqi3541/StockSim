@@ -1,5 +1,4 @@
-// TODO: session should be under src/main/java/session/SessionManager.java
-package use_case.session;
+package session;
 
 import java.util.HashMap;
 import java.util.Map;

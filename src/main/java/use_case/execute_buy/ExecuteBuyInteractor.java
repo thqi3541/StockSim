@@ -1,5 +1,6 @@
 package use_case.execute_buy;
 
+import session.SessionManager;
 import entity.*;
 
 import java.util.Date;
@@ -37,6 +38,13 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 // Add transaction
                 Date timestamp = new Date();
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, stock.getPrice(), "buy");
+                // call portfolio to add the transaction
+                currentUser.getPortfolio().addTransaction(transaction);
+                final ExecuteBuyOutputData outputData = new ExecuteBuyOutputData(
+                        currentUser.getBalance(),
+                        currentUser.getPortfolio()
+                );
+                outputPresenter.prepareSuccessView(outputData);
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
                 // Prepare success view
