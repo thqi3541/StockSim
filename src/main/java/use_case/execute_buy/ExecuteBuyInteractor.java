@@ -51,11 +51,11 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 throw new InsufficientBalanceError();
             }
         } catch (ExecuteBuyDataAccessInterface.ValidationError e) {
-            handleException("Validation failed.");
+            outputPresenter.prepareValidationErrorView();
         } catch (StockNotFoundError e) {
-            handleException("Stock not found.");
+            outputPresenter.prepareStockNotFoundErrorView();
         } catch (InsufficientBalanceError e) {
-            handleException("Insufficient balance.");
+            outputPresenter.prepareInsufficientBalanceErrorView();
         }
     }
 
@@ -69,20 +69,6 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                         existingStock -> existingStock.updateUserStock(stock.getPrice(), quantity),
                         () -> portfolio.addStock(new UserStock(stock, stock.getPrice(), quantity))
                 );
-    }
-
-    private void handleException(String message) {
-        switch (message) {
-            case "Validation failed.":
-                outputPresenter.prepareValidationErrorView();
-                break;
-            case "Stock not found.":
-                outputPresenter.prepareStockNotFoundErrorView();
-                break;
-            case "Insufficient balance.":
-                outputPresenter.prepareInsufficientBalanceErrorView();
-                break;
-        }
     }
 
     static class InsufficientBalanceError extends Exception {
