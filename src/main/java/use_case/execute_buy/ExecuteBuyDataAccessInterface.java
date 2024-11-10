@@ -3,9 +3,9 @@ package use_case.execute_buy;
 import entity.User;
 
 public interface ExecuteBuyDataAccessInterface {
-    User getUserWithCredential(String credential) throws ValidationError;
+    User getUserWithCredential(String credential) throws ValidationException;
 
     // TODO: define this exception elsewhere
-    class ValidationError extends Exception {
+    class ValidationException extends Exception {
     }
 }

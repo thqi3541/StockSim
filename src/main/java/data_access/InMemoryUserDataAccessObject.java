@@ -10,9 +10,9 @@ import use_case.execute_buy.ExecuteBuyDataAccessInterface;
  */
 public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface {
     @Override
-    public User getUserWithCredential(String credential) throws ValidationError {
+    public User getUserWithCredential(String credential) throws ValidationException {
         SessionManager sessionManager = SessionManager.Instance();
-        String username = sessionManager.getUsername(credential).orElseThrow(ValidationError::new);
+        String username = sessionManager.getUsername(credential).orElseThrow(ValidationException::new);
         return getUserWithUsername(username);
     }
 

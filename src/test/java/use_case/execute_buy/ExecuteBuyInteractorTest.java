@@ -26,7 +26,7 @@ class ExecuteBuyInteractorTest {
     }
 
     @Test
-    void successTest() throws ExecuteBuyDataAccessInterface.ValidationError {
+    void successTest() throws ExecuteBuyDataAccessInterface.ValidationException {
         User mockUser = userFactory.create("testUser", "password");
         double initialBalance = 10000.0;
         mockUser.addBalance(initialBalance);
@@ -72,7 +72,7 @@ class ExecuteBuyInteractorTest {
     }
 
     @Test
-    void insufficientBalanceTest() throws ExecuteBuyDataAccessInterface.ValidationError {
+    void insufficientBalanceTest() throws ExecuteBuyDataAccessInterface.ValidationException {
         // prepare user with insufficient balance
         User mockUser = userFactory.create("testUser", "password");
         mockUser.addBalance(500.0);

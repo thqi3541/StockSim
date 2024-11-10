@@ -50,7 +50,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             } else {
                 throw new InsufficientBalanceError();
             }
-        } catch (ExecuteBuyDataAccessInterface.ValidationError e) {
+        } catch (ExecuteBuyDataAccessInterface.ValidationException e) {
             outputPresenter.prepareValidationErrorView();
         } catch (StockNotFoundError e) {
             outputPresenter.prepareStockNotFoundErrorView();
