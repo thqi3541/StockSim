@@ -20,3 +20,4 @@
 - Modified `Portfolio` constructor to take `Map<String, UserStock>` as parameter and remove synchronization with `StockMarket` data
 - Updated `UserStock.java`: Rename `PurchasePrice` to `cost`
 - Implement framework for execute buy use case
+- Added GUI for buy use case
