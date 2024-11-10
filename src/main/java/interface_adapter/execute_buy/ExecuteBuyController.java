@@ -2,7 +2,6 @@ package interface_adapter.execute_buy;
 
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInputData;
-import use_case.session.SessionManager;
 
 public class ExecuteBuyController {
 

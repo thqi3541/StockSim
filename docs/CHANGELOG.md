@@ -4,7 +4,8 @@
 
 ### New Features:
 
-- Added `SessionManager` to handle user validation.
+- Added `SessionManager` to handle user validation
+- Added GUI components for trading page
 
 ### Bug Fixes:
 
