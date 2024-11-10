@@ -19,5 +19,6 @@
 - Modified `Portfolio` constructor to match the optional return value of `StockMarket.getStock`
 - Modified `Portfolio` constructor to take `Map<String, UserStock>` as parameter and remove synchronization with `StockMarket` data
 - Updated `UserStock.java`: Rename `PurchasePrice` to `cost`
-- Implement framework for execute buy use case
+- Implemented framework for execute buy use case
 - Added GUI for buy use case
+- Implemented buy use case interactor and set up unit tests

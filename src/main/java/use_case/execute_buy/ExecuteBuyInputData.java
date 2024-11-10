@@ -4,4 +4,5 @@ public record ExecuteBuyInputData(
         String credential,
         String ticker,
         int quantity
-) {}
+) {
+}

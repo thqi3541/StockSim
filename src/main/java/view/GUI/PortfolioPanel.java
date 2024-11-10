@@ -5,7 +5,7 @@ import java.awt.*;
 
 
 public class PortfolioPanel extends JPanel {
-    private JTable table;
+    private final JTable table;
 
     public PortfolioPanel() {
         setLayout(new BorderLayout(5, 5));
