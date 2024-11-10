@@ -28,7 +28,8 @@ class ExecuteBuyInteractorTest {
     @Test
     void successTest() throws ExecuteBuyDataAccessInterface.ValidationException {
         User mockUser = userFactory.create("testUser", "password");
-        mockUser.addBalance(10000.0);
+        double initialBalance = 10000.0;
+        mockUser.addBalance(initialBalance);
 
         when(dataAccess.getUserWithCredential("00000")).thenReturn(mockUser);
 
@@ -43,7 +44,8 @@ class ExecuteBuyInteractorTest {
             when(stockMarketMock.getStock("XXXX")).thenReturn(Optional.of(stock));
 
             // prepare input data
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("00000", "XXXX", 100);
+            int quantityToBuy = 100;
+            ExecuteBuyInputData inputData = new ExecuteBuyInputData("00000", "XXXX", quantityToBuy);
 
             // create interactor
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
@@ -58,6 +60,11 @@ class ExecuteBuyInteractorTest {
             // check if user stock quantity is correct
             UserStock userStock = mockUser.getPortfolio().getUserStock("XXXX").get();
             assertEquals(100, userStock.getQuantity(), "Portfolio should contain 100 shares of XXXX");
+
+            // check if user balance is correctly reduced
+            double totalPurchaseCost = stock.getPrice() * quantityToBuy;
+            double expectedBalance = initialBalance - totalPurchaseCost;
+            assertEquals(expectedBalance, mockUser.getBalance(), "User balance should be correctly reduced after purchase.");
         }
     }
 
