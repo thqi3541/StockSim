@@ -1,6 +1,10 @@
 package use_case.execute_buy;
 
+import entity.Portfolio;
+
 public record ExecuteBuyOutputData(
-        String message
+        double newBalance,
+        Portfolio newPortfolio
 ) {
 }
+
