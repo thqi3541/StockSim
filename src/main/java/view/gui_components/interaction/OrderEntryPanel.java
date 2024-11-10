@@ -24,6 +24,7 @@ public class OrderEntryPanel extends JPanel {
 
         titleLabel = new JLabel("Order Entry");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setVerticalAlignment(SwingConstants.CENTER);
         titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
 

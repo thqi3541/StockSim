@@ -32,8 +32,8 @@ public class MarketSearchPanel extends JPanel {
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
 
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
-        searchField = new JTextField(12);
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        searchField = new JTextField(8);
         searchField.setToolTipText("Ticker for the stock");
         searchButton = new JButton("Search");
 
