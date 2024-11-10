@@ -52,7 +52,10 @@ class ExecuteBuyInteractorTest {
             interactor.execute(inputData);
 
             // check if message is prepared
-            verify(outputPresenter).prepareSuccessView(new ExecuteBuyOutputData("Purchase successful."));
+            verify(outputPresenter).prepareSuccessView(new ExecuteBuyOutputData(
+                    mockUser.getBalance(),
+                    mockUser.getPortfolio()
+            ));
 
             // check if user portfolio contains the stock
             assertTrue(mockUser.getPortfolio().getUserStock("XXXX").isPresent(), "Portfolio should contain the ticker XXXX");
