@@ -24,3 +24,4 @@
 - Implemented framework for execute buy use case
 - Added GUI for buy use case
 - Implemented buy use case interactor and set up unit tests
+- Removed outdated classes and methods that are incompatible with current codebase version

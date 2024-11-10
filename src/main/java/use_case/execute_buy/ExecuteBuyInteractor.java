@@ -38,17 +38,16 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 // Add transaction
                 Date timestamp = new Date();
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, stock.getPrice(), "buy");
-                // call portfolio to add the transaction
-                currentUser.getPortfolio().addTransaction(transaction);
-                final ExecuteBuyOutputData outputData = new ExecuteBuyOutputData(
-                        currentUser.getBalance(),
-                        currentUser.getPortfolio()
-                );
-                outputPresenter.prepareSuccessView(outputData);
+
+                // add transaction to transaction history
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
-                // Prepare success view
-                outputPresenter.prepareSuccessView(new ExecuteBuyOutputData("Purchase successful."));
+                // prepare success view
+                outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
+                        currentUser.getBalance(),
+                        currentUser.getPortfolio()
+                ));
+
             } else {
                 throw new InsufficientBalanceError();
             }
