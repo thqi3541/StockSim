@@ -131,7 +131,7 @@ Below are some other use cases we might consider implementing:
 - Steps:
    - The user navigates to the "Feedback/Support" section in the application.
    - The user submits a report ticket or feedback message, which can include details like issue types, description, and optional attachments (Iteractor to Controller)
-   - FeedbackController validates the user's meesage content (checks for empty fields or inappropriate content). If valid, FeedbackController saves the feedback or support request in the database for tracking and management and sends an acknowledgment email to the user.
+   - FeedbackController validates the user's meesage content (check for empty fields or inappropriate content). If valid, FeedbackController saves the feedback or support request in the database for tracking and management and sends an acknowledgment email to the user.
    - FeedbackView confirms the successful submission and provides the user with a ticket ID for future reference if needed.
 
 ### Use Case 11: Minimum number of trades
