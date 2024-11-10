@@ -5,4 +5,6 @@ import entity.Portfolio;
 public record ExecuteBuyOutputData(
         double newBalance,
         Portfolio newPortfolio
-) {}
+) {
+}
+
