@@ -8,10 +8,10 @@
     - [Use Case 3: Execute Trades](#use-case-3-execute-trades)
     - [Use Case 4: View Portfolio (Position)](#use-case-4-view-portfolio-position)
     - [Use Case 5: View Transaction History](#use-case-5-view-transaction-history)
-    - [Use Case 8: View Ranking](#use-case-8-view-ranking)
-    - [Use Case 9: Password Reset + Email Verification](#use-case-9-password-reset--email-verification)
-    - [Use Case 10: Feedback / Support](#use-case-10-feedback--support)
-    - [Use Case 11: Minimum number of trades](#use-case-11-minimum-number-of-trades)
+    - [Use Case 6: View Ranking](#use-case-6-view-ranking)
+    - [Use Case 7: Password Reset + Email Verification](#use-case-7-password-reset--email-verification)
+    - [Use Case 8: Feedback / Support](#use-case-8-feedback--support)
+    - [Use Case 9: Minimum number of trades](#use-case-9-minimum-number-of-trades)
   - [Prototype](#prototype)
 
 ## Members
@@ -91,7 +91,7 @@
 
 Below are some other use cases we might consider implementing:
 
-### Use Case 8: View Ranking
+### Use Case 6: View Ranking
 
 - User Story:
   - As a trader, I want to view my rank compared to other traders based on portfolio performance (portfolio values) so I can assess my relative performance and strive to improve.
@@ -104,7 +104,7 @@ Below are some other use cases we might consider implementing:
   - The RankingController retrieves the current user's current rank by comparing their portfolio's total values with other user and formats all user's assets and portfolio's total values by ranking them.
   - The RankingController returns the ranking data to the RankingView, and provide optional details, like viewing the top 3 or top 5 users by listing them in descending order.
 
-### Use Case 9: Password Reset + Email Verification
+### Use Case 7: Password Reset + Email Verification
 
 - User Story:
   - As a trader, I want to reset my password securely using email verification, so I can reobtain access to my account if I forgot my password.
@@ -120,7 +120,7 @@ Below are some other use cases we might consider implementing:
   - The PasswordResetController validates the new password (checking if contains minimum number of characters, length or uppercases requirements) and updates it in the system.
   - The PasswordResetView confirms the successful password reset and directs the user back to login screen.
 
-### Use Case 10: Feedback / Support
+### Use Case 8: Feedback / Support
 
 - User Story:
   - As a user, I want to report technical issues or provide feedback, so I can communicate with the support team if I encounter issues or have any suggestions.
@@ -134,7 +134,7 @@ Below are some other use cases we might consider implementing:
   - FeedbackController validates the user's meesage content (check for empty fields or inappropriate content). If valid, FeedbackController saves the feedback or support request in the database for tracking and management and sends an acknowledgment email to the user.
   - FeedbackView confirms the successful submission and provides the user with a ticket ID for future reference if needed.
 
-### Use Case 11: Minimum number of trades
+### Use Case 9: Minimum number of trades
 
 - User Story:
   - As a trader, I want to be aware of my total number of trades to ensure I meet the minimum trading requirements for account benefits or eligibility for promotions.
