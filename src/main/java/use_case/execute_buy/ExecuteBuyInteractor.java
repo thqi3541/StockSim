@@ -26,7 +26,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             // Get stock and quantity
             String ticker = data.ticker();
             int quantity = data.quantity();
-            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundError::new);
+            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             double totalCost = stock.getPrice() * quantity;
             if (isBalanceSufficient(currentUser, totalCost)) {
@@ -48,14 +48,14 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                         currentUser.getPortfolio()
                 ));
             } else {
-                throw new InsufficientBalanceError();
+                throw new InsufficientBalanceException();
             }
         } catch (ExecuteBuyDataAccessInterface.ValidationException e) {
-            outputPresenter.prepareValidationErrorView();
-        } catch (StockNotFoundError e) {
-            outputPresenter.prepareStockNotFoundErrorView();
-        } catch (InsufficientBalanceError e) {
-            outputPresenter.prepareInsufficientBalanceErrorView();
+            outputPresenter.prepareValidationExceptionView();
+        } catch (StockNotFoundException e) {
+            outputPresenter.prepareStockNotFoundExceptionView();
+        } catch (InsufficientBalanceException e) {
+            outputPresenter.prepareInsufficientBalanceExceptionView();
         }
     }
 
@@ -71,9 +71,9 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 );
     }
 
-    static class InsufficientBalanceError extends Exception {
+    static class InsufficientBalanceException extends Exception {
     }
 
-    static class StockNotFoundError extends Exception {
+    static class StockNotFoundException extends Exception {
     }
 }

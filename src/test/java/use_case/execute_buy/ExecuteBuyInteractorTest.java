@@ -99,7 +99,7 @@ class ExecuteBuyInteractorTest {
             interactor.execute(inputData);
 
             // check if unique view is prepared
-            verify(outputPresenter).prepareInsufficientBalanceErrorView();
+            verify(outputPresenter).prepareInsufficientBalanceExceptionView();
 
             // check if user portfolio does not contain the stock
             assertFalse(mockUser.getPortfolio().getUserStock("XXXX").isPresent(), "Portfolio should not contain the ticker XXXX due to insufficient funds");
