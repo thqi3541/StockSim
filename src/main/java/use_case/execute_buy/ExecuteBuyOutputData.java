@@ -7,4 +7,3 @@ public record ExecuteBuyOutputData(
         Portfolio newPortfolio
 ) {
 }
-

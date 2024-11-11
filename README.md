@@ -28,6 +28,8 @@
 
 ## User Stories and Use Cases
 
+> **WARNING**: Add log out case.
+
 ### Use Case 1: User Registration
 
 User Story: As a new user, I want to create a new account, so that I can log into the app and start trading. To sign up/register, I need to choose a userID and a password.

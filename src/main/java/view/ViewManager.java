@@ -5,6 +5,7 @@ import view.view_event.ViewEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: consider how to switch between views
 public class ViewManager {
 
     // singleton instance

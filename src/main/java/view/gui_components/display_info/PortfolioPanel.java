@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+// TODO: update regularly
 public class PortfolioPanel extends JPanel {
     private final JLabel titleLabel;
     private final JTable portfolioTable;
@@ -55,7 +56,7 @@ public class PortfolioPanel extends JPanel {
         };
 
         Object[][] data = {
-                {"NVDA", "NVIDIA Corporation", "138.27", "2", "158.03", "19.76", "39.52"},
+                {"NVDA", "NVIDIA Corporation", "138.27", "2", "158.03", "19.76", "40.00"},
                 {"TSLA", "Tesla, Inc.", "110.23", "12", "101.85", "-8.38", "-100.56"},
                 {"INTC", "Intel Corporation", "XX.XX", "X", "XX.XX", "XX.XX", "XX.XX"},
         };
