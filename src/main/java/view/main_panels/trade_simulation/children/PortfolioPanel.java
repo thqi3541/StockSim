@@ -1,33 +1,32 @@
-package view.gui_components.display_info;
+package view.main_panels.trade_simulation.children;
+
+import view.IComponent;
+import view.view_event.EventType;
+import view.view_event.ViewEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.EnumSet;
 
-// TODO: update regularly
-public class PortfolioPanel extends JPanel {
+public class PortfolioPanel extends JPanel implements IComponent {
     private final JLabel titleLabel;
     private final JTable portfolioTable;
 
     public PortfolioPanel() {
-
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(600, 300));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-
 
         titleLabel = new JLabel("Portfolio");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-
         add(headerPanel, BorderLayout.NORTH);
-
 
         DefaultTableModel model = getDefaultTableModel();
 
@@ -38,14 +37,10 @@ public class PortfolioPanel extends JPanel {
         portfolioTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         portfolioTable.getTableHeader().setForeground(Color.GRAY);
 
-
         portfolioTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         JScrollPane tableScrollPane = new JScrollPane(portfolioTable);
 
-
         tableScrollPane.setPreferredSize(new Dimension(600, 200));
-
-
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
@@ -60,7 +55,6 @@ public class PortfolioPanel extends JPanel {
                 {"TSLA", "Tesla, Inc.", "110.23", "12", "101.85", "-8.38", "-100.56"},
                 {"INTC", "Intel Corporation", "XX.XX", "X", "XX.XX", "XX.XX", "XX.XX"},
         };
-
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames) {
             @Override
@@ -80,5 +74,16 @@ public class PortfolioPanel extends JPanel {
         frame.add(portfolioPanel);
 
         frame.setVisible(true);
+    }
+
+    @Override
+    public void receiveViewEvent(ViewEvent event) {
+        // The logic for handling UpdatePortfolioEvent will be implemented later.
+    }
+
+    @Override
+    public EnumSet<EventType> getSupportedEventTypes() {
+        // PortfolioPanel only supports UPDATE_PORTFOLIO events
+        return EnumSet.of(EventType.UPDATE_ASSET);
     }
 }

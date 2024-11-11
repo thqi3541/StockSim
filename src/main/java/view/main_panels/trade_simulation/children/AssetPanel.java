@@ -1,12 +1,15 @@
-package view.gui_components.display_info;
+package view.main_panels.trade_simulation.children;
 
 import org.json.JSONObject;
+import view.IComponent;
+import view.view_event.EventType;
+import view.view_event.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.EnumSet;
 
-// TODO: update regularly
-public class AssetPanel extends JPanel {
+public class AssetPanel extends JPanel implements IComponent {
     private final JLabel totalAssetsLabel;
     private final JLabel cashLabel;
     private final JLabel stockLabel;
@@ -47,15 +50,14 @@ public class AssetPanel extends JPanel {
         setPreferredSize(null);
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Asset Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
+    @Override
+    public void receiveViewEvent(ViewEvent event) {
+        // The logic for handling UpdatePortfolioEvent will be implemented later.
+    }
 
-        AssetPanel assetPanel = new AssetPanel();
-        frame.add(assetPanel);
-
-        frame.pack();
-        frame.setVisible(true);
+    @Override
+    public EnumSet<EventType> getSupportedEventTypes() {
+        // AssetPanel supports UPDATE_PORTFOLIO events
+        return EnumSet.of(EventType.UPDATE_ASSET);
     }
 }

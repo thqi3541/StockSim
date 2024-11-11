@@ -1,36 +1,35 @@
-package view.gui_components.interaction;
+package view.main_panels.trade_simulation.children;
+
+import view.IComponent;
+import view.view_event.EventType;
+import view.view_event.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.EnumSet;
 
-public class MarketSearchPanel extends JPanel {
+public class MarketSearchPanel extends JPanel implements IComponent {
     private final JTextField searchField;
     private final JButton searchButton;
     private final JLabel titleLabel;
     private final JTable stockTable;
 
     public MarketSearchPanel() {
-
         setLayout(new BorderLayout());
-
 
         setMinimumSize(new Dimension(400, 300));
         setPreferredSize(new Dimension(600, 400));
 
-
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
 
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-
 
         titleLabel = new JLabel("Market Search");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
         titleLabel.setVerticalAlignment(SwingConstants.CENTER);
         headerPanel.add(titleLabel, BorderLayout.WEST);
-
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         searchField = new JTextField(8);
@@ -40,12 +39,9 @@ public class MarketSearchPanel extends JPanel {
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
-
         headerPanel.add(searchPanel, BorderLayout.EAST);
 
-
         add(headerPanel, BorderLayout.NORTH);
-
 
         JPanel bodyPanel = new JPanel(new BorderLayout());
         stockTable = new JTable();
@@ -64,5 +60,16 @@ public class MarketSearchPanel extends JPanel {
         frame.add(marketSearchPanel);
 
         frame.setVisible(true);
+    }
+
+    @Override
+    public void receiveViewEvent(ViewEvent event) {
+        // Currently no events are processed by MarketSearchPanel, but this is set up for future use.
+    }
+
+    @Override
+    public EnumSet<EventType> getSupportedEventTypes() {
+        // MarketSearchPanel currently supports no event types
+        return EnumSet.noneOf(EventType.class);
     }
 }
