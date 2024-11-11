@@ -1,7 +1,7 @@
 package view;
 
-import view.view_event.EventType;
-import view.view_event.ViewEvent;
+import view.view_events.EventType;
+import view.view_events.ViewEvent;
 
 import java.util.EnumSet;
 

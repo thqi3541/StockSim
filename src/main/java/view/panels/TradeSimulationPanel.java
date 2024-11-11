@@ -1,14 +1,11 @@
-package view.main_panels.trade_simulation;
+package view.panels;
 
 import view.IComponent;
 import view.ViewManager;
-import view.main_panels.trade_simulation.children.AssetPanel;
-import view.main_panels.trade_simulation.children.MarketSearchPanel;
-import view.main_panels.trade_simulation.children.OrderEntryPanel;
-import view.main_panels.trade_simulation.children.PortfolioPanel;
-import view.view_event.EventType;
-import view.view_event.SwitchPanelEvent;
-import view.view_event.ViewEvent;
+import view.components.ButtonComponent;
+import view.view_events.EventType;
+import view.view_events.SwitchPanelEvent;
+import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +17,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Header with Title and Back Button
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -27,14 +25,12 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        // "Back to Home" button with listener
-        JButton backButton = new JButton("Back to Home");
+        // Back to Home button
+        ButtonComponent backButton = new ButtonComponent("Back to Home");
         backButton.setPreferredSize(new Dimension(120, 30));
-        backButton.setBackground(Color.LIGHT_GRAY);
-        backButton.setForeground(Color.BLACK);
-
-        // Action listener to broadcast a SwitchPanelEvent to switch to DashboardPanel
-        backButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
+        backButton.addActionListener(e ->
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel"))
+        );
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttonPanel.add(backButton);
@@ -42,6 +38,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         add(headerPanel);
 
+        // Upper Panel with Market Search and Order Entry
         JPanel upperPanel = new JPanel(new GridBagLayout());
         upperPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -71,6 +68,9 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
         gbc.weightx = 1.0;
         upperPanel.add(searchAndOrderPanel, gbc);
 
+        add(upperPanel);
+
+        // Lower Panel with Asset and Portfolio Details
         JPanel assetAndPortfolioPanel = new JPanel();
         assetAndPortfolioPanel.setLayout(new BoxLayout(assetAndPortfolioPanel, BoxLayout.Y_AXIS));
         assetAndPortfolioPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -78,7 +78,6 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
         assetAndPortfolioPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         assetAndPortfolioPanel.add(new PortfolioPanel());
 
-        add(upperPanel);
         add(assetAndPortfolioPanel);
     }
 

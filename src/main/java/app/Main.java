@@ -9,7 +9,8 @@ public class Main {
         // Register and set up all panels
         appBuilder.addAuthenticationPanels()
                 .addDashboardPanel("User123", 1000.0, 5000.0)
-                .addTradeSimulationPanel();
+                .addTradeSimulationPanel()
+                .addDialogComponent();
 
         // Build the application frame and show LogInPanel by default
         JFrame application = appBuilder.build();

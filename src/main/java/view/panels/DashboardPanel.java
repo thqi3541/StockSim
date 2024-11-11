@@ -1,10 +1,11 @@
-package view.main_panels.dashboard;
+package view.panels;
 
 import view.IComponent;
 import view.ViewManager;
-import view.view_event.EventType;
-import view.view_event.SwitchPanelEvent;
-import view.view_event.ViewEvent;
+import view.components.ButtonComponent;
+import view.view_events.EventType;
+import view.view_events.SwitchPanelEvent;
+import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +13,8 @@ import java.util.EnumSet;
 
 public class DashboardPanel extends JPanel implements IComponent {
     private final JLabel welcomeLabel;
-    private final JButton tradeButton;
-    private final JButton logoutButton;
+    private final ButtonComponent tradeButton;
+    private final ButtonComponent logoutButton;
 
     public DashboardPanel(String username, double cash, double position) {
         setLayout(new BorderLayout());
@@ -21,6 +22,7 @@ public class DashboardPanel extends JPanel implements IComponent {
         setPreferredSize(new Dimension(500, 400));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Welcome Label
         welcomeLabel = new JLabel("<html>Welcome back, " + username + ".<br>You have $" + cash + " in cash and $" + position + " in position.</html>");
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
         welcomeLabel.setVerticalAlignment(SwingConstants.TOP);
@@ -28,34 +30,24 @@ public class DashboardPanel extends JPanel implements IComponent {
         add(welcomeLabel, BorderLayout.NORTH);
 
         // Trading Management Panel
-        JPanel tradingManagementPanel = new JPanel();
-        tradingManagementPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel tradingManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         tradingManagementPanel.setBorder(BorderFactory.createTitledBorder("Trading management"));
 
-        tradeButton = new JButton("Trade");
-        tradeButton.setBackground(Color.LIGHT_GRAY);
-        tradeButton.setForeground(Color.BLACK);
-
-        // Action listener to switch to TradeSimulationPanel
+        // Trade Button with ActionListener for switching panels
+        tradeButton = new ButtonComponent("Trade");
         tradeButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
-
         tradingManagementPanel.add(tradeButton);
 
         // Account Management Panel
-        JPanel accountManagementPanel = new JPanel();
-        accountManagementPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel accountManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         accountManagementPanel.setBorder(BorderFactory.createTitledBorder("Account management"));
 
-        logoutButton = new JButton("Log out");
-        logoutButton.setBackground(Color.LIGHT_GRAY);
-        logoutButton.setForeground(Color.BLACK);
-
-        // Action listener to switch back to LogInPanel
+        // Logout Button with ActionListener for switching to LogInPanel
+        logoutButton = new ButtonComponent("Log out");
         logoutButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel")));
-
         accountManagementPanel.add(logoutButton);
 
-        // Combine Panels
+        // Combine Panels into a Management Panel
         JPanel managementPanel = new JPanel();
         managementPanel.setLayout(new BoxLayout(managementPanel, BoxLayout.Y_AXIS));
         managementPanel.add(tradingManagementPanel);

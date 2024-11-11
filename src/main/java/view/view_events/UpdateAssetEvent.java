@@ -1,4 +1,4 @@
-package view.view_event;
+package view.view_events;
 
 import entity.Portfolio;
 

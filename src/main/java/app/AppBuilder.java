@@ -1,21 +1,31 @@
 package app;
 
+import data_access.InMemoryStockDataAccessObject;
+import data_access.InMemoryUserDataAccessObject;
+import interface_adapter.execute_buy.ExecuteBuyController;
+import interface_adapter.execute_buy.ExecuteBuyPresenter;
+import use_case.execute_buy.ExecuteBuyInputBoundary;
+import use_case.execute_buy.ExecuteBuyInteractor;
 import view.ViewManager;
-import view.main_panels.authentication.LogInPanel;
-import view.main_panels.authentication.SignUpPanel;
-import view.main_panels.dashboard.DashboardPanel;
-import view.main_panels.trade_simulation.TradeSimulationPanel;
+import view.components.DialogComponent;
+import view.panels.DashboardPanel;
+import view.panels.LogInPanel;
+import view.panels.SignUpPanel;
+import view.panels.TradeSimulationPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * A builder class for the application.
- * This class now works as a setup utility to add panels to ViewManager and build the main application frame.
+ * This class now works as a setup utility to add panels to ViewManager, build the main application frame, and manage the ServiceLocator.
  */
 public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
+
+    // Internal ServiceLocator for managing controllers, interactors, DAOs, and presenters
+    private final ServiceLocator serviceLocator = new ServiceLocator();
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -75,8 +85,14 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addDialogComponent() {
+        DialogComponent dialogComponent = new DialogComponent();
+        ViewManager.Instance().registerComponent(dialogComponent);
+        return this;
+    }
+
     /**
-     * Build the application frame and show the LogInPanel initially
+     * Build the application frame, initialize controllers, interactors, DAOs, and presenters, and register them in ServiceLocator.
      *
      * @return the application frame
      */
@@ -85,6 +101,25 @@ public class AppBuilder {
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         application.setSize(1000, 800);
         application.add(cardPanel);
+
+        //Step 0: Initialize and register InMemoryStockDataAccessObject (DAO)
+        InMemoryStockDataAccessObject stockDataAccessObject = new InMemoryStockDataAccessObject();
+        ServiceLocator.registerService(InMemoryStockDataAccessObject.class, stockDataAccessObject);
+
+        // Step 1: Initialize and register InMemoryUserDataAccessObject (DAO)
+        InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
+        ServiceLocator.registerService(InMemoryUserDataAccessObject.class, userDataAccessObject);
+
+        // Step 2: Initialize and register ExecuteBuyPresenter (OutputBoundary)
+        ExecuteBuyPresenter executeBuyPresenter = new ExecuteBuyPresenter();
+        ServiceLocator.registerService(ExecuteBuyPresenter.class, executeBuyPresenter);
+
+        // Step 3: Initialize ExecuteBuyInteractor with DAO and Presenter
+        ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDataAccessObject, executeBuyPresenter);
+
+        // Step 4: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
+        ExecuteBuyController executeBuyController = new ExecuteBuyController(executeBuyInteractor);
+        ServiceLocator.registerService(ExecuteBuyController.class, executeBuyController);
 
         // Set ViewManager to control panel switching with cardLayout and cardPanel
         ViewManager.Instance().setCardLayout(cardLayout, cardPanel);
