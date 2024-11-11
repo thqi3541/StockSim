@@ -21,7 +21,8 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     public void execute(ExecuteBuyInputData data) {
         try {
             // Get current user
-            User currentUser = dataAccess.getUserWithCredential(data.credential());
+            String credential = "dummy";
+            User currentUser = dataAccess.getUserWithCredential(credential);
 
             // Get stock and quantity
             String ticker = data.ticker();

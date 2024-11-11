@@ -11,7 +11,8 @@ public class ExecuteBuyController {
         this.interactor = interactor;
     }
 
-    public void execute(ExecuteBuyInputData data) {
+    public void execute(String ticker, String quantity) {
+        final ExecuteBuyInputData data = new ExecuteBuyInputData(ticker, Integer.parseInt(quantity));
         interactor.execute(data);
     }
 }
