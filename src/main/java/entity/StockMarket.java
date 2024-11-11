@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A singleton class representing the stock market
  */
+// TODO: lock the stock market when updating stock prices
 public class StockMarket {
 
     // thread-safe Singleton instance
@@ -48,6 +49,7 @@ public class StockMarket {
     /**
      * Update the stock prices in the stock market
      */
+    // TODO: set interval for updating stock prices
     public void updateStockPrices() {
         if (dataAccess == null) {
             throw new IllegalStateException("StockMarket has not been initialized with a data access object.");

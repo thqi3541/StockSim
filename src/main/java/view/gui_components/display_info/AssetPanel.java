@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 
+// TODO: update regularly
 public class AssetPanel extends JPanel {
     private final JLabel totalAssetsLabel;
     private final JLabel cashLabel;

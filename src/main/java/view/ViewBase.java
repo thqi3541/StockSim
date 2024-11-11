@@ -5,6 +5,7 @@ import view.view_event.ViewEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: cancel this layer
 public abstract class ViewBase {
 
     private final String name;
