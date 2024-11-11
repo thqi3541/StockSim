@@ -6,7 +6,6 @@ import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
-import view.ViewManager;
 import view.components.DialogComponent;
 import view.panels.DashboardPanel;
 import view.panels.LogInPanel;
@@ -25,7 +24,7 @@ public class AppBuilder {
     private final CardLayout cardLayout = new CardLayout();
 
     // Internal ServiceLocator for managing controllers, interactors, DAOs, and presenters
-    private final ServiceLocator serviceLocator = new ServiceLocator();
+    private final ServiceManager serviceManager = new ServiceManager();
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -104,22 +103,22 @@ public class AppBuilder {
 
         //Step 0: Initialize and register InMemoryStockDataAccessObject (DAO)
         InMemoryStockDataAccessObject stockDataAccessObject = new InMemoryStockDataAccessObject();
-        ServiceLocator.registerService(InMemoryStockDataAccessObject.class, stockDataAccessObject);
+        ServiceManager.registerService(InMemoryStockDataAccessObject.class, stockDataAccessObject);
 
         // Step 1: Initialize and register InMemoryUserDataAccessObject (DAO)
         InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
-        ServiceLocator.registerService(InMemoryUserDataAccessObject.class, userDataAccessObject);
+        ServiceManager.registerService(InMemoryUserDataAccessObject.class, userDataAccessObject);
 
         // Step 2: Initialize and register ExecuteBuyPresenter (OutputBoundary)
         ExecuteBuyPresenter executeBuyPresenter = new ExecuteBuyPresenter();
-        ServiceLocator.registerService(ExecuteBuyPresenter.class, executeBuyPresenter);
+        ServiceManager.registerService(ExecuteBuyPresenter.class, executeBuyPresenter);
 
         // Step 3: Initialize ExecuteBuyInteractor with DAO and Presenter
         ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDataAccessObject, executeBuyPresenter);
 
         // Step 4: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
         ExecuteBuyController executeBuyController = new ExecuteBuyController(executeBuyInteractor);
-        ServiceLocator.registerService(ExecuteBuyController.class, executeBuyController);
+        ServiceManager.registerService(ExecuteBuyController.class, executeBuyController);
 
         // Set ViewManager to control panel switching with cardLayout and cardPanel
         ViewManager.Instance().setCardLayout(cardLayout, cardPanel);

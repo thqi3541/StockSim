@@ -1,9 +1,9 @@
 package view.panels;
 
-import app.ServiceLocator;
+import app.ServiceManager;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import view.IComponent;
-import view.ViewManager;
+import app.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.DialogEvent;
@@ -65,7 +65,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
             ViewManager.Instance().broadcastEvent(new DialogEvent("Buy Order", "You want to buy " + quantity + " shares of " + ticker));
 
             // Retrieve the controller and execute the buy action
-            ExecuteBuyController controller = ServiceLocator.getService(ExecuteBuyController.class);
+            ExecuteBuyController controller = ServiceManager.getService(ExecuteBuyController.class);
             controller.execute(ticker, quantity);
         });
 

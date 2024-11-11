@@ -2,7 +2,7 @@ package interface_adapter.execute_buy;
 
 import use_case.execute_buy.ExecuteBuyOutputBoundary;
 import use_case.execute_buy.ExecuteBuyOutputData;
-import view.ViewManager;
+import app.ViewManager;
 import view.view_events.UpdateAssetEvent;
 
 public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {

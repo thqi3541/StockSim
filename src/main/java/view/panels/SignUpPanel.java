@@ -1,7 +1,7 @@
 package view.panels;
 
 import view.IComponent;
-import view.ViewManager;
+import app.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.DialogEvent;

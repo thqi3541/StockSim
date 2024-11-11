@@ -3,7 +3,7 @@ package app;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServiceLocator {
+public class ServiceManager {
     private static final Map<Class<?>, Object> services = new HashMap<>();
 
     public static <T> void registerService(Class<T> key, T service) {

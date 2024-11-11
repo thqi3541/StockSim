@@ -1,5 +1,6 @@
-package view;
+package app;
 
+import view.IComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 

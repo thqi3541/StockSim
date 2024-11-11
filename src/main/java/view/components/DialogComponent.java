@@ -1,7 +1,7 @@
 package view.components;
 
 import view.IComponent;
-import view.ViewManager;
+import app.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.EventType;
 import view.view_events.ViewEvent;
