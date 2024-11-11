@@ -1,32 +1,40 @@
-
 # Alpha Vantage API Documentation
 
 ## Introduction
+
 We utilize the Alpha Vantage API. Detailed documentation is available [here](https://www.alphavantage.co/documentation/).
 
 ### Response Data Type
-The Alpha Vantage API can return responses in either `JSON` or `CSV` format. Specify your preferred format by setting the `datatype` parameter in your API request to either `json` or `csv`.
+
+The Alpha Vantage API can return responses in either `JSON` or `CSV` format.
+
+Specify your preferred format by setting the `datatype` parameter in your API request to either `json` or `csv`.
 
 ### Language-specific guides: Java wrapper
+
 Alpha Vantage does not directly support Java. We use this wrapper on GitHub: [alphavantage-java](https://github.com/crazzyghost/alphavantage-java).
 
-Note: In issues, a contributor named Creeeeger added a search section. [Not yet tested]
+Note: In issues, a contributor named `Creeeeger` added a search section.
 
 ## API Usage Examples
 
 ### Time Series Intraday
+
 **Parameters:**
+
 - `function`
 - `symbol`
 - `interval`
 - `apikey`
 
 **Sample request:**
-```
+
+```txt
 https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo
 ```
 
 **Sample response (JSON output):**
+
 ```json
 {
   "Meta Data": {
@@ -50,17 +58,21 @@ https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&inter
 ```
 
 ### Real-Time Bulk Quotes
+
 **Parameters:**
+
 - `function`
 - `symbol`
 - `apikey`
 
 **Sample request:**
-```
+
+```txt
 https://www.alphavantage.co/query?function=REALTIME_BULK_QUOTES&symbol=MSFT,AAPL,IBM&apikey=demo
 ```
 
 **Sample response (JSON output):**
+
 ```json
 {
   "Stock Quotes": [
