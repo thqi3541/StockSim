@@ -4,9 +4,9 @@ public interface ExecuteBuyOutputBoundary {
 
     void prepareSuccessView(ExecuteBuyOutputData outputData);
 
-    void prepareInsufficientFundsView();
+    void prepareInsufficientBalanceExceptionView();
 
-    void prepareStockNotFoundView();
+    void prepareStockNotFoundExceptionView();
 
-    void prepareValidationErrorView();
+    void prepareValidationExceptionView();
 }

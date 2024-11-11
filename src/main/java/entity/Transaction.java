@@ -2,6 +2,9 @@ package entity;
 
 import java.util.Date;
 
+/**
+ * A class representing a transaction
+ */
 public record Transaction(
         Date timestamp,
         String ticker,
@@ -9,8 +12,4 @@ public record Transaction(
         double price,
         String type
 ) {
-
-    public double getTotalPrice() {
-        return price * quantity;
-    }
 }

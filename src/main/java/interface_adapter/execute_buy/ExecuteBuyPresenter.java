@@ -14,23 +14,18 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
                         outputData.newPortfolio(),
                         outputData.newBalance()
                 )
-       );
+        );
     }
 
     @Override
-    public void prepareInsufficientFundsView() {
-
+    public void prepareInsufficientBalanceExceptionView() {
     }
 
     @Override
-    public void prepareStockNotFoundView() {
-
+    public void prepareStockNotFoundExceptionView() {
     }
 
     @Override
-    public void prepareValidationErrorView() {
-
+    public void prepareValidationExceptionView() {
     }
-
-
 }

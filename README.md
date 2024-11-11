@@ -32,9 +32,9 @@
 
 User Story: As a new user, I want to create a new account, so that I can log into the app and start trading. To sign up/register, I need to choose a userID and a password.
 
-  - Interactor: RegistrationInteractor
-  - Controller: RegistrationController
-  - Presenter: RegistrationView
+- Interactor: RegistrationInteractor
+- Controller: RegistrationController
+- Presenter: RegistrationView
 - Steps:
   - The user selects "Register" and inputs the required information (View -> Controller).
   - The RegistrationController loads the registration info to the Interactor. The Interactor verifies data compliance and creates a new account (Controller -> Interactor).
@@ -43,11 +43,11 @@ User Story: As a new user, I want to create a new account, so that I can log int
 
 ### Use Case 2: User Login
 
-User Story: As a returning user, I want to log into my account with my username, and password [credentials], so that I can resume all trading activities, balance, etc.
+User Story: As a returning user, I want to log into my account with my username, and password (credentials), so that I can resume all trading activities, balance, etc.
 
-  - Interactor: LoginInteractor
-  - Controller: LoginController
-  - Presenter: LoginView
+- Interactor: LoginInteractor
+- Controller: LoginController
+- Presenter: LoginView
 - Steps:
   - The user inputs their login information(username and password) and submits (View -> Controller).
   - The LoginController verifies credentials and processes the login (Interactor).
@@ -56,11 +56,11 @@ User Story: As a returning user, I want to log into my account with my username,
 
 ### Use Case 3: Execute Trades BUY
 
-User Story: As a user, I want to buy some shares of a stock so that I can hold a long position in it. For example, I can buy 10 shares of APPL(Apple Inc.) at $5 per share.
+User Story: As a user, I want to buy some shares of a stock so that I can hold a long position in it. For example, I can buy 10 shares of APPL (Apple Inc.) at $5 per share.
 
-  - Interactor: ExecuteBuyInteractor
-  - Controller: ExecuteBuyController
-  - Presenter: TradeView
+- Interactor: ExecuteBuyInteractor
+- Controller: ExecuteBuyController
+- Presenter: TradeView
 - Steps:
   - The user selects a ticker(symbol of the stock) and quantity to buy, and submits a buy order in the trading window (Controller -> Interactor).
   - The ExecuteBuyInteractor processes the order and updates the account balance and portfolio (Interactor).
@@ -68,11 +68,11 @@ User Story: As a user, I want to buy some shares of a stock so that I can hold a
 
 ### Use Case 4: Execute Trades SELL
 
-User Story: As a user, I want to sell some shares of a stock that I am currently holding, so that the position of the stock will decrease and I will get some money. For example, I have 10 shares of APPL(Apple Inc.), so I can sell 5 shares.
+User Story: As a user, I want to sell some shares of a stock that I am currently holding, so that the position of the stock will decrease and I will get some money. For example, I have 10 shares of APPL (Apple Inc.), so I can sell 5 shares.
 
-  - Interactor: ExecuteSellInteractor
-  - Controller: ExecuteSellController
-  - Presenter: TradeView
+- Interactor: ExecuteSellInteractor
+- Controller: ExecuteSellController
+- Presenter: TradeView
 - Steps:
   - The user selects a ticker(symbol of the stock) and quantity to buy, and submits a sell order in the trading window (Controller -> Interactor).
   - The ExecuteSellInteractor processes the order and updates the account balance and portfolio (Interactor).
@@ -82,15 +82,16 @@ User Story: As a user, I want to sell some shares of a stock that I am currently
 
 User Story: As a user, I am not holding any shares of APPL(Apple). I want to short-sell 20 shares of Apple so that I can earn some money. Even though my current position at Apple is 0, I can 'borrow' some shares of Apple from someone else and sell the shares I borrowed.
 
-  - Interactor: ExecuteShortSellInteractor
-  - Controller: ExecuteShortSellController
-  - Presenter: TradeView
+- Interactor: ExecuteShortSellInteractor
+- Controller: ExecuteShortSellController
+- Presenter: TradeView
 - Steps:
   - The user selects a ticker(symbol of the stock) and quantity to short-sell, and submits a sell order in the trading window (Controller -> Interactor).
   - The ExecuteShortSellInteractor processes the order, updating the account balance and portfolio (Interactor).
   - The ExecuteShortSellInteractor returns the trade results to the TradeView, displaying success or error messages (Interactor -> Presenter)
 
-> Below are optional, and still need constructing
+**Below are optional, and still need constructing:**
+
 ### Use Case 6: View Portfolio (Position)
 
 - User Story:
@@ -119,7 +120,7 @@ User Story: As a user, I am not holding any shares of APPL(Apple). I want to sho
   - The HistoryController filters all user trades to the select rows, quantity, and column sort (Controller).
   - The HistoryController returns the filtered data to the HistoryView, displaying the new view of current stock holdings and its respective information.
 
-Below are some other use cases we might consider implementing:
+**Below are some other use cases we might consider implementing:**
 
 ### Use Case 8: View Ranking
 

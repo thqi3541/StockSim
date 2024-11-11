@@ -1,5 +1,8 @@
 package entity;
 
+/**
+ * A class representing a user
+ */
 public class User {
 
     private final String username;
@@ -8,8 +11,7 @@ public class User {
     private final TransactionHistory transactionHistory;
     private double balance;
 
-    // TODO: difficulty level?
-    // TODO: password need to be encrypted?
+    // TODO: handle password hashing
 
     public User(String username, String password) {
         this.username = username;

@@ -1,6 +1,5 @@
 package use_case.execute_buy;
 
-import session.SessionManager;
 import entity.*;
 
 import java.util.Date;
@@ -21,10 +20,13 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     @Override
     public void execute(ExecuteBuyInputData data) {
         try {
+            // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());
+
+            // Get stock and quantity
             String ticker = data.ticker();
             int quantity = data.quantity();
-            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundError::new);
+            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             double totalCost = stock.getPrice() * quantity;
             if (isBalanceSufficient(currentUser, totalCost)) {
@@ -38,25 +40,22 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 // Add transaction
                 Date timestamp = new Date();
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, stock.getPrice(), "buy");
-
-                // add transaction to transaction history
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
-                // prepare success view
+                // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
                         currentUser.getBalance(),
                         currentUser.getPortfolio()
                 ));
-
             } else {
-                throw new InsufficientBalanceError();
+                throw new InsufficientBalanceException();
             }
         } catch (ExecuteBuyDataAccessInterface.ValidationException e) {
-            handleException("Validation Error");
-        } catch (StockNotFoundError e) {
-            handleException("Stock not found");
-        } catch (InsufficientBalanceError e) {
-            handleException("Insufficient funds");
+            outputPresenter.prepareValidationExceptionView();
+        } catch (StockNotFoundException e) {
+            outputPresenter.prepareStockNotFoundExceptionView();
+        } catch (InsufficientBalanceException e) {
+            outputPresenter.prepareInsufficientBalanceExceptionView();
         }
     }
 
@@ -72,24 +71,9 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 );
     }
 
-    private void handleException(String message) {
-        switch (message) {
-            case "Validation Error":
-                outputPresenter.prepareValidationErrorView();
-                break;
-            case "Stock not found":
-                outputPresenter.prepareStockNotFoundView();
-                break;
-            case "Insufficient funds":
-                outputPresenter.prepareInsufficientFundsView();
-                break;
-        }
+    static class InsufficientBalanceException extends Exception {
     }
 
-    // custom exceptions
-    static class InsufficientBalanceError extends Exception {
-    }
-
-    static class StockNotFoundError extends Exception {
+    static class StockNotFoundException extends Exception {
     }
 }

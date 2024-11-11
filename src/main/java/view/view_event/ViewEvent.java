@@ -1,3 +1,4 @@
 package view.view_event;
 
-public abstract class ViewEvent { }
+public abstract class ViewEvent {
+}

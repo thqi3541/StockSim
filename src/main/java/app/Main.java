@@ -3,17 +3,20 @@ package app;
 import javax.swing.*;
 
 /**
- * The Main class of our application.
+ * The main class of the application
  */
 public class Main {
     /**
-     * Builds and runs the CA architecture of the application.
+     * The main method of the application
      *
-     * @param args unused arguments
+     * @param args: the arguments passed to the application
      */
     public static void main(String[] args) {
         final AppBuilder appBuilder = new AppBuilder();
-        final JFrame application = appBuilder.addBuyView().build();
+        final JFrame application = appBuilder.addTradeSimulation().build();
+
+        appBuilder.showTradeSimulation();
+
         application.pack();
         application.setVisible(true);
     }
