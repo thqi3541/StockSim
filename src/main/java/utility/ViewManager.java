@@ -18,8 +18,8 @@ public class ViewManager {
     private ViewManager() {
     }
 
-    // TODO: thread-safe
-    public static ViewManager Instance() {
+    // Ensure thread-safety for singleton instance creation
+    public static synchronized ViewManager Instance() {
         if (instance == null) {
             instance = new ViewManager();
         }
@@ -36,10 +36,13 @@ public class ViewManager {
     }
 
     public void broadcastEvent(ViewEvent event) {
-        if (event instanceof SwitchPanelEvent) {
-            switchPanel(((SwitchPanelEvent) event).getPanelName());
+        // Handle SwitchPanelEvent directly within ViewManager
+        if (event instanceof SwitchPanelEvent switchEvent) {
+            switchPanel(switchEvent.getPanelName());
+            return; // No need to broadcast to other components
         }
 
+        // For other event types, broadcast to components
         components.stream()
                 .filter(component -> event.getTypes().stream().anyMatch(component::supportsEvent))
                 .forEach(component -> {
@@ -48,7 +51,7 @@ public class ViewManager {
                 });
     }
 
-    public void switchPanel(String panelName) {
+    private void switchPanel(String panelName) {
         if (cardLayout == null || cardPanel == null) {
             throw new IllegalStateException("CardLayout or CardPanel is not set up in ViewManager.");
         }
