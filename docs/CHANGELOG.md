@@ -1,8 +1,16 @@
 # Project Changelog
 
-## Released
-
 ## Unreleased
+
+### New Features
+
+### Internal Changes
+
+Implement `ClientSessionManager` for client-side session management.
+
+### Bug Fixes
+
+## 0.1.0
 
 ### New Features
 
