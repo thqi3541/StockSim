@@ -11,7 +11,11 @@ public class ExecuteBuyController {
         this.interactor = interactor;
     }
 
-    public void execute(ExecuteBuyInputData data) {
+    public void execute(String ticker, String quantity) {
+        // TODO: wrap the payload with credential
+        String credential = "dummy";
+        final ExecuteBuyInputData data = new ExecuteBuyInputData(credential, ticker, Integer.parseInt(quantity));
+
         interactor.execute(data);
     }
 }

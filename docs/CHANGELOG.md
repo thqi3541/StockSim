@@ -26,5 +26,6 @@
 - Implemented buy use case interactor and set up unit tests
 - Removed outdated classes and methods that are incompatible with current codebase version
 - Updated maven configuration with unit test and api request dependencies
+- Implemented the frontend framework
 
 ### Bug Fixes
