@@ -1,8 +1,18 @@
 # Project Changelog
 
-## Released
-
 ## Unreleased
+
+### New Features
+
+### Internal Changes
+
+Implemented `ClientSessionManager` for client-side session management.
+Implemented credential verification in `BuyStockController`.
+Moved `ValidationException` into a separate class in utility.
+
+### Bug Fixes
+
+## 0.1.0
 
 ### New Features
 
