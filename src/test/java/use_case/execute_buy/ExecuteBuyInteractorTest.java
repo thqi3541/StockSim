@@ -31,7 +31,7 @@ class ExecuteBuyInteractorTest {
         double initialBalance = 10000.0;
         mockUser.addBalance(initialBalance);
 
-        when(dataAccess.getUserWithCredential("00000")).thenReturn(mockUser);
+        when(dataAccess.getUserWithCredential("dummy")).thenReturn(mockUser);
 
         Stock stock = new Stock("XXXX", 100.0);
 
@@ -45,7 +45,7 @@ class ExecuteBuyInteractorTest {
 
             // prepare input data
             int quantityToBuy = 100;
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("00000", "XXXX", quantityToBuy);
+            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "XXXX", quantityToBuy);
 
             // create interactor
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
@@ -78,7 +78,7 @@ class ExecuteBuyInteractorTest {
         mockUser.addBalance(500.0);
 
         // prepare dataAccess mock
-        when(dataAccess.getUserWithCredential("00000")).thenReturn(mockUser);
+        when(dataAccess.getUserWithCredential("dummy")).thenReturn(mockUser);
 
         // prepare Stock mock
         Stock stock = new Stock("XXXX", 100.0);
@@ -92,7 +92,7 @@ class ExecuteBuyInteractorTest {
             when(stockMarketMock.getStock("XXXX")).thenReturn(Optional.of(stock));
 
             // prepare input data
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("00000", "XXXX", 100);
+            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "XXXX", 100);
 
             // create interactor
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);

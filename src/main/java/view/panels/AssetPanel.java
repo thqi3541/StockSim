@@ -1,17 +1,21 @@
-package view.gui_components.display_info;
+package view.panels;
 
 import org.json.JSONObject;
+import view.IComponent;
+import view.view_events.EventType;
+import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.EnumSet;
 
-// TODO: update regularly
-public class AssetPanel extends JPanel {
+public class AssetPanel extends JPanel implements IComponent {
     private final JLabel totalAssetsLabel;
     private final JLabel cashLabel;
     private final JLabel stockLabel;
 
     public AssetPanel() {
+        // Sample JSON data representing assets
         JSONObject jsonData = new JSONObject();
         jsonData.put("totalAssets", 5000000.00);
         jsonData.put("cash", 100000.00);
@@ -20,42 +24,47 @@ public class AssetPanel extends JPanel {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Total Assets label setup
         totalAssetsLabel = new JLabel("Total Assets: $" + String.format("%,.2f", jsonData.getDouble("totalAssets")));
         totalAssetsLabel.setFont(new Font("Arial", Font.BOLD, 16));
         totalAssetsLabel.setHorizontalAlignment(SwingConstants.LEFT);
         add(totalAssetsLabel, BorderLayout.NORTH);
 
+        // Separator for visual structure
         JSeparator separator = new JSeparator();
         add(separator, BorderLayout.CENTER);
 
+        // Bottom panel for Cash and Stock labels
         JPanel bottomPanel = new JPanel(new BorderLayout());
 
+        // Cash label
         cashLabel = new JLabel("Cash: $" + String.format("%,.2f", jsonData.getDouble("cash")));
         cashLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         cashLabel.setForeground(Color.GRAY);
 
+        // Stock label
         stockLabel = new JLabel("Stock: $" + String.format("%,.2f", jsonData.getDouble("stock")));
         stockLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         stockLabel.setForeground(Color.GRAY);
         stockLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
+        // Adding labels to the bottom panel
         bottomPanel.add(cashLabel, BorderLayout.WEST);
         bottomPanel.add(stockLabel, BorderLayout.EAST);
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        setPreferredSize(null);
+        setPreferredSize(new Dimension(300, 150));
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Asset Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
+    @Override
+    public void receiveViewEvent(ViewEvent event) {
+        // Placeholder for future event handling, if needed
+    }
 
-        AssetPanel assetPanel = new AssetPanel();
-        frame.add(assetPanel);
-
-        frame.pack();
-        frame.setVisible(true);
+    @Override
+    public EnumSet<EventType> getSupportedEventTypes() {
+        // AssetPanel supports UPDATE_ASSET events
+        return EnumSet.of(EventType.UPDATE_ASSET);
     }
 }

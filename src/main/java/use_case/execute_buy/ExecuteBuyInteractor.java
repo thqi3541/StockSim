@@ -28,8 +28,10 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             int quantity = data.quantity();
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
+            // Calculate some values for this transaction
             double currentPrice = stock.getPrice();
             double totalCost = currentPrice * quantity;
+
             if (isBalanceSufficient(currentUser, totalCost)) {
                 // Deduct balance
                 currentUser.deductBalance(totalCost);
