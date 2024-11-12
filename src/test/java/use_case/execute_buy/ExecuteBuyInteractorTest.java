@@ -45,7 +45,7 @@ class ExecuteBuyInteractorTest {
 
             // prepare input data
             int quantityToBuy = 100;
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("XXXX", quantityToBuy);
+            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "XXXX", quantityToBuy);
 
             // create interactor
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
@@ -92,7 +92,7 @@ class ExecuteBuyInteractorTest {
             when(stockMarketMock.getStock("XXXX")).thenReturn(Optional.of(stock));
 
             // prepare input data
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("XXXX", 100);
+            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "XXXX", 100);
 
             // create interactor
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
