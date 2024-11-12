@@ -1,9 +1,9 @@
 package view.panels;
 
-import app.ServiceManager;
 import interface_adapter.execute_buy.ExecuteBuyController;
+import utility.ServiceManager;
+import utility.ViewManager;
 import view.IComponent;
-import app.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.DialogEvent;

@@ -1,4 +1,4 @@
-package app;
+package utility;
 
 import view.IComponent;
 import view.view_events.SwitchPanelEvent;
@@ -18,6 +18,7 @@ public class ViewManager {
     private ViewManager() {
     }
 
+    // TODO: thread-safe
     public static ViewManager Instance() {
         if (instance == null) {
             instance = new ViewManager();

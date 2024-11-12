@@ -21,16 +21,17 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     public void execute(ExecuteBuyInputData data) {
         try {
             // Get current user
-            String credential = "dummy";
-            User currentUser = dataAccess.getUserWithCredential(credential);
+            User currentUser = dataAccess.getUserWithCredential(data.credential());
 
             // Get stock and quantity
             String ticker = data.ticker();
             int quantity = data.quantity();
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
+            // Calculate some values for this transaction
             double currentPrice = stock.getPrice();
             double totalCost = currentPrice * quantity;
+
             if (isBalanceSufficient(currentUser, totalCost)) {
                 // Deduct balance
                 currentUser.deductBalance(totalCost);

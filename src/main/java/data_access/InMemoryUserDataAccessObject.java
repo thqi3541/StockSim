@@ -1,8 +1,8 @@
 package data_access;
 
 import entity.User;
-import app.SessionManager;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import utility.SessionManager;
 
 import java.util.HashMap;
 import java.util.Map;

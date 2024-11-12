@@ -1,8 +1,11 @@
-package app;
+package utility;
 
 import java.util.HashMap;
 import java.util.Map;
 
+// This class manages all the service instances for global access
+// e.g. controllers, presenters, and interactors
+// TODO: singleton pattern
 public class ServiceManager {
     private static final Map<Class<?>, Object> services = new HashMap<>();
 

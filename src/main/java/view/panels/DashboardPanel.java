@@ -1,7 +1,7 @@
 package view.panels;
 
+import utility.ViewManager;
 import view.IComponent;
-import app.ViewManager;
 import view.components.ButtonComponent;
 import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
