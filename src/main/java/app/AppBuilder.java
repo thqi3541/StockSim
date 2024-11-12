@@ -18,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 
 // TODO: better ways of import all the services and panels
+// TODO: maybe create a config file for the building process
 /**
  * A builder class for the application.
  * This class now works as a setup utility to add panels to ViewManager, build the main application frame, and manage the ServiceLocator.
