@@ -6,7 +6,7 @@
 
 ### Internal Changes
 
-Implement `ClientSessionManager` for client-side session management.
+Implemented `ClientSessionManager` for client-side session management.
 
 ### Bug Fixes
 
