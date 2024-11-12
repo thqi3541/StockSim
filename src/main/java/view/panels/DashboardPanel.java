@@ -17,6 +17,8 @@ public class DashboardPanel extends JPanel implements IComponent {
     private final ButtonComponent logoutButton;
 
     public DashboardPanel(String username, double cash, double position) {
+        ViewManager.Instance().registerComponent(this);
+
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(300, 400));
         setPreferredSize(new Dimension(500, 400));

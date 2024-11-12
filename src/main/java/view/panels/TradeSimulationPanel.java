@@ -14,6 +14,8 @@ import java.util.EnumSet;
 public class TradeSimulationPanel extends JPanel implements IComponent {
 
     public TradeSimulationPanel() {
+        ViewManager.Instance().registerComponent(this);
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 

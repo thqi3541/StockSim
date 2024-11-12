@@ -43,10 +43,6 @@ public class AppBuilder {
         LogInPanel logInPanel = new LogInPanel();
         SignUpPanel signUpPanel = new SignUpPanel();
 
-        // Register panels with ViewManager
-        ViewManager.Instance().registerComponent(logInPanel);
-        ViewManager.Instance().registerComponent(signUpPanel);
-
         // Add panels to the card layout
         cardPanel.add(logInPanel, "LogInPanel");
         cardPanel.add(signUpPanel, "SignUpPanel");
@@ -62,9 +58,6 @@ public class AppBuilder {
     public AppBuilder addDashboardPanel(String username, double cash, double position) {
         DashboardPanel dashboardPanel = new DashboardPanel(username, cash, position);
 
-        // Register the dashboard panel with ViewManager
-        ViewManager.Instance().registerComponent(dashboardPanel);
-
         // Add the dashboard panel to the card layout
         cardPanel.add(dashboardPanel, "DashboardPanel");
 
@@ -79,9 +72,6 @@ public class AppBuilder {
     public AppBuilder addTradeSimulationPanel() {
         TradeSimulationPanel tradeSimulationPanel = new TradeSimulationPanel();
 
-        // Register the trade simulation panel with ViewManager
-        ViewManager.Instance().registerComponent(tradeSimulationPanel);
-
         // Add the trade simulation panel to the card layout
         cardPanel.add(tradeSimulationPanel, "TradeSimulationPanel");
 
@@ -90,7 +80,6 @@ public class AppBuilder {
 
     public AppBuilder addDialogComponent() {
         DialogComponent dialogComponent = new DialogComponent();
-        ViewManager.Instance().registerComponent(dialogComponent);
         return this;
     }
 

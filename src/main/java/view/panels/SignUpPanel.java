@@ -21,6 +21,8 @@ public class SignUpPanel extends JPanel implements IComponent {
     private final ButtonComponent logInButton;
 
     public SignUpPanel() {
+        ViewManager.Instance().registerComponent(this);
+
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(150, 300));
         setPreferredSize(new Dimension(250, 400));
