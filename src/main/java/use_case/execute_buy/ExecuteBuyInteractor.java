@@ -3,7 +3,7 @@ package use_case.execute_buy;
 import entity.*;
 
 import java.util.Date;
-import utility.ValidationException;
+import utility.exceptions.ValidationException;
 
 /**
  * The Execute Buy Interactor.

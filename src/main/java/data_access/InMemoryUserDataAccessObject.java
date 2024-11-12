@@ -6,7 +6,7 @@ import utility.SessionManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import utility.ValidationException;
+import utility.exceptions.ValidationException;
 
 /**
  * A class that implements the ExecuteBuyDataAccessInterface interface
