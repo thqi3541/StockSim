@@ -1,7 +1,9 @@
 package interface_adapter.execute_buy;
 
+import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInputData;
+import utility.ClientSessionManager;
 
 public class ExecuteBuyController {
 
@@ -12,9 +14,10 @@ public class ExecuteBuyController {
     }
 
     public void execute(String ticker, String quantity) {
-        // TODO: wrap the payload with credential
-        String credential = "dummy";
-        final ExecuteBuyInputData data = new ExecuteBuyInputData(credential, ticker, Integer.parseInt(quantity));
+        final ExecuteBuyInputData data = new ExecuteBuyInputData(
+                ClientSessionManager.Instance().getCredential(),
+                ticker,
+                Integer.parseInt(quantity));
 
         interactor.execute(data);
     }

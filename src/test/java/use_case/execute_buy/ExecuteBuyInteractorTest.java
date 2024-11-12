@@ -11,6 +11,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import utility.ValidationException;
 
 class ExecuteBuyInteractorTest {
 
@@ -26,7 +27,7 @@ class ExecuteBuyInteractorTest {
     }
 
     @Test
-    void successTest() throws ExecuteBuyDataAccessInterface.ValidationException {
+    void successTest() throws ValidationException {
         User mockUser = userFactory.create("testUser", "password");
         double initialBalance = 10000.0;
         mockUser.addBalance(initialBalance);
@@ -72,7 +73,7 @@ class ExecuteBuyInteractorTest {
     }
 
     @Test
-    void insufficientBalanceTest() throws ExecuteBuyDataAccessInterface.ValidationException {
+    void insufficientBalanceTest() throws ValidationException {
         // prepare user with insufficient balance
         User mockUser = userFactory.create("testUser", "password");
         mockUser.addBalance(500.0);

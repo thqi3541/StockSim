@@ -1,4 +1,4 @@
-package session;
+package utility;
 
 import java.util.Optional;
 
@@ -21,8 +21,8 @@ public class ClientSessionManager {
         return instance;
     }
 
-    public Optional<String> getCredential() {
-        return Optional.ofNullable(credential);
+    public String getCredential() {
+        return credential;
     }
 
     public void setCredential(String credential) {

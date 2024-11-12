@@ -3,6 +3,7 @@ package use_case.execute_buy;
 import entity.*;
 
 import java.util.Date;
+import utility.ValidationException;
 
 /**
  * The Execute Buy Interactor.
@@ -54,7 +55,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             } else {
                 throw new InsufficientBalanceException();
             }
-        } catch (ExecuteBuyDataAccessInterface.ValidationException e) {
+        } catch (ValidationException e) {
             outputPresenter.prepareValidationExceptionView();
         } catch (StockNotFoundException e) {
             outputPresenter.prepareStockNotFoundExceptionView();
