@@ -19,7 +19,7 @@ public class StockDataAccessObject implements IStockDataAccess {
     private final OkHttpClient client;
     private final String apiKey;
 
-    public StockDataAccessObject(){
+    public StockDataAccessObject() {
         this.client = new OkHttpClient();
 
         // Load .env.local file and get the API token
