@@ -153,3 +153,6 @@ replay_pid*
 .env.local
 .env.development
 .env.test
+
+# config resource folder
+simulator.iml
