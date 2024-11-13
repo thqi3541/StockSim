@@ -1,8 +1,18 @@
 # Project Changelog
 
-## Released
-
 ## Unreleased
+
+### New Features
+
+### Internal Changes
+
+Implemented `ClientSessionManager` for client-side session management.
+Implemented credential verification in `BuyStockController`.
+Moved `ValidationException` into a separate class in utility.
+
+### Bug Fixes
+
+## 0.1.0
 
 ### New Features
 
@@ -26,5 +36,11 @@
 - Implemented buy use case interactor and set up unit tests
 - Removed outdated classes and methods that are incompatible with current codebase version
 - Updated maven configuration with unit test and api request dependencies
+- Implemented the frontend framework
+- Implemented StockDataAccess to retrieve current market price for set tickers
+- Modified `StockMarket` to utilize new IStockDataAccess return type
+- Updated maven configuration with api request dependencies
+- Added config resource file for 30 preset ticker names
+- Modified `InMemoryStockDataAccessObject` to utilize new IStockDataAccess return type
 
 ### Bug Fixes
