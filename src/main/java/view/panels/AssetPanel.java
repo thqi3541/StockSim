@@ -1,8 +1,10 @@
 package view.panels;
 
-import org.json.JSONObject;
+import entity.Portfolio;
+import utility.ViewManager;
 import view.IComponent;
 import view.view_events.EventType;
+import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
@@ -15,17 +17,13 @@ public class AssetPanel extends JPanel implements IComponent {
     private final JLabel stockLabel;
 
     public AssetPanel() {
-        // Sample JSON data representing assets
-        JSONObject jsonData = new JSONObject();
-        jsonData.put("totalAssets", 5000000.00);
-        jsonData.put("cash", 100000.00);
-        jsonData.put("stock", 4900000.00);
+        ViewManager.Instance().registerComponent(this);
 
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Total Assets label setup
-        totalAssetsLabel = new JLabel("Total Assets: $" + String.format("%,.2f", jsonData.getDouble("totalAssets")));
+        totalAssetsLabel = new JLabel("Total Assets: $0.00");
         totalAssetsLabel.setFont(new Font("Arial", Font.BOLD, 16));
         totalAssetsLabel.setHorizontalAlignment(SwingConstants.LEFT);
         add(totalAssetsLabel, BorderLayout.NORTH);
@@ -38,12 +36,12 @@ public class AssetPanel extends JPanel implements IComponent {
         JPanel bottomPanel = new JPanel(new BorderLayout());
 
         // Cash label
-        cashLabel = new JLabel("Cash: $" + String.format("%,.2f", jsonData.getDouble("cash")));
+        cashLabel = new JLabel("Cash: $0.00");
         cashLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         cashLabel.setForeground(Color.GRAY);
 
         // Stock label
-        stockLabel = new JLabel("Stock: $" + String.format("%,.2f", jsonData.getDouble("stock")));
+        stockLabel = new JLabel("Stock: $0.00");
         stockLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         stockLabel.setForeground(Color.GRAY);
         stockLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -59,7 +57,21 @@ public class AssetPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        // Placeholder for future event handling, if needed
+        // Check if the event is an instance of UpdateAssetEvent
+        if (event instanceof UpdateAssetEvent updateEvent) {
+            // Get the portfolio and balance data
+            Portfolio portfolio = updateEvent.getPortfolio();
+            double balance = updateEvent.getBalance();
+
+            // Calculate total asset value based on portfolio and cash balance
+            double stockValue = portfolio.getTotalValue(); // Assume Portfolio has a method for total stock value
+            double totalAssets = stockValue + balance;
+
+            // Update labels with the new values
+            totalAssetsLabel.setText("Total Assets: $" + String.format("%,.2f", totalAssets));
+            cashLabel.setText("Cash: $" + String.format("%,.2f", balance));
+            stockLabel.setText("Stock: $" + String.format("%,.2f", stockValue));
+        }
     }
 
     @Override

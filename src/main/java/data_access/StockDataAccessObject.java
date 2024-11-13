@@ -19,13 +19,18 @@ public class StockDataAccessObject implements IStockDataAccess {
     private final OkHttpClient client;
     private final String apiKey;
 
-    public StockDataAccessObject(){
+    public StockDataAccessObject() {
         this.client = new OkHttpClient();
 
         // Load .env.local file and get the API token
         Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
         this.apiKey = dotenv.get("STOCK_API_KEY");
 
+    }
+
+    public static void main(String[] args) {
+        StockDataAccessObject stockDataAccessObject = new StockDataAccessObject();
+        stockDataAccessObject.getStocks();
     }
 
     /**
@@ -69,10 +74,5 @@ public class StockDataAccessObject implements IStockDataAccess {
             e.printStackTrace();
         }
         return stocks;
-    }
-
-    public static void main(String[] args) {
-        StockDataAccessObject stockDataAccessObject = new StockDataAccessObject();
-        stockDataAccessObject.getStocks();
     }
 }
