@@ -4,6 +4,9 @@ import data_access.InMemoryRegistrationDataAccessObject;
 import entity.User;
 import entity.UserFactory;
 
+/**
+ * The Registration Interactor.
+ */
 public class RegistrationInteractor implements RegistrationInputBoundary {
     private final RegistrationOutputBoundary presenter;
     private final InMemoryRegistrationDataAccessObject dataAccess;
