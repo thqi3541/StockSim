@@ -22,7 +22,7 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         return getUserWithUsername(username);
     }
 
-    private User getUserWithUsername(String username) {
+    public User getUserWithUsername(String username) {
         Map<String, User> users = new HashMap<>();
 
         User user1 = new User("user1", "password");
@@ -40,3 +40,4 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         return users.get(username);
     }
 }
+

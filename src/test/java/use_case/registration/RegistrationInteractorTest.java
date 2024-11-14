@@ -1,6 +1,6 @@
 package use_case.registration;
 
-import data_access.InMemoryUserDataAccessObject;
+import data_access.InMemoryRegistrationDataAccessObject;
 import entity.User;
 import entity.UserFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -14,14 +14,14 @@ class RegistrationInteractorTest {
 
     private RegistrationInteractor interactor;
     private RegistrationOutputBoundary mockPresenter;
-    private InMemoryUserDataAccessObject mockDataAccess;
+    private InMemoryRegistrationDataAccessObject mockDataAccess;
     private UserFactory mockUserFactory;
 
     @BeforeEach
     void setUp() {
         // Create mock objects
         mockPresenter = mock(RegistrationOutputBoundary.class);
-        mockDataAccess = new InMemoryUserDataAccessObject();
+        mockDataAccess = new InMemoryRegistrationDataAccessObject();
         mockUserFactory = mock(UserFactory.class);
 
         // Initialize RegistrationInteractor with mocks

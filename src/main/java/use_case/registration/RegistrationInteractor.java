@@ -1,15 +1,15 @@
 package use_case.registration;
 
-import data_access.InMemoryUserDataAccessObject;
+import data_access.InMemoryRegistrationDataAccessObject;
 import entity.User;
 import entity.UserFactory;
 
 public class RegistrationInteractor implements RegistrationInputBoundary {
     private final RegistrationOutputBoundary presenter;
-    private final InMemoryUserDataAccessObject dataAccess;
+    private final InMemoryRegistrationDataAccessObject dataAccess;
     private final UserFactory userFactory;
 
-    public RegistrationInteractor(RegistrationOutputBoundary presenter, InMemoryUserDataAccessObject dataAccess, UserFactory userFactory) {
+    public RegistrationInteractor(RegistrationOutputBoundary presenter, InMemoryRegistrationDataAccessObject dataAccess, UserFactory userFactory) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
         this.userFactory = userFactory;
@@ -30,6 +30,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             User newUser = userFactory.create(username, password);
             dataAccess.saveUser(newUser);
             presenter.prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
+            presenter.switchToLoginView();
         }
     }
 }
