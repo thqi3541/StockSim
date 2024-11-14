@@ -34,7 +34,7 @@ class ExecuteBuyInteractorTest {
 
         when(dataAccess.getUserWithCredential("dummy")).thenReturn(mockUser);
 
-        Stock stock = new Stock("XXXX", 100.0);
+        Stock stock = new Stock("XXXX", "X Company", "Technology", 100.0);
 
         try (MockedStatic<StockMarket> mockedStatic = Mockito.mockStatic(StockMarket.class)) {
             // prepare StockMarket mock
@@ -82,7 +82,7 @@ class ExecuteBuyInteractorTest {
         when(dataAccess.getUserWithCredential("dummy")).thenReturn(mockUser);
 
         // prepare Stock mock
-        Stock stock = new Stock("XXXX", 100.0);
+        Stock stock = new Stock("XXXX", "X Company", "Technology", 100.0);
 
         try (MockedStatic<StockMarket> mockedStatic = Mockito.mockStatic(StockMarket.class)) {
             // prepare StockMarket mock
