@@ -20,6 +20,7 @@ public class TransactionHistory {
 
     /**
      * Constructor for TransactionHistory class
+     * @param existingTransactions take in the existing transactions when there are already some
      */
     public TransactionHistory(List<Transaction> existingTransactions) {
         this.transactions = new ArrayList<>(existingTransactions);
