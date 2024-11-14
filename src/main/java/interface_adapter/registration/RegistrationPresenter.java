@@ -26,7 +26,7 @@ public class RegistrationPresenter implements RegistrationOutputBoundary {
 
     @Override
     public void switchToLoginView() {
-        // Switch to the login view explicitly
+        // Switch to the login view
         ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"));
     }
 }
