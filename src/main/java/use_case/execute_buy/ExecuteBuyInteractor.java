@@ -13,11 +13,21 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     private final ExecuteBuyDataAccessInterface dataAccess;
     private final ExecuteBuyOutputBoundary outputPresenter;
 
+    /**
+     * This is the constructor of the ExecuteBuyInteractor class.
+     * It instantiates a new Execute Buy Interactor.
+     * @param dataAccess the data access
+     * @param outputBoundary the output boundary
+     */
     public ExecuteBuyInteractor(ExecuteBuyDataAccessInterface dataAccess, ExecuteBuyOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
     }
 
+    /**
+     * This method executes the buy transaction.
+     * @param data the input data
+     */
     @Override
     public void execute(ExecuteBuyInputData data) {
         try {
@@ -64,10 +74,23 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         }
     }
 
+    /**
+     * This method checks if the user has sufficient balance to buy the stock.
+     * @param user the user
+     * @param totalCost the total cost
+     * @return true if the user has sufficient balance, false otherwise
+     */
     private boolean isBalanceSufficient(User user, double totalCost) {
         return user.getBalance() >= totalCost;
     }
 
+    /**
+     * This method updates the stock in the portfolio or adds a stock to the user's portfolio.
+     * @param portfolio the portfolio of the user
+     * @param stock the stock the user buys
+     * @param quantity the quantity the user buys
+     * @param currentPrice the current price of the stock
+     */
     private void updateOrAddStockToPortfolio(Portfolio portfolio, Stock stock, int quantity, double currentPrice) {
         portfolio.getUserStock(stock.getTicker())
                 .ifPresentOrElse(
