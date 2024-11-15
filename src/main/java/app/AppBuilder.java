@@ -4,15 +4,16 @@ import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
+import interface_adapter.view_history.ViewHistoryController;
+import interface_adapter.view_history.ViewHistoryPresenter;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
+import use_case.view_history.ViewHistoryInputBoundary;
+import use_case.view_history.ViewHistoryInteractor;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.components.DialogComponent;
-import view.panels.DashboardPanel;
-import view.panels.LogInPanel;
-import view.panels.SignUpPanel;
-import view.panels.TradeSimulationPanel;
+import view.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,6 +85,13 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addTransactionHistoryPanel() {
+        TransactionHistoryPanel transactionHistoryPanel = new TransactionHistoryPanel();
+        // Add the transaction history panel to the card layout
+        cardPanel.add(transactionHistoryPanel, "TransactionHistoryPanel");
+        return this;
+    }
+
     /**
      * Build the application frame, initialize controllers, interactors, DAOs, and presenters, and register them in ServiceLocator.
      *
@@ -113,6 +121,17 @@ public class AppBuilder {
         // Step 4: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
         ExecuteBuyController executeBuyController = new ExecuteBuyController(executeBuyInteractor);
         ServiceManager.registerService(ExecuteBuyController.class, executeBuyController);
+
+        // Step 5: Initialize and register ViewHistoryPresenter (OutputBoundary)
+        ViewHistoryPresenter viewHistoryPresenter = new ViewHistoryPresenter();
+        ServiceManager.registerService(ViewHistoryPresenter.class, viewHistoryPresenter);
+
+        // Step 6: Initialize ViewHistoryInteractor with DAO and Presenter
+        ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(userDataAccessObject, viewHistoryPresenter);
+
+        // Step 7: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
+        ViewHistoryController viewHistoryController = new ViewHistoryController(viewHistoryInteractor);
+        ServiceManager.registerService(ViewHistoryController.class, viewHistoryController);
 
         // Set ViewManager to control panel switching with cardLayout and cardPanel
         ViewManager.Instance().setCardLayout(cardLayout, cardPanel);

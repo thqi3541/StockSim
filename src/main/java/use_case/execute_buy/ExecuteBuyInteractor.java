@@ -56,7 +56,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 // Add transaction
                 // TODO: timestamp synchronization
                 Date timestamp = new Date();
-                Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "buy");
+                Transaction transaction = new Transaction(timestamp, stock, quantity, currentPrice, "buy");
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
                 // Prepare success view

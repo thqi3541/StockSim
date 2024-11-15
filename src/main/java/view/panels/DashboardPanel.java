@@ -14,6 +14,7 @@ import java.util.EnumSet;
 public class DashboardPanel extends JPanel implements IComponent {
     private final JLabel welcomeLabel;
     private final ButtonComponent tradeButton;
+    private final ButtonComponent historyButton;
     private final ButtonComponent logoutButton;
 
     public DashboardPanel(String username, double cash, double position) {
@@ -39,6 +40,11 @@ public class DashboardPanel extends JPanel implements IComponent {
         tradeButton = new ButtonComponent("Trade");
         tradeButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
         tradingManagementPanel.add(tradeButton);
+
+        // View Transaction History Button with ActionListener for switching panels
+        historyButton = new ButtonComponent("View Transaction History");
+        historyButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel")));
+        tradingManagementPanel.add(historyButton);
 
         // Account Management Panel
         JPanel accountManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
