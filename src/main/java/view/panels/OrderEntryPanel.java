@@ -75,9 +75,11 @@ public class OrderEntryPanel extends JPanel implements IComponent {
             User user1 = new User("user1", "password");
             user1.addBalance(10000.00);
 
-            Stock stock1 = new Stock("ticker", 100.00);
+            Stock stock1 = new Stock(ticker, 100.00);
             UserStock userStock1 = new UserStock(stock1, 100.00, Integer.parseInt(quantity));
+            Stock stock2 = new Stock("AAPL", 200.00);
             user1.getPortfolio().addStock(userStock1);
+            user1.getPortfolio().addStock(new UserStock(stock2, 200.00, 10));
             ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(user1.getPortfolio(), user1.getBalance()));
         });
 

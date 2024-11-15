@@ -15,5 +15,3 @@ public class InMemoryStockDataAccessObject implements IStockDataAccess {
         return stocks;
     }
 }
-
-
