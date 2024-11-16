@@ -1,5 +1,6 @@
 package interface_adapter.execute_buy;
 
+import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInputData;
 import utility.ClientSessionManager;

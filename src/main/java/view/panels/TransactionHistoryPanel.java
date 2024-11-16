@@ -29,7 +29,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
         // Header Panel with Title and Button
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         JLabel titleLabel = new JLabel("Transaction History");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
@@ -102,7 +102,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
     }
 
     private String[] getColumnNames() {
-        return new String[]{"Date", "Ticker", "Company Name", "Action", "Price", "Quantity", "Total Price"};
+        return new String[]{"Date", "Ticker", "Company Name", "Action", "Price", "Quantity","Total Price"};
     }
 
     private Object[] createRowData(Transaction transaction) {

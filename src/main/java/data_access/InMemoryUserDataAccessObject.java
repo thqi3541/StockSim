@@ -4,10 +4,10 @@ import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.SessionManager;
-import utility.exceptions.ValidationException;
 
 import java.util.HashMap;
 import java.util.Map;
+import utility.exceptions.ValidationException;
 
 /**
  * A class that implements the ExecuteBuyDataAccessInterface interface
