@@ -1,8 +1,5 @@
 package utility;
 
-import java.util.Optional;
-
-
 public class ClientSessionManager {
 
     // singleton instance
@@ -12,7 +9,8 @@ public class ClientSessionManager {
     private String credential;
 
     // singleton constructor
-    private ClientSessionManager() { }
+    private ClientSessionManager() {
+    }
 
     public static synchronized ClientSessionManager Instance() {
         if (instance == null) {

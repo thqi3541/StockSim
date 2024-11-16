@@ -9,9 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A singleton class representing the stock market
  */
+
 // TODO: lock the stock market when updating stock prices
 public class StockMarket {
 
+    // TODO: add a method to get all stocks for market search panel
     // thread-safe Singleton instance
     private static volatile StockMarket instance = null;
 
