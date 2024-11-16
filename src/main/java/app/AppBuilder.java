@@ -132,37 +132,30 @@ public class AppBuilder {
         InMemoryStockDataAccessObject stockDAO = new InMemoryStockDataAccessObject();
         InMemoryUserDataAccessObject userDAO = new InMemoryUserDataAccessObject();
 
-        // Register concrete implementations
+        // Register concrete DAOs and their interfaces
         serviceManager.registerService(InMemoryStockDataAccessObject.class, stockDAO);
         serviceManager.registerService(InMemoryUserDataAccessObject.class, userDAO);
-        // Register userDAO for both interfaces since both interactors use it
         serviceManager.registerService(ExecuteBuyDataAccessInterface.class, userDAO);
         serviceManager.registerService(ExecuteViewHistoryDataAccessInterface.class, userDAO);
 
-        // 2. Initialize Presenters and register them with their interfaces
-        ExecuteBuyPresenter buyPresenter = new ExecuteBuyPresenter();
-        ExecuteViewHistoryPresenter viewHistoryPresenter = new ExecuteViewHistoryPresenter();
+        // 2. Initialize Presenters and register them as output boundaries
+        ExecuteBuyOutputBoundary buyPresenter = new ExecuteBuyPresenter();
+        ExecuteViewHistoryOutputBoundary viewHistoryPresenter = new ExecuteViewHistoryPresenter();
 
-        // Register concrete implementations and interfaces
-        serviceManager.registerService(ExecuteBuyPresenter.class, buyPresenter);
         serviceManager.registerService(ExecuteBuyOutputBoundary.class, buyPresenter);
-        serviceManager.registerService(ExecuteViewHistoryPresenter.class, viewHistoryPresenter);
         serviceManager.registerService(ExecuteViewHistoryOutputBoundary.class, viewHistoryPresenter);
 
-        // 3. Initialize Interactors and register them with their interfaces
-        ExecuteBuyInteractor buyInteractor = new ExecuteBuyInteractor(
+        // 3. Initialize Interactors and register them as input boundaries
+        ExecuteBuyInputBoundary buyInteractor = new ExecuteBuyInteractor(
                 serviceManager.getService(ExecuteBuyDataAccessInterface.class),
                 serviceManager.getService(ExecuteBuyOutputBoundary.class)
         );
-        ExecuteViewHistoryInteractor viewHistoryInteractor = new ExecuteViewHistoryInteractor(
+        ExecuteViewHistoryInputBoundary viewHistoryInteractor = new ExecuteViewHistoryInteractor(
                 serviceManager.getService(ExecuteViewHistoryDataAccessInterface.class),
                 serviceManager.getService(ExecuteViewHistoryOutputBoundary.class)
         );
 
-        // Register concrete implementations and interfaces
-        serviceManager.registerService(ExecuteBuyInteractor.class, buyInteractor);
         serviceManager.registerService(ExecuteBuyInputBoundary.class, buyInteractor);
-        serviceManager.registerService(ExecuteViewHistoryInteractor.class, viewHistoryInteractor);
         serviceManager.registerService(ExecuteViewHistoryInputBoundary.class, viewHistoryInteractor);
 
         // 4. Initialize Controllers
