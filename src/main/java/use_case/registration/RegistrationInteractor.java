@@ -1,8 +1,9 @@
 package use_case.registration;
 
-import data_access.InMemoryRegistrationDataAccessObject;
 import entity.User;
 import entity.UserFactory;
+import utility.exceptions.DuplicateUsernameException;
+import utility.exceptions.InvalidInputException;
 
 /**
  * The Registration Interactor.
@@ -12,8 +13,8 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     // Reference to the output boundary (presenter) for displaying feedback
     private final RegistrationOutputBoundary presenter;
 
-    // Reference to the data access object for saving and retrieving user data
-    private final InMemoryRegistrationDataAccessObject dataAccess;
+    // Reference to the data access object as an interface type
+    private final RegistrationDataAccessInterface dataAccess;
 
     // Reference to the user factory for creating new user instances
     private final UserFactory userFactory;
@@ -25,7 +26,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
      * @param dataAccess  The data access object for storing and retrieving users.
      * @param userFactory The factory used to create new user instances.
      */
-    public RegistrationInteractor(RegistrationOutputBoundary presenter, InMemoryRegistrationDataAccessObject dataAccess, UserFactory userFactory) {
+    public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess, UserFactory userFactory) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
         this.userFactory = userFactory;
@@ -41,32 +42,51 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
      */
     @Override
     public void register(RegistrationInputData inputData) {
-        String username = inputData.username();
-        String password = inputData.password();
+        try {
+            // Check for empty username/password
+            validateInput(inputData);
 
-        // Check if username or password is empty and show an error message if so
-        if (username.isEmpty() || password.isEmpty()) {
-            presenter.prepareFailView("Username and password cannot be empty.");
-        }
+            // Create a new user
+            User newUser = userFactory.create(inputData.username(), inputData.password());
 
-        // Check if the username is already taken by querying the data access object
-        else if (dataAccess.getUserWithUsername(username) != null) {
-            presenter.prepareFailView("Username already exists. Please choose another one.");
-        }
-
-        // Proceed with registration if both checks pass
-        else {
-            // Create a new user with the provided username and password
-            User newUser = userFactory.create(username, password);
-
-            // Save the new user to the data access storage
+            // Save the user
             dataAccess.saveUser(newUser);
 
-            // Notify the presenter that registration was successful and display a message
+            // Notify success
             presenter.prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
+        } catch (InvalidInputException e) {
+            presenter.prepareInvalidInputView(e.getMessage());
+        } catch (DuplicateUsernameException e) {
+            presenter.prepareDuplicateUsernameView(e.getMessage());
+        }
+    }
 
-            // Direct the presenter to switch to the login view
-            presenter.switchToLoginView();
+    private void validateInput(RegistrationInputData inputData) throws InvalidInputException {
+        if (inputData.username().isEmpty() || inputData.password().isEmpty()) {
+            throw new InvalidInputException("Username and password cannot be empty.");
+        }
+
+        // Check if the username already exists
+        else if (dataAccess.getUserWithUsername(inputData.username()) != null) {
+            throw new DuplicateUsernameException("Username already exists. Please choose another one.");
+        }
+    }
+
+    /**
+     * Exception thrown when the input data is invalid.
+     */
+    public static class InvalidInputException extends Exception {
+        public InvalidInputException(String message) {
+            super(message);
+        }
+    }
+
+    /**
+     * Exception thrown when the username already exists.
+     */
+    public static class DuplicateUsernameException extends Exception {
+        public DuplicateUsernameException(String message) {
+            super(message);
         }
     }
 }

@@ -11,22 +11,19 @@ public class RegistrationPresenter implements RegistrationOutputBoundary {
     @Override
     public void prepareSuccessView(RegistrationOutputData outputData) {
         // Display a success message to the user
-        String successMessage = outputData.message();
-        ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Successful", successMessage));
-
-        // After displaying the success message, switch to the login view
-        switchToLoginView();
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Successful", outputData.message()));
+        ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"));
     }
 
     @Override
-    public void prepareFailView(String errorMessage) {
+    public void prepareInvalidInputView(String errorMessage) {
         // Display an error message to the user
         ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
     }
 
     @Override
-    public void switchToLoginView() {
-        // Switch to the login view
-        ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"));
+    public void prepareDuplicateUsernameView(String errorMessage) {
+        // Display an error message for duplicate usernames
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
     }
 }

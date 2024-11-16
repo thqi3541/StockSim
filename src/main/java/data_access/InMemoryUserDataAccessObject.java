@@ -2,7 +2,9 @@ package data_access;
 
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.registration.RegistrationDataAccessInterface;
 import utility.SessionManager;
+import utility.exceptions.DuplicateUsernameException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         return getUserWithUsername(username);
     }
 
-    public User getUserWithUsername(String username) {
+    private User getUserWithUsername(String username) {
         Map<String, User> users = new HashMap<>();
 
         User user1 = new User("user1", "password");
