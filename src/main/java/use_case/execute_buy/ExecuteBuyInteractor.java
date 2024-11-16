@@ -38,6 +38,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
             // Get stock and quantity
             String ticker = data.ticker();
+
             int quantity = data.quantity();
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 

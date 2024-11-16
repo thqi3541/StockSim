@@ -9,4 +9,5 @@ public enum EventType {
     UPDATE_USERNAME,
     SWITCH_PANEL,
     DIALOG,
+    VIEW_HISTORY,
 }

@@ -4,6 +4,9 @@
 
 ### New Features
 
+- Added `ViewHistory` use case to view transaction history
+- Added GUI components for view transaction history page
+
 ### Internal Changes
 
 - Implemented `ClientSessionManager` for client-side session management.
@@ -16,6 +19,7 @@
 - Modified `InMemoryStockDataAccessObject` to utilize new IStockDataAccess return type
 - Added new api calls in `StockDataAccess` to retrieve and store company name and industry
 - Modified `Stock`, `StockMarket`, and `InMemoryStockDataAccessObject` to store and utilize new company and industry data
+- Modified `InMemoryUserDataAccessObject` to utilize `ViewHistoryDataAccessInterface` as well
 
 ### Bug Fixes
 
