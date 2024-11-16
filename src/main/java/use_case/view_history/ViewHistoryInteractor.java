@@ -1,7 +1,6 @@
 package use_case.view_history;
 
 import entity.User;
-import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import utility.exceptions.ValidationException;
 
 /**
@@ -15,7 +14,8 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
     /**
      * This is the constructor of the ViewHistoryInteractor class.
      * It instantiates a new ViewHistory Interactor.
-     * @param dataAccess the data access
+     *
+     * @param dataAccess     the data access
      * @param outputBoundary the output boundary
      */
     public ViewHistoryInteractor(ViewHistoryDataAccessInterface dataAccess, ViewHistoryOutputBoundary outputBoundary) {
@@ -25,6 +25,7 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
 
     /**
      * This methods executes view transaction history
+     *
      * @param data the input data
      */
     @Override

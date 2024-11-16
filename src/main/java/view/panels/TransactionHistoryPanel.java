@@ -33,7 +33,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
         // Header Panel with Title
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel titleLabel = new JLabel("Transaction History");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
