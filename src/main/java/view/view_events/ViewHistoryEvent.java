@@ -23,8 +23,9 @@ public class ViewHistoryEvent extends ViewEvent {
 
     /**
      * Constructs a ViewHistoryEvent with a specified transaction history and a set of event types.
+     *
      * @param transactionHistory The transaction history to display
-     * @param types The set of event types for this event
+     * @param types              The set of event types for this event
      */
     public ViewHistoryEvent(TransactionHistory transactionHistory, EnumSet<EventType> types) {
         super(types);
@@ -33,6 +34,7 @@ public class ViewHistoryEvent extends ViewEvent {
 
     /**
      * A getter for the transaction history associated with this view event
+     *
      * @return The transaction history for this view event's user
      */
     public TransactionHistory getTransactionHistory() {

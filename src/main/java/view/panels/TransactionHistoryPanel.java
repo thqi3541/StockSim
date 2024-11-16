@@ -108,6 +108,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     /**
      * Gets the set table column names
+     *
      * @return column names
      */
     private String[] getColumnNames() {
@@ -116,6 +117,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     /**
      * Creates new table entry based on transaction data
+     *
      * @param transaction the transaction to be displayed
      * @return new table row data
      */
@@ -167,6 +169,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     /**
      * Gets the event type this panel handles
+     *
      * @return the event type
      */
     @Override

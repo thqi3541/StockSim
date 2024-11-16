@@ -87,6 +87,7 @@ public class AppBuilder {
 
     /**
      * Add the transaction history panel to the application
+     *
      * @return
      */
     public AppBuilder addTransactionHistoryPanel() {

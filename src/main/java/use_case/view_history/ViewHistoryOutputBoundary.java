@@ -7,6 +7,7 @@ public interface ViewHistoryOutputBoundary {
 
     /**
      * Prepares the success view for the ViewHistory use case.
+     *
      * @param outputData the output data
      */
     void prepareSuccessView(ViewHistoryOutputData outputData);

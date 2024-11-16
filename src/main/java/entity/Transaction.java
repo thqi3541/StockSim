@@ -15,6 +15,7 @@ public record Transaction(
 
     /**
      * Getter to retrieve transaction date
+     *
      * @return date of transaction
      */
     public Date getTimestamp() {
@@ -23,6 +24,7 @@ public record Transaction(
 
     /**
      * Getter to retrieve transaction ticker
+     *
      * @return ticker of transaction
      */
     public String getTicker() {
@@ -31,6 +33,7 @@ public record Transaction(
 
     /**
      * Getter to retrieve transaction quantity
+     *
      * @return number of stocks involved in the transaction
      */
     public int getQuantity() {
@@ -39,6 +42,7 @@ public record Transaction(
 
     /**
      * Getter to retrieve transaction stock price
+     *
      * @return price of a single stock from transaction
      */
     public double getPrice() {
@@ -47,6 +51,7 @@ public record Transaction(
 
     /**
      * Getter to retrieve type of transaction (i.e. buy or sell)
+     *
      * @return the transaction type
      */
     public String getType() {
