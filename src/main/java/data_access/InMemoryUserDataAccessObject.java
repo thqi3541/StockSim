@@ -2,6 +2,7 @@ package data_access;
 
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 

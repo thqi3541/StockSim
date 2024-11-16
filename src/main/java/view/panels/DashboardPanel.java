@@ -23,9 +23,9 @@ public class DashboardPanel extends JPanel implements IComponent {
     private static final String CURRENCY_FORMAT = "$%.2f";
 
     private final JLabel welcomeLabel;
-    private final JLabel balanceLabel;
-    private ButtonComponent tradeButton;
-    private ButtonComponent logoutButton;
+    private final ButtonComponent tradeButton;
+    private final ButtonComponent historyButton;
+    private final ButtonComponent logoutButton;
 
     public DashboardPanel(String username, double cash, double position) {
         ViewManager.Instance().registerComponent(this);
@@ -75,6 +75,11 @@ public class DashboardPanel extends JPanel implements IComponent {
         tradeButton.addActionListener(e ->
                 ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
         tradingManagementPanel.add(tradeButton);
+
+        // View Transaction History Button with ActionListener for switching panels
+        historyButton = new ButtonComponent("View Transaction History");
+        historyButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel")));
+        tradingManagementPanel.add(historyButton);
 
         // Account Management Panel
         JPanel accountManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));

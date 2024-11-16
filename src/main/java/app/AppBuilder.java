@@ -4,15 +4,16 @@ import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
+import interface_adapter.view_history.ViewHistoryController;
+import interface_adapter.view_history.ViewHistoryPresenter;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
+import use_case.view_history.ViewHistoryInputBoundary;
+import use_case.view_history.ViewHistoryInteractor;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.components.DialogComponent;
-import view.panels.DashboardPanel;
-import view.panels.LogInPanel;
-import view.panels.SignUpPanel;
-import view.panels.TradeSimulationPanel;
+import view.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,6 +111,18 @@ public class AppBuilder {
     private void addPanel(String name, JPanel panel) {
         panels.put(name, panel);
         cardPanel.add(panel, name);
+    }
+
+    /**
+     * Add the transaction history panel to the application
+     *
+     * @return
+     */
+    public AppBuilder addTransactionHistoryPanel() {
+        TransactionHistoryPanel transactionHistoryPanel = new TransactionHistoryPanel();
+        // Add the transaction history panel to the card layout
+        cardPanel.add(transactionHistoryPanel, "TransactionHistoryPanel");
+        return this;
     }
 
     /**
