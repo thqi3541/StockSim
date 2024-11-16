@@ -1,6 +1,6 @@
 package entity;
 
-import data_access.IStockDataAccess;
+import data_access.StockDataAccessInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class StockMarket {
     private static volatile StockMarket instance = null;
 
     private Map<String, Stock> stocks = new ConcurrentHashMap<>();
-    private IStockDataAccess dataAccess;
+    private StockDataAccessInterface dataAccess;
     private boolean initialized = false;
 
     // use read-write lock to ensure stock data is not read during update
@@ -43,7 +43,7 @@ public class StockMarket {
     }
 
     // initialize the stock market with data access object
-    public synchronized void initialize(IStockDataAccess dataAccess) {
+    public synchronized void initialize(StockDataAccessInterface dataAccess) {
         if (this.initialized) {
             throw new IllegalStateException("StockMarket is already initialized.");
         }

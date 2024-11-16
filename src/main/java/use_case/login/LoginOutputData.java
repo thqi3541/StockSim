@@ -9,5 +9,4 @@ public record LoginOutputData(
         User user,
         List<Stock> stocks
 ) {
-
 }

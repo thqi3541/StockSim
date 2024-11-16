@@ -2,14 +2,19 @@ package app;
 
 import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
+import data_access.StockDataAccessInterface;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import interface_adapter.view_history.ViewHistoryController;
 import interface_adapter.view_history.ViewHistoryPresenter;
+import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
+import use_case.execute_buy.ExecuteBuyOutputBoundary;
+import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
+import use_case.view_history.ViewHistoryOutputBoundary;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.components.DialogComponent;
@@ -110,15 +115,16 @@ public class AppBuilder {
 
         //Step 0: Initialize and register InMemoryStockDataAccessObject (DAO)
         InMemoryStockDataAccessObject stockDataAccessObject = new InMemoryStockDataAccessObject();
-        ServiceManager.registerService(InMemoryStockDataAccessObject.class, stockDataAccessObject);
+        ServiceManager.registerService(StockDataAccessInterface.class, stockDataAccessObject);
 
-        // Step 1: Initialize and register InMemoryUserDataAccessObject (DAO)
+        // Step 1: Initialize and register Data Access object
         InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
-        ServiceManager.registerService(InMemoryUserDataAccessObject.class, userDataAccessObject);
+        ServiceManager.registerService(ExecuteBuyDataAccessInterface.class, userDataAccessObject);
+        ServiceManager.registerService(ViewHistoryDataAccessInterface.class, userDataAccessObject);
 
         // Step 2: Initialize and register ExecuteBuyPresenter (OutputBoundary)
         ExecuteBuyPresenter executeBuyPresenter = new ExecuteBuyPresenter();
-        ServiceManager.registerService(ExecuteBuyPresenter.class, executeBuyPresenter);
+        ServiceManager.registerService(ExecuteBuyOutputBoundary.class, executeBuyPresenter);
 
         // Step 3: Initialize ExecuteBuyInteractor with DAO and Presenter
         ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDataAccessObject, executeBuyPresenter);
@@ -129,7 +135,7 @@ public class AppBuilder {
 
         // Step 5: Initialize and register ViewHistoryPresenter (OutputBoundary)
         ViewHistoryPresenter viewHistoryPresenter = new ViewHistoryPresenter();
-        ServiceManager.registerService(ViewHistoryPresenter.class, viewHistoryPresenter);
+        ServiceManager.registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
 
         // Step 6: Initialize ViewHistoryInteractor with DAO and Presenter
         ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(userDataAccessObject, viewHistoryPresenter);

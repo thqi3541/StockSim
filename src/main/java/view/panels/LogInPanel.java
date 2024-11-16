@@ -51,7 +51,12 @@ public class LogInPanel extends JPanel implements IComponent {
 
         // Initialize ButtonComponents for login and sign-up
         logInButton = new ButtonComponent("Log In");
-        logInButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
+        logInButton.addActionListener(e -> {
+            String username = usernameInput.getText();
+            String password = passwordInput.getText();
+
+
+        });
         gbc.gridy = 2;
         formPanel.add(logInButton, gbc);
 

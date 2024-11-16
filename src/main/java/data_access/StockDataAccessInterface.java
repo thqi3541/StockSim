@@ -4,7 +4,7 @@ import entity.Stock;
 
 import java.util.Map;
 
-public interface IStockDataAccess {
+public interface StockDataAccessInterface {
 
     /**
      * Get the prices of all stocks
