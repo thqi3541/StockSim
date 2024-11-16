@@ -16,109 +16,143 @@ import view.panels.TradeSimulationPanel;
 
 import javax.swing.*;
 import java.awt.*;
-
-// TODO: better ways of import all the services and panels
-// TODO: maybe create a config file for the building process
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A builder class for the application.
- * This class now works as a setup utility to add panels to ViewManager, build the main application frame, and manage the ServiceLocator.
+ * Manages frame creation, service registration, and view management.
  */
 public class AppBuilder {
-    private final JPanel cardPanel = new JPanel();
-    private final CardLayout cardLayout = new CardLayout();
+    // Default dimensions and title for the application window
+    private static final int DEFAULT_WIDTH = 1000;
+    private static final int DEFAULT_HEIGHT = 800;
+    private static final String DEFAULT_TITLE = "Application";
 
-    // Internal ServiceLocator for managing controllers, interactors, DAOs, and presenters
-    private final ServiceManager serviceManager = new ServiceManager();
+    // Components for the application
+    private final JPanel cardPanel;
+    private final CardLayout cardLayout;
+    private final Map<String, JPanel> panels;
+    private String initialPanel = "LogInPanel";
+
+    // Custom dimensions and title for the application window
+    private int width = DEFAULT_WIDTH;
+    private int height = DEFAULT_HEIGHT;
+    private String title = DEFAULT_TITLE;
 
     public AppBuilder() {
-        cardPanel.setLayout(cardLayout);
+        this.cardPanel = new JPanel();
+        this.cardLayout = new CardLayout();
+        this.panels = new HashMap<>();
+        this.cardPanel.setLayout(cardLayout);
     }
 
     /**
-     * Add the login and sign-up panels to the application
-     *
-     * @return the builder
+     * Sets custom dimensions for the application window
+     */
+    public AppBuilder withDimensions(int width, int height) {
+        this.width = width;
+        this.height = height;
+        return this;
+    }
+
+    /**
+     * Sets custom title for the application window
+     */
+    public AppBuilder withTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    /**
+     * Sets the initial panel to be displayed
+     */
+    public AppBuilder withInitialPanel(String panelName) {
+        this.initialPanel = panelName;
+        return this;
+    }
+
+    /**
+     * Adds authentication panels (Login and SignUp)
      */
     public AppBuilder addAuthenticationPanels() {
-        LogInPanel logInPanel = new LogInPanel();
-        SignUpPanel signUpPanel = new SignUpPanel();
-
-        // Add panels to the card layout
-        cardPanel.add(logInPanel, "LogInPanel");
-        cardPanel.add(signUpPanel, "SignUpPanel");
-
+        addPanel("LogInPanel", new LogInPanel());
+        addPanel("SignUpPanel", new SignUpPanel());
         return this;
     }
 
     /**
-     * Add the dashboard panel to the application
-     *
-     * @return the builder
+     * Adds the dashboard panel with user information
      */
     public AppBuilder addDashboardPanel(String username, double cash, double position) {
-        DashboardPanel dashboardPanel = new DashboardPanel(username, cash, position);
-
-        // Add the dashboard panel to the card layout
-        cardPanel.add(dashboardPanel, "DashboardPanel");
-
+        addPanel("DashboardPanel", new DashboardPanel(username, cash, position));
         return this;
     }
 
     /**
-     * Add the trade simulation panel to the application
-     *
-     * @return the builder
+     * Adds the trade simulation panel
      */
     public AppBuilder addTradeSimulationPanel() {
-        TradeSimulationPanel tradeSimulationPanel = new TradeSimulationPanel();
-
-        // Add the trade simulation panel to the card layout
-        cardPanel.add(tradeSimulationPanel, "TradeSimulationPanel");
-
-        return this;
-    }
-
-    public AppBuilder addDialogComponent() {
-        DialogComponent dialogComponent = new DialogComponent();
+        addPanel("TradeSimulationPanel", new TradeSimulationPanel());
         return this;
     }
 
     /**
-     * Build the application frame, initialize controllers, interactors, DAOs, and presenters, and register them in ServiceLocator.
-     *
-     * @return the application frame
+     * Adds the dialog component
+     */
+    public void addDialogComponent() {
+        ServiceManager.Instance().registerService(DialogComponent.class, new DialogComponent());
+    }
+
+    /**
+     * Helper method to add a panel to both the card layout and panels map
+     */
+    private void addPanel(String name, JPanel panel) {
+        panels.put(name, panel);
+        cardPanel.add(panel, name);
+    }
+
+    /**
+     * Initializes all required services
+     */
+    private void initializeServices() {
+        // Initialize in memory DAOs
+        ServiceManager.Instance().registerService(InMemoryStockDataAccessObject.class,
+                new InMemoryStockDataAccessObject());
+        ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class,
+                new InMemoryUserDataAccessObject());
+
+        // Initialize Presenter
+        ExecuteBuyPresenter executeBuyPresenter = new ExecuteBuyPresenter();
+        ServiceManager.Instance().registerService(ExecuteBuyPresenter.class, executeBuyPresenter);
+
+        // Initialize Interactor
+        InMemoryUserDataAccessObject userDAO = ServiceManager.Instance().getService(InMemoryUserDataAccessObject.class);
+        ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDAO, executeBuyPresenter);
+
+        // Initialize Controller
+        ServiceManager.Instance().registerService(ExecuteBuyController.class,
+                new ExecuteBuyController(executeBuyInteractor));
+    }
+
+    /**
+     * Builds and returns the configured application frame
      */
     public JFrame build() {
-        JFrame application = new JFrame("Application");
-        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        application.setSize(1000, 800);
-        application.add(cardPanel);
+        // Initialize services
+        initializeServices();
 
-        //Step 0: Initialize and register InMemoryStockDataAccessObject (DAO)
-        InMemoryStockDataAccessObject stockDataAccessObject = new InMemoryStockDataAccessObject();
-        ServiceManager.registerService(InMemoryStockDataAccessObject.class, stockDataAccessObject);
-
-        // Step 1: Initialize and register InMemoryUserDataAccessObject (DAO)
-        InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
-        ServiceManager.registerService(InMemoryUserDataAccessObject.class, userDataAccessObject);
-
-        // Step 2: Initialize and register ExecuteBuyPresenter (OutputBoundary)
-        ExecuteBuyPresenter executeBuyPresenter = new ExecuteBuyPresenter();
-        ServiceManager.registerService(ExecuteBuyPresenter.class, executeBuyPresenter);
-
-        // Step 3: Initialize ExecuteBuyInteractor with DAO and Presenter
-        ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDataAccessObject, executeBuyPresenter);
-
-        // Step 4: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
-        ExecuteBuyController executeBuyController = new ExecuteBuyController(executeBuyInteractor);
-        ServiceManager.registerService(ExecuteBuyController.class, executeBuyController);
-
-        // Set ViewManager to control panel switching with cardLayout and cardPanel
+        // Configure view manager
         ViewManager.Instance().setCardLayout(cardLayout, cardPanel);
 
-        // Show the LogInPanel initially
-        cardLayout.show(cardPanel, "LogInPanel");
+        // Create and configure the main frame
+        JFrame application = new JFrame(title);
+        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        application.setSize(width, height);
+        application.add(cardPanel);
+
+        // Show initial panel
+        cardLayout.show(cardPanel, initialPanel);
 
         return application;
     }

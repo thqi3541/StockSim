@@ -16,6 +16,11 @@
 - Modified `InMemoryStockDataAccessObject` to utilize new IStockDataAccess return type
 - Added new api calls in `StockDataAccess` to retrieve and store company name and industry
 - Modified `Stock`, `StockMarket`, and `InMemoryStockDataAccessObject` to store and utilize new company and industry data
+- Implemented filter filed in market search panel
+- Changed password input field using `JPasswordField`
+- Added `getAssets` method in user entity
+- Reformated app builder to accept more configs
+- Implemented singleton pattern for service manager
 
 ### Bug Fixes
 

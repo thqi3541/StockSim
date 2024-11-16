@@ -4,6 +4,7 @@ import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
+import view.components.PasswordInputComponent;
 import view.view_events.DialogEvent;
 import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
@@ -15,8 +16,8 @@ import java.util.EnumSet;
 
 public class SignUpPanel extends JPanel implements IComponent {
     private final InputComponent usernameField;
-    private final InputComponent passwordField;
-    private final InputComponent repeatPasswordField;
+    private final PasswordInputComponent passwordField;
+    private final PasswordInputComponent repeatPasswordField;
     private final ButtonComponent signUpButton;
     private final ButtonComponent logInButton;
 
@@ -43,8 +44,8 @@ public class SignUpPanel extends JPanel implements IComponent {
 
         // Initialize InputComponents for username and passwords
         usernameField = new InputComponent("Username", 15);
-        passwordField = new InputComponent("Password", 15);
-        repeatPasswordField = new InputComponent("Repeat password", 15);
+        passwordField = new PasswordInputComponent("Password", 15);
+        repeatPasswordField = new PasswordInputComponent("Repeat password", 15);
 
         gbc.gridy = 0;
         formPanel.add(usernameField, gbc);

@@ -4,16 +4,13 @@ package entity;
  * A class representing a user
  */
 public class User {
-
     private final String username;
     private final String password;
     private final Portfolio portfolio;
     private final TransactionHistory transactionHistory;
     private double balance;
 
-    // TODO: asset method
     // TODO: handle password hashing
-
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -36,6 +33,15 @@ public class User {
 
     public void deductBalance(double amount) {
         this.balance -= amount;
+    }
+
+    /**
+     * Get total assets (cash balance + portfolio value)
+     *
+     * @return total value of user's cash and investments
+     */
+    public double getAssets() {
+        return balance + portfolio.getTotalValue();
     }
 
     public String getUsername() {

@@ -4,6 +4,7 @@ import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
+import view.components.PasswordInputComponent;
 import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
@@ -14,7 +15,7 @@ import java.util.EnumSet;
 
 public class LogInPanel extends JPanel implements IComponent {
     private final InputComponent usernameInput;
-    private final InputComponent passwordInput;
+    private final PasswordInputComponent passwordInput;
     private final ButtonComponent logInButton;
     private final ButtonComponent signUpButton;
 
@@ -41,9 +42,8 @@ public class LogInPanel extends JPanel implements IComponent {
         gbc.weightx = 1.0;
 
         // Initialize InputComponents for username and password
-        // TODO: use password filed for passwordInput
         usernameInput = new InputComponent("Username", 15);
-        passwordInput = new InputComponent("Password", 15);
+        passwordInput = new PasswordInputComponent("Password", 15);
 
         gbc.gridy = 0;
         formPanel.add(usernameInput, gbc);
@@ -52,6 +52,7 @@ public class LogInPanel extends JPanel implements IComponent {
 
         // Initialize ButtonComponents for login and sign-up
         logInButton = new ButtonComponent("Log In");
+        // TODO: call log in interactor, if successful, switch to dashboard panel
         logInButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
         gbc.gridy = 2;
         formPanel.add(logInButton, gbc);
