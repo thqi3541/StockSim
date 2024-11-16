@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.EnumSet;
 
 public class TransactionHistoryPanel extends JPanel implements IComponent {
+    private DefaultTableModel tableModel;
 
     public TransactionHistoryPanel() {
         ViewManager.Instance().registerComponent(this);
@@ -49,13 +50,13 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
         // Transaction History Table Setup
         // Initialize table model with column names
-        DefaultTableModel tableModel = new DefaultTableModel(new Object[][]{}, getColumnNames()) {
+        tableModel = new DefaultTableModel(new Object[][]{}, getColumnNames()) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        JTable historyTable = new JTable(getDefaultTableModel());
+        JTable historyTable = new JTable(tableModel);
         historyTable.setFillsViewportHeight(true);
         historyTable.setRowHeight(30);
         historyTable.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -79,6 +80,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         frame.setVisible(true);
     }
 
+    // Display default data to test correct display data
     private DefaultTableModel getDefaultTableModel() {
         String[] columnNames = {
                 "Date and Time", "Ticker", "Company Name", "Action", "Price", "Quantity",
@@ -130,25 +132,22 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
      */
     @Override
     public void receiveViewEvent(ViewEvent event) {
-//        if (event instanceof ViewHistoryEvent updateEvent) {
-//            TransactionHistory transactionHistory = updateEvent.getTransactionHistory();
-//
-//            tableModel.setRowCount(0);
-//
-//            transactionHistory.getAllTransactions().forEach(transaction -> {
-//                Object[] rowData = createRowData(transaction);
-//                tableModel.addRow(rowData);
-//            });
-//        }
-        if (event instanceof SwitchPanelEvent) {
-            System.out.println("TransactionHistoryPanel received a SwitchPanelEvent.");
+        if (event instanceof ViewHistoryEvent updateEvent) {
+            TransactionHistory transactionHistory = updateEvent.getTransactionHistory();
+
+            tableModel.setRowCount(0);
+
+            transactionHistory.getAllTransactions().forEach(transaction -> {
+                Object[] rowData = createRowData(transaction);
+                tableModel.addRow(rowData);
+            });
         }
     }
 
     @Override
     public EnumSet<EventType> getSupportedEventTypes() {
-        // TransactionHistoryPanel only supports SWITCH_PANEL events
-        return EnumSet.of(EventType.SWITCH_PANEL);
+        // TransactionHistoryPanel only supports VIEW_HISTORY events
+        return EnumSet.of(EventType.VIEW_HISTORY);
     }
 
 }

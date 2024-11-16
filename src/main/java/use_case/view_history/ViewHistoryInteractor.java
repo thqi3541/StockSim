@@ -9,7 +9,7 @@ import utility.exceptions.ValidationException;
  */
 public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
 
-    private final ExecuteBuyDataAccessInterface dataAccess;
+    private final ViewHistoryDataAccessInterface dataAccess;
     private final ViewHistoryOutputBoundary outputPresenter;
 
     /**
@@ -18,7 +18,7 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
      * @param dataAccess the data access
      * @param outputBoundary the output boundary
      */
-    public ViewHistoryInteractor(ExecuteBuyDataAccessInterface dataAccess, ViewHistoryOutputBoundary outputBoundary) {
+    public ViewHistoryInteractor(ViewHistoryDataAccessInterface dataAccess, ViewHistoryOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
     }
