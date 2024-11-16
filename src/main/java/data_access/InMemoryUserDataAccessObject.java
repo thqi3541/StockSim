@@ -3,10 +3,10 @@ package data_access;
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import utility.SessionManager;
+import utility.exceptions.ValidationException;
 
 import java.util.HashMap;
 import java.util.Map;
-import utility.exceptions.ValidationException;
 
 /**
  * A class that implements the ExecuteBuyDataAccessInterface interface

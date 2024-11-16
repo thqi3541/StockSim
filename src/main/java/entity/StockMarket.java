@@ -13,9 +13,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * A singleton class representing the stock market
  */
+
 // TODO: lock the stock market when updating stock prices
 public class StockMarket {
 
+    // TODO: add a method to get all stocks for market search panel
     // thread-safe Singleton instance
     private static volatile StockMarket instance = null;
 
@@ -71,9 +73,11 @@ public class StockMarket {
         this.stocks = dataAccess.getStocks();
         for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
             String ticker = entry.getKey();
+            String company = entry.getValue().getCompany();
+            String industry = entry.getValue().getIndustry();
             double price = entry.getValue().getPrice();
             // create a new map entry if stock does not exist, and then update price
-            stocks.computeIfAbsent(ticker, k -> new Stock(ticker, price)).updatePrice(price);
+            stocks.computeIfAbsent(ticker, k -> new Stock(ticker, company, industry, price)).updatePrice(price);
         }
     }
 }
