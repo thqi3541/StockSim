@@ -41,7 +41,6 @@ public class StockDataAccessObject implements IStockDataAccess {
      */
     @Override
     public Map<String, Stock> getStocks() {
-        // TODO: implement api call limit exceeded exception/notification (Error 429)
         Map<String, Stock> stocks = new HashMap<>();
 
         try {

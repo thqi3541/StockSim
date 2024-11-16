@@ -32,7 +32,7 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
         try {
             // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());
-
+            // Prepare output data to feed into presenter
             outputPresenter.prepareSuccessView(new ViewHistoryOutputData(
                     currentUser.getTransactionHistory()
             ));

@@ -85,6 +85,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Add the transaction history panel to the application
+     * @return
+     */
     public AppBuilder addTransactionHistoryPanel() {
         TransactionHistoryPanel transactionHistoryPanel = new TransactionHistoryPanel();
         // Add the transaction history panel to the card layout

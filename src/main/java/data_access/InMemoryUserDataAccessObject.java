@@ -24,7 +24,7 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
     }
 
     private User getUserWithUsername(String username) {
-        Map<String, User> users = new HashMap<>();
+        users = new HashMap<>();
 
         User user1 = new User("user1", "password");
         user1.addBalance(10000.00);

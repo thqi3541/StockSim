@@ -16,18 +16,22 @@ import java.awt.*;
 import java.util.Date;
 import java.util.EnumSet;
 
+/**
+ * A panel containing the ViewHistory use case page.
+ */
 public class TransactionHistoryPanel extends JPanel implements IComponent {
     private DefaultTableModel tableModel;
 
     public TransactionHistoryPanel() {
         ViewManager.Instance().registerComponent(this);
 
+        // Page layout
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(400, 300));
         setPreferredSize(new Dimension(600, 400));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Header Panel with Title and Button
+        // Header Panel with Title
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
@@ -48,14 +52,15 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
         add(headerPanel, BorderLayout.NORTH);
 
-        // Transaction History Table Setup
-        // Initialize table model with column names
+        // Creates base Transaction History Table
         tableModel = new DefaultTableModel(new Object[][]{}, getColumnNames()) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
+        // Transaction History Table setup
         JTable historyTable = new JTable(tableModel);
         historyTable.setFillsViewportHeight(true);
         historyTable.setRowHeight(30);
@@ -64,6 +69,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         historyTable.getTableHeader().setForeground(Color.GRAY);
         historyTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
+        // Add scroll
         JScrollPane tableScrollPane = new JScrollPane(historyTable);
         tableScrollPane.setPreferredSize(new Dimension(600, 200));
         add(tableScrollPane, BorderLayout.CENTER);
@@ -80,17 +86,16 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         frame.setVisible(true);
     }
 
-    // Display default data to test correct display data
+    /**
+     * Displays default data to test correct display format
+     */
     private DefaultTableModel getDefaultTableModel() {
-        String[] columnNames = {
-                "Date and Time", "Ticker", "Company Name", "Action", "Price", "Quantity",
-                "Total Price"
-        };
+        String[] columnNames = getColumnNames();
 
         Object[][] data = {
-                {"Tue Nov 01 02:37:18", "NVDA", "NVIDIA Corporation", "Bought", "138.27", "2", "276.54"},
-                {"XXX XXX XX XX:XX:XX", "XXXX", "XXXXXXXXXXXXXXXXXX", "XXXX", "XXX.XX", "XX", "XXX.XX"},
-                {"XXX XXX XX XX:XX:XX", "XXXX", "XXXXXXXXXXXXXXXXXX", "XXXX", "XXX.XX", "XX", "XXX.XX"},
+                {"Tue Nov 01 02:37:18", "NVDA", "NVIDIA Corporation", "Technology", "Bought", "138.27", "2", "276.54"},
+                {"XXX XXX XX XX:XX:XX", "XXXX", "XXXXXXXXXXXXXXXXXX", "Health", "XXXX", "XXX.XX", "XX", "XXX.XX"},
+                {"XXX XXX XX XX:XX:XX", "XXXX", "XXXXXXXXXXXXXXXXXX", "Financial", "XXXX", "XXX.XX", "XX", "XXX.XX"},
         };
 
         return new DefaultTableModel(data, columnNames) {
@@ -101,23 +106,36 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         };
     }
 
+    /**
+     * Gets the set table column names
+     * @return column names
+     */
     private String[] getColumnNames() {
-        return new String[]{"Date", "Ticker", "Company Name", "Action", "Price", "Quantity","Total Price"};
+        return new String[]{"Date", "Ticker", "Company Name", "Industry", "Action", "Price", "Quantity", "Total Price"};
     }
 
+    /**
+     * Creates new table entry based on transaction data
+     * @param transaction the transaction to be displayed
+     * @return new table row data
+     */
     private Object[] createRowData(Transaction transaction) {
-        String ticker = transaction.getStock().getTicker();
+        // Retrieves data from transaction
+        String ticker = transaction.getTicker();
         Date date = transaction.getTimestamp();
-        String company = transaction.getStock().getCompany();
+        String company = "Unknown Company";
+        String industry = "Unknown Industry";
         String action = transaction.getType();
         double price = transaction.getPrice();
         int quantity = transaction.getQuantity();
         double totalPrice = price * quantity;
 
+        // Creates new formatted row data
         return new Object[]{
                 date.toString(),
                 ticker,
                 company,
+                industry,
                 action,
                 String.format("%.2f", price),
                 quantity,
@@ -133,10 +151,13 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
     @Override
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof ViewHistoryEvent updateEvent) {
+            // Retrieves transaction history
             TransactionHistory transactionHistory = updateEvent.getTransactionHistory();
 
+            // Resets the table
             tableModel.setRowCount(0);
 
+            // Stores all current transaction history data in table
             transactionHistory.getAllTransactions().forEach(transaction -> {
                 Object[] rowData = createRowData(transaction);
                 tableModel.addRow(rowData);
@@ -144,6 +165,10 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         }
     }
 
+    /**
+     * Gets the event type this panel handles
+     * @return the event type
+     */
     @Override
     public EnumSet<EventType> getSupportedEventTypes() {
         // TransactionHistoryPanel only supports VIEW_HISTORY events
