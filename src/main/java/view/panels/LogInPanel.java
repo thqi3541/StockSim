@@ -41,6 +41,7 @@ public class LogInPanel extends JPanel implements IComponent {
         gbc.weightx = 1.0;
 
         // Initialize InputComponents for username and password
+        // TODO: use password filed for passwordInput
         usernameInput = new InputComponent("Username", 15);
         passwordInput = new InputComponent("Password", 15);
 

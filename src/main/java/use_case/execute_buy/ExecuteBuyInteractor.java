@@ -32,6 +32,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
      */
     @Override
     public void execute(ExecuteBuyInputData data) {
+        // TODO: commission fee?
         try {
             // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());
@@ -54,7 +55,6 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 updateOrAddStockToPortfolio(portfolio, stock, quantity, currentPrice);
 
                 // Add transaction
-                // TODO: timestamp synchronization
                 Date timestamp = new Date();
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "buy");
                 currentUser.getTransactionHistory().addTransaction(transaction);

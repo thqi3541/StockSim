@@ -11,6 +11,7 @@ public class User {
     private final TransactionHistory transactionHistory;
     private double balance;
 
+    // TODO: asset method
     // TODO: handle password hashing
 
     public User(String username, String password) {
