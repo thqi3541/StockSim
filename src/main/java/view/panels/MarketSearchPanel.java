@@ -4,6 +4,7 @@ import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.EventType;
+import view.view_events.UpdateStockEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
@@ -86,6 +87,14 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     @Override
     public void receiveViewEvent(ViewEvent event) {
         // Set up for future event handling
+        switch (event) {
+            case UpdateStockEvent updateStockEvent -> {
+                // TODO: update market information
+            }
+            default -> {
+                // event not used by panel
+            }
+        }
     }
 
     @Override

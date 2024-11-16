@@ -2,9 +2,13 @@ package entity;
 
 import data_access.IStockDataAccess;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * A singleton class representing the stock market
@@ -18,6 +22,9 @@ public class StockMarket {
     private Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private IStockDataAccess dataAccess;
     private boolean initialized = false;
+
+    // use read-write lock to ensure stock data is not read during update
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     private StockMarket() {
     }
@@ -43,7 +50,13 @@ public class StockMarket {
     }
 
     public Optional<Stock> getStock(String ticker) {
+        lock.readLock().lock();
         return Optional.ofNullable(stocks.get(ticker));
+    }
+
+    public List<Stock> getStocks() {
+        lock.readLock().lock();
+        return new ArrayList<>(stocks.values());
     }
 
     /**
@@ -51,6 +64,7 @@ public class StockMarket {
      */
     // TODO: set interval for updating stock prices
     public void updateStockPrices() {
+        lock.writeLock().lock();
         if (dataAccess == null) {
             throw new IllegalStateException("StockMarket has not been initialized with a data access object.");
         }
