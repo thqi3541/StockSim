@@ -13,7 +13,7 @@ import view.view_events.ViewEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.EnumSet;
 
 public class TransactionHistoryPanel extends JPanel implements IComponent {
@@ -35,6 +35,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     // Format Constants
     private static final String CURRENCY_FORMAT = "%.2f";
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm");
 
     // Column Constants
     private static final String[] COLUMN_NAMES = {
@@ -125,7 +126,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     private Object[] createRowData(Transaction transaction) {
         String ticker = transaction.getTicker();
-        Date date = transaction.getTimestamp();
+        String formattedDate = DATE_FORMAT.format(transaction.getTimestamp());
         String company = "Unknown Company";
         String industry = "Unknown Industry";
         String action = transaction.getType();
@@ -134,7 +135,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         double totalPrice = price * quantity;
 
         return new Object[]{
-                date.toString(),
+                formattedDate,
                 ticker,
                 company,
                 industry,
