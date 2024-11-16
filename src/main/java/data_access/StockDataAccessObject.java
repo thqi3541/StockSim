@@ -40,7 +40,6 @@ public class StockDataAccessObject implements IStockDataAccess {
         Map<String, Stock> stocks = new HashMap<>();
 
         try {
-
             // Reads content in config/tickers text file
             InputStream inputStream = getClass().getResourceAsStream("/tickers.txt");
 
@@ -50,29 +49,56 @@ public class StockDataAccessObject implements IStockDataAccess {
             Scanner scanner = new Scanner(inputStream);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().trim();
-                String url = String.format("%s/quote?symbol=%s&token=%s", BASE_URL, line, apiKey);
-                Request request = new Request.Builder().url(url).build();
-                try (Response response = client.newCall(request).execute()) {
-                    if (response.isSuccessful()) {
-                        String responseBody = response.body().string();
-                        JSONObject jsonObject = new JSONObject(responseBody);
-                        Stock stock = new Stock(line, jsonObject.getDouble("c"));
-                        stocks.put(line, stock);
+
+                // Information to create a new stock
+                String ticker = line;
+                String company = "Unknown Company Name";
+                String industry = "Unknown Industry";
+                double price = 0.0;
+
+                // Url and request for Quote api call
+                String quoteUrl = String.format("%s/quote?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
+                Request quoteRequest = new Request.Builder().url(quoteUrl).build();
+
+                // Url and request for Profile2 api call
+                String profileUrl = String.format("%s/stock/profile2?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
+                Request profileRequest = new Request.Builder().url(profileUrl).build();
+
+                // Quote api call to get current market price
+                try (Response quoteResponse = client.newCall(quoteRequest).execute()) {
+                    if (quoteResponse.isSuccessful()) {
+                        String quoteResponseBody = quoteResponse.body().string();
+                        JSONObject jsonObject = new JSONObject(quoteResponseBody);
+                        price = jsonObject.getDouble("c");
+                    } else {
+                        System.out.println("API call limit exceeded.");
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
+                // Profile2 api call to get company name and industry
+                try (Response profileResponse = client.newCall(profileRequest).execute()) {
+                    if (profileResponse.isSuccessful()) {
+                        String profileResponseBody = profileResponse.body().string();
+                        JSONObject jsonObject = new JSONObject(profileResponseBody);
+                        company = jsonObject.getString("name");
+                        industry = jsonObject.getString("finnhubIndustry");
+                    } else {
+                        System.out.println("API call limit exceeded.");
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Creates new Stock with retrieved information
+                Stock stock = new Stock(ticker, company, industry, price);
+                stocks.put(line, stock);
             }
-            System.out.println(stocks);
             scanner.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return stocks;
-    }
-
-    public static void main(String[] args) {
-        StockDataAccessObject stockDataAccessObject = new StockDataAccessObject();
-        stockDataAccessObject.getStocks();
     }
 }
