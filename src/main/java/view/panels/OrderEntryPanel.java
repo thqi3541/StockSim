@@ -1,13 +1,16 @@
 package view.panels;
 
+import entity.Stock;
+import entity.User;
+import entity.UserStock;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
-import view.view_events.DialogEvent;
 import view.view_events.EventType;
+import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
@@ -22,6 +25,8 @@ public class OrderEntryPanel extends JPanel implements IComponent {
     private final JButton sellButton;
 
     public OrderEntryPanel() {
+        ViewManager.Instance().registerComponent(this);
+
         setLayout(new BorderLayout());
 
         setMinimumSize(new Dimension(150, 300));
@@ -62,11 +67,20 @@ public class OrderEntryPanel extends JPanel implements IComponent {
             String ticker = tickerField.getText();
             String quantity = quantityField.getText();
 
-            ViewManager.Instance().broadcastEvent(new DialogEvent("Buy Order", "You want to buy " + quantity + " shares of " + ticker));
-
             // Retrieve the controller and execute the buy action
             ExecuteBuyController controller = ServiceManager.getService(ExecuteBuyController.class);
             controller.execute(ticker, quantity);
+
+            // Test update asset
+            User user1 = new User("user1", "password");
+            user1.addBalance(10000.00);
+
+            Stock stock1 = new Stock(ticker, "Unknown Company", "Unknown Industry", 100.00);
+            UserStock userStock1 = new UserStock(stock1, 100.00, Integer.parseInt(quantity));
+            Stock stock2 = new Stock("AAPL", "Unknown Company", "Unknown Industry", 200.00);
+            user1.getPortfolio().addStock(userStock1);
+            user1.getPortfolio().addStock(new UserStock(stock2, 200.00, 10));
+            ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(user1.getPortfolio(), user1.getBalance()));
         });
 
         buttonPanel.add(buyButton);

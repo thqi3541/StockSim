@@ -2,19 +2,18 @@ package data_access;
 
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
-import use_case.registration.RegistrationDataAccessInterface;
+import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.SessionManager;
-import utility.exceptions.DuplicateUsernameException;
+import utility.exceptions.ValidationException;
 
 import java.util.HashMap;
 import java.util.Map;
-import utility.exceptions.ValidationException;
 
 /**
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface {
+public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
     private Map<String, User> users;
 
     @Override
@@ -25,7 +24,7 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
     }
 
     private User getUserWithUsername(String username) {
-        Map<String, User> users = new HashMap<>();
+        users = new HashMap<>();
 
         User user1 = new User("user1", "password");
         user1.addBalance(10000.00);
@@ -42,4 +41,3 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         return users.get(username);
     }
 }
-

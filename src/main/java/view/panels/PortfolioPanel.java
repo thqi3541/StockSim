@@ -1,7 +1,11 @@
 package view.panels;
 
+import entity.Portfolio;
+import entity.UserStock;
+import utility.ViewManager;
 import view.IComponent;
 import view.view_events.EventType;
+import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
@@ -12,11 +16,22 @@ import java.util.EnumSet;
 public class PortfolioPanel extends JPanel implements IComponent {
     private final JLabel titleLabel;
     private final JTable portfolioTable;
+    private final DefaultTableModel tableModel;
 
     public PortfolioPanel() {
+        ViewManager.Instance().registerComponent(this);
+
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(600, 300));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Initialize table model with column names
+        tableModel = new DefaultTableModel(new Object[][]{}, getColumnNames()) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         // Header Panel with Title
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -35,20 +50,8 @@ public class PortfolioPanel extends JPanel implements IComponent {
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Portfolio Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-
-        PortfolioPanel portfolioPanel = new PortfolioPanel();
-        frame.add(portfolioPanel);
-
-        frame.setVisible(true);
-    }
-
     private JTable createPortfolioTable() {
-        DefaultTableModel model = getDefaultTableModel();
-        JTable table = new JTable(model);
+        JTable table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
         table.setRowHeight(30);
         table.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -58,34 +61,48 @@ public class PortfolioPanel extends JPanel implements IComponent {
         return table;
     }
 
-    private DefaultTableModel getDefaultTableModel() {
-        String[] columnNames = {
-                "Ticker", "Company Name", "Average Cost", "Quantity",
-                "Market Price", "Profit / Share", "Total Profit"
-        };
-
-        Object[][] data = {
-                {"NVDA", "NVIDIA Corporation", "138.27", "2", "158.03", "19.76", "40.00"},
-                {"TSLA", "Tesla, Inc.", "110.23", "12", "101.85", "-8.38", "-100.56"},
-                {"INTC", "Intel Corporation", "XX.XX", "X", "XX.XX", "XX.XX", "XX.XX"},
-        };
-
-        return new DefaultTableModel(data, columnNames) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+    private String[] getColumnNames() {
+        return new String[]{"Ticker", "Average Cost", "Quantity", "Market Price", "Profit / Share", "Total Profit"};
     }
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        // Future handling of UpdatePortfolioEvent
+        if (event instanceof UpdateAssetEvent updateEvent) {
+            // Get the portfolio from the event
+            Portfolio portfolio = updateEvent.getPortfolio();
+
+            // Clear the current table content
+            tableModel.setRowCount(0);
+
+            // Populate table with updated data from the portfolio
+            portfolio.getAllStocks().forEach(userStock -> {
+                Object[] rowData = createRowData(userStock);
+                tableModel.addRow(rowData);
+            });
+        }
+    }
+
+    private Object[] createRowData(UserStock userStock) {
+        String ticker = userStock.getStock().getTicker();
+        double avgCost = userStock.getCost();
+        int quantity = userStock.getQuantity();
+        double marketPrice = userStock.getStock().getPrice();
+        double profitPerShare = marketPrice - avgCost;
+        double totalProfit = profitPerShare * quantity;
+
+        return new Object[]{
+                ticker,
+                String.format("%.2f", avgCost),
+                quantity,
+                String.format("%.2f", marketPrice),
+                String.format("%.2f", profitPerShare),
+                String.format("%.2f", totalProfit)
+        };
     }
 
     @Override
     public EnumSet<EventType> getSupportedEventTypes() {
-        // PortfolioPanel only supports UPDATE_ASSET events
+        // PortfolioPanel supports UPDATE_ASSET events
         return EnumSet.of(EventType.UPDATE_ASSET);
     }
 }

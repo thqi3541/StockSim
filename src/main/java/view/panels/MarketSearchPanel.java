@@ -1,5 +1,6 @@
 package view.panels;
 
+import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
@@ -18,6 +19,8 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     private final JTable stockTable;
 
     public MarketSearchPanel() {
+        ViewManager.Instance().registerComponent(this);
+
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(400, 300));
         setPreferredSize(new Dimension(600, 400));

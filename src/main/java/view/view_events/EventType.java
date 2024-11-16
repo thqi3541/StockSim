@@ -1,6 +1,5 @@
 package view.view_events;
 
-
 public enum EventType {
     SIGN_UP,
     LOGIN,
@@ -8,4 +7,5 @@ public enum EventType {
     UPDATE_ASSET,
     SWITCH_PANEL,
     DIALOG,
+    VIEW_HISTORY,
 }
