@@ -59,9 +59,11 @@ public class StockMarket {
         this.stocks = dataAccess.getStocks();
         for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
             String ticker = entry.getKey();
+            String company = entry.getValue().getCompany();
+            String industry = entry.getValue().getIndustry();
             double price = entry.getValue().getPrice();
             // create a new map entry if stock does not exist, and then update price
-            stocks.computeIfAbsent(ticker, k -> new Stock(ticker, price)).updatePrice(price);
+            stocks.computeIfAbsent(ticker, k -> new Stock(ticker, company, industry, price)).updatePrice(price);
         }
     }
 }
