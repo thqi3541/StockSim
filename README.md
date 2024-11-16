@@ -114,9 +114,9 @@ User Story: As a user, I am not holding any shares of APPL(Apple). I want to sho
   - As a trader, I want to access my transaction history and check bought and/or sold price, quantity, current market price, profit/loss per share, total profit/loss, and [Optional for sold stocks] current mp profit/loss per share, current mp total profit/loss so I can learn from past trades.
   - (Optional) As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantities so I can view certain trades.
 - Implementation:
-  - Interactor: UserHistory
-  - Controller: HistoryController
-  - Presenter: HistoryView
+  - Interactor: ViewHistoryInteractor
+  - Controller: ViewHistoryController
+  - Presenter: ViewHistoryPresenter
 - Steps:
   - The user selects a page and/or rows per page for pagination-based item selection from the selection provided near the bottom (Interactor to Controller).
   - The HistoryController filters all user trades to the select rows, quantity, and column sort (Controller).
