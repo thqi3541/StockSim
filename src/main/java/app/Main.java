@@ -13,10 +13,9 @@ public class Main {
                 .withDimensions(1200, 900)
                 .withInitialPanel("LogInPanel")
                 .addAuthenticationPanels()
-                .addDashboardPanel("User123", 1000.0, 5000.0)
-                .addTradeSimulationPanel()
-                .addDialogComponent()
-                .addTransactionHistoryPanel();
+                .addDashboardPanel()
+                .addActionPanels()
+                .addDialogComponent();
 
         // Build the application frame
         JFrame application = appBuilder.build();

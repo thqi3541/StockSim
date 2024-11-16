@@ -5,5 +5,4 @@ import utility.exceptions.ValidationException;
 
 public interface ExecuteBuyDataAccessInterface {
     User getUserWithCredential(String credential) throws ValidationException;
-
 }

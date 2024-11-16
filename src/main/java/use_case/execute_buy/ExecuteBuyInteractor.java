@@ -33,6 +33,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     @Override
     public void execute(ExecuteBuyInputData data) {
         // TODO: commission fee?
+        // TODO: write data back to database
         try {
             // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());

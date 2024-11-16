@@ -1,10 +1,12 @@
 package view.panels;
 
+import entity.User;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
 import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
+import view.view_events.UpdateCurrentUserEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
@@ -22,39 +24,65 @@ public class DashboardPanel extends JPanel implements IComponent {
     private static final int PREF_HEIGHT = 400;
     private static final String CURRENCY_FORMAT = "$%.2f";
 
+    // Default placeholder values
+    private static final String DEFAULT_USERNAME = "Guest";
+    private static final double DEFAULT_CASH = 0.0;
+    private static final double DEFAULT_POSITION = 0.0;
+
     private final JLabel welcomeLabel;
+    private final JLabel balanceLabel;
     private final ButtonComponent tradeButton;
     private final ButtonComponent historyButton;
     private final ButtonComponent logoutButton;
 
-    public DashboardPanel(String username, double cash, double position) {
+    public DashboardPanel() {
+        // Initialize all buttons first
+        tradeButton = new ButtonComponent("Trade");
+        historyButton = new ButtonComponent("View Transaction History");
+        logoutButton = new ButtonComponent("Log out");
+
+        // Initialize labels
+        welcomeLabel = new JLabel("Welcome back, " + DEFAULT_USERNAME);
+        balanceLabel = new JLabel(formatBalanceText(DEFAULT_CASH, DEFAULT_POSITION));
+
         ViewManager.Instance().registerComponent(this);
         setupPanelLayout();
+        setupWelcomePanel();
+        add(createManagementPanel(), BorderLayout.CENTER);
+        setupButtonActions();
+    }
 
-        // Welcome Panel (contains both labels)
+    private void setupWelcomePanel() {
         JPanel welcomePanel = new JPanel();
         welcomePanel.setLayout(new BoxLayout(welcomePanel, BoxLayout.Y_AXIS));
 
-        welcomeLabel = new JLabel("Welcome back, " + username);
         welcomeLabel.setFont(WELCOME_FONT);
         welcomeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Balance Label
-        String balanceText = String.format("You have %s in cash and %s in position",
-                String.format(CURRENCY_FORMAT, cash),
-                String.format(CURRENCY_FORMAT, position));
-        balanceLabel = new JLabel(balanceText);
         balanceLabel.setFont(BALANCE_FONT);
         balanceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Add labels to welcome panel with spacing
         welcomePanel.add(welcomeLabel);
         welcomePanel.add(Box.createVerticalStrut(5));
         welcomePanel.add(balanceLabel);
         add(welcomePanel, BorderLayout.NORTH);
+    }
 
-        // Add management panels
-        add(createManagementPanel(), BorderLayout.CENTER);
+    private void setupButtonActions() {
+        tradeButton.addActionListener(e ->
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
+
+        historyButton.addActionListener(e ->
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel")));
+
+        logoutButton.addActionListener(e ->
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel")));
+    }
+
+    private String formatBalanceText(double cash, double position) {
+        return String.format("You have %s in cash and %s in position",
+                String.format(CURRENCY_FORMAT, cash),
+                String.format(CURRENCY_FORMAT, position));
     }
 
     private void setupPanelLayout() {
@@ -70,25 +98,12 @@ public class DashboardPanel extends JPanel implements IComponent {
         JPanel tradingManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         tradingManagementPanel.setBorder(BorderFactory.createTitledBorder("Trading management"));
 
-        // Trade Button
-        tradeButton = new ButtonComponent("Trade");
-        tradeButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
         tradingManagementPanel.add(tradeButton);
-
-        // View Transaction History Button with ActionListener for switching panels
-        historyButton = new ButtonComponent("View Transaction History");
-        historyButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel")));
         tradingManagementPanel.add(historyButton);
 
         // Account Management Panel
         JPanel accountManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         accountManagementPanel.setBorder(BorderFactory.createTitledBorder("Account management"));
-
-        // Logout Button
-        logoutButton = new ButtonComponent("Log out");
-        logoutButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel")));
         accountManagementPanel.add(logoutButton);
 
         // Combine Panels
@@ -105,11 +120,20 @@ public class DashboardPanel extends JPanel implements IComponent {
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof SwitchPanelEvent) {
             System.out.println("DashboardPanel received a SwitchPanelEvent.");
+        } else if (event instanceof UpdateCurrentUserEvent userEvent) {
+            User user = userEvent.getUser();
+            double portfolioValue = user.getPortfolio() != null ? user.getPortfolio().getTotalValue() : 0.0;
+            updateDashboard(user.getUsername(), user.getBalance(), portfolioValue);
         }
+    }
+
+    private void updateDashboard(String username, double cash, double position) {
+        welcomeLabel.setText("Welcome back, " + username);
+        balanceLabel.setText(formatBalanceText(cash, position));
     }
 
     @Override
     public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.of(EventType.SWITCH_PANEL);
+        return EnumSet.of(EventType.SWITCH_PANEL, EventType.UPDATE_CURRENT_USER);
     }
 }

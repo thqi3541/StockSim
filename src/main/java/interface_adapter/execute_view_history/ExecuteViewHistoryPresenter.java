@@ -1,14 +1,14 @@
-package interface_adapter.view_history;
+package interface_adapter.execute_view_history;
 
-import use_case.view_history.ViewHistoryOutputBoundary;
-import use_case.view_history.ViewHistoryOutputData;
+import use_case.execute_view_history.ExecuteViewHistoryOutputBoundary;
+import use_case.execute_view_history.ExecuteViewHistoryOutputData;
 import utility.ViewManager;
-import view.view_events.ViewHistoryEvent;
+import view.view_events.UpdateTransactionHistoryEvent;
 
 /**
  * Presenter for the ViewHistory Use Case
  */
-public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
+public class ExecuteViewHistoryPresenter implements ExecuteViewHistoryOutputBoundary {
 
     /**
      * Prepares the success view of the ViewHistory use case
@@ -16,9 +16,9 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
      * @param outputData the required display output data
      */
     @Override
-    public void prepareSuccessView(ViewHistoryOutputData outputData) {
+    public void prepareSuccessView(ExecuteViewHistoryOutputData outputData) {
         ViewManager.Instance().broadcastEvent(
-                new ViewHistoryEvent(
+                new UpdateTransactionHistoryEvent(
                         outputData.transactionHistory()
                 )
         );

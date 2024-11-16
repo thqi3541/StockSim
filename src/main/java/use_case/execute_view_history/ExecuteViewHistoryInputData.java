@@ -1,11 +1,11 @@
-package use_case.view_history;
+package use_case.execute_view_history;
 
 /**
  * This class records the input data for the ViewHistory use case
  *
  * @param credential the credential of the user
  */
-public record ViewHistoryInputData(
+public record ExecuteViewHistoryInputData(
         String credential
 ) {
 }
