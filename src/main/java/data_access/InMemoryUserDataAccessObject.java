@@ -12,7 +12,11 @@ import java.util.Map;
  * This class is used to get the user with the given credential
  */
 public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface {
-    private Map<String, User> users;
+    private final Map<String, User> users;
+
+    public InMemoryUserDataAccessObject() {
+        this.users = new java.util.HashMap<>();
+    }
 
     @Override
     public User getUserWithCredential(String credential) throws ValidationException {
