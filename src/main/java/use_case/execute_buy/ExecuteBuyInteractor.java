@@ -78,7 +78,6 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         }
     }
 
-
     /**
      * This method updates the stock in the portfolio or adds a stock to the user's portfolio.
      *
