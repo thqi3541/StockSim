@@ -46,7 +46,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             double currentPrice = stock.getPrice();
             double totalCost = currentPrice * quantity;
 
-            if (isBalanceSufficient(currentUser, totalCost)) {
+            if (currentUser.getBalance() >= totalCost) {
                 // Deduct balance
                 currentUser.deductBalance(totalCost);
 
@@ -77,16 +77,6 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         }
     }
 
-    /**
-     * This method checks if the user has sufficient balance to buy the stock.
-     *
-     * @param user      the user
-     * @param totalCost the total cost
-     * @return true if the user has sufficient balance, false otherwise
-     */
-    private boolean isBalanceSufficient(User user, double totalCost) {
-        return user.getBalance() >= totalCost;
-    }
 
     /**
      * This method updates the stock in the portfolio or adds a stock to the user's portfolio.
