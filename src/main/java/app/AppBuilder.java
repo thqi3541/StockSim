@@ -134,57 +134,55 @@ public class AppBuilder {
      * Initializes all required services
      */
     private void initializeServices() {
-        ServiceManager serviceManager = ServiceManager.Instance();
-
         // 1. Initialize DAOs first
         InMemoryStockDataAccessObject stockDAO = new InMemoryStockDataAccessObject();
         InMemoryUserDataAccessObject userDAO = new InMemoryUserDataAccessObject();
 
         // Register concrete DAOs and their interfaces
-        serviceManager.registerService(StockDataAccessInterface.class, stockDAO);
+        ServiceManager.Instance().registerService(StockDataAccessInterface.class, stockDAO);
         StockMarket.Instance().initialize(stockDAO);
 
-        serviceManager.registerService(InMemoryUserDataAccessObject.class, userDAO);
-        serviceManager.registerService(ExecuteBuyDataAccessInterface.class, userDAO);
-        serviceManager.registerService(ViewHistoryDataAccessInterface.class, userDAO);
-        serviceManager.registerService(LoginDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, userDAO);
+        ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, userDAO);
 
         // 2. Initialize Presenters and register them as output boundaries
         ExecuteBuyOutputBoundary buyPresenter = new ExecuteBuyPresenter();
         ViewHistoryOutputBoundary viewHistoryPresenter = new ViewHistoryPresenter();
         LoginOutputBoundary loginPresenter = new LoginPresenter();
 
-        serviceManager.registerService(ExecuteBuyOutputBoundary.class, buyPresenter);
-        serviceManager.registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
-        serviceManager.registerService(LoginOutputBoundary.class, loginPresenter);
+        ServiceManager.Instance().registerService(ExecuteBuyOutputBoundary.class, buyPresenter);
+        ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
+        ServiceManager.Instance().registerService(LoginOutputBoundary.class, loginPresenter);
 
         // 3. Initialize Interactors and register them as input boundaries
         ExecuteBuyInputBoundary buyInteractor = new ExecuteBuyInteractor(
-                serviceManager.getService(ExecuteBuyDataAccessInterface.class),
-                serviceManager.getService(ExecuteBuyOutputBoundary.class)
+                ServiceManager.Instance().getService(ExecuteBuyDataAccessInterface.class),
+                ServiceManager.Instance().getService(ExecuteBuyOutputBoundary.class)
         );
         ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(
-                serviceManager.getService(ViewHistoryDataAccessInterface.class),
-                serviceManager.getService(ViewHistoryOutputBoundary.class)
+                ServiceManager.Instance().getService(ViewHistoryDataAccessInterface.class),
+                ServiceManager.Instance().getService(ViewHistoryOutputBoundary.class)
         );
         LoginInputBoundary loginInteractor = new LoginInteractor(
-                serviceManager.getService(LoginDataAccessInterface.class),
-                serviceManager.getService(LoginOutputBoundary.class)
+                ServiceManager.Instance().getService(LoginDataAccessInterface.class),
+                ServiceManager.Instance().getService(LoginOutputBoundary.class)
         );
 
-        serviceManager.registerService(ExecuteBuyInputBoundary.class, buyInteractor);
-        serviceManager.registerService(ViewHistoryInputBoundary.class, viewHistoryInteractor);
-        serviceManager.registerService(LoginInputBoundary.class, loginInteractor);
+        ServiceManager.Instance().registerService(ExecuteBuyInputBoundary.class, buyInteractor);
+        ServiceManager.Instance().registerService(ViewHistoryInputBoundary.class, viewHistoryInteractor);
+        ServiceManager.Instance().registerService(LoginInputBoundary.class, loginInteractor);
 
         // 4. Initialize Controllers
-        serviceManager.registerService(ExecuteBuyController.class, new ExecuteBuyController(
-                serviceManager.getService(ExecuteBuyInputBoundary.class))
+        ServiceManager.Instance().registerService(ExecuteBuyController.class, new ExecuteBuyController(
+                ServiceManager.Instance().getService(ExecuteBuyInputBoundary.class))
         );
-        serviceManager.registerService(ViewHistoryController.class, new ViewHistoryController(
-                serviceManager.getService(ViewHistoryInputBoundary.class))
+        ServiceManager.Instance().registerService(ViewHistoryController.class, new ViewHistoryController(
+                ServiceManager.Instance().getService(ViewHistoryInputBoundary.class))
         );
-        serviceManager.registerService(LoginController.class, new LoginController(
-                serviceManager.getService(LoginInputBoundary.class))
+        ServiceManager.Instance().registerService(LoginController.class, new LoginController(
+                ServiceManager.Instance().getService(LoginInputBoundary.class))
         );
     }
 
