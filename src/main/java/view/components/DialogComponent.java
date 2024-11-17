@@ -40,9 +40,4 @@ public class DialogComponent implements IComponent {
         dialogShown = false;
     }
 
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // This component only supports DIALOG events
-        return EnumSet.of(EventType.DIALOG);
-    }
 }

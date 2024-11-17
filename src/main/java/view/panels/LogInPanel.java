@@ -1,5 +1,7 @@
 package view.panels;
 
+import interface_adapter.login.LoginController;
+import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
@@ -139,10 +141,5 @@ public class LogInPanel extends JPanel implements IComponent {
         if (event instanceof SwitchPanelEvent) {
             System.out.println("LogInPanel received a SwitchPanelEvent to switch panels.");
         }
-    }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.of(EventType.SWITCH_PANEL);
     }
 }

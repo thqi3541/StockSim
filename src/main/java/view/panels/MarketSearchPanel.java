@@ -1,10 +1,14 @@
 package view.panels;
 
+import entity.Stock;
 import utility.ViewManager;
 import view.IComponent;
 import view.view_events.EventType;
+import view.view_events.UpdateStockEvent;
+import view.view_events.UpdateUsernameEvent;
 import view.view_events.ViewEvent;
 
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -12,6 +16,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.List;
 
 public class MarketSearchPanel extends JPanel implements IComponent {
@@ -158,8 +163,25 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         return bodyPanel;
     }
 
-    private JTable createStockTable() {
-        DefaultTableModel model = new DefaultTableModel(INITIAL_DATA, COLUMN_NAMES) {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Market Search Panel");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+
+        MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
+        frame.add(marketSearchPanel);
+        frame.setVisible(true);
+    }
+
+    // Table model setup for demonstration purposes
+    private DefaultTableModel getDefaultTableModel() {
+        String[] columnNames = {"Ticker", "Company Name", "Price", "Change"};
+        Object[][] data = {
+                {"AAPL", "Apple Inc.", "150.00", "+1.23"},
+                {"GOOG", "Alphabet Inc.", "2800.00", "-15.23"},
+                {"TSLA", "Tesla Inc.", "900.00", "+12.34"}
+        };
+        return new DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -209,6 +231,29 @@ public class MarketSearchPanel extends JPanel implements IComponent {
                     RowFilter.regexFilter("(?i)" + searchText, 2)  // Industry column
             )));
         }
+    }
+
+    private void updateStockTable(List<Stock> stocks) {
+        // Define columns (same as in getDefaultTableModel)
+        String[] columnNames = {"Ticker", "Company Name", "Industry", "Price"};
+
+        // Create a 2D array to hold the data for the table
+        Object[][] data = new Object[stocks.size()][4];
+        for (int i = 0; i < stocks.size(); i++) {
+            data[i][0] = stocks.get(i).getTicker();
+            data[i][1] = stocks.get(i).getCompany();
+            data[i][2] = stocks.get(i).getIndustry();
+            data[i][3] = stocks.get(i).getPrice();
+        }
+
+        // Update the table model with the new data
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;  // Make table cells non-editable
+            }
+        };
+        stockTable.setModel(model);
     }
 
     @Override

@@ -6,6 +6,8 @@
 
 - Added `ViewHistory` use case to view transaction history
 - Added GUI components for view transaction history page
+- Implemented login use case
+- Implemented periodic update of stock information from data access interface in `StockMarket` that self-adjust based on API rate limit
 
 ### Internal Changes
 

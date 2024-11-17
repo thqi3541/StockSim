@@ -2,6 +2,8 @@ package app;
 
 import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
+import data_access.StockDataAccessInterface;
+import entity.StockMarket;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import interface_adapter.execute_view_history.ExecuteViewHistoryController;

@@ -174,9 +174,4 @@ public class PortfolioPanel extends JPanel implements IComponent {
         }
         return String.format(POSITIVE_PROFIT_FORMAT, profit);
     }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.of(EventType.UPDATE_ASSET);
-    }
 }

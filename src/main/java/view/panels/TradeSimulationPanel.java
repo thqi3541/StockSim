@@ -116,9 +116,4 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
             System.out.println("TradeSimulationPanel received a SwitchPanelEvent.");
         }
     }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.of(EventType.SWITCH_PANEL);
-    }
 }
