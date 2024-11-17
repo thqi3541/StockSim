@@ -39,14 +39,7 @@ public class LoginPresenter implements LoginOutputBoundary {
     @Override
     public void prepareValidationExceptionView() {
         ViewManager.Instance().broadcastEvent(
-                new DialogEvent("Sorry", "We cannot find your account. Please try again.")
-        );
-    }
-
-    @Override
-    public void prepareFailView(String error) {
-        ViewManager.Instance().broadcastEvent(
-                new DialogEvent("Error", error)
+                new DialogEvent("Sorry", "Please try again.")
         );
     }
 }

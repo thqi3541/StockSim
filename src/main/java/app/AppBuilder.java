@@ -38,9 +38,9 @@ import java.util.Map;
  */
 public class AppBuilder {
     // Default dimensions and title for the application window
-    private static final int DEFAULT_WIDTH = 1000;
-    private static final int DEFAULT_HEIGHT = 800;
-    private static final String DEFAULT_TITLE = "Application";
+    private static final int DEFAULT_WIDTH = 1200;
+    private static final int DEFAULT_HEIGHT = 900;
+    private static final String DEFAULT_TITLE = "StockSim";
 
     // Components for the application
     private final JPanel cardPanel;
@@ -139,20 +139,22 @@ public class AppBuilder {
     private void initializeServices() {
         // 1. Initialize DAOs first
         stockDAO = new StockDataAccessObject();
+        // TODO: this should be replaced with a real user DAO later
         InMemoryUserDataAccessObject userDAO = new InMemoryUserDataAccessObject();
 
-        // Register concrete DAOs and their interfaces
+        // Register stock dao as its interface
         ServiceManager.Instance().registerService(StockDataAccessInterface.class, stockDAO);
 
         // Initialize and register StockMarket
         StockMarket.Instance().initialize(stockDAO);
 
+        // Register user dao as their interfaces
         ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, userDAO);
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, userDAO);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, userDAO);
         ServiceManager.Instance().registerService(LoginDataAccessInterface.class, userDAO);
 
-        // 2. Initialize Presenters and register them as output boundaries
+        // 2. Initialize Presenters and register them as output boundary interfaces
         ExecuteBuyOutputBoundary buyPresenter = new ExecuteBuyPresenter();
         ViewHistoryOutputBoundary viewHistoryPresenter = new ViewHistoryPresenter();
         LoginOutputBoundary loginPresenter = new LoginPresenter();
@@ -161,7 +163,7 @@ public class AppBuilder {
         ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
         ServiceManager.Instance().registerService(LoginOutputBoundary.class, loginPresenter);
 
-        // 3. Initialize Interactors and register them as input boundaries
+        // 3. Initialize Interactors and register them as input boundary interfaces
         ExecuteBuyInputBoundary buyInteractor = new ExecuteBuyInteractor(
                 ServiceManager.Instance().getService(ExecuteBuyDataAccessInterface.class),
                 ServiceManager.Instance().getService(ExecuteBuyOutputBoundary.class)
@@ -211,14 +213,5 @@ public class AppBuilder {
         cardLayout.show(cardPanel, initialPanel);
 
         return application;
-    }
-
-    /**
-     * Cleanup method to release resources
-     */
-    private void cleanup() {
-        System.out.println("Starting application cleanup...");
-        System.out.println("Application cleanup completed.");
-        System.exit(0);  // Ensure complete application termination
     }
 }

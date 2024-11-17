@@ -2,9 +2,7 @@ package use_case.execute_buy;
 
 import entity.*;
 import utility.StockMarket;
-import utility.ViewManager;
 import utility.exceptions.ValidationException;
-import view.view_events.UpdateTransactionHistoryEvent;
 
 import java.util.Date;
 
@@ -61,15 +59,11 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "buy");
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
-                // Broadcast transaction history update event
-                ViewManager.Instance().broadcastEvent(
-                        new UpdateTransactionHistoryEvent(currentUser.getTransactionHistory())
-                );
-
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
                         currentUser.getBalance(),
-                        currentUser.getPortfolio()
+                        currentUser.getPortfolio(),
+                        currentUser.getTransactionHistory()
                 ));
             } else {
                 throw new InsufficientBalanceException();

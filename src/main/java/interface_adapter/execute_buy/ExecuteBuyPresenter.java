@@ -5,6 +5,7 @@ import use_case.execute_buy.ExecuteBuyOutputData;
 import utility.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.UpdateAssetEvent;
+import view.view_events.UpdateTransactionHistoryEvent;
 
 public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
 
@@ -16,7 +17,9 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
                         outputData.newBalance()
                 )
         );
-        // TODO: both buy and sell should be logged in transaction history
+        ViewManager.Instance().broadcastEvent(
+                new UpdateTransactionHistoryEvent(outputData.newTransactionHistory())
+        );
     }
 
     @Override

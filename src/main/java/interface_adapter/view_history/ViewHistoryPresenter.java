@@ -3,6 +3,7 @@ package interface_adapter.view_history;
 import use_case.view_history.ViewHistoryOutputBoundary;
 import use_case.view_history.ViewHistoryOutputData;
 import utility.ViewManager;
+import view.view_events.DialogEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
 /**
@@ -29,5 +30,8 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
      */
     @Override
     public void prepareValidationExceptionView() {
+        ViewManager.Instance().broadcastEvent(
+                new DialogEvent("Sorry", "Please try again.")
+        );
     }
 }

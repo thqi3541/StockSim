@@ -23,15 +23,15 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
 
         // Initialize with predefined users
         User user1 = new User("user1", DEFAULT_PASSWORD);
-        user1.addBalance(100000.00); // Increased balance
+        user1.addBalance(100000.00);
         users.put("user1", user1);
 
         User user2 = new User("user2", DEFAULT_PASSWORD);
-        user2.addBalance(200000.00); // Increased balance
+        user2.addBalance(200000.00);
         users.put("user2", user2);
 
         User user3 = new User("user3", DEFAULT_PASSWORD);
-        user3.addBalance(300000.00); // Increased balance
+        user3.addBalance(300000.00);
         users.put("user3", user3);
     }
 
@@ -42,6 +42,7 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         return getUserWithUsername(username);
     }
 
+    // TODO: should we throw a different exception if the user is not found?
     private User getUserWithUsername(String username) throws ValidationException {
         User user = users.get(username);
         if (user == null) {
@@ -58,6 +59,7 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
             throw new ValidationException();
         }
 
+        // TODO: should we throw a different exception if the password does not match?
         if (!user.getPassword().equals(password)) {
             throw new ValidationException();
         }

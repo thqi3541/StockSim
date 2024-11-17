@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import utility.StockMarket;
 import utility.ViewManager;
 import utility.exceptions.ValidationException;
-import view.view_events.UpdateTransactionHistoryEvent;
 
 import java.util.Optional;
 
@@ -41,11 +40,8 @@ class ExecuteBuyInteractorTest {
         User mockUser = createMockUserWithBalance(10000.0);
         Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 150.0);
 
-        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class);
-             MockedStatic<ViewManager> viewManagerMockedStatic = Mockito.mockStatic(ViewManager.class)) {
-
+        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class)) {
             stockMarketMockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
-            viewManagerMockedStatic.when(ViewManager::Instance).thenReturn(viewManagerMock);
             when(stockMarketMock.getStock("AAPL")).thenReturn(Optional.of(stock));
 
             ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
@@ -53,16 +49,16 @@ class ExecuteBuyInteractorTest {
 
             interactor.execute(inputData);
 
-            // Verify success view was prepared
-            verify(outputPresenter).prepareSuccessView(any());
+            // Verify success view was prepared with updated data
+            verify(outputPresenter).prepareSuccessView(any(ExecuteBuyOutputData.class));
 
-            // Verify transaction was added
+            // Verify portfolio was updated
             Optional<UserStock> userStockOpt = mockUser.getPortfolio().getUserStock("AAPL");
             assertTrue(userStockOpt.isPresent(), "Portfolio should contain the ticker AAPL");
-            assertEquals(10, userStockOpt.get().getQuantity(), "Stock quantity should match.");
+            assertEquals(10, userStockOpt.get().getQuantity(), "Stock quantity should match");
 
-            // Verify transaction history event was broadcast
-            verify(viewManagerMock).broadcastEvent(any(UpdateTransactionHistoryEvent.class));
+            // Verify balance was deducted
+            assertEquals(8500.0, mockUser.getBalance(), "Balance should be reduced by total cost");
         }
     }
 
@@ -71,11 +67,8 @@ class ExecuteBuyInteractorTest {
         User mockUser = createMockUserWithBalance(500.0);
         Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 150.0);
 
-        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class);
-             MockedStatic<ViewManager> viewManagerMockedStatic = Mockito.mockStatic(ViewManager.class)) {
-
+        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class)) {
             stockMarketMockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
-            viewManagerMockedStatic.when(ViewManager::Instance).thenReturn(viewManagerMock);
             when(stockMarketMock.getStock("AAPL")).thenReturn(Optional.of(stock));
 
             ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
@@ -83,12 +76,15 @@ class ExecuteBuyInteractorTest {
 
             interactor.execute(inputData);
 
+            // Verify error view was prepared
             verify(outputPresenter).prepareInsufficientBalanceExceptionView();
-            assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
-                    "Stock should not be in portfolio due to insufficient funds.");
 
-            // Verify no transaction history event was broadcast
-            verify(viewManagerMock, never()).broadcastEvent(any(UpdateTransactionHistoryEvent.class));
+            // Verify no changes were made
+            assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
+                    "Stock should not be in portfolio due to insufficient funds");
+            assertEquals(500.0, mockUser.getBalance(), "Balance should remain unchanged");
+            assertTrue(mockUser.getTransactionHistory().getAllTransactions().isEmpty(),
+                    "No transaction should be recorded");
         }
     }
 

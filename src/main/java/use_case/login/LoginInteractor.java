@@ -34,13 +34,10 @@ public class LoginInteractor implements LoginInputBoundary {
                 String credential = SessionManager.Instance().createSession(data.username());
                 ClientSessionManager.Instance().setCredential(credential);
 
-                // Don't fetch stock data here, let the StockMarket handle it
                 outputPresenter.prepareSuccessView(new LoginOutputData(currentUser));
 
             } catch (ValidationException e) {
                 outputPresenter.prepareValidationExceptionView();
-            } catch (Exception e) {
-                outputPresenter.prepareFailView("An error occurred during login: " + e.getMessage());
             }
         }, executor);
     }

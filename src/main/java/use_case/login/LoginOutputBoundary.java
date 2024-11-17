@@ -5,6 +5,4 @@ public interface LoginOutputBoundary {
     void prepareSuccessView(LoginOutputData outputData);
 
     void prepareValidationExceptionView();
-
-    void prepareFailView(String s);
 }
