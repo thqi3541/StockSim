@@ -1,17 +1,15 @@
 package view.panels;
 
-import entity.Stock;
-import entity.Transaction;
-import entity.User;
-import entity.UserStock;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
-import view.view_events.*;
+import view.view_events.SwitchPanelEvent;
+import view.view_events.UpdateAssetEvent;
+import view.view_events.UpdateUsernameEvent;
+import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Date;
 
 public class DashboardPanel extends JPanel implements IComponent {
     // Layout Constants
@@ -124,36 +122,16 @@ public class DashboardPanel extends JPanel implements IComponent {
 
     private void setupButtonActions() {
         tradeButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel"))
+        );
 
-        historyButton.addActionListener(e -> {
-            User testUser = createDevelopmentTestUser();
-            ViewManager.Instance().broadcastEvent(new UpdateTransactionHistoryEvent(testUser.getTransactionHistory()));
-            ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel"));
-        });
+        historyButton.addActionListener(e ->
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel"))
+        );
 
         logoutButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel")));
-    }
-
-    private User createDevelopmentTestUser() {
-        User user = new User("test_user", "password");
-        user.addBalance(10000.00);
-
-        Stock testStock1 = new Stock("AAPL", "Apple Inc.", "Technology", 150.00);
-        Stock testStock2 = new Stock("GOOGL", "Alphabet Inc.", "Technology", 2800.00);
-        user.getPortfolio().addStock(new UserStock(testStock1, 145.00, 10));
-        user.getPortfolio().addStock(new UserStock(testStock2, 2750.00, 5));
-
-        Date testDate1 = new Date();
-        Date testDate2 = new Date(testDate1.getTime() - 24 * 60 * 60 * 1000);
-
-        Transaction testTransaction1 = new Transaction(testDate1, "AAPL", 10, 150.00, "BUY");
-        Transaction testTransaction2 = new Transaction(testDate2, "GOOGL", 5, 2800.00, "BUY");
-
-        user.getTransactionHistory().addTransaction(testTransaction1);
-        user.getTransactionHistory().addTransaction(testTransaction2);
-        return user;
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"))
+        );
     }
 
     @Override

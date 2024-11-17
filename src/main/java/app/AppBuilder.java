@@ -135,7 +135,6 @@ public class AppBuilder {
      */
     private void initializeServices() {
         ServiceManager serviceManager = ServiceManager.Instance();
-        StockMarket stockMarket = StockMarket.Instance();
 
         // 1. Initialize DAOs first
         InMemoryStockDataAccessObject stockDAO = new InMemoryStockDataAccessObject();

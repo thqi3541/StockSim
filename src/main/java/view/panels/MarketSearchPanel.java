@@ -1,6 +1,7 @@
 package view.panels;
 
 import entity.Stock;
+import org.jetbrains.annotations.NotNull;
 import utility.ViewManager;
 import view.IComponent;
 import view.view_events.UpdateStockEvent;
@@ -22,7 +23,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     private static final int SEARCH_FIELD_COLUMNS = 20;
 
     // Column Width Constants
-    private static final double[] COLUMN_PROPORTIONS = {0.20, 0.40, 0.30, 0.10}; // Proportions for each column
+    private static final double[] COLUMN_PROPORTIONS = {0.20, 0.40, 0.30, 0.10};
 
     // Font Constants
     private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
@@ -34,22 +35,11 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     private static final String SEARCH_PLACEHOLDER = "Ticker, company, or industry";
     private static final String[] COLUMN_NAMES = {"Ticker", "Company Name", "Industry", "Price"};
 
-    // Mock Data
-    private static final Object[][] INITIAL_DATA = {
-            {"AAPL", "Apple Inc.", "Technology", "150.00"},
-            {"GOOG", "Alphabet Inc.", "Technology", "2800.00"},
-            {"TSLA", "Tesla Inc.", "Automotive", "900.00"},
-            {"MSFT", "Microsoft Corporation", "Technology", "320.50"},
-            {"AMZN", "Amazon.com Inc.", "E-Commerce", "3200.00"},
-            {"META", "Meta Platforms Inc.", "Technology", "330.45"},
-            {"NFLX", "Netflix Inc.", "Entertainment", "550.20"}
-    };
-
     private final JTextField searchField;
     private final JButton searchButton;
     private final JLabel titleLabel;
     private final JTable stockTable;
-    private final TableRowSorter<DefaultTableModel> rowSorter;
+    private TableRowSorter<DefaultTableModel> rowSorter;
 
     public MarketSearchPanel() {
         ViewManager.Instance().registerComponent(this);
@@ -86,11 +76,37 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         frame.setVisible(true);
     }
 
+    @NotNull
+    private static DefaultTableModel getTableModel(List<Stock> stocks) {
+        DefaultTableModel newModel = new DefaultTableModel(COLUMN_NAMES, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return String.class;
+            }
+        };
+
+        // 2. Add data to model
+        for (Stock stock : stocks) {
+            Object[] row = new Object[]{
+                    stock.getTicker(),
+                    stock.getCompany(),
+                    stock.getIndustry(),
+                    String.format("%.2f", stock.getPrice())
+            };
+            newModel.addRow(row);
+        }
+        return newModel;
+    }
+
     private void setupPanel() {
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(0, PANEL_HEIGHT)); // Only fix the height
-        setBorder(BorderFactory.createEmptyBorder(
-                BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
+        setPreferredSize(new Dimension(0, PANEL_HEIGHT));
+        setBorder(BorderFactory.createEmptyBorder(BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
     }
 
     private JLabel createTitleLabel() {
@@ -149,12 +165,9 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     }
 
     private JPanel createSearchPanel() {
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)); // Set horizontal gap to 0
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         searchPanel.add(searchField);
-
-        // Add a small gap to the right of the search field explicitly
         searchPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-
         searchPanel.add(searchButton);
 
         return searchPanel;
@@ -168,7 +181,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     }
 
     private JTable createStockTable() {
-        DefaultTableModel model = new DefaultTableModel(INITIAL_DATA, COLUMN_NAMES) {
+        DefaultTableModel model = new DefaultTableModel(new Object[0][COLUMN_NAMES.length], COLUMN_NAMES) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -189,7 +202,6 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         table.getTableHeader().setPreferredSize(
                 new Dimension(table.getTableHeader().getPreferredSize().width, HEADER_HEIGHT));
 
-        // Set auto resize mode
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         return table;
@@ -211,37 +223,47 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         if (searchText.equals(SEARCH_PLACEHOLDER) || searchText.isEmpty()) {
             rowSorter.setRowFilter(null);
         } else {
-            // Filter that checks ticker, company name, and industry
             rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
         }
     }
 
     private void updateStockTable(List<Stock> stocks) {
-        // Define columns (same as in getDefaultTableModel)
-        String[] columnNames = {"Ticker", "Company Name", "Industry", "Price"};
-
-        // Create a 2D array to hold the data for the table
-        Object[][] data = new Object[stocks.size()][4];
-        for (int i = 0; i < stocks.size(); i++) {
-            data[i][0] = stocks.get(i).getTicker();
-            data[i][1] = stocks.get(i).getCompany();
-            data[i][2] = stocks.get(i).getIndustry();
-            data[i][3] = stocks.get(i).getPrice();
-        }
-
-        // Update the table model with the new data
-        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;  // Make table cells non-editable
+        SwingUtilities.invokeLater(() -> {
+            if (stocks == null || stocks.isEmpty()) {
+                System.err.println("No stocks available to update.");
+                return;
             }
-        };
-        stockTable.setModel(model);
+
+            // 1. Create new table model with data
+            DefaultTableModel newModel = getTableModel(stocks);
+
+            // 3. Update table model
+            stockTable.setModel(newModel);
+
+            // 4. Create and set new row sorter
+            rowSorter = new TableRowSorter<>(newModel);
+            stockTable.setRowSorter(rowSorter);
+
+            // 5. Reapply current search filter if exists
+            String searchText = searchField.getText().trim();
+            if (!searchText.equals(SEARCH_PLACEHOLDER) && !searchText.isEmpty()) {
+                rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
+            }
+
+            // 6. Reapply column widths
+            adjustColumnWidths();
+
+            // 7. Repaint the table to ensure visual update
+            stockTable.revalidate();
+            stockTable.repaint();
+        });
     }
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof UpdateStockEvent stockEvent) {
+            System.out.println("MarketSearchPanel received UpdateStockEvent with stocks: " +
+                    (stockEvent.getStocks() != null ? stockEvent.getStocks().size() : "null"));
             updateStockTable(stockEvent.getStocks());
         }
     }
