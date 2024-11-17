@@ -6,10 +6,16 @@ import java.awt.*;
 public class ButtonComponent extends JButton {
 
     public ButtonComponent(String text) {
-        super(text);  // Set the button text
+        super(text);
 
-        // Set simple colors
-        setBackground(Color.WHITE);   // Set background to white
-        setForeground(Color.BLACK);   // Set text color to black
+        // Set font and colors
+        setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        setBackground(Color.WHITE);
+        setForeground(Color.BLACK);
+
+        // Set size and padding
+        Dimension size = new Dimension(getPreferredSize().width, 40);
+        setPreferredSize(size);
+        setMargin(new Insets(5, 5, 5, 5));
     }
 }

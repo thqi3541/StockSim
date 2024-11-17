@@ -20,8 +20,13 @@ public class PasswordInputComponent extends JPanel {
         JLabel label = new JLabel(labelText);
         passwordField = new JPasswordField(columns);
 
+        // Set font for both label and password field
+        Font lucidaFont = new Font("Lucida Sans", Font.PLAIN, 14);
+        label.setFont(lucidaFont);
+        passwordField.setFont(lucidaFont);
+
         label.setHorizontalAlignment(SwingConstants.LEFT); // Align label to the left
-        passwordField.setPreferredSize(new Dimension(0, passwordField.getPreferredSize().height));
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 30));
 
         add(label, BorderLayout.NORTH);
         add(passwordField, BorderLayout.CENTER);
@@ -35,6 +40,8 @@ public class PasswordInputComponent extends JPanel {
     public PasswordInputComponent(int columns) {
         setLayout(new BorderLayout());
         passwordField = new JPasswordField(columns);
+        passwordField.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 30));
         add(passwordField, BorderLayout.CENTER);
     }
 
@@ -46,9 +53,10 @@ public class PasswordInputComponent extends JPanel {
     public PasswordInputComponent(String placeholderText) {
         setLayout(new BorderLayout());
         passwordField = new JPasswordField();
+        passwordField.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
         passwordField.setEchoChar((char) 0); // Temporarily show the placeholder text
         passwordField.setText(placeholderText);
-        passwordField.setPreferredSize(new Dimension(0, passwordField.getPreferredSize().height));
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 30));
 
         // Add focus listener to handle placeholder behavior
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {

@@ -6,6 +6,7 @@ import view.view_events.DialogEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class DialogComponent implements IComponent {
 
@@ -14,6 +15,13 @@ public class DialogComponent implements IComponent {
     public DialogComponent() {
         // Register this component with ViewManager
         ViewManager.Instance().registerComponent(this);
+
+        // Set up default button styling for JOptionPane
+        UIManager.put("OptionPane.buttonFont", new Font("Lucida Sans", Font.PLAIN, 14));
+        UIManager.put("OptionPane.messageFont", new Font("Lucida Sans", Font.PLAIN, 14));
+        UIManager.put("Button.margin", new Insets(5, 5, 5, 5));
+        UIManager.put("Button.minimumSize", new Dimension(0, 40));
+        UIManager.put("Button.preferredSize", new Dimension(0, 40));
     }
 
     @Override
