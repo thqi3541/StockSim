@@ -16,7 +16,7 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
                         outputData.newBalance()
                 )
         );
-        // TODO: add transaction history update
+        // TODO: both buy and sell should be logged in transaction history
     }
 
     @Override

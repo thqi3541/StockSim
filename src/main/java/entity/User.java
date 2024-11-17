@@ -10,7 +10,7 @@ public class User {
     private final TransactionHistory transactionHistory;
     private double balance;
 
-    // TODO: handle password hashing
+    // TODO: user password should be hashed or encrypted
     public User(String username, String password) {
         this.username = username;
         this.password = password;
