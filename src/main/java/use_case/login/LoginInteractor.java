@@ -6,20 +6,29 @@ import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class LoginInteractor implements LoginInputBoundary {
 
     private final LoginDataAccessInterface dataAccess;
     private final LoginOutputBoundary outputPresenter;
+    private final Executor executor;
 
     public LoginInteractor(LoginDataAccessInterface dataAccess, LoginOutputBoundary outputBoundary) {
+        this(dataAccess, outputBoundary, Executors.newSingleThreadExecutor());
+    }
+
+    // Constructor for testing - allows injecting a synchronous executor
+    LoginInteractor(LoginDataAccessInterface dataAccess, LoginOutputBoundary outputBoundary, Executor executor) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
+        this.executor = executor;
     }
 
     @Override
-    public void execute(LoginInputData data) {
-        CompletableFuture.runAsync(() -> {
+    public CompletableFuture<Void> execute(LoginInputData data) {
+        return CompletableFuture.runAsync(() -> {
             try {
                 User currentUser = dataAccess.getUserWithPassword(data.username(), data.password());
                 String credential = SessionManager.Instance().createSession(data.username());
@@ -33,6 +42,6 @@ public class LoginInteractor implements LoginInputBoundary {
             } catch (Exception e) {
                 outputPresenter.prepareFailView("An error occurred during login: " + e.getMessage());
             }
-        });
+        }, executor);
     }
 }

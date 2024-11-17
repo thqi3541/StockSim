@@ -56,12 +56,10 @@ public class StockConfigService {
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
-                int count = 0;
-                while ((line = reader.readLine()) != null && count < 10) { // Limit to 10 stocks for demo
+                while ((line = reader.readLine()) != null) {
                     String ticker = line.trim();
                     if (!ticker.isEmpty()) {
                         tickers.add(ticker);
-                        count++;
                     }
                 }
             }
