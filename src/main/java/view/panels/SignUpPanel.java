@@ -78,10 +78,4 @@ public class SignUpPanel extends JPanel implements IComponent {
             System.out.println("SignUpPanel received an event: " + event.getClass().getSimpleName());
         }
     }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // SignUpPanel supports both SWITCH_PANEL and DIALOG events
-        return EnumSet.of(EventType.SWITCH_PANEL, EventType.DIALOG);
-    }
 }

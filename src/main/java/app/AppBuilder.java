@@ -5,12 +5,18 @@ import data_access.InMemoryUserDataAccessObject;
 import data_access.StockDataAccessInterface;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
+import interface_adapter.login.LoginController;
+import interface_adapter.login.LoginPresenter;
 import interface_adapter.view_history.ViewHistoryController;
 import interface_adapter.view_history.ViewHistoryPresenter;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
 import use_case.execute_buy.ExecuteBuyOutputBoundary;
+import use_case.login.LoginDataAccessInterface;
+import use_case.login.LoginInputBoundary;
+import use_case.login.LoginInteractor;
+import use_case.login.LoginOutputBoundary;
 import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
@@ -113,36 +119,38 @@ public class AppBuilder {
         application.setSize(1000, 800);
         application.add(cardPanel);
 
-        //Step 0: Initialize and register InMemoryStockDataAccessObject (DAO)
+        // Initialize and register stock data access object
         InMemoryStockDataAccessObject stockDataAccessObject = new InMemoryStockDataAccessObject();
         ServiceManager.registerService(StockDataAccessInterface.class, stockDataAccessObject);
 
-        // Step 1: Initialize and register Data Access object
+        // Initialize and register user data access object
         InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
         ServiceManager.registerService(ExecuteBuyDataAccessInterface.class, userDataAccessObject);
         ServiceManager.registerService(ViewHistoryDataAccessInterface.class, userDataAccessObject);
+        ServiceManager.registerService(LoginDataAccessInterface.class, userDataAccessObject);
 
-        // Step 2: Initialize and register ExecuteBuyPresenter (OutputBoundary)
-        ExecuteBuyPresenter executeBuyPresenter = new ExecuteBuyPresenter();
+        // Initialize and register presenter classes (output boundary) for each use case
+        ExecuteBuyOutputBoundary executeBuyPresenter = new ExecuteBuyPresenter();
+        ViewHistoryOutputBoundary viewHistoryPresenter = new ViewHistoryPresenter();
+        LoginOutputBoundary loginPresenter = new LoginPresenter();
+
         ServiceManager.registerService(ExecuteBuyOutputBoundary.class, executeBuyPresenter);
-
-        // Step 3: Initialize ExecuteBuyInteractor with DAO and Presenter
-        ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDataAccessObject, executeBuyPresenter);
-
-        // Step 4: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
-        ExecuteBuyController executeBuyController = new ExecuteBuyController(executeBuyInteractor);
-        ServiceManager.registerService(ExecuteBuyController.class, executeBuyController);
-
-        // Step 5: Initialize and register ViewHistoryPresenter (OutputBoundary)
-        ViewHistoryPresenter viewHistoryPresenter = new ViewHistoryPresenter();
         ServiceManager.registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
+        ServiceManager.registerService(LoginOutputBoundary.class, loginPresenter);
 
-        // Step 6: Initialize ViewHistoryInteractor with DAO and Presenter
+        // Initialize use case interactors
+        ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDataAccessObject, executeBuyPresenter);
         ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(userDataAccessObject, viewHistoryPresenter);
+        LoginInputBoundary loginInteractor = new LoginInteractor(userDataAccessObject, loginPresenter);
 
-        // Step 7: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
+        // Initialize and register controller classes (input boundary) for each use case
+        ExecuteBuyController executeBuyController = new ExecuteBuyController(executeBuyInteractor);
         ViewHistoryController viewHistoryController = new ViewHistoryController(viewHistoryInteractor);
+        LoginController loginController = new LoginController(loginInteractor);
+
+        ServiceManager.registerService(ExecuteBuyController.class, executeBuyController);
         ServiceManager.registerService(ViewHistoryController.class, viewHistoryController);
+        ServiceManager.registerService(LoginController.class, loginController);
 
         // Set ViewManager to control panel switching with cardLayout and cardPanel
         ViewManager.Instance().setCardLayout(cardLayout, cardPanel);

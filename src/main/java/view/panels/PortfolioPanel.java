@@ -99,10 +99,4 @@ public class PortfolioPanel extends JPanel implements IComponent {
                 String.format("%.2f", totalProfit)
         };
     }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // PortfolioPanel supports UPDATE_ASSET events
-        return EnumSet.of(EventType.UPDATE_ASSET);
-    }
 }

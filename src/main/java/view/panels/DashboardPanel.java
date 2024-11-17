@@ -3,9 +3,7 @@ package view.panels;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
-import view.view_events.EventType;
-import view.view_events.SwitchPanelEvent;
-import view.view_events.ViewEvent;
+import view.view_events.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +15,11 @@ public class DashboardPanel extends JPanel implements IComponent {
     private final ButtonComponent historyButton;
     private final ButtonComponent logoutButton;
 
-    public DashboardPanel(String username, double cash, double position) {
+    private String displayUsername;
+    private double displayCash;
+    private double displayPortfolio;
+
+    public DashboardPanel(String username, double cash, double portfolio) {
         ViewManager.Instance().registerComponent(this);
 
         setLayout(new BorderLayout());
@@ -26,7 +28,11 @@ public class DashboardPanel extends JPanel implements IComponent {
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Welcome Label
-        welcomeLabel = new JLabel("<html>Welcome back, " + username + ".<br>You have $" + cash + " in cash and $" + position + " in position.</html>");
+        this.displayUsername = username;
+        this.displayCash = cash;
+        this.displayPortfolio = portfolio;
+        welcomeLabel = new JLabel();
+        updateWelcomeLabel();
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
         welcomeLabel.setVerticalAlignment(SwingConstants.TOP);
         welcomeLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -65,16 +71,23 @@ public class DashboardPanel extends JPanel implements IComponent {
         add(managementPanel, BorderLayout.CENTER);
     }
 
-    @Override
-    public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof SwitchPanelEvent) {
-            System.out.println("DashboardPanel received a SwitchPanelEvent.");
-        }
+    private void updateWelcomeLabel() {
+        welcomeLabel.setText(String.format("<html>Welcome back, %s.<br>You have $%.2f in cash and $%.2f in portfolio.</html>",
+                displayUsername,
+                displayCash,
+                displayPortfolio)
+        );
     }
 
     @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // DashboardPanel only supports SWITCH_PANEL events
-        return EnumSet.of(EventType.SWITCH_PANEL);
+    public void receiveViewEvent(ViewEvent event) {
+        if (event instanceof UpdateUsernameEvent updateUsernameEvent) {
+            displayUsername = updateUsernameEvent.getUsername();
+            updateWelcomeLabel();
+        } else if (event instanceof UpdateAssetEvent updateAssetEvent){
+            displayCash = updateAssetEvent.getBalance();
+            displayPortfolio = updateAssetEvent.getPortfolio().getTotalValue();
+        }
     }
+
 }

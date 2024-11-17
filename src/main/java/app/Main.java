@@ -8,7 +8,7 @@ public class Main {
 
         // Register and set up all panels
         appBuilder.addAuthenticationPanels()
-                .addDashboardPanel("User123", 1000.0, 5000.0)
+                .addDashboardPanel("Guest", 0.0, 0.0)
                 .addTradeSimulationPanel()
                 .addDialogComponent()
                 .addTransactionHistoryPanel();

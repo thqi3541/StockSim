@@ -74,9 +74,4 @@ public class AssetPanel extends JPanel implements IComponent {
         }
     }
 
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // AssetPanel supports UPDATE_ASSET events
-        return EnumSet.of(EventType.UPDATE_ASSET);
-    }
 }

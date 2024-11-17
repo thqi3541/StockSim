@@ -166,16 +166,4 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
             });
         }
     }
-
-    /**
-     * Gets the event type this panel handles
-     *
-     * @return the event type
-     */
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // TransactionHistoryPanel only supports VIEW_HISTORY events
-        return EnumSet.of(EventType.VIEW_HISTORY);
-    }
-
 }

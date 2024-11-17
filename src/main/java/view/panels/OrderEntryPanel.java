@@ -105,10 +105,4 @@ public class OrderEntryPanel extends JPanel implements IComponent {
     public void receiveViewEvent(ViewEvent event) {
         // Placeholder for future event handling
     }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // OrderEntryPanel currently supports no event types
-        return EnumSet.noneOf(EventType.class);
-    }
 }

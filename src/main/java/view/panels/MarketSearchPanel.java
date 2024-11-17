@@ -1,17 +1,21 @@
 package view.panels;
 
+import entity.Stock;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.EventType;
 import view.view_events.UpdateStockEvent;
+import view.view_events.UpdateUsernameEvent;
 import view.view_events.ViewEvent;
 
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.EnumSet;
+import java.util.Objects;
 
 public class MarketSearchPanel extends JPanel implements IComponent {
     private final InputComponent searchField;
@@ -73,11 +77,11 @@ public class MarketSearchPanel extends JPanel implements IComponent {
 
     // Table model setup for demonstration purposes
     private DefaultTableModel getDefaultTableModel() {
-        String[] columnNames = {"Ticker", "Company Name", "Price", "Change"};
+        String[] columnNames = {"Ticker", "Company Name", "Price"};
         Object[][] data = {
-                {"AAPL", "Apple Inc.", "150.00", "+1.23"},
-                {"GOOG", "Alphabet Inc.", "2800.00", "-15.23"},
-                {"TSLA", "Tesla Inc.", "900.00", "+12.34"}
+                {"AAPL", "Apple Inc.", "Fruit Retail", "150.00"},
+                {"GOOG", "Alphabet Inc.", "Spelling Education", "2800.00"},
+                {"TSLA", "Tesla Inc.", "Electricity", "900.00"}
         };
         return new DefaultTableModel(data, columnNames) {
             @Override
@@ -87,22 +91,36 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         };
     }
 
-    @Override
-    public void receiveViewEvent(ViewEvent event) {
-        // Set up for future event handling
-        switch (event) {
-            case UpdateStockEvent updateStockEvent -> {
-                // TODO: update market information
-            }
-            default -> {
-                // event not used by panel
-            }
+    private void updateStockTable(List<Stock> stocks) {
+        // Define columns (same as in getDefaultTableModel)
+        String[] columnNames = {"Ticker", "Company Name", "Industry", "Price"};
+
+        // Create a 2D array to hold the data for the table
+        Object[][] data = new Object[stocks.size()][4];
+        for (int i = 0; i < stocks.size(); i++) {
+            data[i][0] = stocks.get(i).getTicker();
+            data[i][1] = stocks.get(i).getCompany();
+            data[i][2] = stocks.get(i).getIndustry();
+            data[i][3] = stocks.get(i).getPrice();
         }
+
+        // Update the table model with the new data
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;  // Make table cells non-editable
+            }
+        };
+        stockTable.setModel(model);
     }
 
     @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // Currently supports no event types
-        return EnumSet.noneOf(EventType.class);
+    public void receiveViewEvent(ViewEvent event) {
+        // Set up for future event handling
+        // event not used by panel
+        if (Objects.requireNonNull(event) instanceof UpdateStockEvent updateStockEvent) {
+            // Update the table with the new stock data
+            updateStockTable(updateStockEvent.getStocks());
+        }
     }
 }

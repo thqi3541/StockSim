@@ -2,6 +2,7 @@ package data_access;
 
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.login.LoginDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
@@ -13,7 +14,8 @@ import java.util.Map;
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
+public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface,
+        ViewHistoryDataAccessInterface, LoginDataAccessInterface {
     private Map<String, User> users;
 
     @Override
@@ -39,5 +41,10 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         users.put(username, user3);
 
         return users.get(username);
+    }
+
+    @Override
+    public User getUserWithPassword(String username, String password) throws ValidationException {
+        return new User(username, password);
     }
 }

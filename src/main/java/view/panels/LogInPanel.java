@@ -1,5 +1,7 @@
 package view.panels;
 
+import interface_adapter.login.LoginController;
+import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
@@ -55,7 +57,7 @@ public class LogInPanel extends JPanel implements IComponent {
             String username = usernameInput.getText();
             String password = passwordInput.getText();
 
-
+            ServiceManager.getService(LoginController.class).execute(username, password);
         });
         gbc.gridy = 2;
         formPanel.add(logInButton, gbc);
@@ -74,10 +76,5 @@ public class LogInPanel extends JPanel implements IComponent {
         if (event instanceof SwitchPanelEvent) {
             System.out.println("LogInPanel received a SwitchPanelEvent to switch panels.");
         }
-    }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.of(EventType.SWITCH_PANEL);
     }
 }

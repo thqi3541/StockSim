@@ -43,9 +43,7 @@ public class ViewManager {
         }
 
         // For other event types, broadcast to components
-        components.stream()
-                .filter(component -> event.getTypes().stream().anyMatch(component::supportsEvent))
-                .forEach(component -> {
+        components.forEach(component -> {
                     System.out.println("Broadcasting " + event.getClass().getSimpleName() + " to " + component.getClass().getSimpleName());
                     component.receiveViewEvent(event);
                 });
