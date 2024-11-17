@@ -2,8 +2,6 @@ package view.view_events;
 
 import entity.TransactionHistory;
 
-import java.util.EnumSet;
-
 /**
  * This class handles the ViewEvent for the ViewHistory use case
  */
@@ -17,7 +15,6 @@ public class UpdateTransactionHistoryEvent extends ViewEvent {
      * @param transactionHistory The transaction history to display
      */
     public UpdateTransactionHistoryEvent(TransactionHistory transactionHistory) {
-        super(EnumSet.of(EventType.UPDATE_TRANSACTION_HISTORY));
         this.transactionHistory = transactionHistory;
     }
 

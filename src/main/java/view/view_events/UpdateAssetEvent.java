@@ -2,8 +2,6 @@ package view.view_events;
 
 import entity.Portfolio;
 
-import java.util.EnumSet;
-
 public class UpdateAssetEvent extends ViewEvent {
     private final Portfolio portfolio;
     private final double balance;
@@ -16,7 +14,6 @@ public class UpdateAssetEvent extends ViewEvent {
      * @param balance   The balance associated with the portfolio.
      */
     public UpdateAssetEvent(Portfolio portfolio, double balance) {
-        super(EnumSet.of(EventType.UPDATE_ASSET));
         this.portfolio = portfolio;
         this.balance = balance;
     }
