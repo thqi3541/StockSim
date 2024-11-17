@@ -7,6 +7,7 @@ import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
@@ -16,20 +17,22 @@ import java.util.List;
 public class MarketSearchPanel extends JPanel implements IComponent {
     // Layout Constants
     private static final int BORDER_PADDING = 10;
-    private static final int MIN_WIDTH = 400;
-    private static final int MIN_HEIGHT = 300;
-    private static final int PREF_WIDTH = 600;
-    private static final int PREF_HEIGHT = 400;
+    private static final int PANEL_HEIGHT = 400;
+    private static final int ROW_HEIGHT = 30;
+    private static final int HEADER_HEIGHT = 30;
     private static final int SEARCH_FIELD_COLUMNS = 20;
 
+    // Column Width Constants
+    private static final double[] COLUMN_PROPORTIONS = {0.20, 0.40, 0.30, 0.10}; // Proportions for each column
+
     // Font Constants
-    private static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 24);
-    private static final Font SEARCH_FONT = new Font("Arial", Font.PLAIN, 14);
+    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
+    private static final Font SEARCH_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
 
     // Text Constants
-    private static final String TITLE_TEXT = "Market Search";
+    private static final String TITLE_TEXT = "Market Overview";
     private static final String SEARCH_BUTTON_TEXT = "Search";
-    private static final String SEARCH_PLACEHOLDER = "Ticker, company name, or industry";
+    private static final String SEARCH_PLACEHOLDER = "Ticker, company, or industry";
     private static final String[] COLUMN_NAMES = {"Ticker", "Company Name", "Industry", "Price"};
 
     // Mock Data
@@ -64,30 +67,19 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         // Add components to panel
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(createBodyPanel(), BorderLayout.CENTER);
-    }
 
-    // Test main method
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Market Search Panel");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
-            frame.add(new MarketSearchPanel());
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+        // Add resize listener
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                adjustColumnWidths();
+            }
         });
     }
 
     private void setupPanel() {
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-        setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
+        setPreferredSize(new Dimension(0, PANEL_HEIGHT)); // Only fix the height
         setBorder(BorderFactory.createEmptyBorder(
                 BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
     }
@@ -148,9 +140,14 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     }
 
     private JPanel createSearchPanel() {
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)); // Set horizontal gap to 0
         searchPanel.add(searchField);
+
+        // Add a small gap to the right of the search field explicitly
+        searchPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+
         searchPanel.add(searchButton);
+
         return searchPanel;
     }
 
@@ -176,13 +173,28 @@ public class MarketSearchPanel extends JPanel implements IComponent {
 
         JTable table = new JTable(model);
         table.setFillsViewportHeight(true);
-        table.setRowHeight(25);
+        table.setRowHeight(ROW_HEIGHT);
         table.getTableHeader().setReorderingAllowed(false);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setFont(SEARCH_FONT);
         table.getTableHeader().setFont(SEARCH_FONT);
+        table.getTableHeader().setPreferredSize(
+                new Dimension(table.getTableHeader().getPreferredSize().width, HEADER_HEIGHT));
+
+        // Set auto resize mode
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         return table;
+    }
+
+    private void adjustColumnWidths() {
+        int availableWidth = getWidth() - (2 * BORDER_PADDING);
+        if (availableWidth <= 0) return;
+
+        for (int col = 0; col < stockTable.getColumnCount(); col++) {
+            TableColumn column = stockTable.getColumnModel().getColumn(col);
+            int columnWidth = (int) (COLUMN_PROPORTIONS[col] * availableWidth);
+            column.setPreferredWidth(columnWidth);
+        }
     }
 
     private void performSearch() {

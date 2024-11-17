@@ -20,15 +20,12 @@ import java.util.EnumSet;
 public class OrderEntryPanel extends JPanel implements IComponent {
     // Layout Constants
     private static final int BORDER_PADDING = 10;
-    private static final int MIN_WIDTH = 150;
-    private static final int MIN_HEIGHT = 300;
-    private static final int PREF_WIDTH = 150;
-    private static final int PREF_HEIGHT = 400;
+    private static final int PANEL_HEIGHT = 400; // Fixed height
     private static final Insets FIELD_INSETS = new Insets(10, 0, 10, 0);
     private static final int BUTTON_GAP = 10;
 
     // Font Constants
-    private static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 24);
+    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
 
     // Text Constants
     private static final String TITLE_TEXT = "Order Entry";
@@ -65,19 +62,9 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         add(createButtonPanel(), BorderLayout.SOUTH);
     }
 
-    // Test main method
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Order Entry Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.add(new OrderEntryPanel());
-        frame.setVisible(true);
-    }
-
     private void setupPanel() {
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-        setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
+        setPreferredSize(new Dimension(0, PANEL_HEIGHT)); // Let width adjust dynamically
         setBorder(BorderFactory.createEmptyBorder(
                 BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
     }
@@ -139,11 +126,11 @@ public class OrderEntryPanel extends JPanel implements IComponent {
     }
 
     private User createTestUser(String ticker, String quantity) {
-        User user = new User("user1", "password");
+        User user = new User("user", "password");
         user.addBalance(10000.00);
 
         Stock stock1 = new Stock(ticker, "XXX", "XXX", 100.00);
-        Stock stock2 = new Stock("AAPL", "YYY", "YYY", 200.00);
+        Stock stock2 = new Stock("YYY", "YYY", "YYY", 200.00);
         user.getPortfolio().addStock(new UserStock(stock1, 100.00, Integer.parseInt(quantity)));
         user.getPortfolio().addStock(new UserStock(stock2, 200.00, 10));
 

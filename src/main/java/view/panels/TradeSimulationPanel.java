@@ -14,17 +14,13 @@ import java.util.EnumSet;
 public class TradeSimulationPanel extends JPanel implements IComponent {
     // Layout Constants
     private static final int MAIN_PADDING = 20;
-    private static final int SECTION_PADDING = 10;
-    private static final Insets HEADER_INSETS = new Insets(20, 20, 20, 20);
-    private static final Insets PANEL_SPACING = new Insets(10, 0, 10, 0);
+    private static final int SECTION_SPACING = 10;
 
     // Component Sizes
-    private static final Dimension BACK_BUTTON_SIZE = new Dimension(120, 30);
-    private static final Dimension ORDER_PANEL_SIZE = new Dimension(200, 0);
-    private static final Dimension VERTICAL_GAP = new Dimension(0, 10);
+    private static final Dimension VERTICAL_GAP = new Dimension(0, SECTION_SPACING);
 
     // Font Constants
-    private static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 28);
+    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 28);
 
     // Text Constants
     private static final String TITLE_TEXT = "Trade Simulation";
@@ -36,7 +32,9 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         // Add components in order
         add(createHeaderPanel());
+        add(Box.createRigidArea(VERTICAL_GAP));
         add(createUpperPanel());
+        add(Box.createRigidArea(VERTICAL_GAP));
         add(createLowerPanel());
     }
 
@@ -48,9 +46,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
     private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(
-                HEADER_INSETS.top, HEADER_INSETS.left,
-                HEADER_INSETS.bottom, HEADER_INSETS.right));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add 10px internal margin
 
         // Title
         JLabel titleLabel = new JLabel(TITLE_TEXT);
@@ -65,7 +61,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
     private JPanel createBackButton() {
         ButtonComponent backButton = new ButtonComponent(BACK_BUTTON_TEXT);
-        backButton.setPreferredSize(BACK_BUTTON_SIZE);
+        backButton.setPreferredSize(new Dimension(120, 30));
         backButton.addActionListener(e ->
                 ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
 
@@ -76,66 +72,40 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
     private JPanel createUpperPanel() {
         JPanel upperPanel = new JPanel(new GridBagLayout());
-        upperPanel.setBorder(BorderFactory.createEmptyBorder(
-                PANEL_SPACING.top, 0, PANEL_SPACING.bottom, 0));
-
-        JPanel searchAndOrderPanel = createSearchAndOrderPanel();
-
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-
-        upperPanel.add(searchAndOrderPanel, gbc);
-        return upperPanel;
-    }
-
-    private JPanel createSearchAndOrderPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = 1.0;
 
         // Market Search Panel
         MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
-        marketSearchPanel.setBorder(BorderFactory.createEmptyBorder(
-                SECTION_PADDING, SECTION_PADDING, SECTION_PADDING, SECTION_PADDING));
-
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 4.0;
-        gbc.insets = new Insets(0, 0, 0, SECTION_PADDING);
-        panel.add(marketSearchPanel, gbc);
+        gbc.weightx = 3.0; // Wider proportion
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 0, 0, SECTION_SPACING);
+        upperPanel.add(marketSearchPanel, gbc);
 
         // Order Entry Panel
         OrderEntryPanel orderEntryPanel = new OrderEntryPanel();
-        orderEntryPanel.setPreferredSize(ORDER_PANEL_SIZE);
-        orderEntryPanel.setBorder(BorderFactory.createEmptyBorder(
-                SECTION_PADDING, SECTION_PADDING, SECTION_PADDING, SECTION_PADDING));
-
         gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.insets = new Insets(0, SECTION_PADDING, 0, 0);
-        panel.add(orderEntryPanel, gbc);
+        gbc.weightx = 1.0; // Narrower proportion
+        gbc.insets = new Insets(0, SECTION_SPACING, 0, 0);
+        upperPanel.add(orderEntryPanel, gbc);
 
-        return panel;
+        return upperPanel;
     }
 
     private JPanel createLowerPanel() {
-        JPanel assetAndPortfolioPanel = new JPanel();
-        assetAndPortfolioPanel.setLayout(new BoxLayout(
-                assetAndPortfolioPanel, BoxLayout.Y_AXIS));
-        assetAndPortfolioPanel.setBorder(BorderFactory.createEmptyBorder(
-                SECTION_PADDING, 0, 0, 0));
+        JPanel assetAndPortfolioPanel = new JPanel(new BorderLayout()); // Use BorderLayout for full width
 
         // Add Asset Panel
-        assetAndPortfolioPanel.add(new AssetPanel());
-        assetAndPortfolioPanel.add(Box.createRigidArea(VERTICAL_GAP));
+        AssetPanel assetPanel = new AssetPanel();
+        assetPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, assetPanel.getPreferredSize().height));
+        assetAndPortfolioPanel.add(assetPanel, BorderLayout.NORTH);
 
         // Add Portfolio Panel
-        assetAndPortfolioPanel.add(new PortfolioPanel());
+        PortfolioPanel portfolioPanel = new PortfolioPanel();
+        portfolioPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, portfolioPanel.getPreferredSize().height));
+        assetAndPortfolioPanel.add(portfolioPanel, BorderLayout.CENTER);
 
         return assetAndPortfolioPanel;
     }
