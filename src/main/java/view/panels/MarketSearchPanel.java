@@ -231,8 +231,21 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         SwingUtilities.invokeLater(() -> {
             if (stocks == null || stocks.isEmpty()) {
                 System.err.println("No stocks available to update.");
+                DefaultTableModel emptyModel = new DefaultTableModel(new Object[][]{
+                        {"Loading...", "Please wait while stock data is being fetched...", "", ""}
+                }, COLUMN_NAMES) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                stockTable.setModel(emptyModel);
+                stockTable.setEnabled(false);
                 return;
             }
+
+            // Enable table and update with real data
+            stockTable.setEnabled(true);
 
             // 1. Create new table model with data
             DefaultTableModel newModel = getTableModel(stocks);

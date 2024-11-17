@@ -17,11 +17,11 @@ import java.awt.event.ComponentEvent;
 
 public class PortfolioPanel extends JPanel implements IComponent {
     // Layout Constants
-    private static final int BORDER_PADDING = 10; // Padding around the panel content
-    private static final int PANEL_HEIGHT = 300; // Height of the panel
-    private static final int TABLE_HEIGHT = 200; // Height of the table
-    private static final int ROW_HEIGHT = 30;    // Height of each row in the table
-    private static final int HEADER_HEIGHT = 30; // Height of the table header
+    private static final int BORDER_PADDING = 10;
+    private static final int PANEL_HEIGHT = 300;
+    private static final int TABLE_HEIGHT = 200;
+    private static final int ROW_HEIGHT = 30;
+    private static final int HEADER_HEIGHT = 30;
 
     // Font Constants
     private static final String FONT_FAMILY = "Lucida Sans";
@@ -52,7 +52,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
         setupPanelLayout();
 
         // Initialize table model
-        tableModel = new DefaultTableModel(new Object[][]{}, COLUMN_NAMES) {
+        tableModel = new DefaultTableModel(COLUMN_NAMES, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -65,24 +65,25 @@ public class PortfolioPanel extends JPanel implements IComponent {
         // Setup table
         portfolioTable = createPortfolioTable();
         JScrollPane tableScrollPane = new JScrollPane(portfolioTable);
-        tableScrollPane.setPreferredSize(new Dimension(0, TABLE_HEIGHT)); // Let width adjust to parent
+        tableScrollPane.setPreferredSize(new Dimension(0, TABLE_HEIGHT));
+        tableScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(tableScrollPane, BorderLayout.CENTER);
 
-        // Add resize listener to adjust column widths dynamically
+        // Add resize listener
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                adjustColumnWidths(portfolioTable);
+                adjustColumnWidths();
             }
         });
 
         // Initial column width adjustment
-        adjustColumnWidths(portfolioTable);
+        adjustColumnWidths();
     }
 
     private void setupPanelLayout() {
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(0, PANEL_HEIGHT)); // Let width adjust to parent
+        setPreferredSize(new Dimension(0, PANEL_HEIGHT));
         setBorder(BorderFactory.createEmptyBorder(
                 BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
     }
@@ -107,28 +108,31 @@ public class PortfolioPanel extends JPanel implements IComponent {
         table.setFillsViewportHeight(true);
         table.setRowHeight(ROW_HEIGHT);
         table.setFont(new Font(FONT_FAMILY, Font.PLAIN, TABLE_FONT_SIZE));
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         // Header properties
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font(FONT_FAMILY, Font.BOLD, TABLE_FONT_SIZE));
         header.setForeground(Color.GRAY);
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, HEADER_HEIGHT));
-
-        // Column properties
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Disable automatic resizing
+        header.setReorderingAllowed(false);
 
         return table;
     }
 
-    private void adjustColumnWidths(JTable table) {
-        int parentWidth = this.getWidth(); // Get the parent container's width
+    private void adjustColumnWidths() {
+        int availableWidth = getWidth() - (2 * BORDER_PADDING);
+        if (availableWidth <= 0) return;
 
-        // Proportions for each column
-        double[] columnProportions = {0.10, 0.15, 0.10, 0.15, 0.25, 0.25}; // 10%, 15%, etc.
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            int columnWidth = (int) (columnProportions[col] * parentWidth);
-            TableColumn column = table.getColumnModel().getColumn(col);
-            column.setPreferredWidth(columnWidth);
+        // Column proportions (must sum to 1.0)
+        double[] columnProportions = {0.15, 0.17, 0.13, 0.17, 0.19, 0.19};
+
+        for (int i = 0; i < portfolioTable.getColumnCount(); i++) {
+            TableColumn column = portfolioTable.getColumnModel().getColumn(i);
+            int width = (int) (availableWidth * columnProportions[i]);
+            column.setPreferredWidth(width);
+            column.setMinWidth(width);
+            column.setMaxWidth(width);
         }
     }
 
@@ -143,8 +147,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
                 tableModel.addRow(rowData);
             });
 
-            // Adjust column widths after updating the data
-            adjustColumnWidths(portfolioTable);
+            adjustColumnWidths();
         }
     }
 

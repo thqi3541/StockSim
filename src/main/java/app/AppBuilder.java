@@ -1,9 +1,8 @@
 package app;
 
-import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import data_access.StockDataAccessInterface;
-import entity.StockMarket;
+import data_access.StockDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import interface_adapter.login.LoginController;
@@ -23,6 +22,7 @@ import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
 import use_case.view_history.ViewHistoryOutputBoundary;
 import utility.ServiceManager;
+import utility.StockMarket;
 import utility.ViewManager;
 import view.components.DialogComponent;
 import view.panels.*;
@@ -52,6 +52,9 @@ public class AppBuilder {
     private int width = DEFAULT_WIDTH;
     private int height = DEFAULT_HEIGHT;
     private String title = DEFAULT_TITLE;
+
+    // Store reference to StockDataAccessObject for cleanup
+    private StockDataAccessObject stockDAO;
 
     /**
      * Constructor for the AppBuilder class
@@ -135,11 +138,13 @@ public class AppBuilder {
      */
     private void initializeServices() {
         // 1. Initialize DAOs first
-        InMemoryStockDataAccessObject stockDAO = new InMemoryStockDataAccessObject();
+        stockDAO = new StockDataAccessObject();
         InMemoryUserDataAccessObject userDAO = new InMemoryUserDataAccessObject();
 
         // Register concrete DAOs and their interfaces
         ServiceManager.Instance().registerService(StockDataAccessInterface.class, stockDAO);
+
+        // Initialize and register StockMarket
         StockMarket.Instance().initialize(stockDAO);
 
         ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, userDAO);
@@ -206,5 +211,14 @@ public class AppBuilder {
         cardLayout.show(cardPanel, initialPanel);
 
         return application;
+    }
+
+    /**
+     * Cleanup method to release resources
+     */
+    private void cleanup() {
+        System.out.println("Starting application cleanup...");
+        System.out.println("Application cleanup completed.");
+        System.exit(0);  // Ensure complete application termination
     }
 }

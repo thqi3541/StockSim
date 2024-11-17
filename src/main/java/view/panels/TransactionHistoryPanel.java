@@ -36,8 +36,6 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
     private static final String[] COLUMN_NAMES = {
             "Date",
             "Ticker",
-            "Company Name",
-            "Industry",
             "Action",
             "Price",
             "Quantity",
@@ -46,14 +44,12 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     // Column Width Proportions (total = 1.0)
     private static final double[] COLUMN_PROPORTIONS = {
-            0.15,  // Date
-            0.08,  // Ticker
-            0.25,  // Company Name
-            0.20,  // Industry
-            0.08,  // Action
-            0.08,  // Price
-            0.08,  // Quantity
-            0.08   // Total Price
+            0.20,  // Date
+            0.10,  // Ticker
+            0.10,  // Action
+            0.10,  // Price
+            0.10,  // Quantity
+            0.10   // Total Price
     };
     private final JTable historyTable;
     // Components
@@ -90,10 +86,15 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
     }
 
     private DefaultTableModel createTableModel() {
-        return new DefaultTableModel(new Object[][]{}, COLUMN_NAMES) {
+        return new DefaultTableModel(COLUMN_NAMES, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return String.class;
             }
         };
     }
@@ -219,8 +220,6 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
     private Object[] createRowData(Transaction transaction) {
         String ticker = transaction.getTicker();
         String formattedDate = DATE_FORMAT.format(transaction.getTimestamp());
-        String company = "Unknown Company";  // You might want to fetch this from somewhere
-        String industry = "Unknown Industry";  // You might want to fetch this from somewhere
         String action = transaction.getType();
         double price = transaction.getPrice();
         int quantity = transaction.getQuantity();
@@ -229,8 +228,6 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         return new Object[]{
                 formattedDate,
                 ticker,
-                company,
-                industry,
                 action,
                 String.format("$" + CURRENCY_FORMAT, price),
                 quantity,

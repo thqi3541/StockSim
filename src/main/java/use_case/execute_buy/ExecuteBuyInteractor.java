@@ -1,12 +1,15 @@
 package use_case.execute_buy;
 
 import entity.*;
+import utility.StockMarket;
+import utility.ViewManager;
 import utility.exceptions.ValidationException;
+import view.view_events.UpdateTransactionHistoryEvent;
 
 import java.util.Date;
 
 /**
- * The Execute Buy Interactor.
+ * The interactor for the Buy Stock use case
  */
 public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
@@ -32,14 +35,12 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
      */
     @Override
     public void execute(ExecuteBuyInputData data) {
-        // TODO: after the transaction is successful, the updated date should be saved in the database
         try {
             // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());
 
             // Get stock and quantity
             String ticker = data.ticker();
-
             int quantity = data.quantity();
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
@@ -59,6 +60,11 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 Date timestamp = new Date();
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "buy");
                 currentUser.getTransactionHistory().addTransaction(transaction);
+
+                // Broadcast transaction history update event
+                ViewManager.Instance().broadcastEvent(
+                        new UpdateTransactionHistoryEvent(currentUser.getTransactionHistory())
+                );
 
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(

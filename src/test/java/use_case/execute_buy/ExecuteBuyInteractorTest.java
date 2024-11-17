@@ -1,15 +1,22 @@
 package use_case.execute_buy;
 
-import entity.*;
+import entity.Stock;
+import entity.User;
+import entity.UserFactory;
+import entity.UserStock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import utility.StockMarket;
+import utility.ViewManager;
 import utility.exceptions.ValidationException;
+import view.view_events.UpdateTransactionHistoryEvent;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class ExecuteBuyInteractorTest {
@@ -17,55 +24,71 @@ class ExecuteBuyInteractorTest {
     private ExecuteBuyDataAccessInterface dataAccess;
     private ExecuteBuyOutputBoundary outputPresenter;
     private UserFactory userFactory;
+    private StockMarket stockMarketMock;
+    private ViewManager viewManagerMock;
 
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
         dataAccess = mock(ExecuteBuyDataAccessInterface.class);
         outputPresenter = mock(ExecuteBuyOutputBoundary.class);
+        stockMarketMock = mock(StockMarket.class);
+        viewManagerMock = mock(ViewManager.class);
     }
 
     @Test
     void successTest() throws ValidationException {
         User mockUser = createMockUserWithBalance(10000.0);
-        Stock stock = new Stock("XXXX", "X Company", "Technology", 100.0);
+        Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 150.0);
 
-        try (MockedStatic<StockMarket> mockedStatic = Mockito.mockStatic(StockMarket.class)) {
-            StockMarket stockMarketMock = Mockito.mock(StockMarket.class);
-            mockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
-            when(stockMarketMock.getStock("XXXX")).thenReturn(Optional.of(stock));
+        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class);
+             MockedStatic<ViewManager> viewManagerMockedStatic = Mockito.mockStatic(ViewManager.class)) {
 
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "XXXX", 100);
+            stockMarketMockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
+            viewManagerMockedStatic.when(ViewManager::Instance).thenReturn(viewManagerMock);
+            when(stockMarketMock.getStock("AAPL")).thenReturn(Optional.of(stock));
+
+            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
 
             interactor.execute(inputData);
 
-            // Verify the success view was prepared correctly
+            // Verify success view was prepared
             verify(outputPresenter).prepareSuccessView(any());
-            Optional<UserStock> userStockOpt = mockUser.getPortfolio().getUserStock("XXXX");
-            assertTrue(userStockOpt.isPresent(), "Portfolio should contain the ticker " + "XXXX");
-            assertEquals(100, userStockOpt.get().getQuantity(), "Stock quantity should match.");
+
+            // Verify transaction was added
+            Optional<UserStock> userStockOpt = mockUser.getPortfolio().getUserStock("AAPL");
+            assertTrue(userStockOpt.isPresent(), "Portfolio should contain the ticker AAPL");
+            assertEquals(10, userStockOpt.get().getQuantity(), "Stock quantity should match.");
+
+            // Verify transaction history event was broadcast
+            verify(viewManagerMock).broadcastEvent(any(UpdateTransactionHistoryEvent.class));
         }
     }
 
     @Test
     void insufficientBalanceTest() throws ValidationException {
         User mockUser = createMockUserWithBalance(500.0);
-        Stock stock = new Stock("XXXX", "X Company", "Technology", 100.0);
+        Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 150.0);
 
-        try (MockedStatic<StockMarket> mockedStatic = Mockito.mockStatic(StockMarket.class)) {
-            StockMarket stockMarketMock = Mockito.mock(StockMarket.class);
-            mockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
-            when(stockMarketMock.getStock("XXXX")).thenReturn(Optional.of(stock));
+        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class);
+             MockedStatic<ViewManager> viewManagerMockedStatic = Mockito.mockStatic(ViewManager.class)) {
 
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "XXXX", 100);
+            stockMarketMockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
+            viewManagerMockedStatic.when(ViewManager::Instance).thenReturn(viewManagerMock);
+            when(stockMarketMock.getStock("AAPL")).thenReturn(Optional.of(stock));
+
+            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
 
             interactor.execute(inputData);
 
             verify(outputPresenter).prepareInsufficientBalanceExceptionView();
-            assertFalse(mockUser.getPortfolio().getUserStock("XXXX").isPresent(),
+            assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to insufficient funds.");
+
+            // Verify no transaction history event was broadcast
+            verify(viewManagerMock, never()).broadcastEvent(any(UpdateTransactionHistoryEvent.class));
         }
     }
 
