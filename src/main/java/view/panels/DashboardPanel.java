@@ -12,7 +12,6 @@ import view.view_events.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
-import java.util.EnumSet;
 
 public class DashboardPanel extends JPanel implements IComponent {
     // Layout Constants
@@ -159,22 +158,21 @@ public class DashboardPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof SwitchPanelEvent) {
-            System.out.println("DashboardPanel received a SwitchPanelEvent.");
-        } else if (event instanceof UpdateCurrentUserEvent userEvent) {
-            User user = userEvent.getUser();
-            double portfolioValue = user.getPortfolio() != null ? user.getPortfolio().getTotalValue() : 0.0;
-            updateDashboard(user.getUsername(), user.getBalance(), portfolioValue);
+        if (event instanceof UpdateUsernameEvent userEvent) {
+            String username = userEvent.getUsername();
+            updateDashboardUserName(username);
+        } else if (event instanceof UpdateAssetEvent assetEvent) {
+            double cash = assetEvent.getBalance();
+            double portfolioValue = assetEvent.getPortfolio().getTotalValue();
+            updateDashboardValue(cash, portfolioValue);
         }
     }
 
-    private void updateDashboard(String username, double cash, double position) {
+    private void updateDashboardUserName(String username) {
         welcomeLabel.setText("Welcome back, " + username);
-        balanceLabel.setText(formatBalanceText(cash, position));
     }
 
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.of(EventType.SWITCH_PANEL, EventType.UPDATE_CURRENT_USER);
+    private void updateDashboardValue(double cash, double portfolioValue) {
+        balanceLabel.setText(formatBalanceText(cash, portfolioValue));
     }
 }

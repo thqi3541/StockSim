@@ -16,18 +16,6 @@ public class SwitchPanelEvent extends ViewEvent {
     }
 
     /**
-     * Creates a SwitchPanelEvent with a customizable set of event types.
-     * This is useful if additional types are needed for this event.
-     *
-     * @param panelName The name of the panel to switch to.
-     * @param types     The set of event types associated with this event.
-     */
-    public SwitchPanelEvent(String panelName, EnumSet<EventType> types) {
-        super(types);
-        this.panelName = panelName;
-    }
-
-    /**
      * Returns the name of the panel to switch to.
      *
      * @return The panel name.

@@ -3,13 +3,11 @@ package view.panels;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
-import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.EnumSet;
 
 public class TradeSimulationPanel extends JPanel implements IComponent {
     // Layout Constants
@@ -112,8 +110,5 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof SwitchPanelEvent) {
-            System.out.println("TradeSimulationPanel received a SwitchPanelEvent.");
-        }
     }
 }

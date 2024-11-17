@@ -3,11 +3,9 @@ package view.components;
 import utility.ViewManager;
 import view.IComponent;
 import view.view_events.DialogEvent;
-import view.view_events.EventType;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
-import java.util.EnumSet;
 
 public class DialogComponent implements IComponent {
 

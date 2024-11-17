@@ -5,7 +5,6 @@ import entity.TransactionHistory;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
-import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 import view.view_events.ViewEvent;
@@ -15,7 +14,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.EnumSet;
 
 public class TransactionHistoryPanel extends JPanel implements IComponent {
     // Layout Constants
@@ -192,8 +190,8 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof UpdateTransactionHistoryEvent updateEvent) {
-            TransactionHistory transactionHistory = updateEvent.getTransactionHistory();
+        if (event instanceof UpdateTransactionHistoryEvent historyEvent) {
+            TransactionHistory transactionHistory = historyEvent.getTransactionHistory();
             tableModel.setRowCount(0);
 
             transactionHistory.getAllTransactions().forEach(transaction -> {
@@ -201,10 +199,5 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
                 tableModel.addRow(rowData);
             });
         }
-    }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.of(EventType.UPDATE_TRANSACTION_HISTORY);
     }
 }

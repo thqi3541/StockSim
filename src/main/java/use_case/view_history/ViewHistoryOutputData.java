@@ -1,4 +1,4 @@
-package use_case.execute_view_history;
+package use_case.view_history;
 
 import entity.TransactionHistory;
 
@@ -7,7 +7,7 @@ import entity.TransactionHistory;
  *
  * @param transactionHistory the transaction history of the user
  */
-public record ExecuteViewHistoryOutputData(
+public record ViewHistoryOutputData(
         TransactionHistory transactionHistory
 ) {
 }

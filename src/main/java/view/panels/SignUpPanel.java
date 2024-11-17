@@ -6,13 +6,11 @@ import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.components.PasswordInputComponent;
 import view.view_events.DialogEvent;
-import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.EnumSet;
 
 public class SignUpPanel extends JPanel implements IComponent {
     // Components
@@ -142,8 +140,5 @@ public class SignUpPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof SwitchPanelEvent || event instanceof DialogEvent) {
-            System.out.println("SignUpPanel received an event: " + event.getClass().getSimpleName());
-        }
     }
 }

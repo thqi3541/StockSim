@@ -4,7 +4,6 @@ import entity.Portfolio;
 import entity.UserStock;
 import utility.ViewManager;
 import view.IComponent;
-import view.view_events.EventType;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
@@ -15,7 +14,6 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.EnumSet;
 
 public class PortfolioPanel extends JPanel implements IComponent {
     // Layout Constants
@@ -136,8 +134,8 @@ public class PortfolioPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof UpdateAssetEvent updateEvent) {
-            Portfolio portfolio = updateEvent.getPortfolio();
+        if (event instanceof UpdateAssetEvent assetEvent) {
+            Portfolio portfolio = assetEvent.getPortfolio();
             tableModel.setRowCount(0);
 
             portfolio.getAllStocks().forEach(userStock -> {

@@ -7,13 +7,11 @@ import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.components.PasswordInputComponent;
-import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.EnumSet;
 
 public class LogInPanel extends JPanel implements IComponent {
     // Components
@@ -127,8 +125,10 @@ public class LogInPanel extends JPanel implements IComponent {
 
     private void configureButtonActions() {
         logInButton.addActionListener(e -> {
-            // TODO: Add logic for logging in
-            ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel"));
+            String username = usernameInput.getText();
+            char[] passwordChars = passwordInput.getPassword();
+            String password = new String(passwordChars);
+            ServiceManager.Instance().getService(LoginController.class).execute(username, password);
         });
 
         signUpButton.addActionListener(e -> {
@@ -138,8 +138,5 @@ public class LogInPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof SwitchPanelEvent) {
-            System.out.println("LogInPanel received a SwitchPanelEvent to switch panels.");
-        }
     }
 }

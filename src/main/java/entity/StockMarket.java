@@ -27,18 +27,16 @@ public class StockMarket {
     private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE = 500; // interval adjustment rate in milliseconds
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = 5; // number of rounds without rate limit
 
-    private volatile long currentUpdateInterval = INITIAL_UPDATE_MARKET_INTERVAL;
-    private int roundsWithoutRateLimit = 0;
-
     // thread-safe Singleton instance
     private static volatile StockMarket instance = null;
 
+    // use read-write lock to ensure stock data is not read during update
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private volatile long currentUpdateInterval = INITIAL_UPDATE_MARKET_INTERVAL;
+    private int roundsWithoutRateLimit = 0;
     private Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private StockDataAccessInterface dataAccess;
     private boolean initialized = false;
-
-    // use read-write lock to ensure stock data is not read during update
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private ScheduledExecutorService scheduler;
 
     private StockMarket() {

@@ -1,9 +1,9 @@
 package view.view_events;
 
+import entity.Stock;
+
 import java.util.EnumSet;
 import java.util.List;
-
-import entity.Stock;
 
 public class UpdateStockEvent extends ViewEvent {
 
@@ -14,5 +14,7 @@ public class UpdateStockEvent extends ViewEvent {
         this.stocks = stocks;
     }
 
-    public List<Stock> getStocks() { return stocks; }
+    public List<Stock> getStocks() {
+        return stocks;
+    }
 }

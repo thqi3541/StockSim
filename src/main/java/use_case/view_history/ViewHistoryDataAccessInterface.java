@@ -1,4 +1,4 @@
-package use_case.execute_view_history;
+package use_case.view_history;
 
 import entity.User;
 import utility.exceptions.ValidationException;
@@ -6,7 +6,7 @@ import utility.exceptions.ValidationException;
 /**
  * The interface of the DAO for the View Transaction History Use Case.
  */
-public interface ExecuteViewHistoryDataAccessInterface {
+public interface ViewHistoryDataAccessInterface {
 
     /**
      * Gets the current user from the user credential and throws ValidationException if credential is invalid

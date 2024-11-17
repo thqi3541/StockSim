@@ -3,20 +3,14 @@ package view.panels;
 import entity.Stock;
 import utility.ViewManager;
 import view.IComponent;
-import view.view_events.EventType;
 import view.view_events.UpdateStockEvent;
-import view.view_events.UpdateUsernameEvent;
 import view.view_events.ViewEvent;
 
-import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.util.EnumSet;
-import java.util.Objects;
 import java.util.List;
 
 public class MarketSearchPanel extends JPanel implements IComponent {
@@ -55,7 +49,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     private final JButton searchButton;
     private final JLabel titleLabel;
     private final JTable stockTable;
-    private final TableRowSorter<TableModel> rowSorter;
+    private final TableRowSorter<DefaultTableModel> rowSorter;
 
     public MarketSearchPanel() {
         ViewManager.Instance().registerComponent(this);
@@ -66,7 +60,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         searchField = createSearchField();
         searchButton = createSearchButton();
         stockTable = createStockTable();
-        rowSorter = new TableRowSorter<>(stockTable.getModel());
+        rowSorter = new TableRowSorter<>((DefaultTableModel) stockTable.getModel());
         stockTable.setRowSorter(rowSorter);
 
         // Add components to panel
@@ -80,6 +74,16 @@ public class MarketSearchPanel extends JPanel implements IComponent {
                 adjustColumnWidths();
             }
         });
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Market Search Panel");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+
+        MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
+        frame.add(marketSearchPanel);
+        frame.setVisible(true);
     }
 
     private void setupPanel() {
@@ -163,25 +167,8 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         return bodyPanel;
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Market Search Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-
-        MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
-        frame.add(marketSearchPanel);
-        frame.setVisible(true);
-    }
-
-    // Table model setup for demonstration purposes
-    private DefaultTableModel getDefaultTableModel() {
-        String[] columnNames = {"Ticker", "Company Name", "Price", "Change"};
-        Object[][] data = {
-                {"AAPL", "Apple Inc.", "150.00", "+1.23"},
-                {"GOOG", "Alphabet Inc.", "2800.00", "-15.23"},
-                {"TSLA", "Tesla Inc.", "900.00", "+12.34"}
-        };
-        return new DefaultTableModel(data, columnNames) {
+    private JTable createStockTable() {
+        DefaultTableModel model = new DefaultTableModel(INITIAL_DATA, COLUMN_NAMES) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -225,11 +212,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
             rowSorter.setRowFilter(null);
         } else {
             // Filter that checks ticker, company name, and industry
-            rowSorter.setRowFilter(RowFilter.orFilter(List.of(
-                    RowFilter.regexFilter("(?i)" + searchText, 0), // Ticker column
-                    RowFilter.regexFilter("(?i)" + searchText, 1), // Company name column
-                    RowFilter.regexFilter("(?i)" + searchText, 2)  // Industry column
-            )));
+            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
         }
     }
 
@@ -258,11 +241,8 @@ public class MarketSearchPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        // Set up for future event handling
-    }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        return EnumSet.noneOf(EventType.class);
+        if (event instanceof UpdateStockEvent stockEvent) {
+            updateStockTable(stockEvent.getStocks());
+        }
     }
 }

@@ -4,7 +4,7 @@ import entity.Stock;
 
 import java.util.Map;
 
-public class InMemoryStockDataAccessObject implements IStockDataAccess {
+public class InMemoryStockDataAccessObject implements StockDataAccessInterface {
     private final Map<String, Stock> stocks;
 
     public InMemoryStockDataAccessObject() {

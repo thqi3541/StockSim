@@ -11,5 +11,7 @@ public class UpdateUsernameEvent extends ViewEvent {
         this.username = username;
     }
 
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 }

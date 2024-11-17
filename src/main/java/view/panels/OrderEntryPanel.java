@@ -1,21 +1,15 @@
 package view.panels;
 
-import entity.Stock;
-import entity.User;
-import entity.UserStock;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
-import view.view_events.EventType;
-import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.EnumSet;
 
 public class OrderEntryPanel extends JPanel implements IComponent {
     // Layout Constants
@@ -118,23 +112,6 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         ExecuteBuyController controller = ServiceManager.Instance()
                 .getService(ExecuteBuyController.class);
         controller.execute(ticker, quantity);
-
-        // Test update asset (mock data)
-        User user = createTestUser(ticker, quantity);
-        ViewManager.Instance().broadcastEvent(
-                new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
-    }
-
-    private User createTestUser(String ticker, String quantity) {
-        User user = new User("user", "password");
-        user.addBalance(10000.00);
-
-        Stock stock1 = new Stock(ticker, "XXX", "XXX", 100.00);
-        Stock stock2 = new Stock("YYY", "YYY", "YYY", 200.00);
-        user.getPortfolio().addStock(new UserStock(stock1, 100.00, Integer.parseInt(quantity)));
-        user.getPortfolio().addStock(new UserStock(stock2, 200.00, 10));
-
-        return user;
     }
 
     @Override

@@ -22,17 +22,6 @@ public class UpdateTransactionHistoryEvent extends ViewEvent {
     }
 
     /**
-     * Constructs a UpdateTransactionHistoryEvent with a specified transaction history and a set of event types.
-     *
-     * @param transactionHistory The transaction history to display
-     * @param types              The set of event types for this event
-     */
-    public UpdateTransactionHistoryEvent(TransactionHistory transactionHistory, EnumSet<EventType> types) {
-        super(types);
-        this.transactionHistory = transactionHistory;
-    }
-
-    /**
      * A getter for the transaction history associated with this view event
      *
      * @return The transaction history for this view event's user

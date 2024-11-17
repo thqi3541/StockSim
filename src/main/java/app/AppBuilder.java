@@ -6,16 +6,22 @@ import data_access.StockDataAccessInterface;
 import entity.StockMarket;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
-import interface_adapter.execute_view_history.ExecuteViewHistoryController;
-import interface_adapter.execute_view_history.ExecuteViewHistoryPresenter;
+import interface_adapter.login.LoginController;
+import interface_adapter.login.LoginPresenter;
+import interface_adapter.view_history.ViewHistoryController;
+import interface_adapter.view_history.ViewHistoryPresenter;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
 import use_case.execute_buy.ExecuteBuyOutputBoundary;
-import use_case.execute_view_history.ExecuteViewHistoryDataAccessInterface;
-import use_case.execute_view_history.ExecuteViewHistoryInputBoundary;
-import use_case.execute_view_history.ExecuteViewHistoryInteractor;
-import use_case.execute_view_history.ExecuteViewHistoryOutputBoundary;
+import use_case.login.LoginDataAccessInterface;
+import use_case.login.LoginInputBoundary;
+import use_case.login.LoginInteractor;
+import use_case.login.LoginOutputBoundary;
+import use_case.view_history.ViewHistoryDataAccessInterface;
+import use_case.view_history.ViewHistoryInputBoundary;
+import use_case.view_history.ViewHistoryInteractor;
+import use_case.view_history.ViewHistoryOutputBoundary;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.components.DialogComponent;
@@ -129,43 +135,57 @@ public class AppBuilder {
      */
     private void initializeServices() {
         ServiceManager serviceManager = ServiceManager.Instance();
+        StockMarket stockMarket = StockMarket.Instance();
 
         // 1. Initialize DAOs first
         InMemoryStockDataAccessObject stockDAO = new InMemoryStockDataAccessObject();
         InMemoryUserDataAccessObject userDAO = new InMemoryUserDataAccessObject();
 
         // Register concrete DAOs and their interfaces
-        serviceManager.registerService(InMemoryStockDataAccessObject.class, stockDAO);
+        serviceManager.registerService(StockDataAccessInterface.class, stockDAO);
+        StockMarket.Instance().initialize(stockDAO);
+
         serviceManager.registerService(InMemoryUserDataAccessObject.class, userDAO);
         serviceManager.registerService(ExecuteBuyDataAccessInterface.class, userDAO);
-        serviceManager.registerService(ExecuteViewHistoryDataAccessInterface.class, userDAO);
+        serviceManager.registerService(ViewHistoryDataAccessInterface.class, userDAO);
+        serviceManager.registerService(LoginDataAccessInterface.class, userDAO);
 
         // 2. Initialize Presenters and register them as output boundaries
         ExecuteBuyOutputBoundary buyPresenter = new ExecuteBuyPresenter();
-        ExecuteViewHistoryOutputBoundary viewHistoryPresenter = new ExecuteViewHistoryPresenter();
+        ViewHistoryOutputBoundary viewHistoryPresenter = new ViewHistoryPresenter();
+        LoginOutputBoundary loginPresenter = new LoginPresenter();
 
         serviceManager.registerService(ExecuteBuyOutputBoundary.class, buyPresenter);
-        serviceManager.registerService(ExecuteViewHistoryOutputBoundary.class, viewHistoryPresenter);
+        serviceManager.registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
+        serviceManager.registerService(LoginOutputBoundary.class, loginPresenter);
 
         // 3. Initialize Interactors and register them as input boundaries
         ExecuteBuyInputBoundary buyInteractor = new ExecuteBuyInteractor(
                 serviceManager.getService(ExecuteBuyDataAccessInterface.class),
                 serviceManager.getService(ExecuteBuyOutputBoundary.class)
         );
-        ExecuteViewHistoryInputBoundary viewHistoryInteractor = new ExecuteViewHistoryInteractor(
-                serviceManager.getService(ExecuteViewHistoryDataAccessInterface.class),
-                serviceManager.getService(ExecuteViewHistoryOutputBoundary.class)
+        ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(
+                serviceManager.getService(ViewHistoryDataAccessInterface.class),
+                serviceManager.getService(ViewHistoryOutputBoundary.class)
+        );
+        LoginInputBoundary loginInteractor = new LoginInteractor(
+                serviceManager.getService(LoginDataAccessInterface.class),
+                serviceManager.getService(LoginOutputBoundary.class)
         );
 
         serviceManager.registerService(ExecuteBuyInputBoundary.class, buyInteractor);
-        serviceManager.registerService(ExecuteViewHistoryInputBoundary.class, viewHistoryInteractor);
+        serviceManager.registerService(ViewHistoryInputBoundary.class, viewHistoryInteractor);
+        serviceManager.registerService(LoginInputBoundary.class, loginInteractor);
 
         // 4. Initialize Controllers
         serviceManager.registerService(ExecuteBuyController.class, new ExecuteBuyController(
                 serviceManager.getService(ExecuteBuyInputBoundary.class))
         );
-        serviceManager.registerService(ExecuteViewHistoryController.class, new ExecuteViewHistoryController(
-                serviceManager.getService(ExecuteViewHistoryInputBoundary.class))
+        serviceManager.registerService(ViewHistoryController.class, new ViewHistoryController(
+                serviceManager.getService(ViewHistoryInputBoundary.class))
+        );
+        serviceManager.registerService(LoginController.class, new LoginController(
+                serviceManager.getService(LoginInputBoundary.class))
         );
     }
 

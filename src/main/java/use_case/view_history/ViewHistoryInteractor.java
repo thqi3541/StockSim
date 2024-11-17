@@ -1,4 +1,4 @@
-package use_case.execute_view_history;
+package use_case.view_history;
 
 import entity.User;
 import utility.exceptions.ValidationException;
@@ -6,19 +6,19 @@ import utility.exceptions.ValidationException;
 /**
  * The View History Interactor.
  */
-public class ExecuteViewHistoryInteractor implements ExecuteViewHistoryInputBoundary {
+public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
 
-    private final ExecuteViewHistoryDataAccessInterface dataAccess;
-    private final ExecuteViewHistoryOutputBoundary outputPresenter;
+    private final ViewHistoryDataAccessInterface dataAccess;
+    private final ViewHistoryOutputBoundary outputPresenter;
 
     /**
-     * This is the constructor of the ExecuteViewHistoryInteractor class.
+     * This is the constructor of the ViewHistoryInteractor class.
      * It instantiates a new ViewHistory Interactor.
      *
      * @param dataAccess     the data access
      * @param outputBoundary the output boundary
      */
-    public ExecuteViewHistoryInteractor(ExecuteViewHistoryDataAccessInterface dataAccess, ExecuteViewHistoryOutputBoundary outputBoundary) {
+    public ViewHistoryInteractor(ViewHistoryDataAccessInterface dataAccess, ViewHistoryOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
     }
@@ -29,12 +29,12 @@ public class ExecuteViewHistoryInteractor implements ExecuteViewHistoryInputBoun
      * @param data the input data
      */
     @Override
-    public void execute(ExecuteViewHistoryInputData data) {
+    public void execute(ViewHistoryInputData data) {
         try {
             // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());
             // Prepare output data to feed into presenter
-            outputPresenter.prepareSuccessView(new ExecuteViewHistoryOutputData(
+            outputPresenter.prepareSuccessView(new ViewHistoryOutputData(
                     currentUser.getTransactionHistory()
             ));
         } catch (ValidationException e) {

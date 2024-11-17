@@ -3,13 +3,11 @@ package view.panels;
 import entity.Portfolio;
 import utility.ViewManager;
 import view.IComponent;
-import view.view_events.EventType;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.EnumSet;
 
 public class AssetPanel extends JPanel implements IComponent {
     // Label text constants
@@ -77,11 +75,11 @@ public class AssetPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof UpdateAssetEvent updateEvent) {
-            Portfolio portfolio = updateEvent.getPortfolio();
-            double balance = updateEvent.getBalance();
+        if (event instanceof UpdateAssetEvent assetEvent) {
+            Portfolio portfolio = assetEvent.getPortfolio();
+            double balance = assetEvent.getBalance();
             double portfolioTotalValue = portfolio.getTotalValue();
-            double totalAssets = portfolioTotalValue + balance;
+            double totalAssets = balance + portfolioTotalValue;
 
             totalAssetsLabel.setText(TOTAL_ASSETS_LABEL + String.format(CURRENCY_FORMAT, totalAssets));
             balanceLabel.setText(BALANCE_LABEL + String.format(CURRENCY_FORMAT, balance));
