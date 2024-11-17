@@ -5,6 +5,7 @@ import entity.User;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 import utility.ViewManager;
+import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateStockEvent;
 import view.view_events.UpdateUsernameEvent;
@@ -21,13 +22,13 @@ public class LoginPresenter implements LoginOutputBoundary {
                         user.getBalance()
                 )
         );
-        // update stock market data
-        ViewManager.Instance().broadcastEvent(
-                new UpdateStockEvent(StockMarket.Instance().getStocks())
-        );
         // update username data
         ViewManager.Instance().broadcastEvent(
                 new UpdateUsernameEvent(user.getUsername())
+        );
+        // switch to dashboard
+        ViewManager.Instance().broadcastEvent(
+                new SwitchPanelEvent("DashboardPanel")
         );
     }
 

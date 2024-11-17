@@ -118,7 +118,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     public void receiveViewEvent(ViewEvent event) {
         // Set up for future event handling
         // event not used by panel
-        if (Objects.requireNonNull(event) instanceof UpdateStockEvent updateStockEvent) {
+        if (event instanceof UpdateStockEvent updateStockEvent) {
             // Update the table with the new stock data
             updateStockTable(updateStockEvent.getStocks());
         }

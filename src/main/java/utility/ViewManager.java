@@ -44,9 +44,8 @@ public class ViewManager {
 
         // For other event types, broadcast to components
         components.forEach(component -> {
-                    System.out.println("Broadcasting " + event.getClass().getSimpleName() + " to " + component.getClass().getSimpleName());
-                    component.receiveViewEvent(event);
-                });
+            component.receiveViewEvent(event);
+        });
     }
 
     private void switchPanel(String panelName) {

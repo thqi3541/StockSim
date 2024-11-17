@@ -45,6 +45,8 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
 
     @Override
     public User getUserWithPassword(String username, String password) throws ValidationException {
-        return new User(username, password);
+        User testUser = new User(username, password);
+        testUser.addBalance(10000.00);
+        return testUser;
     }
 }

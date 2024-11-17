@@ -3,6 +3,7 @@ package app;
 import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import data_access.StockDataAccessInterface;
+import entity.StockMarket;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import interface_adapter.login.LoginController;
@@ -122,6 +123,7 @@ public class AppBuilder {
         // Initialize and register stock data access object
         InMemoryStockDataAccessObject stockDataAccessObject = new InMemoryStockDataAccessObject();
         ServiceManager.registerService(StockDataAccessInterface.class, stockDataAccessObject);
+        StockMarket.Instance().initialize(stockDataAccessObject);
 
         // Initialize and register user data access object
         InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
