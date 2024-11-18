@@ -1,6 +1,8 @@
 1. Introduce the project
-- Project domain
+- Project Domain
 - Specification - Google Doc Overview, print them out and introduce some terminologies
+- UML
+- User stories
 
 2. Use Case
 - `Buy` @All
@@ -17,6 +19,7 @@
 4. Our Special Design
 - Session Manager
 - MongoDB(NoSQL database)
+- Workflow
 
 5. Team Collaboration
 - Regular Meeting
