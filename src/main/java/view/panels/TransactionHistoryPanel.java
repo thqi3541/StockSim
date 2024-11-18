@@ -20,15 +20,15 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
     private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm");
     private static final String[] COLUMN_NAMES = {
-            "Date", "Ticker", "Action", "Price", "Quantity", "Total"
+            "Date", "Ticker", "Action", "Price", "Quantity", "Total Price"
     };
     private static final double[] COLUMN_PROPORTIONS = {
             0.25,  // Date
             0.15,  // Ticker
-            0.15,  // Action
+            0.10,  // Action
             0.15,  // Price
             0.15,  // Quantity
-            0.15   // Total
+            0.20   // Total Price
     };
 
     private final TableComponent historyTable;

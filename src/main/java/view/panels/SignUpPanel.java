@@ -72,7 +72,7 @@ public class SignUpPanel extends JPanel implements IComponent {
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel titleLabel = new JLabel("Create a new account");
+        JLabel titleLabel = new JLabel("Registration");
         titleLabel.setFont(new Font("Lucida Sans", Font.BOLD, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(titleLabel);
@@ -107,7 +107,7 @@ public class SignUpPanel extends JPanel implements IComponent {
 
     private void configureButtonActions() {
         signUpButton.addActionListener(e -> {
-            ViewManager.Instance().broadcastEvent(new DialogEvent("Sign Up", "Sign Up button clicked."));
+            ViewManager.Instance().broadcastEvent(new DialogEvent("Sign Up", "WIP"));
         });
 
         logInButton.addActionListener(e -> {

@@ -26,10 +26,10 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         ViewManager.Instance().registerComponent(this);
 
         // Initialize components
-        tickerInput = new InputComponent("Ticker", 10);
+        tickerInput = new InputComponent("Ticker", 15);
         tickerInput.setFont(CONTENT_FONT);
 
-        quantityInput = new InputComponent("Quantity", 10);
+        quantityInput = new InputComponent("Quantity", 15);
         quantityInput.setFont(CONTENT_FONT);
 
         buyButton = new JButton("Buy");
@@ -54,6 +54,9 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         // Add input section at the top
         JPanel inputPanel = createInputPanel();
         contentPanel.add(inputPanel, BorderLayout.NORTH);
+
+        // Add gap
+        contentPanel.add(Box.createRigidArea(new Dimension(0, Integer.MAX_VALUE)));
 
         // Add button section at the bottom
         JPanel buttonPanel = createButtonPanel();
@@ -103,10 +106,12 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 2, INNER_GAP, 0));
+        buttonPanel.setLayout(new GridLayout(1, 2, PADDING, 0));
 
         buttonPanel.add(buyButton);
         buyButton.addActionListener(e -> handleBuyAction());
+
+        // TODO: add listener to call sell controller
         buttonPanel.add(sellButton);
 
         return buttonPanel;

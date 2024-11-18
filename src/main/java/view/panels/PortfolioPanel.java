@@ -13,18 +13,18 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class PortfolioPanel extends JPanel implements IComponent {
-    private static final String TITLE = "Portfolio";
+    private static final String TITLE = "Portfolio Overview";
     private static final String[] COLUMN_NAMES = {
-            "Ticker", "Company", "Quantity", "Avg Cost", "Market Price", "Total Value", "Profit/Loss"
+            "Ticker", "Company", "Quantity", "Avg Cost", "Market Price", "Total Value", "Profit"
     };
     private static final double[] COLUMN_PROPORTIONS = {
-            0.15,  // Ticker
-            0.20,  // Company
+            0.10,  // Ticker
+            0.25,  // Company
             0.10,  // Quantity
             0.15,  // Avg Cost
             0.15,  // Market Price
             0.15,  // Total Value
-            0.10   // Profit/Loss
+            0.10   // Profit
     };
     private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 18);
     private static final Font CONTENT_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
@@ -102,7 +102,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
             for (UserStock userStock : portfolio.getAllStocks()) {
                 double marketValue = userStock.getCurrentMarketValue();
                 double totalCost = userStock.getPurchasedTotalCost();
-                double profitLoss = marketValue - totalCost;
+                double totalProfit = marketValue - totalCost;
 
                 model.addRow(new Object[]{
                         userStock.getStock().getTicker(),
@@ -111,7 +111,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
                         String.format("$%.2f", userStock.getCost()),
                         String.format("$%.2f", userStock.getStock().getPrice()),
                         String.format("$%.2f", marketValue),
-                        String.format("$%.2f", profitLoss)
+                        String.format("$%.2f", totalProfit)
                 });
             }
         }

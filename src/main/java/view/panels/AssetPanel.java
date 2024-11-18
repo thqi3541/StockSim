@@ -120,9 +120,9 @@ public class AssetPanel extends JPanel implements IComponent {
     }
 
     private void updateValues(double cash, double portfolioValue) {
+        totalLabel.setText(String.format("Total Assets: $%.2f", cash + portfolioValue));
         cashLabel.setText(String.format("Cash: $%.2f", cash));
         portfolioLabel.setText(String.format("Portfolio Value: $%.2f", portfolioValue));
-        totalLabel.setText(String.format("Total Assets: $%.2f", cash + portfolioValue));
     }
 
     @Override

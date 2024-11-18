@@ -18,7 +18,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
             "Ticker", "Company", "Industry", "Price"
     };
     private static final double[] COLUMN_PROPORTIONS = {
-            0.20, 0.40, 0.30, 0.10
+            0.10, 0.40, 0.30, 0.20
     };
     private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 18);
     private static final Font CONTENT_FONT = new Font("Lucida Sans", Font.PLAIN, 14);

@@ -14,14 +14,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LogInPanel extends JPanel implements IComponent {
-    private final InputComponent usernameInput;
-    private final PasswordInputComponent passwordInput;
+    private final InputComponent usernameField;
+    private final PasswordInputComponent passwordField;
     private final ButtonComponent logInButton;
     private final ButtonComponent signUpButton;
 
     public LogInPanel() {
-        usernameInput = new InputComponent("Username", 20);
-        passwordInput = new PasswordInputComponent("Password", 20);
+        usernameField = new InputComponent("Username", 20);
+        passwordField = new PasswordInputComponent("Password", 20);
         logInButton = new ButtonComponent("Log In");
         signUpButton = new ButtonComponent("Go to Sign Up");
 
@@ -84,12 +84,12 @@ public class LogInPanel extends JPanel implements IComponent {
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        inputPanel.add(usernameInput);
+        inputPanel.add(usernameField);
         inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        inputPanel.add(passwordInput);
+        inputPanel.add(passwordField);
 
-        usernameInput.setMaximumSize(new Dimension(300, usernameInput.getPreferredSize().height));
-        passwordInput.setMaximumSize(new Dimension(300, passwordInput.getPreferredSize().height));
+        usernameField.setMaximumSize(new Dimension(300, usernameField.getPreferredSize().height));
+        passwordField.setMaximumSize(new Dimension(300, passwordField.getPreferredSize().height));
 
         return inputPanel;
     }
@@ -103,8 +103,8 @@ public class LogInPanel extends JPanel implements IComponent {
 
     private void configureButtonActions() {
         logInButton.addActionListener(e -> {
-            String username = usernameInput.getText();
-            char[] passwordChars = passwordInput.getPassword();
+            String username = usernameField.getText();
+            char[] passwordChars = passwordField.getPassword();
             String password = new String(passwordChars);
             ServiceManager.Instance().getService(LoginController.class).execute(username, password);
         });

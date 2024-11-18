@@ -18,16 +18,16 @@ public class DashboardPanel extends JPanel implements IComponent {
     private static final String CURRENCY_FORMAT = "$%.2f";
 
     private final JLabel welcomeLabel;
-    private final JLabel balanceLabel;
+    private final JLabel assetLabel;
     private final ButtonComponent tradeButton;
     private final ButtonComponent historyButton;
     private final ButtonComponent logoutButton;
 
     public DashboardPanel() {
-        welcomeLabel = new JLabel("Welcome back, Guest");
-        balanceLabel = new JLabel(formatBalanceText(0.0, 0.0));
+        welcomeLabel = new JLabel("Welcome back, Guest!");
+        assetLabel = new JLabel(formatAssetValue(0.0, 0.0));
         tradeButton = new ButtonComponent("Trade");
-        historyButton = new ButtonComponent("View Transaction History");
+        historyButton = new ButtonComponent("Transaction History");
         logoutButton = new ButtonComponent("Log out");
 
         ViewManager.Instance().registerComponent(this);
@@ -37,7 +37,7 @@ public class DashboardPanel extends JPanel implements IComponent {
 
         add(createHeaderSection());
         add(Box.createRigidArea(new Dimension(0, PADDING)));
-        add(createTradingSection());
+        add(createDashboardSection());
         add(Box.createRigidArea(new Dimension(0, PADDING)));
         add(createAccountSection());
         add(Box.createRigidArea(new Dimension(0, PADDING)));
@@ -54,58 +54,58 @@ public class DashboardPanel extends JPanel implements IComponent {
         welcomeLabel.setFont(TITLE_FONT);
         welcomeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        balanceLabel.setFont(SUBTITLE_FONT);
-        balanceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        assetLabel.setFont(SUBTITLE_FONT);
+        assetLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         header.add(welcomeLabel);
         header.add(Box.createRigidArea(new Dimension(0, 10)));
-        header.add(balanceLabel);
+        header.add(assetLabel);
 
         return header;
     }
 
-    private JPanel createTradingSection() {
-        JPanel tradingPanel = new JPanel();
-        tradingPanel.setLayout(new BoxLayout(tradingPanel, BoxLayout.Y_AXIS));
-        tradingPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        tradingPanel.setBorder(BorderFactory.createTitledBorder("Trading management"));
+    private JPanel createDashboardSection() {
+        JPanel dashboardSection = new JPanel();
+        dashboardSection.setLayout(new BoxLayout(dashboardSection, BoxLayout.Y_AXIS));
+        dashboardSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        dashboardSection.setBorder(BorderFactory.createTitledBorder("Dashboard"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(tradeButton);
         buttonPanel.add(historyButton);
 
-        tradingPanel.add(buttonPanel);
-        return tradingPanel;
+        dashboardSection.add(buttonPanel);
+        return dashboardSection;
     }
 
     private JPanel createAccountSection() {
-        JPanel accountPanel = new JPanel();
-        accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.Y_AXIS));
-        accountPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        accountPanel.setBorder(BorderFactory.createTitledBorder("Account management"));
+        JPanel accountSection = new JPanel();
+        accountSection.setLayout(new BoxLayout(accountSection, BoxLayout.Y_AXIS));
+        accountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        accountSection.setBorder(BorderFactory.createTitledBorder("Account"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(logoutButton);
 
-        accountPanel.add(buttonPanel);
-        return accountPanel;
+        accountSection.add(buttonPanel);
+        return accountSection;
     }
 
     private JPanel createFooterSection() {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
         footer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel footerLabel = new JLabel("Thank you for using StockSim.");
+        JLabel footerLabel = new JLabel("Made with love by Group 184 from CSC 207.");
         footerLabel.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
         footer.add(footerLabel);
 
         return footer;
     }
 
-    private String formatBalanceText(double cash, double position) {
-        return String.format("You have %s in cash and %s in position.",
+    private String formatAssetValue(double cash, double portfolio) {
+        return String.format("You have %s in cash and %s in portfolio.",
                 String.format(CURRENCY_FORMAT, cash),
-                String.format(CURRENCY_FORMAT, position));
+                String.format(CURRENCY_FORMAT, portfolio));
     }
 
     private void setupButtonActions() {
@@ -132,10 +132,10 @@ public class DashboardPanel extends JPanel implements IComponent {
     }
 
     private void updateDashboardUserName(String username) {
-        welcomeLabel.setText("Welcome back, " + username);
+        welcomeLabel.setText("Welcome back, " + username + "!");
     }
 
     private void updateDashboardValue(double cash, double position) {
-        balanceLabel.setText(formatBalanceText(cash, position));
+        assetLabel.setText(formatAssetValue(cash, position));
     }
 }

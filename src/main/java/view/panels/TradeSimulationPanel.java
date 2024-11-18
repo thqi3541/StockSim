@@ -41,7 +41,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
         add(Box.createRigidArea(new Dimension(0, PADDING)));
 
         // Add portfolio section (automatic height, fill width)
-        JPanel portfolioPanel = createPortfolioSection();
+        JPanel portfolioPanel = createAccountSection();
         portfolioPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         portfolioPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(portfolioPanel);
@@ -76,13 +76,13 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         // Left panel (75% width)
         gbc.gridx = 0;
-        gbc.weightx = 0.75;  // Using absolute ratio instead of constant
+        gbc.weightx = MAIN_PANEL_RATIO;
         gbc.insets = new Insets(0, 0, 0, PADDING / 2);
         panel.add(leftPanel, gbc);
 
         // Right panel (25% width)
         gbc.gridx = 1;
-        gbc.weightx = 0.25;  // Using absolute ratio instead of constant
+        gbc.weightx = SIDE_PANEL_RATIO;
         gbc.insets = new Insets(0, PADDING / 2, 0, 0);
         panel.add(rightPanel, gbc);
 
@@ -99,7 +99,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
         return createTwoColumnPanel(marketSearchPanel, orderEntryPanel);
     }
 
-    private JPanel createPortfolioSection() {
+    private JPanel createAccountSection() {
         PortfolioPanel portfolioTablePanel = new PortfolioPanel();
         AssetPanel assetPanel = new AssetPanel();
         return createTwoColumnPanel(portfolioTablePanel, assetPanel);
