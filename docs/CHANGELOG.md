@@ -13,9 +13,9 @@
 
 ### Internal Changes
 
-- Implemented `ClientSessionManager` for client-side session management.
-- Implemented credential verification in `BuyStockController`.
-- Moved `ValidationException` into a separate class in utility.
+- Implemented `ClientSessionManager` for client-side session management
+- Implemented credential verification in `BuyStockController`
+- Moved `ValidationException` into a separate class in utility
 - Implemented `StockDataAccess` to retrieve current market price for set tickers
 - Modified `StockMarket` to utilize new IStockDataAccess return type
 - Updated maven configuration with api request dependencies
