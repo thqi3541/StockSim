@@ -4,7 +4,6 @@ import interface_adapter.execute_buy.ExecuteBuyController;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
-import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.ViewEvent;
 
@@ -12,101 +11,110 @@ import javax.swing.*;
 import java.awt.*;
 
 public class OrderEntryPanel extends JPanel implements IComponent {
-    // Layout Constants
-    private static final int BORDER_PADDING = 10;
-    private static final int PANEL_HEIGHT = 400; // Fixed height
-    private static final Insets FIELD_INSETS = new Insets(10, 0, 10, 0);
-    private static final int BUTTON_GAP = 10;
+    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 18);
+    private static final Font CONTENT_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
+    private static final int HEADER_HEIGHT = 40;
+    private static final int PADDING = 20;
+    private static final int INNER_GAP = 10;
 
-    // Font Constants
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
-
-    // Text Constants
-    private static final String TITLE_TEXT = "Order Entry";
-    private static final String TICKER_LABEL = "Ticker";
-    private static final String QUANTITY_LABEL = "Quantity";
-    private static final String BUY_BUTTON_TEXT = "Buy";
-    private static final String SELL_BUTTON_TEXT = "Sell";
-
-    // Component Size Constants
-    private static final int INPUT_COLUMNS = 10;
-    private static final double GRID_WEIGHT = 1.0;
-
-    // Components
-    private final JLabel titleLabel;
-    private final InputComponent tickerField;
-    private final InputComponent quantityField;
+    private final InputComponent tickerInput;
+    private final InputComponent quantityInput;
     private final JButton buyButton;
     private final JButton sellButton;
 
     public OrderEntryPanel() {
         ViewManager.Instance().registerComponent(this);
-        setupPanel();
 
         // Initialize components
-        titleLabel = createTitleLabel();
-        tickerField = new InputComponent(TICKER_LABEL, INPUT_COLUMNS);
-        quantityField = new InputComponent(QUANTITY_LABEL, INPUT_COLUMNS);
-        buyButton = createBuyButton();
-        sellButton = createSellButton();
+        tickerInput = new InputComponent("Ticker", 10);
+        tickerInput.setFont(CONTENT_FONT);
 
-        // Add components to panel
-        add(titleLabel, BorderLayout.NORTH);
-        add(createFormPanel(), BorderLayout.CENTER);
-        add(createButtonPanel(), BorderLayout.SOUTH);
+        quantityInput = new InputComponent("Quantity", 10);
+        quantityInput.setFont(CONTENT_FONT);
+
+        buyButton = new JButton("Buy");
+        buyButton.setFont(CONTENT_FONT);
+
+        sellButton = new JButton("Sell");
+        sellButton.setFont(CONTENT_FONT);
+
+        // Set up panel layout
+        setLayout(new BorderLayout(0, PADDING));
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        // Add header
+        JPanel headerPanel = createHeaderPanel();
+        add(headerPanel, BorderLayout.NORTH);
+
+        // Create main content panel
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout(0, PADDING));
+        contentPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Add input section at the top
+        JPanel inputPanel = createInputPanel();
+        contentPanel.add(inputPanel, BorderLayout.NORTH);
+
+        // Add button section at the bottom
+        JPanel buttonPanel = createButtonPanel();
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        add(contentPanel, BorderLayout.CENTER);
     }
 
-    private void setupPanel() {
-        setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(0, PANEL_HEIGHT)); // Let width adjust dynamically
-        setBorder(BorderFactory.createEmptyBorder(
-                BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
+    private JPanel createHeaderPanel() {
+        // Create main header panel with fixed height
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        headerPanel.setPreferredSize(new Dimension(0, HEADER_HEIGHT));
+
+        // Title with vertical centering
+        JLabel titleLabel = new JLabel("Order Entry");
+        titleLabel.setFont(TITLE_FONT);
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Center the title vertically
+        headerPanel.add(Box.createVerticalGlue());
+        headerPanel.add(titleLabel);
+        headerPanel.add(Box.createVerticalGlue());
+
+        return headerPanel;
     }
 
-    private JLabel createTitleLabel() {
-        JLabel label = new JLabel(TITLE_TEXT);
-        label.setFont(TITLE_FONT);
-        label.setVerticalAlignment(SwingConstants.CENTER);
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-        return label;
-    }
+    private JPanel createInputPanel() {
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
 
-    private JPanel createFormPanel() {
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = FIELD_INSETS;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
-        gbc.weightx = GRID_WEIGHT;
+        // Configure quantity input
+        tickerInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, tickerInput.getPreferredSize().height));
+        tickerInput.setAlignmentX(Component.LEFT_ALIGNMENT);
+        inputPanel.add(tickerInput);
 
-        gbc.gridy = 0;
-        formPanel.add(tickerField, gbc);
-        gbc.gridy = 1;
-        formPanel.add(quantityField, gbc);
+        // Add gap between inputs
+        inputPanel.add(Box.createRigidArea(new Dimension(0, INNER_GAP)));
 
-        return formPanel;
+        // Configure price input
+        quantityInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, quantityInput.getPreferredSize().height));
+        quantityInput.setAlignmentX(Component.LEFT_ALIGNMENT);
+        inputPanel.add(quantityInput);
+
+        return inputPanel;
     }
 
     private JPanel createButtonPanel() {
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, BUTTON_GAP, 0));
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 2, INNER_GAP, 0));
+
         buttonPanel.add(buyButton);
+        buyButton.addActionListener(e -> handleBuyAction());
         buttonPanel.add(sellButton);
+
         return buttonPanel;
     }
 
-    private JButton createBuyButton() {
-        ButtonComponent button = new ButtonComponent(BUY_BUTTON_TEXT);
-        button.addActionListener(e -> handleBuyAction());
-        return button;
-    }
-
-    private JButton createSellButton() {
-        return new ButtonComponent(SELL_BUTTON_TEXT);
-    }
-
     private void handleBuyAction() {
-        String ticker = tickerField.getText();
-        String quantity = quantityField.getText();
+        String ticker = tickerInput.getText();
+        String quantity = quantityInput.getText();
 
         // Execute buy action
         ExecuteBuyController controller = ServiceManager.Instance()
@@ -116,6 +124,5 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        // Placeholder for future event handling
     }
 }
