@@ -45,10 +45,7 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
 
     @Override
     public void saveUser(User user) throws DuplicateUsernameException {
-        if (users == null) {
-            users = new HashMap<>();
-        }
-        else if (users.containsKey(user.getUsername())) {
+        if (users.containsKey(user.getUsername())) {
             throw new DuplicateUsernameException("Username '" + user.getUsername() + "' already exists.");
         }
         users.put(user.getUsername(), user);

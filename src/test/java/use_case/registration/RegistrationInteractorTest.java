@@ -4,102 +4,110 @@ import entity.User;
 import entity.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import utility.exceptions.DuplicateUsernameException;
 import utility.exceptions.InvalidInputException;
 import utility.exceptions.PasswordsDoNotMatchException;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test for RegistrationInteractor
+ */
 class RegistrationInteractorTest {
 
-    private RegistrationInteractor interactor;
-    private RegistrationOutputBoundary mockPresenter;
-    private RegistrationDataAccessInterface mockDataAccess;
-    private UserFactory mockUserFactory;
+    private RegistrationOutputBoundary outputPresenter;
+    private RegistrationDataAccessInterface dataAccess;
+    private UserFactory userFactory;
 
     @BeforeEach
     void setUp() {
-        // Create mock objects
-        mockPresenter = mock(RegistrationOutputBoundary.class);
-        mockDataAccess = mock(RegistrationDataAccessInterface.class);
-        mockUserFactory = mock(UserFactory.class);
-
-        // Initialize RegistrationInteractor with mocks
-        interactor = new RegistrationInteractor(mockPresenter, mockDataAccess, mockUserFactory);
+        // Create mocks
+        outputPresenter = Mockito.mock(RegistrationOutputBoundary.class);
+        dataAccess = Mockito.mock(RegistrationDataAccessInterface.class);
+        userFactory = new UserFactory();
     }
 
     @Test
-    void testRegisterWithEmptyUsername() {
-        // Arrange
-        RegistrationInputData inputData = new RegistrationInputData("", "password123", "password123");
-
-        // Act
-        interactor.execute(inputData);
-
-        // Assert
-        verify(mockPresenter).prepareInvalidInputView("Username and password cannot be empty.");
-    }
-
-    @Test
-    void testRegisterWithEmptyPassword() {
-        // Arrange
-        RegistrationInputData inputData = new RegistrationInputData("newuser", "", "");
-
-        // Act
-        interactor.execute(inputData);
-
-        // Assert
-        verify(mockPresenter).prepareInvalidInputView("Username and password cannot be empty.");
-    }
-
-    @Test
-    void testRegisterWithNonMatchingPasswords() {
-        // Arrange
-        RegistrationInputData inputData = new RegistrationInputData("newuser", "password123", "differentPassword");
-
-        // Act
-        interactor.execute(inputData);
-
-        // Assert
-        verify(mockPresenter).preparePasswordsDoNotMatchView("Passwords do not match.");
-    }
-
-    @Test
-    void testRegisterWithExistingUsername() throws DuplicateUsernameException {
-        String username = "existingUser";
-        String password = "password123";
-
-        // Simulate an existing user in the mock data access object
-        User existingUser = new User(username, password);
-        mockDataAccess.saveUser(existingUser);
-
-        RegistrationInputData inputData = new RegistrationInputData(username, password, password);
-
-        interactor.execute(inputData);
-
-        // Verify that the failure view was prepared with an appropriate message
-        verify(mockPresenter).prepareDuplicateUsernameView("Username already exists. Please choose another one.");
-    }
-
-    @Test
-    void testRegisterWithValidNewUser() throws DuplicateUsernameException {
-        // Arrange
+    void successTest() throws DuplicateUsernameException {
+        // Prepare input data
         String username = "uniqueUser";
         String password = "password123";
-        RegistrationInputData inputData = new RegistrationInputData(username, password, password);
+        String confirmPassword = "password123";
+        RegistrationInputData inputData = new RegistrationInputData(username, password, confirmPassword);
 
-        // Simulate user creation
-        User newUser = new User(username, password);
-        when(mockUserFactory.create(username, password)).thenReturn(newUser);
+        // Create user instance
+        User newUser = userFactory.create(username, password);
 
-        // Act
+        // Mock data access to not throw any exception when saving the user
+        doNothing().when(dataAccess).saveUser(newUser);
+
+        // Create interactor
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
         interactor.execute(inputData);
 
-        // Assert
-        // Verify that a new user was saved
-        verify(mockDataAccess).saveUser(newUser);
+        // Verify that success view is prepared
+        verify(outputPresenter).prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
+    }
 
-        // Verify that the success view was prepared with the success message
-        verify(mockPresenter).prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
+    @Test
+    void emptyUsername() {
+        // Prepare input data with empty username
+        RegistrationInputData inputDataEmptyUsername = new RegistrationInputData("", "password123", "password123");
+
+        // Create interactor
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputDataEmptyUsername);
+
+        // Verify that the invalid input view is prepared for empty username
+        verify(outputPresenter).prepareInvalidInputView("Username and password cannot be empty.");
+
+    }
+
+    @Test
+    void emptyPasswordTest() {
+        // Prepare input data with empty password
+        RegistrationInputData inputDataEmptyPassword = new RegistrationInputData("newuser", "", "");
+
+        // Create interactor
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputDataEmptyPassword);
+
+        // Verify that the invalid input view is prepared for empty password
+        verify(outputPresenter).prepareInvalidInputView("Username and password cannot be empty.");
+    }
+
+    @Test
+    void passwordsDoNotMatchTest() {
+        // Prepare input data with mismatched passwords
+        RegistrationInputData inputData = new RegistrationInputData("newuser", "password123", "password456");
+
+        // Create interactor
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputData);
+
+        // Verify that the passwords do not match view is prepared
+        verify(outputPresenter).preparePasswordsDoNotMatchView("Passwords do not match.");
+    }
+
+    @Test
+    void existingUsernameTest() throws DuplicateUsernameException {
+        // Prepare input data with an existing username
+        String existingUsername = "existingUser";
+        String password = "password123";
+        String confirmPassword = "password123";
+        RegistrationInputData inputData = new RegistrationInputData(existingUsername, password, confirmPassword);
+
+        // Mock data access to indicate that the user already exists
+        doThrow(new DuplicateUsernameException("Username already exists. Please choose another one."))
+                .when(dataAccess).saveUser(any(User.class));
+
+        // Create interactor
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputData);
+
+        // Verify that the duplicate username view is prepared
+        verify(outputPresenter).prepareDuplicateUsernameView("Username already exists. Please choose another one.");
     }
 }
