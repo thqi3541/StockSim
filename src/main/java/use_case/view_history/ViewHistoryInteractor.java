@@ -1,6 +1,7 @@
 package use_case.view_history;
 
 import entity.User;
+import utility.ServiceManager;
 import utility.exceptions.ValidationException;
 
 /**
@@ -21,6 +22,7 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
     public ViewHistoryInteractor(ViewHistoryDataAccessInterface dataAccess, ViewHistoryOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
+        ServiceManager.Instance().registerService(ViewHistoryInputBoundary.class, this);
     }
 
     /**

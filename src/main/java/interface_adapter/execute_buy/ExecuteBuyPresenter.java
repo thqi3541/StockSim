@@ -2,12 +2,17 @@ package interface_adapter.execute_buy;
 
 import use_case.execute_buy.ExecuteBuyOutputBoundary;
 import use_case.execute_buy.ExecuteBuyOutputData;
+import utility.ServiceManager;
 import utility.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
 public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
+
+    public ExecuteBuyPresenter() {
+        ServiceManager.Instance().registerService(ExecuteBuyOutputBoundary.class, this);
+    }
 
     @Override
     public void prepareSuccessView(ExecuteBuyOutputData outputData) {

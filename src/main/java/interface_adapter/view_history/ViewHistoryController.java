@@ -3,6 +3,7 @@ package interface_adapter.view_history;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInputData;
 import utility.ClientSessionManager;
+import utility.ServiceManager;
 
 /**
  * Controller for the ViewHistory Use Case.
@@ -13,6 +14,7 @@ public class ViewHistoryController {
 
     public ViewHistoryController(ViewHistoryInputBoundary interactor) {
         this.interactor = interactor;
+        ServiceManager.Instance().registerService(ViewHistoryController.class, this);
     }
 
     /**

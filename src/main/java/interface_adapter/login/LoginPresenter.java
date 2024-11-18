@@ -3,10 +3,15 @@ package interface_adapter.login;
 import entity.User;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
+import utility.ServiceManager;
 import utility.ViewManager;
 import view.view_events.*;
 
 public class LoginPresenter implements LoginOutputBoundary {
+
+    public LoginPresenter() {
+        ServiceManager.Instance().registerService(LoginOutputBoundary.class, this);
+    }
 
     @Override
     public void prepareSuccessView(LoginOutputData outputData) {

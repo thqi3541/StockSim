@@ -4,6 +4,7 @@ import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
+import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
@@ -33,6 +34,10 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         User user3 = new User("user3", DEFAULT_PASSWORD);
         user3.addBalance(300000.00);
         users.put("user3", user3);
+
+        ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
     }
 
     @Override

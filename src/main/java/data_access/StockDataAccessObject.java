@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
+import utility.ServiceManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +43,8 @@ public class StockDataAccessObject implements StockDataAccessInterface {
         // Initialize cache and load tickers
         this.companyCache = new ConcurrentHashMap<>();
         this.tickers = loadTickers();
+
+        ServiceManager.Instance().registerService(StockDataAccessInterface.class, this);
     }
 
     @Override

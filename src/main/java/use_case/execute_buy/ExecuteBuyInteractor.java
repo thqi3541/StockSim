@@ -1,6 +1,7 @@
 package use_case.execute_buy;
 
 import entity.*;
+import utility.ServiceManager;
 import utility.StockMarket;
 import utility.exceptions.ValidationException;
 
@@ -24,6 +25,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     public ExecuteBuyInteractor(ExecuteBuyDataAccessInterface dataAccess, ExecuteBuyOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
+        ServiceManager.Instance().registerService(ExecuteBuyInputBoundary.class, this);
     }
 
     /**

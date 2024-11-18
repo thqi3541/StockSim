@@ -2,6 +2,7 @@ package use_case.login;
 
 import entity.User;
 import utility.ClientSessionManager;
+import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
@@ -17,6 +18,7 @@ public class LoginInteractor implements LoginInputBoundary {
 
     public LoginInteractor(LoginDataAccessInterface dataAccess, LoginOutputBoundary outputBoundary) {
         this(dataAccess, outputBoundary, Executors.newSingleThreadExecutor());
+        ServiceManager.Instance().registerService(LoginInputBoundary.class, this);
     }
 
     // Constructor for testing - allows injecting a synchronous executor
@@ -24,6 +26,7 @@ public class LoginInteractor implements LoginInputBoundary {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
         this.executor = executor;
+        ServiceManager.Instance().registerService(LoginInputBoundary.class, this);
     }
 
     @Override
