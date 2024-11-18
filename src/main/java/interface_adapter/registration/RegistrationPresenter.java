@@ -26,4 +26,9 @@ public class RegistrationPresenter implements RegistrationOutputBoundary {
         // Display an error message for duplicate usernames
         ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
     }
+
+    public void preparePasswordsDoNotMatchView(String errorMessage) {
+        // Display an error message for passwords that don't match
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
+    }
 }

@@ -6,4 +6,6 @@ public interface RegistrationOutputBoundary {
     void prepareInvalidInputView(String errorMessage);
 
     void prepareDuplicateUsernameView(String errorMessage);
+
+    void preparePasswordsDoNotMatchView(String errorMessage);
 }

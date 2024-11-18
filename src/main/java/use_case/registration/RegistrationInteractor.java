@@ -4,6 +4,7 @@ import entity.User;
 import entity.UserFactory;
 import utility.exceptions.DuplicateUsernameException;
 import utility.exceptions.InvalidInputException;
+import utility.exceptions.PasswordsDoNotMatchException;
 
 /**
  * The Registration Interactor.
@@ -41,7 +42,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
      * @param inputData The input data containing the username and password for registration.
      */
     @Override
-    public void register(RegistrationInputData inputData) {
+    public void execute(RegistrationInputData inputData) {
         try {
             // Check for empty username/password
             validateInput(inputData);
@@ -58,35 +59,18 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             presenter.prepareInvalidInputView(e.getMessage());
         } catch (DuplicateUsernameException e) {
             presenter.prepareDuplicateUsernameView(e.getMessage());
+        } catch (PasswordsDoNotMatchException e) {
+            presenter.preparePasswordsDoNotMatchView(e.getMessage());
         }
     }
 
-    private void validateInput(RegistrationInputData inputData) throws InvalidInputException {
+    private void validateInput(RegistrationInputData inputData) throws InvalidInputException, DuplicateUsernameException, PasswordsDoNotMatchException{
         if (inputData.username().isEmpty() || inputData.password().isEmpty()) {
             throw new InvalidInputException("Username and password cannot be empty.");
         }
 
-        // Check if the username already exists
-        else if (dataAccess.getUserWithUsername(inputData.username()) != null) {
-            throw new DuplicateUsernameException("Username already exists. Please choose another one.");
-        }
-    }
-
-    /**
-     * Exception thrown when the input data is invalid.
-     */
-    public static class InvalidInputException extends Exception {
-        public InvalidInputException(String message) {
-            super(message);
-        }
-    }
-
-    /**
-     * Exception thrown when the username already exists.
-     */
-    public static class DuplicateUsernameException extends Exception {
-        public DuplicateUsernameException(String message) {
-            super(message);
+        else if (!inputData.password().equals(inputData.confirmPassword())) {
+            throw new PasswordsDoNotMatchException("Passwords do not match.");
         }
     }
 }

@@ -2,9 +2,11 @@ package data_access;
 
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
+import utility.exceptions.DuplicateUsernameException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +15,7 @@ import java.util.Map;
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
+public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface, RegistrationDataAccessInterface{
     private Map<String, User> users;
 
     @Override
@@ -39,5 +41,16 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         users.put(username, user3);
 
         return users.get(username);
+    }
+
+    @Override
+    public void saveUser(User user) throws DuplicateUsernameException {
+        if (users == null) {
+            users = new HashMap<>();
+        }
+        else if (users.containsKey(user.getUsername())) {
+            throw new DuplicateUsernameException("Username '" + user.getUsername() + "' already exists.");
+        }
+        users.put(user.getUsername(), user);
     }
 }

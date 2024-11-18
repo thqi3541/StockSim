@@ -10,8 +10,8 @@ public class RegistrationController {
         this.interactor = interactor;
     }
 
-    public void register(String userId, String password) {
-        RegistrationInputData inputData = new RegistrationInputData(userId, password);
-        interactor.register(inputData);
+    public void register(String userId, String password, String confirmPassword) {
+        RegistrationInputData inputData = new RegistrationInputData(userId, password, confirmPassword);
+        interactor.execute(inputData);
     }
 }
