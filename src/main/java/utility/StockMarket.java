@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Singleton utility class that manages the stock market state and updates.
  */
 public class StockMarket implements AutoCloseable {
-    private static final long DEFAULT_UPDATE_INTERVAL_MS = 300000; // 5 minutes
+    private static final long DEFAULT_UPDATE_INTERVAL_MS = 120000; // 2 minutes
     private static volatile StockMarket instance;
     private final Map<String, Stock> stocks;
     private final ReadWriteLock lock;
