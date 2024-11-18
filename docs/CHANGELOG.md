@@ -8,6 +8,8 @@
 - Added GUI components for view transaction history page
 - Implemented login use case
 - Implemented periodic update of stock information from data access interface in `StockMarket` that self-adjust based on API rate limit
+- Changed API to Finnhub API
+- Implemented integration of `StockMarket` and `StockDataAccessObject`
 
 ### Internal Changes
 
@@ -27,8 +29,12 @@
 - Added `getAssets` method in user entity
 - Reformated app builder to accept more configs
 - Implemented singleton pattern for service manager
+- Refined ui components, extracted table component to its own class
+- Refactored `ServiceManager` registration process into object constructor
 
 ### Bug Fixes
+
+- Fixed `TransactionHistoryPanel` not updated after buy use case
 
 ## 0.1.0
 

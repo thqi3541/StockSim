@@ -14,8 +14,8 @@ import java.util.Map;
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface, LoginDataAccessInterface {
-    private static final String DEFAULT_PASSWORD = "000"; // Set all passwords to "000"
+public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
+    private static final String DEFAULT_PASSWORD = "0";
 
     private final Map<String, User> users;
 
@@ -23,21 +23,21 @@ public class InMemoryUserDataAccessObject implements ExecuteBuyDataAccessInterfa
         this.users = new java.util.HashMap<>();
 
         // Initialize with predefined users
-        User user1 = new User("user1", DEFAULT_PASSWORD);
+        User user1 = new User("1", DEFAULT_PASSWORD);
         user1.addBalance(100000.00);
-        users.put("user1", user1);
+        users.put("1", user1);
 
-        User user2 = new User("user2", DEFAULT_PASSWORD);
+        User user2 = new User("2", DEFAULT_PASSWORD);
         user2.addBalance(200000.00);
-        users.put("user2", user2);
+        users.put("2", user2);
 
-        User user3 = new User("user3", DEFAULT_PASSWORD);
+        User user3 = new User("3", DEFAULT_PASSWORD);
         user3.addBalance(300000.00);
-        users.put("user3", user3);
+        users.put("3", user3);
 
+        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
-        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
     }
 
     @Override
