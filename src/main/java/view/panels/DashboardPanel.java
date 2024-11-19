@@ -95,7 +95,7 @@ public class DashboardPanel extends JPanel implements IComponent {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
         footer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel footerLabel = new JLabel("Made with love by Group 184 from CSC 207.");
+        JLabel footerLabel = new JLabel("Made with \u2764 by Group 184.");
         footerLabel.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
         footer.add(footerLabel);
 

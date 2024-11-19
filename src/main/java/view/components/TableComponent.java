@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class TableComponent extends JTable {
     private static final Font TABLE_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
-    private static final Font HEADER_FONT = new Font("Lucida Sans", Font.BOLD, 14);
+    private static final Font HEADER_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
     private static final int ROW_HEIGHT = 30;
     private static final int HEADER_HEIGHT = 30;
     private final double[] columnProportions;
@@ -26,7 +26,6 @@ public class TableComponent extends JTable {
         setRowHeight(ROW_HEIGHT);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setShowGrid(false);
-        setGridColor(Color.LIGHT_GRAY);
         setFillsViewportHeight(true);
         getTableHeader().setReorderingAllowed(true);
     }
@@ -35,7 +34,8 @@ public class TableComponent extends JTable {
         JTableHeader header = getTableHeader();
         header.setFont(HEADER_FONT);
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, HEADER_HEIGHT));
-        header.setBackground(Color.WHITE);
+        header.setOpaque(false);
+        header.setBackground(new Color(245, 245, 245));
         header.setForeground(Color.BLACK);
     }
 
