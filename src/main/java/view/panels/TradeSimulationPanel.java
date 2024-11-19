@@ -1,5 +1,6 @@
 package view.panels;
 
+import utility.FontManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
@@ -11,7 +12,6 @@ import java.awt.*;
 
 public class TradeSimulationPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
     private static final double MAIN_PANEL_RATIO = 0.8;
     private static final double SIDE_PANEL_RATIO = 0.2;
 
@@ -52,7 +52,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         // Title on the left
         JLabel titleLabel = new JLabel("Trade Simulation");
-        titleLabel.setFont(TITLE_FONT);
+        FontManager.Instance().useBold(titleLabel, 24f);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
         // Back button on the right

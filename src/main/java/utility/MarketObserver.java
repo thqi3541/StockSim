@@ -35,7 +35,7 @@ public class MarketObserver {
                     user.getBalance()
             ));
         } catch (ValidationException e) {
-            System.out.println("Failed to locate current user.");
+            System.out.println("Failed to find current user.");
         }
     }
 }

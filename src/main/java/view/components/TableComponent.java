@@ -1,5 +1,7 @@
 package view.components;
 
+import utility.FontManager;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -7,8 +9,6 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 
 public class TableComponent extends JTable {
-    private static final Font TABLE_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
-    private static final Font HEADER_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
     private static final int ROW_HEIGHT = 30;
     private static final int HEADER_HEIGHT = 30;
     private final double[] columnProportions;
@@ -22,7 +22,7 @@ public class TableComponent extends JTable {
     }
 
     private void setupTableStyle() {
-        setFont(TABLE_FONT);
+        FontManager.Instance().useRegular(this, 14f);
         setRowHeight(ROW_HEIGHT);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setShowGrid(false);
@@ -32,8 +32,8 @@ public class TableComponent extends JTable {
 
     private void setupHeaderStyle() {
         JTableHeader header = getTableHeader();
-        header.setFont(HEADER_FONT);
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, HEADER_HEIGHT));
+        FontManager.Instance().useBold(header, 14f);
         header.setOpaque(false);
         header.setBackground(new Color(245, 245, 245));
         header.setForeground(Color.BLACK);

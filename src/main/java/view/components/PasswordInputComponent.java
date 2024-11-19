@@ -1,5 +1,7 @@
 package view.components;
 
+import utility.FontManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,9 +23,9 @@ public class PasswordInputComponent extends JPanel {
         passwordField = new JPasswordField(columns);
 
         // Set font for both label and password field
-        Font lucidaFont = new Font("Lucida Sans", Font.PLAIN, 14);
-        label.setFont(lucidaFont);
-        passwordField.setFont(lucidaFont);
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(label, 14f);
+        fontManager.useRegular(passwordField, 14f);
 
         label.setHorizontalAlignment(SwingConstants.LEFT); // Align label to the left
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
@@ -40,7 +42,8 @@ public class PasswordInputComponent extends JPanel {
     public PasswordInputComponent(int columns) {
         setLayout(new BorderLayout());
         passwordField = new JPasswordField(columns);
-        passwordField.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(passwordField, 14f);
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
         add(passwordField, BorderLayout.CENTER);
     }
@@ -53,7 +56,8 @@ public class PasswordInputComponent extends JPanel {
     public PasswordInputComponent(String placeholderText) {
         setLayout(new BorderLayout());
         passwordField = new JPasswordField();
-        passwordField.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(passwordField, 14f);
         passwordField.setEchoChar((char) 0); // Temporarily show the placeholder text
         passwordField.setText(placeholderText);
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));

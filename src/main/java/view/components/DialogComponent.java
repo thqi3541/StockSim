@@ -1,5 +1,6 @@
 package view.components;
 
+import utility.FontManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.view_events.DialogEvent;
@@ -17,8 +18,9 @@ public class DialogComponent implements IComponent {
         ViewManager.Instance().registerComponent(this);
 
         // Set up default button styling for JOptionPane
-        UIManager.put("OptionPane.buttonFont", new Font("Lucida Sans", Font.PLAIN, 14));
-        UIManager.put("OptionPane.messageFont", new Font("Lucida Sans", Font.PLAIN, 14));
+        Font interRegular = FontManager.Instance().getRegular(14f);
+        UIManager.put("OptionPane.buttonFont", interRegular);
+        UIManager.put("OptionPane.messageFont", interRegular);
         UIManager.put("Button.margin", new Insets(5, 5, 5, 5));
         UIManager.put("Button.minimumSize", new Dimension(0, 40));
         UIManager.put("Button.preferredSize", new Dimension(0, 40));

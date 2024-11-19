@@ -1,6 +1,7 @@
 package view.panels;
 
 import interface_adapter.execute_buy.ExecuteBuyController;
+import utility.FontManager;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
@@ -12,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class OrderEntryPanel extends JPanel implements IComponent {
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 18);
-    private static final Font CONTENT_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
     private static final int INNER_GAP = 10;
@@ -28,16 +27,9 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
         // Initialize components
         tickerInput = new InputComponent("Ticker", 15);
-        tickerInput.setFont(CONTENT_FONT);
-
         quantityInput = new InputComponent("Quantity", 15);
-        quantityInput.setFont(CONTENT_FONT);
-
         buyButton = new ButtonComponent("Buy");
-        buyButton.setFont(CONTENT_FONT);
-
         sellButton = new ButtonComponent("Sell");
-        sellButton.setFont(CONTENT_FONT);
 
         // Set up panel layout
         setLayout(new BorderLayout(0, PADDING));
@@ -74,7 +66,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
         // Title with vertical centering
         JLabel titleLabel = new JLabel("Order Entry");
-        titleLabel.setFont(TITLE_FONT);
+        FontManager.Instance().useBold(titleLabel, 18f);
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Center the title vertically
@@ -90,6 +82,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
 
         // Configure quantity input
+        FontManager.Instance().useRegular(tickerInput, 14f);
         tickerInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, tickerInput.getPreferredSize().height));
         tickerInput.setAlignmentX(Component.LEFT_ALIGNMENT);
         inputPanel.add(tickerInput);
@@ -98,6 +91,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         inputPanel.add(Box.createRigidArea(new Dimension(0, INNER_GAP)));
 
         // Configure price input
+        FontManager.Instance().useRegular(quantityInput, 14f);
         quantityInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, quantityInput.getPreferredSize().height));
         quantityInput.setAlignmentX(Component.LEFT_ALIGNMENT);
         inputPanel.add(quantityInput);
@@ -109,10 +103,12 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 2, PADDING, 0));
 
+        FontManager.Instance().useRegular(buyButton, 14f);
         buttonPanel.add(buyButton);
         buyButton.addActionListener(e -> handleBuyAction());
 
         // TODO: add listener to call sell controller
+        FontManager.Instance().useRegular(sellButton, 14f);
         buttonPanel.add(sellButton);
 
         return buttonPanel;

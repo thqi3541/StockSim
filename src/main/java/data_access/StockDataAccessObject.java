@@ -45,7 +45,7 @@ public class StockDataAccessObject implements StockDataAccessInterface {
 
         try {
             // Reads content in config/tickers text file
-            InputStream inputStream = getClass().getResourceAsStream("/tickers.txt");
+            InputStream inputStream = getClass().getResourceAsStream("/config/tickers.txt");
 
             if (inputStream == null) {
                 throw new FileNotFoundException("Ticker resource file not found.");

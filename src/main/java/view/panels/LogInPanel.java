@@ -1,6 +1,7 @@
 package view.panels;
 
 import interface_adapter.login.LoginController;
+import utility.FontManager;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
@@ -72,7 +73,7 @@ public class LogInPanel extends JPanel implements IComponent {
         titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel titleLabel = new JLabel("StockSim");
-        titleLabel.setFont(new Font("Lucida Sans", Font.BOLD, 24));
+        FontManager.Instance().useBold(titleLabel, 24f);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(titleLabel);
 

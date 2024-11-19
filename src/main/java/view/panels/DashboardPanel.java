@@ -1,5 +1,6 @@
 package view.panels;
 
+import utility.FontManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
@@ -13,8 +14,6 @@ import java.awt.*;
 
 public class DashboardPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
-    private static final Font SUBTITLE_FONT = new Font("Lucida Sans", Font.PLAIN, 18);
     private static final String CURRENCY_FORMAT = "$%.2f";
 
     private final JLabel welcomeLabel;
@@ -51,10 +50,10 @@ public class DashboardPanel extends JPanel implements IComponent {
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
         header.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        welcomeLabel.setFont(TITLE_FONT);
+        FontManager.Instance().useBold(welcomeLabel, 24f);
         welcomeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        assetLabel.setFont(SUBTITLE_FONT);
+        FontManager.Instance().useRegular(assetLabel, 18f);
         assetLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         header.add(welcomeLabel);
@@ -71,6 +70,8 @@ public class DashboardPanel extends JPanel implements IComponent {
         dashboardSection.setBorder(BorderFactory.createTitledBorder("Dashboard"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        FontManager.Instance().useRegular(tradeButton, 14f);
+        FontManager.Instance().useRegular(historyButton, 14f);
         buttonPanel.add(tradeButton);
         buttonPanel.add(historyButton);
 
@@ -85,6 +86,7 @@ public class DashboardPanel extends JPanel implements IComponent {
         accountSection.setBorder(BorderFactory.createTitledBorder("Account"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        FontManager.Instance().useRegular(logoutButton, 14f);
         buttonPanel.add(logoutButton);
 
         accountSection.add(buttonPanel);
@@ -96,7 +98,7 @@ public class DashboardPanel extends JPanel implements IComponent {
         footer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel footerLabel = new JLabel("Made with \u2764 by Group 184.");
-        footerLabel.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        FontManager.Instance().useRegular(footerLabel, 14f);
         footer.add(footerLabel);
 
         return footer;

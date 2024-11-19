@@ -1,5 +1,7 @@
 package view.components;
 
+import utility.FontManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,9 +15,9 @@ public class InputComponent extends JPanel {
         textField = new JTextField(columns);
 
         // Set font for both label and text field
-        Font lucidaFont = new Font("Lucida Sans", Font.PLAIN, 14);
-        label.setFont(lucidaFont);
-        textField.setFont(lucidaFont);
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(label, 14f);
+        fontManager.useRegular(textField, 14f);
 
         label.setHorizontalAlignment(SwingConstants.LEFT);
         textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
@@ -28,7 +30,7 @@ public class InputComponent extends JPanel {
     public InputComponent(int columns) {
         setLayout(new BorderLayout());
         textField = new JTextField(columns);
-        textField.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        FontManager.Instance().useRegular(textField, 14f);
         textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
         add(textField, BorderLayout.CENTER);
     }
@@ -37,7 +39,7 @@ public class InputComponent extends JPanel {
     public InputComponent(String placeholderText) {
         setLayout(new BorderLayout());
         textField = new JTextField();
-        textField.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        FontManager.Instance().useRegular(textField, 14f);
         textField.setText(placeholderText);
         textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
         add(textField, BorderLayout.CENTER);

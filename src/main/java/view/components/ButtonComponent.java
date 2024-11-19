@@ -1,5 +1,7 @@
 package view.components;
 
+import utility.FontManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +11,7 @@ public class ButtonComponent extends JButton {
         super(text);
 
         // Set font and colors
-        setFont(new Font("Lucida Sans", Font.PLAIN, 14));
+        FontManager.Instance().useRegular(this, 14f);
         setBackground(Color.WHITE);
         setForeground(Color.BLACK);
 

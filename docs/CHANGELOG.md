@@ -1,6 +1,29 @@
 # Project Changelog
 
+## Tags
+
+- [Unreleased](#Unreleased)
+- [0.2.0](#0.2.0)
+- [0.1.0](#0.1.0)
+
 ## Unreleased
+
+### New Features
+
+- Implemented MarketObserver to update user data when stock market changes
+- Implemented `FontManager` to set custom font for GUI components
+
+### Internal Changes
+
+- Refactored `StockMarket` to `MarketTracker`
+- Refined all ui components to have a consistent style
+
+### Bug Fixes
+
+- Fixed `MarketTracker` not update prices after first initialization
+- Fixed `AssetPanel` and `PortfolioPanel` not updated after buy use case
+
+## 0.2.0
 
 ### New Features
 

@@ -1,6 +1,7 @@
 package view.panels;
 
 import entity.Stock;
+import utility.FontManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
@@ -22,8 +23,6 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     private static final double[] COLUMN_PROPORTIONS = {
             0.10, 0.40, 0.30, 0.20
     };
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 18);
-    private static final Font CONTENT_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
 
@@ -37,11 +36,13 @@ public class MarketSearchPanel extends JPanel implements IComponent {
 
         // Initialize components
         searchField = new InputComponent(20);
+        FontManager.Instance().useRegular(searchField, 14f);
         searchButton = new ButtonComponent("Search");
+        FontManager.Instance().useRegular(searchButton, 14f);
 
         DefaultTableModel tableModel = createTableModel();
         stockTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
-        stockTable.setFont(CONTENT_FONT);
+        FontManager.Instance().useRegular(stockTable, 14f);
         rowSorter = new TableRowSorter<>(tableModel);
         stockTable.setRowSorter(rowSorter);
 
@@ -78,7 +79,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
 
         // Title with vertical centering
         JLabel titleLabel = new JLabel("Market Overview");
-        titleLabel.setFont(TITLE_FONT);
+        FontManager.Instance().useBold(titleLabel, 18f);
 
         // Center the title vertically
         JPanel titlePanel = new JPanel();

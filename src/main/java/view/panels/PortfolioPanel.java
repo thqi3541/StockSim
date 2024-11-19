@@ -2,6 +2,7 @@ package view.panels;
 
 import entity.Portfolio;
 import entity.UserStock;
+import utility.FontManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.TableComponent;
@@ -26,8 +27,6 @@ public class PortfolioPanel extends JPanel implements IComponent {
             0.15,  // Total Value
             0.10   // Profit
     };
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 18);
-    private static final Font CONTENT_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
 
@@ -39,7 +38,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
         // Initialize table
         DefaultTableModel tableModel = createTableModel();
         portfolioTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
-        portfolioTable.setFont(CONTENT_FONT);
+        FontManager.Instance().useRegular(portfolioTable, 14f);
 
         // Set up panel layout
         setLayout(new BorderLayout(0, PADDING));
@@ -80,7 +79,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
 
         // Title with vertical centering
         JLabel titleLabel = new JLabel(TITLE);
-        titleLabel.setFont(TITLE_FONT);
+        FontManager.Instance().useBold(titleLabel, 18f);
 
         // Center the title vertically
         JPanel titlePanel = new JPanel();

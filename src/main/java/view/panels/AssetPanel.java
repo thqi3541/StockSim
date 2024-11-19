@@ -1,5 +1,6 @@
 package view.panels;
 
+import utility.FontManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.view_events.UpdateAssetEvent;
@@ -10,8 +11,6 @@ import java.awt.*;
 
 public class AssetPanel extends JPanel implements IComponent {
     private static final String TITLE = "Assets Overview";
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 18);
-    private static final Font VALUE_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
     private static final int INNER_GAP = 10;
@@ -57,7 +56,7 @@ public class AssetPanel extends JPanel implements IComponent {
         contentGbc.anchor = GridBagConstraints.WEST;
 
         // Add total assets section
-        totalLabel.setFont(VALUE_FONT);
+        FontManager.Instance().useRegular(totalLabel, 14f);
         contentGbc.gridy = 0;
         contentGbc.insets = new Insets(0, 0, INNER_GAP, 0);
         contentPanel.add(totalLabel, contentGbc);
@@ -79,7 +78,7 @@ public class AssetPanel extends JPanel implements IComponent {
         // Style and add detail labels
         int labelIndex = 0;
         for (JLabel label : new JLabel[]{cashLabel, portfolioLabel}) {
-            label.setFont(VALUE_FONT);
+            FontManager.Instance().useRegular(label, 14f);
             detailsGbc.gridy = labelIndex++;
             detailsGbc.insets = new Insets(0, 0, 5, 0);
             detailsPanel.add(label, detailsGbc);
@@ -113,7 +112,7 @@ public class AssetPanel extends JPanel implements IComponent {
         gbc.anchor = GridBagConstraints.WEST;
 
         JLabel titleLabel = new JLabel(TITLE);
-        titleLabel.setFont(TITLE_FONT);
+        FontManager.Instance().useBold(titleLabel, 18f);
         headerPanel.add(titleLabel, gbc);
 
         return headerPanel;

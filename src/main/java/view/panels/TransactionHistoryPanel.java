@@ -2,6 +2,7 @@ package view.panels;
 
 import entity.Transaction;
 import entity.TransactionHistory;
+import utility.FontManager;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
@@ -17,7 +18,6 @@ import java.text.SimpleDateFormat;
 
 public class TransactionHistoryPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm");
     private static final String[] COLUMN_NAMES = {
             "Date", "Ticker", "Action", "Price", "Quantity", "Total Price"
@@ -44,6 +44,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         // Create table model and table
         tableModel = createTableModel();
         historyTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
+        FontManager.Instance().useRegular(historyTable, 14f);
 
         // Create and add header
         add(createHeaderPanel(), BorderLayout.NORTH);
@@ -66,11 +67,12 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
         // Title on the left
         JLabel titleLabel = new JLabel("Transaction History");
-        titleLabel.setFont(TITLE_FONT);
+        FontManager.Instance().useBold(titleLabel, 24f);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
         // Back button on the right
         ButtonComponent backButton = new ButtonComponent("Back to Home");
+        FontManager.Instance().useRegular(backButton, 14f);
         backButton.addActionListener(e ->
                 ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
         headerPanel.add(backButton, BorderLayout.EAST);

@@ -73,7 +73,7 @@ public class SignUpPanel extends JPanel implements IComponent {
         titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel titleLabel = new JLabel("Registration");
-        titleLabel.setFont(new Font("Lucida Sans", Font.BOLD, 24));
+        utility.FontManager.Instance().useBold(titleLabel, 24f);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(titleLabel);
 
