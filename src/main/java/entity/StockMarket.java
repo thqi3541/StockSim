@@ -23,8 +23,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class StockMarket {
 
     // market information update interval in milliseconds
-    private static final long INITIAL_UPDATE_MARKET_INTERVAL = 1000; // initial interval in milliseconds
-    private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE = 500; // interval adjustment rate in milliseconds
+    private static final long INITIAL_UPDATE_MARKET_INTERVAL = 60000; // initial interval in milliseconds
+    private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE = 60000; // interval adjustment rate in milliseconds
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = 5; // number of rounds without rate limit
 
     // thread-safe Singleton instance
