@@ -12,8 +12,8 @@ import java.awt.*;
 public class TradeSimulationPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
     private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
-    private static final double MAIN_PANEL_RATIO = 0.75;
-    private static final double SIDE_PANEL_RATIO = 0.25;
+    private static final double MAIN_PANEL_RATIO = 0.8;
+    private static final double SIDE_PANEL_RATIO = 0.2;
 
     public TradeSimulationPanel() {
         ViewManager.Instance().registerComponent(this);

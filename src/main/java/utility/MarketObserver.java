@@ -6,6 +6,7 @@ import utility.exceptions.ValidationException;
 import view.view_events.UpdateAssetEvent;
 
 public class MarketObserver {
+
     private static volatile MarketObserver instance = null;
 
     private MarketObserver() {
