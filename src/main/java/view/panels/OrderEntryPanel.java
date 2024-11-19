@@ -4,6 +4,7 @@ import interface_adapter.execute_buy.ExecuteBuyController;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.IComponent;
+import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.ViewEvent;
 
@@ -32,10 +33,10 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         quantityInput = new InputComponent("Quantity", 15);
         quantityInput.setFont(CONTENT_FONT);
 
-        buyButton = new JButton("Buy");
+        buyButton = new ButtonComponent("Buy");
         buyButton.setFont(CONTENT_FONT);
 
-        sellButton = new JButton("Sell");
+        sellButton = new ButtonComponent("Sell");
         sellButton.setFont(CONTENT_FONT);
 
         // Set up panel layout

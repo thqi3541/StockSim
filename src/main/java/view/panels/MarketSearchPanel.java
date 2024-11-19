@@ -3,6 +3,8 @@ package view.panels;
 import entity.Stock;
 import utility.ViewManager;
 import view.IComponent;
+import view.components.ButtonComponent;
+import view.components.InputComponent;
 import view.components.TableComponent;
 import view.view_events.UpdateStockEvent;
 import view.view_events.ViewEvent;
@@ -25,8 +27,8 @@ public class MarketSearchPanel extends JPanel implements IComponent {
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
 
-    private final JTextField searchField;
-    private final JButton searchButton;
+    private final InputComponent searchField;
+    private final ButtonComponent searchButton;
     private final TableComponent stockTable;
     private final TableRowSorter<DefaultTableModel> rowSorter;
 
@@ -34,11 +36,8 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         ViewManager.Instance().registerComponent(this);
 
         // Initialize components
-        searchField = new JTextField(20);
-        searchField.setFont(CONTENT_FONT);
-
-        searchButton = new JButton("Search");
-        searchButton.setFont(CONTENT_FONT);
+        searchField = new InputComponent(20);
+        searchButton = new ButtonComponent("Search");
 
         DefaultTableModel tableModel = createTableModel();
         stockTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
@@ -95,8 +94,8 @@ public class MarketSearchPanel extends JPanel implements IComponent {
 
         // Create search controls panel
         JPanel searchControls = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, 30));
-        searchButton.setPreferredSize(new Dimension(searchButton.getPreferredSize().width, 30));
+        searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, HEADER_HEIGHT));
+        searchButton.setPreferredSize(new Dimension(searchButton.getPreferredSize().width, HEADER_HEIGHT));
         searchControls.add(searchField);
         searchControls.add(searchButton);
 
