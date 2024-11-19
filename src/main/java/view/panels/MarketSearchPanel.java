@@ -1,9 +1,9 @@
 package view.panels;
 
 import entity.Stock;
-import utility.FontManager;
-import utility.ViewManager;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.components.TableComponent;

@@ -3,6 +3,7 @@ package utility;
 import data_access.StockDataAccessInterface;
 import entity.Stock;
 import utility.exceptions.RateLimitExceededException;
+import view.ViewManager;
 import view.view_events.UpdateStockEvent;
 
 import java.io.IOException;

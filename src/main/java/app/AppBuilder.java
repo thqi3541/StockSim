@@ -22,7 +22,7 @@ import use_case.view_history.ViewHistoryInteractor;
 import use_case.view_history.ViewHistoryOutputBoundary;
 import utility.MarketTracker;
 import utility.ServiceManager;
-import utility.ViewManager;
+import view.ViewManager;
 import view.components.DialogComponent;
 import view.panels.*;
 

@@ -3,7 +3,7 @@ package interface_adapter.execute_buy;
 import use_case.execute_buy.ExecuteBuyOutputBoundary;
 import use_case.execute_buy.ExecuteBuyOutputData;
 import utility.ServiceManager;
-import utility.ViewManager;
+import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateTransactionHistoryEvent;

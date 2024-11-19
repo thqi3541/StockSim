@@ -1,10 +1,10 @@
 package view.panels;
 
 import interface_adapter.execute_buy.ExecuteBuyController;
-import utility.FontManager;
 import utility.ServiceManager;
-import utility.ViewManager;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.ViewEvent;

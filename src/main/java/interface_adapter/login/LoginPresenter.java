@@ -4,7 +4,7 @@ import entity.User;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 import utility.ServiceManager;
-import utility.ViewManager;
+import view.ViewManager;
 import view.view_events.*;
 
 public class LoginPresenter implements LoginOutputBoundary {

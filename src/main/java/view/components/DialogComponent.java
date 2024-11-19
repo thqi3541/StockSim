@@ -1,8 +1,8 @@
 package view.components;
 
-import utility.FontManager;
-import utility.ViewManager;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.ViewEvent;
 

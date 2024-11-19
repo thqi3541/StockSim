@@ -1,7 +1,8 @@
 package view.panels;
 
-import utility.ViewManager;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.components.PasswordInputComponent;
@@ -73,7 +74,7 @@ public class SignUpPanel extends JPanel implements IComponent {
         titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel titleLabel = new JLabel("Registration");
-        utility.FontManager.Instance().useBold(titleLabel, 24f);
+        FontManager.Instance().useBold(titleLabel, 24f);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(titleLabel);
 

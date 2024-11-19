@@ -2,9 +2,9 @@ package view.panels;
 
 import entity.Portfolio;
 import entity.UserStock;
-import utility.FontManager;
-import utility.ViewManager;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
 import view.components.TableComponent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;

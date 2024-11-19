@@ -1,6 +1,6 @@
 package view.components;
 
-import utility.FontManager;
+import view.FontManager;
 
 import javax.swing.*;
 import java.awt.*;

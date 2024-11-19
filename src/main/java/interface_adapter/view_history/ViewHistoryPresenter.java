@@ -3,7 +3,7 @@ package interface_adapter.view_history;
 import use_case.view_history.ViewHistoryOutputBoundary;
 import use_case.view_history.ViewHistoryOutputData;
 import utility.ServiceManager;
-import utility.ViewManager;
+import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 

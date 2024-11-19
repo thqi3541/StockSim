@@ -3,6 +3,7 @@ package utility;
 import data_access.InMemoryUserDataAccessObject;
 import entity.User;
 import utility.exceptions.ValidationException;
+import view.ViewManager;
 import view.view_events.UpdateAssetEvent;
 
 public class MarketObserver {

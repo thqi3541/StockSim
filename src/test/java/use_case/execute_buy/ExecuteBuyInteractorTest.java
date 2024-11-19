@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import utility.MarketTracker;
-import utility.ViewManager;
 import utility.exceptions.ValidationException;
+import view.ViewManager;
 
 import java.util.Optional;
 
