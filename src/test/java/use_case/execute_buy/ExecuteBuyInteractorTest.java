@@ -2,7 +2,6 @@ package use_case.execute_buy;
 
 import entity.Stock;
 import entity.User;
-import entity.UserFactory;
 import entity.UserStock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +21,11 @@ class ExecuteBuyInteractorTest {
 
     private ExecuteBuyDataAccessInterface dataAccess;
     private ExecuteBuyOutputBoundary outputPresenter;
-    private UserFactory userFactory;
     private StockMarket stockMarketMock;
     private ViewManager viewManagerMock;
 
     @BeforeEach
     void setUp() {
-        userFactory = new UserFactory();
         dataAccess = mock(ExecuteBuyDataAccessInterface.class);
         outputPresenter = mock(ExecuteBuyOutputBoundary.class);
         stockMarketMock = mock(StockMarket.class);
@@ -89,7 +86,7 @@ class ExecuteBuyInteractorTest {
     }
 
     private User createMockUserWithBalance(double balance) throws ValidationException {
-        User user = userFactory.create("testUser", "password");
+        User user = new User("testUser", "password");
         user.addBalance(balance);
         when(dataAccess.getUserWithCredential("dummy")).thenReturn(user);
         return user;

@@ -1,45 +1,47 @@
 package utility;
 
 import data_access.StockDataAccessInterface;
-import data_access.StockDataAccessObject;
 import entity.Stock;
+import utility.exceptions.RateLimitExceededException;
 import view.view_events.UpdateStockEvent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Singleton utility class that manages the stock market state and updates.
+ * A singleton class representing the stock market
  */
-public class StockMarket implements AutoCloseable {
-    private static final long DEFAULT_UPDATE_INTERVAL_MS = 120000; // 2 minutes
-    private static volatile StockMarket instance;
-    private final Map<String, Stock> stocks;
-    private final ReadWriteLock lock;
-    private final ScheduledExecutorService updateScheduler;
-    private final long updateIntervalMs;
+
+public class StockMarket {
+
+    // market information update interval in milliseconds
+    private static final long INITIAL_UPDATE_MARKET_INTERVAL = 60000; // initial interval in milliseconds
+    private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE = 60000; // interval adjustment rate in milliseconds
+    private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = 5; // number of rounds without rate limit
+
+    // thread-safe Singleton instance
+    private static volatile StockMarket instance = null;
+
+    // use read-write lock to ensure stock data is not read during update
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private volatile long currentUpdateInterval = INITIAL_UPDATE_MARKET_INTERVAL;
+    private int roundsWithoutRateLimit = 0;
+    private Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private StockDataAccessInterface dataAccess;
-    private volatile boolean initialized = false;
-    private volatile boolean shutdownRequested = false;
+    private boolean initialized = false;
+    private ScheduledExecutorService scheduler;
 
     private StockMarket() {
-        this(DEFAULT_UPDATE_INTERVAL_MS);
-    }
-
-    private StockMarket(long updateIntervalMs) {
-        this.stocks = new ConcurrentHashMap<>();
-        this.lock = new ReentrantReadWriteLock();
-        this.updateIntervalMs = updateIntervalMs;
-        this.updateScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "StockMarket-Updater");
-            t.setDaemon(true);
-            return t;
-        });
+        startUpdatingStockPrices();
     }
 
     public static StockMarket Instance() {
@@ -53,103 +55,14 @@ public class StockMarket implements AutoCloseable {
         return instance;
     }
 
-    public synchronized CompletableFuture<Void> initialize(StockDataAccessInterface dataAccess) {
+    // initialize the stock market with data access object
+    public synchronized void initialize(StockDataAccessInterface dataAccess) {
         if (this.initialized) {
-            return CompletableFuture.completedFuture(null);
+            throw new IllegalStateException("StockMarket is already initialized.");
         }
-
-        if (dataAccess == null) {
-            throw new IllegalArgumentException("DataAccess cannot be null");
-        }
-
         this.dataAccess = dataAccess;
-
-        return refreshStockData()
-                .thenAccept(success -> {
-                    if (success) {
-                        this.initialized = true;
-                        scheduleUpdates();
-                        broadcastStockUpdate();
-                    }
-                })
-                .exceptionally(e -> {
-                    System.err.println("Failed to initialize StockMarket: " + e.getMessage());
-                    return null;
-                });
-    }
-
-    private CompletableFuture<Boolean> refreshStockData() {
-        if (shutdownRequested) {
-            return CompletableFuture.completedFuture(false);
-        }
-
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                Map<String, Stock> newStocks = ((StockDataAccessObject) dataAccess)
-                        .getStocks(null); // Progress callback removed for cleaner logs
-
-                updateStocks(newStocks);
-                return true;
-            } catch (Exception e) {
-                System.err.println("Error refreshing stock data: " + e.getMessage());
-                return false;
-            }
-        });
-    }
-
-    private void updateStocks(Map<String, Stock> newStocks) {
-        if (newStocks == null || newStocks.isEmpty()) {
-            return;
-        }
-
-        lock.writeLock().lock();
-        try {
-            stocks.clear();
-            stocks.putAll(newStocks);
-            broadcastStockUpdate();
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    private void broadcastStockUpdate() {
-        List<Stock> stockList;
-        lock.readLock().lock();
-        try {
-            stockList = new ArrayList<>(stocks.values());
-        } finally {
-            lock.readLock().unlock();
-        }
-
-        if (!stockList.isEmpty()) {
-            ViewManager.Instance().broadcastEvent(new UpdateStockEvent(stockList));
-        }
-    }
-
-    private void scheduleUpdates() {
-        if (!shutdownRequested) {
-            updateScheduler.scheduleAtFixedRate(
-                    () -> {
-                        try {
-                            refreshStockData().join();
-                        } catch (Exception e) {
-                            System.err.println("Error during scheduled update: " + e.getMessage());
-                        }
-                    },
-                    updateIntervalMs,
-                    updateIntervalMs,
-                    TimeUnit.MILLISECONDS
-            );
-        }
-    }
-
-    public List<Stock> getStocksList() {
-        lock.readLock().lock();
-        try {
-            return new ArrayList<>(stocks.values());
-        } finally {
-            lock.readLock().unlock();
-        }
+        this.initialized = true;
+        updateStocks();
     }
 
     public Optional<Stock> getStock(String ticker) {
@@ -161,27 +74,99 @@ public class StockMarket implements AutoCloseable {
         }
     }
 
-    @Override
-    public void close() {
-        shutdownRequested = true;
-
-        if (updateScheduler != null) {
-            updateScheduler.shutdown();
-            try {
-                if (!updateScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
-                    updateScheduler.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+    public List<Stock> getStocks() {
+        lock.readLock().lock();
+        try {
+            return new ArrayList<>(stocks.values());
+        } finally {
+            lock.readLock().unlock();
         }
+    }
 
+    /**
+     * Update the stock information periodically based on API rate limit
+     * <p>
+     * The update rate initially INITIAL_UPDATE_MARKET_INTERVAL
+     * When the API rate limit exceeds, increase update interval by UPDATE_INTERVAL_ADJUSTMENT_RATE
+     * If API rate limit not exceeded in consecutive ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE,
+     * decrease update interval by UPDATE_INTERVAL_ADJUSTMENT_RATE until reaching INITIAL_UPDATE_MARKET_INTERVAL
+     * </p>
+     */
+    public void updateStocks() {
         lock.writeLock().lock();
         try {
-            stocks.clear();
+            if (dataAccess == null) {
+                throw new IllegalStateException("StockMarket has not been initialized with a data access object.");
+            }
+
+            // retrieve stock information from data access object
+            this.stocks = dataAccess.getStocks();
+            for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
+                String ticker = entry.getKey();
+                String company = entry.getValue().getCompany();
+                String industry = entry.getValue().getIndustry();
+                double price = entry.getValue().getPrice();
+                stocks.computeIfAbsent(ticker, k -> new Stock(ticker, company, industry, price)).updatePrice(price);
+            }
+
+            // if no exception, increment the rounds counter
+            roundsWithoutRateLimit++;
+            // check if it's time to reduce the interval
+            if (roundsWithoutRateLimit >= ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE &&
+                    currentUpdateInterval > INITIAL_UPDATE_MARKET_INTERVAL) {
+                currentUpdateInterval = Math.max(currentUpdateInterval - UPDATE_INTERVAL_ADJUSTMENT_RATE,
+                        INITIAL_UPDATE_MARKET_INTERVAL);
+                roundsWithoutRateLimit = 0; // reset counter after adjustment
+                restartScheduler(); // restart the scheduler with new interval
+            }
+
+            // broadcast stock update to view
+            System.out.println("Broadcasting stock update...");
+            ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
+
+        } catch (RateLimitExceededException | IOException e) {
+            // on rate limit, increase the update interval and reset the rounds counter
+            currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
+            roundsWithoutRateLimit = 0;
+            restartScheduler(); // restart scheduler with new interval
         } finally {
             lock.writeLock().unlock();
         }
-        initialized = false;
+    }
+
+    /**
+     * Starts a background thread to update stock prices at fixed intervals.
+     */
+    public synchronized void startUpdatingStockPrices() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            throw new IllegalStateException("Stock price updating is already running.");
+        }
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(this::updateStocks, 0, currentUpdateInterval, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Stops the periodic stock price updates.
+     */
+    public synchronized void stopUpdatingStockPrices() {
+        if (scheduler != null) {
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+            }
+            scheduler = null;
+        }
+    }
+
+    /**
+     * Restarts the scheduler with the current update interval.
+     */
+    private synchronized void restartScheduler() {
+        stopUpdatingStockPrices();
+        startUpdatingStockPrices();
     }
 }

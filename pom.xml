@@ -6,7 +6,7 @@
 
     <groupId>com.stocksim</groupId>
     <artifactId>simulator</artifactId>
-    <version>1.0-RC</version>
+    <version>3.0-SNAPSHOT</version>
 
     <build>
         <plugins>

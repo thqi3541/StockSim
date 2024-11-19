@@ -125,7 +125,6 @@ public class AppBuilder {
         // TODO: this should be replaced with a real user DAO later
         new InMemoryUserDataAccessObject();
 
-        // TODO: question: what if an interface is implemented by more than one objects?
         // 2. Initialize Presenters
         new LoginPresenter();
         new ExecuteBuyPresenter();

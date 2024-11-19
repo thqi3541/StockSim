@@ -6,178 +6,103 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
-import utility.ServiceManager;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class StockDataAccessObject implements StockDataAccessInterface {
     private static final String BASE_URL = "https://finnhub.io/api/v1";
     private final OkHttpClient client;
     private final String apiKey;
-    private final Map<String, CompanyInfo> companyCache;
-    private final List<String> tickers;
 
     public StockDataAccessObject() {
-        // Configure OkHttpClient with timeouts and connection pool
-        this.client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .build();
+        this.client = new OkHttpClient();
 
-        // Load API key
+        // Load .env.local file and get the API token
         Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
         this.apiKey = dotenv.get("STOCK_API_KEY");
-        if (apiKey == null || apiKey.isEmpty()) {
-            throw new IllegalStateException("STOCK_API_KEY not found in .env.local file");
-        }
 
-        // Initialize cache and load tickers
-        this.companyCache = new ConcurrentHashMap<>();
-        this.tickers = loadTickers();
-
-        ServiceManager.Instance().registerService(StockDataAccessInterface.class, this);
     }
 
+    public static void main(String[] args) {
+        StockDataAccessObject stockDataAccessObject = new StockDataAccessObject();
+        stockDataAccessObject.getStocks();
+    }
+
+    /**
+     * Get the prices of all stocks
+     *
+     * @return a hashmap with the stock ticker as the key and the Stock entity as the value.
+     * It should contain all stocks in the database.
+     */
     @Override
-    public Map<String, Stock> getStocks() throws IOException {
-        return getStocks(null);
-    }
-
-    public Map<String, Stock> getStocks(Consumer<String> progressCallback) throws IOException {
+    public Map<String, Stock> getStocks() {
         Map<String, Stock> stocks = new HashMap<>();
 
-        for (int i = 0; i < tickers.size(); i++) {
-            String ticker = tickers.get(i);
-            try {
-                if (progressCallback != null) {
-                    progressCallback.accept(String.format("Fetching data for %s (%d/%d)",
-                            ticker, i + 1, tickers.size()));
-                }
-
-                Stock stock = fetchStockData(ticker);
-                stocks.put(ticker, stock);
-
-                // Small delay between API calls
-                if (i < tickers.size() - 1) {
-                    Thread.sleep(100);
-                }
-            } catch (IOException e) {
-                System.err.println("Failed to fetch data for " + ticker + ": " + e.getMessage());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new IOException("Stock data fetch was interrupted", e);
-            }
-        }
-
-        return stocks;
-    }
-
-    private List<String> loadTickers() {
-        List<String> loadedTickers = new ArrayList<>();
-
         try {
-            // Try resources first, then file system
-            InputStream inputStream = getClass().getResourceAsStream("/config/tickers.txt");
+            // Reads content in config/tickers text file
+            InputStream inputStream = getClass().getResourceAsStream("/tickers.txt");
+
             if (inputStream == null) {
-                Path tickersPath = Paths.get("src", "main", "config", "tickers.txt");
-                if (!Files.exists(tickersPath)) {
-                    throw new IOException("tickers.txt not found");
-                }
-                inputStream = Files.newInputStream(tickersPath);
+                throw new FileNotFoundException("Ticker resource file not found.");
             }
+            Scanner scanner = new Scanner(inputStream);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
 
-            try (Scanner scanner = new Scanner(inputStream)) {
-                while (scanner.hasNextLine()) {
-                    String ticker = scanner.nextLine().trim();
-                    if (!ticker.isEmpty()) {
-                        loadedTickers.add(ticker);
+                // Information to create a new stock
+                String ticker = line;
+                String company = "Unknown Company Name";
+                String industry = "Unknown Industry";
+                double price = 0.0;
+
+                // Url and request for Quote api call
+                String quoteUrl = String.format("%s/quote?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
+                Request quoteRequest = new Request.Builder().url(quoteUrl).build();
+
+                // Url and request for Profile2 api call
+                String profileUrl = String.format("%s/stock/profile2?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
+                Request profileRequest = new Request.Builder().url(profileUrl).build();
+
+                // Quote api call to get current market price
+                try (Response quoteResponse = client.newCall(quoteRequest).execute()) {
+                    if (quoteResponse.isSuccessful()) {
+                        String quoteResponseBody = quoteResponse.body().string();
+                        JSONObject jsonObject = new JSONObject(quoteResponseBody);
+                        price = jsonObject.getDouble("c");
+                    } else {
+                        System.out.println("API call limit exceeded.");
                     }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
+
+                // Profile2 api call to get company name and industry
+                try (Response profileResponse = client.newCall(profileRequest).execute()) {
+                    if (profileResponse.isSuccessful()) {
+                        String profileResponseBody = profileResponse.body().string();
+                        JSONObject jsonObject = new JSONObject(profileResponseBody);
+                        company = jsonObject.getString("name");
+                        industry = jsonObject.getString("finnhubIndustry");
+                    } else {
+                        System.out.println("API call limit exceeded.");
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Creates new Stock with retrieved information
+                Stock stock = new Stock(ticker, company, industry, price);
+                stocks.put(line, stock);
             }
-        } catch (IOException e) {
-            throw new IllegalStateException("Failed to load tickers: " + e.getMessage());
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-
-        if (loadedTickers.isEmpty()) {
-            throw new IllegalStateException("No tickers found in tickers.txt");
-        }
-
-        return Collections.unmodifiableList(loadedTickers);
-    }
-
-    private Stock fetchStockData(String ticker) throws IOException {
-        // Get current price
-        double price = fetchCurrentPrice(ticker);
-
-        // Get or update company info
-        CompanyInfo info = getCompanyInfo(ticker);
-
-        return new Stock(ticker, info.name, info.industry, price);
-    }
-
-    private double fetchCurrentPrice(String ticker) throws IOException {
-        String quoteUrl = String.format("%s/quote?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
-        Request request = new Request.Builder().url(quoteUrl).build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Quote API failed with code: " + response.code());
-            }
-            JSONObject quoteData = new JSONObject(response.body().string());
-            return quoteData.getDouble("c");
-        }
-    }
-
-    private CompanyInfo getCompanyInfo(String ticker) throws IOException {
-        // Check cache first
-        CompanyInfo cachedInfo = companyCache.get(ticker);
-        if (cachedInfo != null && !cachedInfo.isExpired()) {
-            return cachedInfo;
-        }
-
-        // Fetch new company info
-        String profileUrl = String.format("%s/stock/profile2?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
-        Request request = new Request.Builder().url(profileUrl).build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Profile API failed with code: " + response.code());
-            }
-            JSONObject profileData = new JSONObject(response.body().string());
-
-            CompanyInfo info = new CompanyInfo(
-                    profileData.optString("name", "Unknown Company Name"),
-                    profileData.optString("finnhubIndustry", "Unknown Industry")
-            );
-
-            companyCache.put(ticker, info);
-            return info;
-        }
-    }
-
-    private static class CompanyInfo {
-        final String name;
-        final String industry;
-        final long timestamp;
-
-        CompanyInfo(String name, String industry) {
-            this.name = name;
-            this.industry = industry;
-            this.timestamp = System.currentTimeMillis();
-        }
-
-        boolean isExpired() {
-            // Company info cache expires after 24 hours
-            return System.currentTimeMillis() - timestamp > TimeUnit.HOURS.toMillis(24);
-        }
+        return stocks;
     }
 }
