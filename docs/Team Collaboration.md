@@ -23,6 +23,7 @@
 4. Our Special Design
 
 - Team Workflow
+- Wireframe and prototype design in Figma
 - Session Manager (Both on client and server side)
 - Service Manager
 - View Manager
