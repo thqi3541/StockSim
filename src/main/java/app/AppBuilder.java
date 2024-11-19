@@ -20,8 +20,8 @@ import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
 import use_case.view_history.ViewHistoryOutputBoundary;
+import utility.MarketTracker;
 import utility.ServiceManager;
-import utility.StockMarket;
 import utility.ViewManager;
 import view.components.DialogComponent;
 import view.panels.*;
@@ -120,10 +120,8 @@ public class AppBuilder {
      */
     private void initializeServices() {
         // 1. Initialize DAOs first
-        StockMarket.Instance().initialize(new StockDataAccessObject());
-
-        // TODO: this should be replaced with a real user DAO later
         new InMemoryUserDataAccessObject();
+        MarketTracker.Instance().initialize(new StockDataAccessObject());
 
         // 2. Initialize Presenters
         new LoginPresenter();

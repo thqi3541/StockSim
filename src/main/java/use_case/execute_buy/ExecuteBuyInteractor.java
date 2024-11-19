@@ -1,8 +1,8 @@
 package use_case.execute_buy;
 
 import entity.*;
+import utility.MarketTracker;
 import utility.ServiceManager;
-import utility.StockMarket;
 import utility.exceptions.ValidationException;
 
 import java.util.Date;
@@ -42,7 +42,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             // Get stock and quantity
             String ticker = data.ticker();
             int quantity = data.quantity();
-            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
+            Stock stock = MarketTracker.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             // Calculate some values for this transaction
             double currentPrice = stock.getPrice();

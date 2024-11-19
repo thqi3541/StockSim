@@ -35,15 +35,6 @@ public class User {
         this.balance -= amount;
     }
 
-    /**
-     * Get total assets (cash balance + portfolio value)
-     *
-     * @return total value of user's cash and investments
-     */
-    public double getAssets() {
-        return balance + portfolio.getTotalValue();
-    }
-
     public String getUsername() {
         return username;
     }

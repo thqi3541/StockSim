@@ -35,6 +35,7 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
         user3.addBalance(300000.00);
         users.put("3", user3);
 
+        ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, this);
         ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);

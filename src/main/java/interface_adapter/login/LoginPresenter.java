@@ -35,7 +35,7 @@ public class LoginPresenter implements LoginOutputBoundary {
                 new UpdateTransactionHistoryEvent(user.getTransactionHistory())
         );
 
-        // Switch to dashboard - stock data will be updated by StockMarket automatically
+        // Switch to dashboard - stock data will be updated by MarketTracker automatically
         ViewManager.Instance().broadcastEvent(
                 new SwitchPanelEvent("DashboardPanel")
         );

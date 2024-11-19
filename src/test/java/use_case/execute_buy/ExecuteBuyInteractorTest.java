@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import utility.StockMarket;
+import utility.MarketTracker;
 import utility.ViewManager;
 import utility.exceptions.ValidationException;
 
@@ -21,14 +21,14 @@ class ExecuteBuyInteractorTest {
 
     private ExecuteBuyDataAccessInterface dataAccess;
     private ExecuteBuyOutputBoundary outputPresenter;
-    private StockMarket stockMarketMock;
+    private MarketTracker marketTrackerMock;
     private ViewManager viewManagerMock;
 
     @BeforeEach
     void setUp() {
         dataAccess = mock(ExecuteBuyDataAccessInterface.class);
         outputPresenter = mock(ExecuteBuyOutputBoundary.class);
-        stockMarketMock = mock(StockMarket.class);
+        marketTrackerMock = mock(MarketTracker.class);
         viewManagerMock = mock(ViewManager.class);
     }
 
@@ -37,9 +37,9 @@ class ExecuteBuyInteractorTest {
         User mockUser = createMockUserWithBalance(10000.0);
         Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 150.0);
 
-        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class)) {
-            stockMarketMockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
-            when(stockMarketMock.getStock("AAPL")).thenReturn(Optional.of(stock));
+        try (MockedStatic<MarketTracker> stockMarketMockedStatic = Mockito.mockStatic(MarketTracker.class)) {
+            stockMarketMockedStatic.when(MarketTracker::Instance).thenReturn(marketTrackerMock);
+            when(marketTrackerMock.getStock("AAPL")).thenReturn(Optional.of(stock));
 
             ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
@@ -64,9 +64,9 @@ class ExecuteBuyInteractorTest {
         User mockUser = createMockUserWithBalance(500.0);
         Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 150.0);
 
-        try (MockedStatic<StockMarket> stockMarketMockedStatic = Mockito.mockStatic(StockMarket.class)) {
-            stockMarketMockedStatic.when(StockMarket::Instance).thenReturn(stockMarketMock);
-            when(stockMarketMock.getStock("AAPL")).thenReturn(Optional.of(stock));
+        try (MockedStatic<MarketTracker> stockMarketMockedStatic = Mockito.mockStatic(MarketTracker.class)) {
+            stockMarketMockedStatic.when(MarketTracker::Instance).thenReturn(marketTrackerMock);
+            when(marketTrackerMock.getStock("AAPL")).thenReturn(Optional.of(stock));
 
             ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
             ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
