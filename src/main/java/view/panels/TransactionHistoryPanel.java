@@ -93,12 +93,12 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         tableModel.setRowCount(0);
         if (history != null) {
             for (Transaction transaction : history.getAllTransactions()) {
-                double totalPrice = transaction.getPrice() * transaction.getQuantity();
+                double totalPrice = transaction.getExecutionPrice() * transaction.getQuantity();
                 tableModel.addRow(new Object[]{
                         DATE_FORMAT.format(transaction.getTimestamp()),
                         transaction.getTicker(),
                         transaction.getType(),
-                        String.format("$%.2f", transaction.getPrice()),
+                        String.format("$%.2f", transaction.getExecutionPrice()),
                         transaction.getQuantity(),
                         String.format("$%.2f", totalPrice)
                 });

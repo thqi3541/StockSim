@@ -29,9 +29,9 @@ public class MarketTracker {
 
     // use read-write lock to ensure stock data is not read during update
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private volatile long currentUpdateInterval = INITIAL_UPDATE_MARKET_INTERVAL;
     private int roundsWithoutRateLimit = 0;
-    private Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private StockDataAccessInterface dataAccess;
     private boolean initialized = false;
     private ScheduledExecutorService scheduler;
@@ -97,13 +97,16 @@ public class MarketTracker {
             }
 
             // retrieve stock information from data access object
-            this.stocks = dataAccess.getStocks();
-            for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
+            Map<String, Stock> newStocks = dataAccess.getStocks();
+            for (Map.Entry<String, Stock> entry : newStocks.entrySet()) {
                 String ticker = entry.getKey();
-                String company = entry.getValue().getCompany();
-                String industry = entry.getValue().getIndustry();
-                double price = entry.getValue().getPrice();
-                stocks.computeIfAbsent(ticker, k -> new Stock(ticker, company, industry, price)).updatePrice(price);
+                Stock newStock = entry.getValue();
+                Stock existingStock = stocks.get(ticker);
+                if (existingStock != null) {
+                    existingStock.updatePrice(newStock.getMarketPrice());
+                } else {
+                    stocks.put(ticker, newStock);
+                }
             }
 
             // if no exception, increment the rounds counter
@@ -121,8 +124,9 @@ public class MarketTracker {
             System.out.println("Broadcasting stock update...");
             ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
 
-            // notify observer of price update
-            MarketObserver.Instance().onPriceUpdate();
+            // notify observer of executionPrice update
+            System.out.println("Notifying observers...");
+            MarketObserver.Instance().onMarketUpdate();
         } catch (RateLimitExceededException | IOException e) {
             // on rate limit, increase the update interval and reset the rounds counter
             currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
@@ -138,14 +142,14 @@ public class MarketTracker {
      */
     public synchronized void startUpdatingStockPrices() {
         if (scheduler != null && !scheduler.isShutdown()) {
-            throw new IllegalStateException("Stock price updating is already running.");
+            throw new IllegalStateException("Stock executionPrice updating is already running.");
         }
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::updateStocks, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
     }
 
     /**
-     * Stops the periodic stock price updates.
+     * Stops the periodic stock executionPrice updates.
      */
     public synchronized void stopUpdatingStockPrices() {
         if (scheduler != null) {

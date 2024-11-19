@@ -104,9 +104,9 @@ public class DashboardPanel extends JPanel implements IComponent {
         return footer;
     }
 
-    private String formatAssetValue(double cash, double portfolio) {
-        return String.format("You have %s in cash and %s in portfolio.",
-                String.format(CURRENCY_FORMAT, cash),
+    private String formatAssetValue(double balance, double portfolio) {
+        return String.format("You have %s in balance and %s in portfolio.",
+                String.format(CURRENCY_FORMAT, balance),
                 String.format(CURRENCY_FORMAT, portfolio));
     }
 
@@ -127,17 +127,17 @@ public class DashboardPanel extends JPanel implements IComponent {
     @Override
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof UpdateUsernameEvent userEvent) {
-            updateDashboardUserName(userEvent.getUsername());
+            updateUsername(userEvent.getUsername());
         } else if (event instanceof UpdateAssetEvent assetEvent) {
-            updateDashboardValue(assetEvent.getBalance(), assetEvent.getPortfolio().getTotalValue());
+            updateAsset(assetEvent.getBalance(), assetEvent.getPortfolio().getTotalValue());
         }
     }
 
-    private void updateDashboardUserName(String username) {
+    private void updateUsername(String username) {
         welcomeLabel.setText("Welcome back, " + username + "!");
     }
 
-    private void updateDashboardValue(double cash, double position) {
-        assetLabel.setText(formatAssetValue(cash, position));
+    private void updateAsset(double balance, double portfolioValue) {
+        assetLabel.setText(formatAssetValue(balance, portfolioValue));
     }
 }

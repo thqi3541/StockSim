@@ -23,13 +23,14 @@ public class MarketObserver {
         return instance;
     }
 
-    public void onPriceUpdate() {
+    public void onMarketUpdate() {
         try {
             String credential = ClientSessionManager.Instance().getCredential();
             User user = ServiceManager.Instance().
                     getService(InMemoryUserDataAccessObject.class).
                     getUserWithCredential(credential);
 
+            System.out.println("Current user: " + user.getUsername());
             ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(
                     user.getPortfolio(),
                     user.getBalance()

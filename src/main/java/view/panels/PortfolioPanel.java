@@ -98,17 +98,17 @@ public class PortfolioPanel extends JPanel implements IComponent {
         model.setRowCount(0);
 
         if (portfolio != null) {
-            for (UserStock userStock : portfolio.getAllStocks()) {
-                double marketValue = userStock.getCurrentMarketValue();
-                double totalCost = userStock.getPurchasedTotalCost();
+            for (UserStock userStock : portfolio.getAllUserStocks()) {
+                double marketValue = userStock.getMarketValue();
+                double totalCost = userStock.getTotalCost();
                 double totalProfit = marketValue - totalCost;
 
                 model.addRow(new Object[]{
                         userStock.getStock().getTicker(),
                         userStock.getStock().getCompany(),
                         userStock.getQuantity(),
-                        String.format("$%.2f", userStock.getCost()),
-                        String.format("$%.2f", userStock.getStock().getPrice()),
+                        String.format("$%.2f", userStock.getAvgCost()),
+                        String.format("$%.2f", userStock.getStock().getMarketPrice()),
                         String.format("$%.2f", marketValue),
                         String.format("$%.2f", totalProfit)
                 });

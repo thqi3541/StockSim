@@ -15,16 +15,16 @@ public class AssetPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
     private static final int INNER_GAP = 10;
 
-    private final JLabel cashLabel;
+    private final JLabel assetLabel;
+    private final JLabel balanceLabel;
     private final JLabel portfolioLabel;
-    private final JLabel totalLabel;
 
     public AssetPanel() {
         ViewManager.Instance().registerComponent(this);
 
         // Initialize labels
-        totalLabel = new JLabel("Total Assets: $0.00");
-        cashLabel = new JLabel("Cash: $0.00");
+        assetLabel = new JLabel("Total Assets: $0.00");
+        balanceLabel = new JLabel("Balance: $0.00");
         portfolioLabel = new JLabel("Portfolio Value: $0.00");
 
         setupPanel();
@@ -56,10 +56,10 @@ public class AssetPanel extends JPanel implements IComponent {
         contentGbc.anchor = GridBagConstraints.WEST;
 
         // Add total assets section
-        FontManager.Instance().useRegular(totalLabel, 14f);
+        FontManager.Instance().useRegular(assetLabel, 14f);
         contentGbc.gridy = 0;
         contentGbc.insets = new Insets(0, 0, INNER_GAP, 0);
-        contentPanel.add(totalLabel, contentGbc);
+        contentPanel.add(assetLabel, contentGbc);
 
         // Add separator
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -77,7 +77,7 @@ public class AssetPanel extends JPanel implements IComponent {
 
         // Style and add detail labels
         int labelIndex = 0;
-        for (JLabel label : new JLabel[]{cashLabel, portfolioLabel}) {
+        for (JLabel label : new JLabel[]{balanceLabel, portfolioLabel}) {
             FontManager.Instance().useRegular(label, 14f);
             detailsGbc.gridy = labelIndex++;
             detailsGbc.insets = new Insets(0, 0, 5, 0);
@@ -118,9 +118,9 @@ public class AssetPanel extends JPanel implements IComponent {
         return headerPanel;
     }
 
-    private void updateValues(double cash, double portfolioValue) {
-        totalLabel.setText(String.format("Total Assets: $%.2f", cash + portfolioValue));
-        cashLabel.setText(String.format("Cash: $%.2f", cash));
+    private void updateValues(double balance, double portfolioValue) {
+        assetLabel.setText(String.format("Total Assets: $%.2f", balance + portfolioValue));
+        balanceLabel.setText(String.format("Balance: $%.2f", balance));
         portfolioLabel.setText(String.format("Portfolio Value: $%.2f", portfolioValue));
     }
 

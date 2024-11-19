@@ -14,7 +14,7 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.balance = 0;
+        this.balance = 0.0;
         this.portfolio = new Portfolio();
         this.transactionHistory = new TransactionHistory();
     }

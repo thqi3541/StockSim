@@ -138,7 +138,7 @@ public class MarketSearchPanel extends JPanel implements IComponent {
                     stock.getTicker(),
                     stock.getCompany(),
                     stock.getIndustry(),
-                    String.format("$%.2f", stock.getPrice())
+                    String.format("$%.2f", stock.getMarketPrice())
             });
         }
     }
