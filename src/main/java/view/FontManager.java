@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FontManager {
-    private static final String INTER_REGULAR = "/fonts/Inter-Regular.ttf";
-    private static final String INTER_BOLD = "/fonts/Inter-Bold.ttf";
-    private static final String INTER_ITALIC = "/fonts/Inter-Italic.ttf";
+    private static final String SANS_REGULAR = "/fonts/Inter-Regular.ttf";
+    private static final String SANS_BOLD = "/fonts/Inter-Bold.ttf";
+    private static final String SANS_ITALIC = "/fonts/Inter-Italic.ttf";
 
     private static FontManager instance = null;
     private final Map<String, Font> fontCache;
@@ -19,21 +19,17 @@ public class FontManager {
         loadFonts();
     }
 
-    public static FontManager Instance() {
+    public static synchronized FontManager Instance() {
         if (instance == null) {
-            synchronized (FontManager.class) {
-                if (instance == null) {
-                    instance = new FontManager();
-                }
-            }
+            instance = new FontManager();
         }
         return instance;
     }
 
     private void loadFonts() {
-        loadFont(INTER_REGULAR, "Inter Regular");
-        loadFont(INTER_BOLD, "Inter Bold");
-        loadFont(INTER_ITALIC, "Inter Italic");
+        loadFont(SANS_REGULAR, "Sans Regular");
+        loadFont(SANS_BOLD, "Sans Bold");
+        loadFont(SANS_ITALIC, "Sans Italic");
     }
 
     private void loadFont(String path, String name) {
@@ -51,15 +47,15 @@ public class FontManager {
     }
 
     public Font getRegular(float size) {
-        return getFont("Inter Regular", size);
+        return getFont("Sans Regular", size);
     }
 
     public Font getBold(float size) {
-        return getFont("Inter Bold", size);
+        return getFont("Sans Bold", size);
     }
 
     public Font getItalic(float size) {
-        return getFont("Inter Italic", size);
+        return getFont("Sans Italic", size);
     }
 
     private Font getFont(String name, float size) {
