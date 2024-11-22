@@ -1,6 +1,9 @@
 package use_case.view_history;
 
-import entity.*;
+import entity.Transaction;
+import entity.TransactionHistory;
+import entity.User;
+import entity.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,7 +24,7 @@ class ViewHistoryInteractorTest {
     private UserFactory userFactory;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         userFactory = new UserFactory();
         dataAccess = Mockito.mock(ViewHistoryDataAccessInterface.class);
         outputPresenter = Mockito.mock(ViewHistoryOutputBoundary.class);
