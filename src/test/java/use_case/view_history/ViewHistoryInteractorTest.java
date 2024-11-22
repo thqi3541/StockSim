@@ -51,16 +51,23 @@ class ViewHistoryInteractorTest {
         assertEquals(userTransactions, mockUserTransactionHistory.getAllTransactions(), "Transaction History should be empty");
 
         // mock execute buy transaction
-        Date timestamp = new Date(2024, 11, 22, 13, 05, 55);
+        Date buyTimestamp = new Date(2024, 11, 22, 13, 05, 55);
         String ticker = "XXXX";
-        Transaction mockBuyTransaction = new Transaction(timestamp, ticker, 10, 100.0, "buy");
+        Transaction mockBuyTransaction = new Transaction(buyTimestamp, ticker, 10, 100.0, "buy");
         mockUserTransactionHistory.addTransaction(mockBuyTransaction);
 
-        // check if user history is correct
+        // check if user history updated buy transaction
         userTransactions.add(mockBuyTransaction);
         assertEquals(userTransactions, mockUserTransactionHistory.getAllTransactions(), "Transaction History should contain the mockBuyTransaction");
 
-        // TODO: add execute sell transaction test
+        // mock execute sell transaction
+        Date sellTimestamp = new Date(2024, 11, 23, 03, 05, 25);
+        Transaction mockSellTransaction = new Transaction(sellTimestamp, ticker, 5, 100.0, "sell");
+        mockUserTransactionHistory.addTransaction(mockSellTransaction);
+
+        // check if user history updated sell transaction
+        userTransactions.add(mockSellTransaction);
+        assertEquals(userTransactions, mockUserTransactionHistory.getAllTransactions(), "Transaction History should be contain the mockSellTransaction");
 
     }
 }
