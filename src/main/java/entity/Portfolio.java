@@ -31,11 +31,9 @@ public class Portfolio {
      * @return the value of all stocks in the portfolio
      */
     public double getTotalValue() {
-        double result = 0.0;
-        for (UserStock stock : stocks.values()) {
-            result += stock.getCurrentMarketValue();
-        }
-        return result;
+        return stocks.values().stream()
+                .mapToDouble(UserStock::getCurrentMarketValue)
+                .sum();
     }
 
     /**

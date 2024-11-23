@@ -5,7 +5,6 @@ package entity;
  */
 public class Stock {
 
-    // TODO: need to add more fields like company name, sector, etc.
     private final String ticker;
     private final String company;
     private final String industry;
