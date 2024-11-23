@@ -156,6 +156,7 @@ replay_pid*
 
 # config resource folder
 simulator.iml
+src/main/config/stocks.json
 
 # maven
 target/
