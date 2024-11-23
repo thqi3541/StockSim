@@ -27,6 +27,7 @@
 - Added `getAssets` method in user entity
 - Reformated app builder to accept more configs
 - Implemented singleton pattern for service manager
+- Added test cases for `ViewHistoryInteractor` with mock buy and sell transactions.
 
 ### Bug Fixes
 
