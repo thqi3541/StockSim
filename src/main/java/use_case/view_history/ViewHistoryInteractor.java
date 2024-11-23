@@ -24,7 +24,7 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
     }
 
     /**
-     * This methods executes view transaction history
+     * This method executes view transaction history
      *
      * @param data the input data
      */

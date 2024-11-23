@@ -3,80 +3,88 @@ package view.panels;
 import entity.Portfolio;
 import utility.ViewManager;
 import view.IComponent;
-import view.view_events.EventType;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.EnumSet;
 
 public class AssetPanel extends JPanel implements IComponent {
+    // Label text constants
+    private static final String TOTAL_ASSETS_LABEL = "Total Assets: ";
+    private static final String BALANCE_LABEL = "Balance: ";
+    private static final String PORTFOLIO_VALUE_LABEL = "Total Value in Portfolio: ";
+
+    // Format and style constants
+    private static final String DEFAULT_VALUE = "$0.00";
+    private static final String CURRENCY_FORMAT = "$%,.2f";
+    private static final String FONT_FAMILY = "Lucida Sans";
+    private static final int TOTAL_ASSETS_FONT_SIZE = 16;
+    private static final int DETAIL_FONT_SIZE = 14;
+
+    // Layout constants
+    private static final int BORDER_PADDING = 10;
+    private static final int DETAIL_GAP = 5; // Gap between lines and separator
+
+    // Component references
     private final JLabel totalAssetsLabel;
-    private final JLabel cashLabel;
-    private final JLabel stockLabel;
+    private final JLabel balanceLabel;
+    private final JLabel portfolioValueLabel;
 
     public AssetPanel() {
         ViewManager.Instance().registerComponent(this);
 
-        setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Use BoxLayout to manage vertical alignment
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBorder(BorderFactory.createEmptyBorder(
+                BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
 
         // Total Assets label setup
-        totalAssetsLabel = new JLabel("Total Assets: $0.00");
-        totalAssetsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        totalAssetsLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        add(totalAssetsLabel, BorderLayout.NORTH);
+        totalAssetsLabel = new JLabel(TOTAL_ASSETS_LABEL + DEFAULT_VALUE);
+        totalAssetsLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, TOTAL_ASSETS_FONT_SIZE));
+        totalAssetsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(totalAssetsLabel);
 
         // Separator for visual structure
-        JSeparator separator = new JSeparator();
-        add(separator, BorderLayout.CENTER);
+        add(Box.createVerticalStrut(DETAIL_GAP)); // Gap before separator
+        add(new JSeparator());
+        add(Box.createVerticalStrut(DETAIL_GAP)); // Gap after separator
 
         // Bottom panel for Cash and Stock labels
-        JPanel bottomPanel = new JPanel(new BorderLayout());
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+        bottomPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Cash label
-        cashLabel = new JLabel("Cash: $0.00");
-        cashLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        cashLabel.setForeground(Color.GRAY);
+        balanceLabel = new JLabel(BALANCE_LABEL + DEFAULT_VALUE);
+        balanceLabel.setFont(new Font(FONT_FAMILY, Font.PLAIN, DETAIL_FONT_SIZE));
+        balanceLabel.setForeground(Color.GRAY);
 
         // Stock label
-        stockLabel = new JLabel("Stock: $0.00");
-        stockLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        stockLabel.setForeground(Color.GRAY);
-        stockLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        portfolioValueLabel = new JLabel(PORTFOLIO_VALUE_LABEL + DEFAULT_VALUE);
+        portfolioValueLabel.setFont(new Font(FONT_FAMILY, Font.PLAIN, DETAIL_FONT_SIZE));
+        portfolioValueLabel.setForeground(Color.GRAY);
 
-        // Adding labels to the bottom panel
-        bottomPanel.add(cashLabel, BorderLayout.WEST);
-        bottomPanel.add(stockLabel, BorderLayout.EAST);
+        // Add labels to the bottom panel
+        bottomPanel.add(balanceLabel);
+        bottomPanel.add(Box.createHorizontalGlue()); // Push the stock label to the right
+        bottomPanel.add(portfolioValueLabel);
 
-        add(bottomPanel, BorderLayout.SOUTH);
-
-        setPreferredSize(new Dimension(300, 150));
+        add(bottomPanel);
     }
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        // Check if the event is an instance of UpdateAssetEvent
-        if (event instanceof UpdateAssetEvent updateEvent) {
-            // Get the portfolio and balance data
-            Portfolio portfolio = updateEvent.getPortfolio();
-            double balance = updateEvent.getBalance();
+        if (event instanceof UpdateAssetEvent assetEvent) {
+            Portfolio portfolio = assetEvent.getPortfolio();
+            double balance = assetEvent.getBalance();
+            double portfolioTotalValue = portfolio.getTotalValue();
+            double totalAssets = balance + portfolioTotalValue;
 
-            // Calculate total asset value based on portfolio and cash balance
-            double stockValue = portfolio.getTotalValue(); // Assume Portfolio has a method for total stock value
-            double totalAssets = stockValue + balance;
-
-            // Update labels with the new values
-            totalAssetsLabel.setText("Total Assets: $" + String.format("%,.2f", totalAssets));
-            cashLabel.setText("Cash: $" + String.format("%,.2f", balance));
-            stockLabel.setText("Stock: $" + String.format("%,.2f", stockValue));
+            totalAssetsLabel.setText(TOTAL_ASSETS_LABEL + String.format(CURRENCY_FORMAT, totalAssets));
+            balanceLabel.setText(BALANCE_LABEL + String.format(CURRENCY_FORMAT, balance));
+            portfolioValueLabel.setText(PORTFOLIO_VALUE_LABEL + String.format(CURRENCY_FORMAT, portfolioTotalValue));
         }
     }
 
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // AssetPanel supports UPDATE_ASSET events
-        return EnumSet.of(EventType.UPDATE_ASSET);
-    }
 }

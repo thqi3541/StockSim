@@ -3,7 +3,7 @@ package interface_adapter.view_history;
 import use_case.view_history.ViewHistoryOutputBoundary;
 import use_case.view_history.ViewHistoryOutputData;
 import utility.ViewManager;
-import view.view_events.ViewHistoryEvent;
+import view.view_events.UpdateTransactionHistoryEvent;
 
 /**
  * Presenter for the ViewHistory Use Case
@@ -18,7 +18,7 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
     @Override
     public void prepareSuccessView(ViewHistoryOutputData outputData) {
         ViewManager.Instance().broadcastEvent(
-                new ViewHistoryEvent(
+                new UpdateTransactionHistoryEvent(
                         outputData.transactionHistory()
                 )
         );

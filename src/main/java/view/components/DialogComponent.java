@@ -3,11 +3,9 @@ package view.components;
 import utility.ViewManager;
 import view.IComponent;
 import view.view_events.DialogEvent;
-import view.view_events.EventType;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
-import java.util.EnumSet;
 
 public class DialogComponent implements IComponent {
 
@@ -40,9 +38,4 @@ public class DialogComponent implements IComponent {
         dialogShown = false;
     }
 
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // This component only supports DIALOG events
-        return EnumSet.of(EventType.DIALOG);
-    }
 }
