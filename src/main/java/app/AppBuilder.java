@@ -2,14 +2,26 @@ package app;
 
 import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
+import data_access.StockDataAccessInterface;
+import entity.StockMarket;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
+import interface_adapter.login.LoginController;
+import interface_adapter.login.LoginPresenter;
 import interface_adapter.view_history.ViewHistoryController;
 import interface_adapter.view_history.ViewHistoryPresenter;
+import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
+import use_case.execute_buy.ExecuteBuyOutputBoundary;
+import use_case.login.LoginDataAccessInterface;
+import use_case.login.LoginInputBoundary;
+import use_case.login.LoginInteractor;
+import use_case.login.LoginOutputBoundary;
+import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
+import use_case.view_history.ViewHistoryOutputBoundary;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.components.DialogComponent;
@@ -17,132 +29,181 @@ import view.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
-
-// TODO: better ways of import all the services and panels
-// TODO: maybe create a config file for the building process
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A builder class for the application.
- * This class now works as a setup utility to add panels to ViewManager, build the main application frame, and manage the ServiceLocator.
+ * Manages application frame creation, service registration, and view management.
  */
 public class AppBuilder {
-    private final JPanel cardPanel = new JPanel();
-    private final CardLayout cardLayout = new CardLayout();
+    // Default dimensions and title for the application window
+    private static final int DEFAULT_WIDTH = 1000;
+    private static final int DEFAULT_HEIGHT = 800;
+    private static final String DEFAULT_TITLE = "Application";
 
-    // Internal ServiceLocator for managing controllers, interactors, DAOs, and presenters
-    private final ServiceManager serviceManager = new ServiceManager();
+    // Components for the application
+    private final JPanel cardPanel;
+    private final CardLayout cardLayout;
+    private final Map<String, JPanel> panels;
+    private String initialPanel = "LogInPanel";
 
+    // Custom dimensions and title for the application window
+    private int width = DEFAULT_WIDTH;
+    private int height = DEFAULT_HEIGHT;
+    private String title = DEFAULT_TITLE;
+
+    /**
+     * Constructor for the AppBuilder class
+     */
     public AppBuilder() {
-        cardPanel.setLayout(cardLayout);
+        this.cardPanel = new JPanel();
+        this.cardLayout = new CardLayout();
+        this.panels = new HashMap<>();
+        this.cardPanel.setLayout(cardLayout);
     }
 
     /**
-     * Add the login and sign-up panels to the application
-     *
-     * @return the builder
+     * Sets custom dimensions for the application window
+     */
+    public AppBuilder withDimensions(int width, int height) {
+        this.width = width;
+        this.height = height;
+        return this;
+    }
+
+    /**
+     * Sets custom title for the application window
+     */
+    public AppBuilder withTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    /**
+     * Sets the initial panel to be displayed
+     */
+    public AppBuilder withInitialPanel(String panelName) {
+        this.initialPanel = panelName;
+        return this;
+    }
+
+    /**
+     * Adds authentication panels (Login and SignUp)
      */
     public AppBuilder addAuthenticationPanels() {
-        LogInPanel logInPanel = new LogInPanel();
-        SignUpPanel signUpPanel = new SignUpPanel();
-
-        // Add panels to the card layout
-        cardPanel.add(logInPanel, "LogInPanel");
-        cardPanel.add(signUpPanel, "SignUpPanel");
-
+        addPanel("LogInPanel", new LogInPanel());
+        addPanel("SignUpPanel", new SignUpPanel());
         return this;
     }
 
     /**
-     * Add the dashboard panel to the application
-     *
-     * @return the builder
+     * Adds the dashboard panel with user information
      */
-    public AppBuilder addDashboardPanel(String username, double cash, double position) {
-        DashboardPanel dashboardPanel = new DashboardPanel(username, cash, position);
-
-        // Add the dashboard panel to the card layout
-        cardPanel.add(dashboardPanel, "DashboardPanel");
-
+    public AppBuilder addDashboardPanel() {
+        addPanel("DashboardPanel", new DashboardPanel());
         return this;
     }
 
     /**
-     * Add the trade simulation panel to the application
-     *
-     * @return the builder
+     * Adds the action panels
      */
-    public AppBuilder addTradeSimulationPanel() {
-        TradeSimulationPanel tradeSimulationPanel = new TradeSimulationPanel();
-
-        // Add the trade simulation panel to the card layout
-        cardPanel.add(tradeSimulationPanel, "TradeSimulationPanel");
-
+    public AppBuilder addActionPanels() {
+        addPanel("TradeSimulationPanel", new TradeSimulationPanel());
+        addPanel("TransactionHistoryPanel", new TransactionHistoryPanel());
         return this;
     }
 
+    /**
+     * Adds the dialog component
+     */
     public AppBuilder addDialogComponent() {
-        DialogComponent dialogComponent = new DialogComponent();
+        ServiceManager.Instance().registerService(DialogComponent.class, new DialogComponent());
         return this;
     }
 
     /**
-     * Add the transaction history panel to the application
-     *
-     * @return
+     * Helper method to add a panel to both the card layout and panels map
      */
-    public AppBuilder addTransactionHistoryPanel() {
-        TransactionHistoryPanel transactionHistoryPanel = new TransactionHistoryPanel();
-        // Add the transaction history panel to the card layout
-        cardPanel.add(transactionHistoryPanel, "TransactionHistoryPanel");
-        return this;
+    private void addPanel(String name, JPanel panel) {
+        panels.put(name, panel);
+        cardPanel.add(panel, name);
     }
 
     /**
-     * Build the application frame, initialize controllers, interactors, DAOs, and presenters, and register them in ServiceLocator.
-     *
-     * @return the application frame
+     * Initializes all required services
+     */
+    private void initializeServices() {
+        // 1. Initialize DAOs first
+        InMemoryStockDataAccessObject stockDAO = new InMemoryStockDataAccessObject();
+        InMemoryUserDataAccessObject userDAO = new InMemoryUserDataAccessObject();
+
+        // Register concrete DAOs and their interfaces
+        ServiceManager.Instance().registerService(StockDataAccessInterface.class, stockDAO);
+        StockMarket.Instance().initialize(stockDAO);
+
+        ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, userDAO);
+        ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, userDAO);
+
+        // 2. Initialize Presenters and register them as output boundaries
+        ExecuteBuyOutputBoundary buyPresenter = new ExecuteBuyPresenter();
+        ViewHistoryOutputBoundary viewHistoryPresenter = new ViewHistoryPresenter();
+        LoginOutputBoundary loginPresenter = new LoginPresenter();
+
+        ServiceManager.Instance().registerService(ExecuteBuyOutputBoundary.class, buyPresenter);
+        ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
+        ServiceManager.Instance().registerService(LoginOutputBoundary.class, loginPresenter);
+
+        // 3. Initialize Interactors and register them as input boundaries
+        ExecuteBuyInputBoundary buyInteractor = new ExecuteBuyInteractor(
+                ServiceManager.Instance().getService(ExecuteBuyDataAccessInterface.class),
+                ServiceManager.Instance().getService(ExecuteBuyOutputBoundary.class)
+        );
+        ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(
+                ServiceManager.Instance().getService(ViewHistoryDataAccessInterface.class),
+                ServiceManager.Instance().getService(ViewHistoryOutputBoundary.class)
+        );
+        LoginInputBoundary loginInteractor = new LoginInteractor(
+                ServiceManager.Instance().getService(LoginDataAccessInterface.class),
+                ServiceManager.Instance().getService(LoginOutputBoundary.class)
+        );
+
+        ServiceManager.Instance().registerService(ExecuteBuyInputBoundary.class, buyInteractor);
+        ServiceManager.Instance().registerService(ViewHistoryInputBoundary.class, viewHistoryInteractor);
+        ServiceManager.Instance().registerService(LoginInputBoundary.class, loginInteractor);
+
+        // 4. Initialize Controllers
+        ServiceManager.Instance().registerService(ExecuteBuyController.class, new ExecuteBuyController(
+                ServiceManager.Instance().getService(ExecuteBuyInputBoundary.class))
+        );
+        ServiceManager.Instance().registerService(ViewHistoryController.class, new ViewHistoryController(
+                ServiceManager.Instance().getService(ViewHistoryInputBoundary.class))
+        );
+        ServiceManager.Instance().registerService(LoginController.class, new LoginController(
+                ServiceManager.Instance().getService(LoginInputBoundary.class))
+        );
+    }
+
+    /**
+     * Builds and returns the configured application frame
      */
     public JFrame build() {
-        JFrame application = new JFrame("Application");
-        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        application.setSize(1000, 800);
-        application.add(cardPanel);
+        // Initialize services
+        initializeServices();
 
-        //Step 0: Initialize and register InMemoryStockDataAccessObject (DAO)
-        InMemoryStockDataAccessObject stockDataAccessObject = new InMemoryStockDataAccessObject();
-        ServiceManager.registerService(InMemoryStockDataAccessObject.class, stockDataAccessObject);
-
-        // Step 1: Initialize and register InMemoryUserDataAccessObject (DAO)
-        InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
-        ServiceManager.registerService(InMemoryUserDataAccessObject.class, userDataAccessObject);
-
-        // Step 2: Initialize and register ExecuteBuyPresenter (OutputBoundary)
-        ExecuteBuyPresenter executeBuyPresenter = new ExecuteBuyPresenter();
-        ServiceManager.registerService(ExecuteBuyPresenter.class, executeBuyPresenter);
-
-        // Step 3: Initialize ExecuteBuyInteractor with DAO and Presenter
-        ExecuteBuyInputBoundary executeBuyInteractor = new ExecuteBuyInteractor(userDataAccessObject, executeBuyPresenter);
-
-        // Step 4: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
-        ExecuteBuyController executeBuyController = new ExecuteBuyController(executeBuyInteractor);
-        ServiceManager.registerService(ExecuteBuyController.class, executeBuyController);
-
-        // Step 5: Initialize and register ViewHistoryPresenter (OutputBoundary)
-        ViewHistoryPresenter viewHistoryPresenter = new ViewHistoryPresenter();
-        ServiceManager.registerService(ViewHistoryPresenter.class, viewHistoryPresenter);
-
-        // Step 6: Initialize ViewHistoryInteractor with DAO and Presenter
-        ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(userDataAccessObject, viewHistoryPresenter);
-
-        // Step 7: Initialize ExecuteBuyController with ExecuteBuyInteractor and register
-        ViewHistoryController viewHistoryController = new ViewHistoryController(viewHistoryInteractor);
-        ServiceManager.registerService(ViewHistoryController.class, viewHistoryController);
-
-        // Set ViewManager to control panel switching with cardLayout and cardPanel
+        // Configure view manager
         ViewManager.Instance().setCardLayout(cardLayout, cardPanel);
 
-        // Show the LogInPanel initially
-        cardLayout.show(cardPanel, "LogInPanel");
+        // Create and configure the main frame
+        JFrame application = new JFrame(title);
+        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        application.setSize(width, height);
+        application.add(cardPanel);
+
+        // Show initial panel
+        cardLayout.show(cardPanel, initialPanel);
 
         return application;
     }

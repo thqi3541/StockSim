@@ -6,6 +6,8 @@
 
 - Added `ViewHistory` use case to view transaction history
 - Added GUI components for view transaction history page
+- Implemented login use case
+- Implemented periodic update of stock information from data access interface in `StockMarket` that self-adjust based on API rate limit
 
 ### Internal Changes
 
@@ -20,8 +22,12 @@
 - Added new api calls in `StockDataAccess` to retrieve and store company name and industry
 - Modified `Stock`, `StockMarket`, and `InMemoryStockDataAccessObject` to store and utilize new company and industry data
 - Modified `InMemoryUserDataAccessObject` to utilize `ViewHistoryDataAccessInterface` as well
-- Updated stock data provider from Alpha Vantage to Finnhub.
-- Modified references to Alpha Vantage in documentation and codebase.
+- Implemented filter filed in market search panel
+- Changed password input field using `JPasswordField`
+- Added `getAssets` method in user entity
+- Reformated app builder to accept more configs
+- Implemented singleton pattern for service manager
+- Added test cases for `ViewHistoryInteractor` with mock buy and sell transactions.
 
 ### Bug Fixes
 

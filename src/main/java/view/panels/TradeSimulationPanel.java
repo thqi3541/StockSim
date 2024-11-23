@@ -3,96 +3,112 @@ package view.panels;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
-import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.EnumSet;
 
 public class TradeSimulationPanel extends JPanel implements IComponent {
+    // Layout Constants
+    private static final int MAIN_PADDING = 20;
+    private static final int SECTION_SPACING = 10;
+
+    // Component Sizes
+    private static final Dimension VERTICAL_GAP = new Dimension(0, SECTION_SPACING);
+
+    // Font Constants
+    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 28);
+
+    // Text Constants
+    private static final String TITLE_TEXT = "Trade Simulation";
+    private static final String BACK_BUTTON_TEXT = "Back to Home";
 
     public TradeSimulationPanel() {
         ViewManager.Instance().registerComponent(this);
+        setupMainPanel();
 
+        // Add components in order
+        add(createHeaderPanel());
+        add(Box.createRigidArea(VERTICAL_GAP));
+        add(createUpperPanel());
+        add(Box.createRigidArea(VERTICAL_GAP));
+        add(createLowerPanel());
+    }
+
+    private void setupMainPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(
+                MAIN_PADDING, MAIN_PADDING, MAIN_PADDING, MAIN_PADDING));
+    }
 
-        // Header with Title and Back Button
+    private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add 10px internal margin
 
-        JLabel titleLabel = new JLabel("Trade Simulation");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        // Title
+        JLabel titleLabel = new JLabel(TITLE_TEXT);
+        titleLabel.setFont(TITLE_FONT);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        // Back to Home button
-        ButtonComponent backButton = new ButtonComponent("Back to Home");
+        // Back button
+        headerPanel.add(createBackButton(), BorderLayout.EAST);
+
+        return headerPanel;
+    }
+
+    private JPanel createBackButton() {
+        ButtonComponent backButton = new ButtonComponent(BACK_BUTTON_TEXT);
         backButton.setPreferredSize(new Dimension(120, 30));
         backButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel"))
-        );
+                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttonPanel.add(backButton);
-        headerPanel.add(buttonPanel, BorderLayout.EAST);
+        return buttonPanel;
+    }
 
-        add(headerPanel);
-
-        // Upper Panel with Market Search and Order Entry
+    private JPanel createUpperPanel() {
         JPanel upperPanel = new JPanel(new GridBagLayout());
-        upperPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = 1.0;
 
-        JPanel searchAndOrderPanel = new JPanel(new GridBagLayout());
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 4.0;
-        gbc.insets = new Insets(0, 0, 0, 10);
+        // Market Search Panel
         MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
-        marketSearchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        searchAndOrderPanel.add(marketSearchPanel, gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.insets = new Insets(0, 10, 0, 0);
-        OrderEntryPanel orderEntryPanel = new OrderEntryPanel();
-        orderEntryPanel.setPreferredSize(new Dimension(200, 0));
-        orderEntryPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        searchAndOrderPanel.add(orderEntryPanel, gbc);
-
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        upperPanel.add(searchAndOrderPanel, gbc);
+        gbc.weightx = 3.0; // Wider proportion
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 0, 0, SECTION_SPACING);
+        upperPanel.add(marketSearchPanel, gbc);
 
-        add(upperPanel);
+        // Order Entry Panel
+        OrderEntryPanel orderEntryPanel = new OrderEntryPanel();
+        gbc.gridx = 1;
+        gbc.weightx = 1.0; // Narrower proportion
+        gbc.insets = new Insets(0, SECTION_SPACING, 0, 0);
+        upperPanel.add(orderEntryPanel, gbc);
 
-        // Lower Panel with Asset and Portfolio Details
-        JPanel assetAndPortfolioPanel = new JPanel();
-        assetAndPortfolioPanel.setLayout(new BoxLayout(assetAndPortfolioPanel, BoxLayout.Y_AXIS));
-        assetAndPortfolioPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        assetAndPortfolioPanel.add(new AssetPanel());
-        assetAndPortfolioPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        assetAndPortfolioPanel.add(new PortfolioPanel());
+        return upperPanel;
+    }
 
-        add(assetAndPortfolioPanel);
+    private JPanel createLowerPanel() {
+        JPanel assetAndPortfolioPanel = new JPanel(new BorderLayout()); // Use BorderLayout for full width
+
+        // Add Asset Panel
+        AssetPanel assetPanel = new AssetPanel();
+        assetPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, assetPanel.getPreferredSize().height));
+        assetAndPortfolioPanel.add(assetPanel, BorderLayout.NORTH);
+
+        // Add Portfolio Panel
+        PortfolioPanel portfolioPanel = new PortfolioPanel();
+        portfolioPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, portfolioPanel.getPreferredSize().height));
+        assetAndPortfolioPanel.add(portfolioPanel, BorderLayout.CENTER);
+
+        return assetAndPortfolioPanel;
     }
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof SwitchPanelEvent) {
-            System.out.println("TradeSimulationPanel received a SwitchPanelEvent.");
-        }
-    }
-
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // TradeSimulationPanel only supports SWITCH_PANEL events
-        return EnumSet.of(EventType.SWITCH_PANEL);
     }
 }

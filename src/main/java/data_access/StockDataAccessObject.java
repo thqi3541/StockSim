@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class StockDataAccessObject implements IStockDataAccess {
+public class StockDataAccessObject implements StockDataAccessInterface {
     private static final String BASE_URL = "https://finnhub.io/api/v1";
     private final OkHttpClient client;
     private final String apiKey;
