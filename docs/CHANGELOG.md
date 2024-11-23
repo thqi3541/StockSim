@@ -48,5 +48,7 @@
 - Removed outdated classes and methods that are incompatible with current codebase version
 - Updated maven configuration with unit test and api request dependencies
 - Implemented the frontend framework
+- Updated stock data provider from Alpha Vantage to Finnhub.
+- Removed references to Alpha Vantage in documentation and codebase.
 
 ### Bug Fixes
