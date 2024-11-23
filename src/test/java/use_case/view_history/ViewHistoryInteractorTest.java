@@ -3,7 +3,6 @@ package use_case.view_history;
 import entity.Transaction;
 import entity.TransactionHistory;
 import entity.User;
-import entity.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,18 +20,16 @@ class ViewHistoryInteractorTest {
 
     private ViewHistoryDataAccessInterface dataAccess;
     private ViewHistoryOutputBoundary outputPresenter;
-    private UserFactory userFactory;
 
     @BeforeEach
     void setUp() {
-        userFactory = new UserFactory();
         dataAccess = Mockito.mock(ViewHistoryDataAccessInterface.class);
         outputPresenter = Mockito.mock(ViewHistoryOutputBoundary.class);
     }
 
     @Test
     void successTest() throws ValidationException {
-        User mockUser = userFactory.create("testUser", "password");
+        User mockUser = new User("testUser", "password");
 
         when(dataAccess.getUserWithCredential("dummy")).thenReturn(mockUser);
 

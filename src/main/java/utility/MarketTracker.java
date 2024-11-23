@@ -1,10 +1,12 @@
-package entity;
+package utility;
 
 import data_access.StockDataAccessInterface;
-import utility.ViewManager;
+import entity.Stock;
 import utility.exceptions.RateLimitExceededException;
+import view.ViewManager;
 import view.view_events.UpdateStockEvent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * A singleton class representing the stock market
- */
-
-public class StockMarket {
+public class MarketTracker {
 
     // market information update interval in milliseconds
     private static final long INITIAL_UPDATE_MARKET_INTERVAL = 60000; // initial interval in milliseconds
@@ -28,26 +26,26 @@ public class StockMarket {
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = 5; // number of rounds without rate limit
 
     // thread-safe Singleton instance
-    private static volatile StockMarket instance = null;
+    private static volatile MarketTracker instance = null;
 
     // use read-write lock to ensure stock data is not read during update
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private volatile long currentUpdateInterval = INITIAL_UPDATE_MARKET_INTERVAL;
     private int roundsWithoutRateLimit = 0;
-    private Map<String, Stock> stocks = new ConcurrentHashMap<>();
     private StockDataAccessInterface dataAccess;
     private boolean initialized = false;
     private ScheduledExecutorService scheduler;
 
-    private StockMarket() {
-        startUpdatingStockPrices();
+    private MarketTracker() {
+        // Don't start updating prices until initialized
     }
 
-    public static StockMarket Instance() {
+    public static MarketTracker Instance() {
         if (instance == null) {
-            synchronized (StockMarket.class) {
+            synchronized (MarketTracker.class) {
                 if (instance == null) {
-                    instance = new StockMarket();
+                    instance = new MarketTracker();
                 }
             }
         }
@@ -57,10 +55,12 @@ public class StockMarket {
     // initialize the stock market with data access object
     public synchronized void initialize(StockDataAccessInterface dataAccess) {
         if (this.initialized) {
-            throw new IllegalStateException("StockMarket is already initialized.");
+            throw new IllegalStateException("MarketTracker is already initialized.");
         }
         this.dataAccess = dataAccess;
         this.initialized = true;
+        updateStocks();  // First update
+        startUpdatingStockPrices();  // Then start periodic updates
     }
 
     public Optional<Stock> getStock(String ticker) {
@@ -94,17 +94,20 @@ public class StockMarket {
         lock.writeLock().lock();
         try {
             if (dataAccess == null) {
-                throw new IllegalStateException("StockMarket has not been initialized with a data access object.");
+                throw new IllegalStateException("MarketTracker has not been initialized with a data access object.");
             }
 
             // retrieve stock information from data access object
-            this.stocks = dataAccess.getStocks();
-            for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
+            Map<String, Stock> newStocks = dataAccess.getStocks();
+            for (Map.Entry<String, Stock> entry : newStocks.entrySet()) {
                 String ticker = entry.getKey();
-                String company = entry.getValue().getCompany();
-                String industry = entry.getValue().getIndustry();
-                double price = entry.getValue().getPrice();
-                stocks.computeIfAbsent(ticker, k -> new Stock(ticker, company, industry, price)).updatePrice(price);
+                Stock newStock = entry.getValue();
+                Stock existingStock = stocks.get(ticker);
+                if (existingStock != null) {
+                    existingStock.updatePrice(newStock.getMarketPrice());
+                } else {
+                    stocks.put(ticker, newStock);
+                }
             }
 
             // if no exception, increment the rounds counter
@@ -119,9 +122,13 @@ public class StockMarket {
             }
 
             // broadcast stock update to view
+            System.out.println("Broadcasting stock update...");
             ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
 
-        } catch (RateLimitExceededException e) {
+            // notify observer of executionPrice update
+            System.out.println("Notifying observers...");
+            MarketObserver.Instance().onMarketUpdate();
+        } catch (RateLimitExceededException | IOException e) {
             // on rate limit, increase the update interval and reset the rounds counter
             currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
             roundsWithoutRateLimit = 0;
@@ -136,14 +143,14 @@ public class StockMarket {
      */
     public synchronized void startUpdatingStockPrices() {
         if (scheduler != null && !scheduler.isShutdown()) {
-            throw new IllegalStateException("Stock price updating is already running.");
+            throw new IllegalStateException("Stock executionPrice updating is already running.");
         }
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateStocks, 0, currentUpdateInterval, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::updateStocks, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
     }
 
     /**
-     * Stops the periodic stock price updates.
+     * Stops the periodic stock executionPrice updates.
      */
     public synchronized void stopUpdatingStockPrices() {
         if (scheduler != null) {

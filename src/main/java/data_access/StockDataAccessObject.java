@@ -45,7 +45,7 @@ public class StockDataAccessObject implements StockDataAccessInterface {
 
         try {
             // Reads content in config/tickers text file
-            InputStream inputStream = getClass().getResourceAsStream("/tickers.txt");
+            InputStream inputStream = getClass().getResourceAsStream("/config/tickers.txt");
 
             if (inputStream == null) {
                 throw new FileNotFoundException("Ticker resource file not found.");
@@ -68,7 +68,7 @@ public class StockDataAccessObject implements StockDataAccessInterface {
                 String profileUrl = String.format("%s/stock/profile2?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
                 Request profileRequest = new Request.Builder().url(profileUrl).build();
 
-                // Quote api call to get current market price
+                // Quote api call to get current market executionPrice
                 try (Response quoteResponse = client.newCall(quoteRequest).execute()) {
                     if (quoteResponse.isSuccessful()) {
                         String quoteResponseBody = quoteResponse.body().string();

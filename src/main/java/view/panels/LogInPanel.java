@@ -2,8 +2,9 @@ package view.panels;
 
 import interface_adapter.login.LoginController;
 import utility.ServiceManager;
-import utility.ViewManager;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.components.PasswordInputComponent;
@@ -14,53 +15,41 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LogInPanel extends JPanel implements IComponent {
-    // Components
-    private final InputComponent usernameInput;
-    private final PasswordInputComponent passwordInput;
+    private final InputComponent usernameField;
+    private final PasswordInputComponent passwordField;
     private final ButtonComponent logInButton;
     private final ButtonComponent signUpButton;
 
     public LogInPanel() {
-        // Initialize components
-        usernameInput = new InputComponent("Username", 20);
-        passwordInput = new PasswordInputComponent("Password", 20);
+        usernameField = new InputComponent("Username", 20);
+        passwordField = new PasswordInputComponent("Password", 20);
         logInButton = new ButtonComponent("Log In");
         signUpButton = new ButtonComponent("Go to Sign Up");
 
-        // Register this panel as a component in ViewManager
         ViewManager.Instance().registerComponent(this);
 
-        // Set up the panel layout
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Add components
         add(createHeader(), BorderLayout.NORTH);
         add(createCenteredFormPanel(), BorderLayout.CENTER);
 
-        // Configure button actions
         configureButtonActions();
     }
 
     private JPanel createHeader() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0)); // 20px bottom spacing
-
-        // Add "Go to Sign Up" button aligned to the right
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         headerPanel.add(signUpButton, BorderLayout.EAST);
-
         return headerPanel;
     }
 
     private JPanel createCenteredFormPanel() {
-        // Create a wrapper panel to center the form panel
         JPanel centeringPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.NONE; // Prevent filling the parent
-        gbc.anchor = GridBagConstraints.CENTER; // Center the content
-
+        gbc.anchor = GridBagConstraints.CENTER;
         centeringPanel.add(createOuterFormPanel(), gbc);
         return centeringPanel;
     }
@@ -68,14 +57,11 @@ public class LogInPanel extends JPanel implements IComponent {
     private JPanel createOuterFormPanel() {
         JPanel outerPanel = new JPanel();
         outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
-        outerPanel.setPreferredSize(new Dimension(300, 300)); // Fixed dimensions for the outer panel
-        outerPanel.setMaximumSize(new Dimension(300, 300));
 
-        // Add title, input fields, and button as separate sections
         outerPanel.add(createTitleSection());
-        outerPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacing between sections
+        outerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         outerPanel.add(createInputSection());
-        outerPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacing between sections
+        outerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         outerPanel.add(createButtonSection());
 
         return outerPanel;
@@ -87,7 +73,7 @@ public class LogInPanel extends JPanel implements IComponent {
         titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel titleLabel = new JLabel("StockSim");
-        titleLabel.setFont(new Font("Lucida Sans", Font.BOLD, 24));
+        FontManager.Instance().useBold(titleLabel, 24f);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(titleLabel);
 
@@ -99,16 +85,12 @@ public class LogInPanel extends JPanel implements IComponent {
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Add username input
-        inputPanel.add(usernameInput);
-        inputPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacing between inputs
+        inputPanel.add(usernameField);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        inputPanel.add(passwordField);
 
-        // Add password input
-        inputPanel.add(passwordInput);
-
-        // Ensure natural height by not explicitly setting preferred size
-        usernameInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, usernameInput.getPreferredSize().height));
-        passwordInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, passwordInput.getPreferredSize().height));
+        usernameField.setMaximumSize(new Dimension(300, usernameField.getPreferredSize().height));
+        passwordField.setMaximumSize(new Dimension(300, passwordField.getPreferredSize().height));
 
         return inputPanel;
     }
@@ -116,17 +98,14 @@ public class LogInPanel extends JPanel implements IComponent {
     private JPanel createButtonSection() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        logInButton.setPreferredSize(new Dimension(120, 30));
         buttonPanel.add(logInButton);
-
         return buttonPanel;
     }
 
     private void configureButtonActions() {
         logInButton.addActionListener(e -> {
-            String username = usernameInput.getText();
-            char[] passwordChars = passwordInput.getPassword();
+            String username = usernameField.getText();
+            char[] passwordChars = passwordField.getPassword();
             String password = new String(passwordChars);
             ServiceManager.Instance().getService(LoginController.class).execute(username, password);
         });

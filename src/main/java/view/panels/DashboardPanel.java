@@ -1,7 +1,8 @@
 package view.panels;
 
-import utility.ViewManager;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
 import view.components.ButtonComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateAssetEvent;
@@ -12,112 +13,101 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DashboardPanel extends JPanel implements IComponent {
-    // Layout Constants
-    private static final int MAIN_PADDING = 20;
-    private static final int SECTION_SPACING = 10;
-    private static final int HEADER_LINE_SPACING = 5;
-
-    // Font Constants
-    private static final Font WELCOME_FONT = new Font("Lucida Sans", Font.BOLD, 24);
-    private static final Font BALANCE_FONT = new Font("Lucida Sans", Font.PLAIN, 18);
-
-    // Text Constants
+    private static final int PADDING = 20;
     private static final String CURRENCY_FORMAT = "$%.2f";
-    private static final String DEFAULT_USERNAME = "Guest";
-    private static final double DEFAULT_CASH = 0.0;
-    private static final double DEFAULT_POSITION = 0.0;
 
-    // Components
     private final JLabel welcomeLabel;
-    private final JLabel balanceLabel;
+    private final JLabel assetLabel;
     private final ButtonComponent tradeButton;
     private final ButtonComponent historyButton;
     private final ButtonComponent logoutButton;
 
     public DashboardPanel() {
-        // Initialize components
-        welcomeLabel = new JLabel("Welcome back, " + DEFAULT_USERNAME);
-        balanceLabel = new JLabel(formatBalanceText(DEFAULT_CASH, DEFAULT_POSITION));
+        welcomeLabel = new JLabel("Welcome back, Guest!");
+        assetLabel = new JLabel(formatAssetValue(0.0, 0.0));
         tradeButton = new ButtonComponent("Trade");
-        historyButton = new ButtonComponent("View Transaction History");
+        historyButton = new ButtonComponent("Transaction History");
         logoutButton = new ButtonComponent("Log out");
 
         ViewManager.Instance().registerComponent(this);
 
-        setupMainPanel();
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
 
-        // Add components to the panel
-        add(createHeaderPanel());
-        add(Box.createRigidArea(new Dimension(0, SECTION_SPACING)));
-        add(createCenterPanel());
-        add(Box.createRigidArea(new Dimension(0, SECTION_SPACING)));
-        add(createFooterPanel());
+        add(createHeaderSection());
+        add(Box.createRigidArea(new Dimension(0, PADDING)));
+        add(createDashboardSection());
+        add(Box.createRigidArea(new Dimension(0, PADDING)));
+        add(createAccountSection());
+        add(Box.createRigidArea(new Dimension(0, PADDING)));
+        add(createFooterSection());
 
         setupButtonActions();
     }
 
-    private void setupMainPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(MAIN_PADDING, MAIN_PADDING, MAIN_PADDING, MAIN_PADDING));
-    }
+    private JPanel createHeaderSection() {
+        JPanel header = new JPanel();
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+        header.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel();
-        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
-        headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        // Configure welcome label
-        welcomeLabel.setFont(WELCOME_FONT);
+        FontManager.Instance().useBold(welcomeLabel, 24f);
         welcomeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Configure balance label
-        balanceLabel.setFont(BALANCE_FONT);
-        balanceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        FontManager.Instance().useRegular(assetLabel, 18f);
+        assetLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Add labels with spacing
-        headerPanel.add(welcomeLabel);
-        headerPanel.add(Box.createRigidArea(new Dimension(0, HEADER_LINE_SPACING)));
-        headerPanel.add(balanceLabel);
+        header.add(welcomeLabel);
+        header.add(Box.createRigidArea(new Dimension(0, 10)));
+        header.add(assetLabel);
 
-        return headerPanel;
+        return header;
     }
 
-    private JPanel createCenterPanel() {
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    private JPanel createDashboardSection() {
+        JPanel dashboardSection = new JPanel();
+        dashboardSection.setLayout(new BoxLayout(dashboardSection, BoxLayout.Y_AXIS));
+        dashboardSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        dashboardSection.setBorder(BorderFactory.createTitledBorder("Dashboard"));
 
-        // Trading Management Panel
-        JPanel tradingManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        tradingManagementPanel.setBorder(BorderFactory.createTitledBorder("Trading management"));
-        tradingManagementPanel.add(tradeButton);
-        tradingManagementPanel.add(historyButton);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        FontManager.Instance().useRegular(tradeButton, 14f);
+        FontManager.Instance().useRegular(historyButton, 14f);
+        buttonPanel.add(tradeButton);
+        buttonPanel.add(historyButton);
 
-        // Account Management Panel
-        JPanel accountManagementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        accountManagementPanel.setBorder(BorderFactory.createTitledBorder("Account management"));
-        accountManagementPanel.add(logoutButton);
-
-        // Combine panels
-        centerPanel.add(tradingManagementPanel);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, SECTION_SPACING)));
-        centerPanel.add(accountManagementPanel);
-
-        return centerPanel;
+        dashboardSection.add(buttonPanel);
+        return dashboardSection;
     }
 
-    private JPanel createFooterPanel() {
-        JPanel footerPanel = new JPanel();
-        footerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        footerPanel.add(new JLabel("Thank you for using StockSim."));
-        footerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return footerPanel;
+    private JPanel createAccountSection() {
+        JPanel accountSection = new JPanel();
+        accountSection.setLayout(new BoxLayout(accountSection, BoxLayout.Y_AXIS));
+        accountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        accountSection.setBorder(BorderFactory.createTitledBorder("Account"));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        FontManager.Instance().useRegular(logoutButton, 14f);
+        buttonPanel.add(logoutButton);
+
+        accountSection.add(buttonPanel);
+        return accountSection;
     }
 
-    private String formatBalanceText(double cash, double position) {
-        return String.format("You have %s in cash and %s in position.",
-                String.format(CURRENCY_FORMAT, cash),
-                String.format(CURRENCY_FORMAT, position));
+    private JPanel createFooterSection() {
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        footer.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel footerLabel = new JLabel("Made with \u2764 by Group 184.");
+        FontManager.Instance().useRegular(footerLabel, 14f);
+        footer.add(footerLabel);
+
+        return footer;
+    }
+
+    private String formatAssetValue(double balance, double portfolio) {
+        return String.format("You have %s in balance and %s in portfolio.",
+                String.format(CURRENCY_FORMAT, balance),
+                String.format(CURRENCY_FORMAT, portfolio));
     }
 
     private void setupButtonActions() {
@@ -137,20 +127,17 @@ public class DashboardPanel extends JPanel implements IComponent {
     @Override
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof UpdateUsernameEvent userEvent) {
-            String username = userEvent.getUsername();
-            updateDashboardUserName(username);
+            updateUsername(userEvent.getUsername());
         } else if (event instanceof UpdateAssetEvent assetEvent) {
-            double cash = assetEvent.getBalance();
-            double portfolioValue = assetEvent.getPortfolio().getTotalValue();
-            updateDashboardValue(cash, portfolioValue);
+            updateAsset(assetEvent.getBalance(), assetEvent.getPortfolio().getTotalValue());
         }
     }
 
-    private void updateDashboardUserName(String username) {
-        welcomeLabel.setText("Welcome back, " + username);
+    private void updateUsername(String username) {
+        welcomeLabel.setText("Welcome back, " + username + "!");
     }
 
-    private void updateDashboardValue(double cash, double portfolioValue) {
-        balanceLabel.setText(formatBalanceText(cash, portfolioValue));
+    private void updateAsset(double balance, double portfolioValue) {
+        assetLabel.setText(formatAssetValue(balance, portfolioValue));
     }
 }

@@ -9,12 +9,10 @@ public class Main {
 
         // Configure the application by adding various panels and components
         appBuilder
-                .withTitle("Trading Simulator")
+                .withTitle("StockSim")
                 .withDimensions(1200, 900)
                 .withInitialPanel("LogInPanel")
-                .addAuthenticationPanels()
-                .addDashboardPanel()
-                .addActionPanels()
+                .addAllPanels()
                 .addDialogComponent();
 
         // Build the application frame

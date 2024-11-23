@@ -42,7 +42,7 @@ Buy(`+`): This is when you purchase the shares of a stock. When the stock price 
 
 Sell(`-`): This usually happens when you already have some shares of the stock. Normally, the maximum quantity you can sell can not exceed the current quantity you are holding.
 
-However, there is a special case of selling, which is called short-selling. Even if you don't own any shares of a stock, you can temporarily 'borrow' some shares from others and sell them. Later, you have to buy the shares you borrowed back. If we don't allow short-selling, we need to make the position of a stock always >= 0.(Buy >= Sell)
+However, there is a special case of selling, which is called short-selling. Even if you don't own any shares of a stock, you can temporarily 'borrow' some shares from others and sell them. Later, you have to buy the shares you borrowed back. If we don't allow short-selling, we need to make the position of a stock always >= 0. (Buy >= Sell)
 
 There are typically two order types of orders.
 

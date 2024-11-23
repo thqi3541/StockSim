@@ -44,19 +44,4 @@ public class TransactionHistory {
     public List<Transaction> getAllTransactions() {
         return Collections.unmodifiableList(transactions);
     }
-
-    /**
-     * Get the most recent transactions by count
-     *
-     * @param count the number of transactions to get
-     * @return the most recent transactions
-     */
-    public List<Transaction> getRecentTransactions(int count) {
-        if (count <= 0) {
-            return Collections.emptyList();
-        }
-
-        int start = Math.max(transactions.size() - count, 0);
-        return new ArrayList<>(transactions.subList(start, transactions.size()));
-    }
 }
