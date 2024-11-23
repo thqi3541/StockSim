@@ -5,43 +5,125 @@ import entity.TransactionHistory;
 import utility.ViewManager;
 import view.IComponent;
 import view.components.ButtonComponent;
-import view.view_events.EventType;
 import view.view_events.SwitchPanelEvent;
+import view.view_events.UpdateTransactionHistoryEvent;
 import view.view_events.ViewEvent;
-import view.view_events.ViewHistoryEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.util.Date;
-import java.util.EnumSet;
+import java.text.SimpleDateFormat;
 
-/**
- * A panel containing the ViewHistory use case page.
- */
 public class TransactionHistoryPanel extends JPanel implements IComponent {
+    // Layout Constants
+    private static final int MAIN_PADDING = 20;
+    private static final int HEADER_BOTTOM_SPACING = 10;
+    private static final int ROW_HEIGHT = 30;
+    private static final int BUTTON_WIDTH = 120;
+    private static final int BUTTON_HEIGHT = 30;
+
+    // Font Constants
+    private static final String FONT_FAMILY = "Lucida Sans";
+    private static final int TITLE_FONT_SIZE = 28;
+    private static final int TABLE_FONT_SIZE = 14;
+
+    // Format Constants
+    private static final String CURRENCY_FORMAT = "%.2f";
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+
+    // Column Constants
+    private static final String[] COLUMN_NAMES = {
+            "Date",
+            "Ticker",
+            "Company Name",
+            "Industry",
+            "Action",
+            "Price",
+            "Quantity",
+            "Total Price"
+    };
+
+    // Column Width Proportions (total = 1.0)
+    private static final double[] COLUMN_PROPORTIONS = {
+            0.15,  // Date
+            0.08,  // Ticker
+            0.25,  // Company Name
+            0.20,  // Industry
+            0.08,  // Action
+            0.08,  // Price
+            0.08,  // Quantity
+            0.08   // Total Price
+    };
+    private final JTable historyTable;
+    // Components
     private DefaultTableModel tableModel;
 
     public TransactionHistoryPanel() {
+        // Initialize table model and table first
+        tableModel = createTableModel();
+        historyTable = createHistoryTable();
+
+        // Register component
         ViewManager.Instance().registerComponent(this);
 
-        // Page layout
+        // Set up main panel layout
+        setupMainPanel();
+
+        // Add components
+        add(createHeaderWithGapPanel(), BorderLayout.NORTH);
+        add(createTablePanel(), BorderLayout.CENTER);
+
+        // Add resize listener
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                adjustColumnWidths();
+            }
+        });
+    }
+
+    private void setupMainPanel() {
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(400, 300));
-        setPreferredSize(new Dimension(600, 400));
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(
+                MAIN_PADDING, MAIN_PADDING, MAIN_PADDING, MAIN_PADDING));
+    }
 
-        // Header Panel with Title
+    private DefaultTableModel createTableModel() {
+        return new DefaultTableModel(new Object[][]{}, COLUMN_NAMES) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+    }
+
+    private JPanel createHeaderWithGapPanel() {
+        // Wrapper panel for header and gap
+        JPanel wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));
+
+        // Header panel
+        JPanel headerPanel = createHeaderPanel();
+        wrapperPanel.add(headerPanel);
+
+        // Gap
+        wrapperPanel.add(Box.createRigidArea(new Dimension(0, HEADER_BOTTOM_SPACING)));
+
+        return wrapperPanel;
+    }
+
+    private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Title
         JLabel titleLabel = new JLabel("Transaction History");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, TITLE_FONT_SIZE));
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        // Back to Home button
+        // Back button
         ButtonComponent backButton = new ButtonComponent("Back to Home");
-        backButton.setPreferredSize(new Dimension(120, 30));
+        backButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         backButton.addActionListener(e ->
                 ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel"))
         );
@@ -50,132 +132,117 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         buttonPanel.add(backButton);
         headerPanel.add(buttonPanel, BorderLayout.EAST);
 
-        add(headerPanel, BorderLayout.NORTH);
+        return headerPanel;
+    }
 
-        // Creates base Transaction History Table
-        tableModel = new DefaultTableModel(new Object[][]{}, getColumnNames()) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        // Transaction History Table setup
-        JTable historyTable = new JTable(tableModel);
-        historyTable.setFillsViewportHeight(true);
-        historyTable.setRowHeight(30);
-        historyTable.setFont(new Font("Arial", Font.PLAIN, 14));
-        historyTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        historyTable.getTableHeader().setForeground(Color.GRAY);
-        historyTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-        // Add scroll
+    private JScrollPane createTablePanel() {
         JScrollPane tableScrollPane = new JScrollPane(historyTable);
-        tableScrollPane.setPreferredSize(new Dimension(600, 200));
-        add(tableScrollPane, BorderLayout.CENTER);
-
+        tableScrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        tableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        return tableScrollPane;
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Transaction History");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-
-        TransactionHistoryPanel historyPanel = new TransactionHistoryPanel();
-        frame.add(historyPanel);
-        frame.setVisible(true);
+    private JTable createHistoryTable() {
+        JTable table = new JTable(tableModel);
+        table.setFillsViewportHeight(true);
+        table.setRowHeight(ROW_HEIGHT);
+        table.setFont(new Font(FONT_FAMILY, Font.PLAIN, TABLE_FONT_SIZE));
+        table.getTableHeader().setFont(new Font(FONT_FAMILY, Font.BOLD, TABLE_FONT_SIZE));
+        table.getTableHeader().setForeground(Color.GRAY);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        return table;
     }
 
-    /**
-     * Displays default data to test correct display format
-     */
-    private DefaultTableModel getDefaultTableModel() {
-        String[] columnNames = getColumnNames();
+    private void adjustColumnWidths() {
+        int availableWidth = getWidth() - (2 * MAIN_PADDING);
+        if (availableWidth <= 0) return;
 
-        Object[][] data = {
-                {"Tue Nov 01 02:37:18", "NVDA", "NVIDIA Corporation", "Technology", "Bought", "138.27", "2", "276.54"},
-                {"XXX XXX XX XX:XX:XX", "XXXX", "XXXXXXXXXXXXXXXXXX", "Health", "XXXX", "XXX.XX", "XX", "XXX.XX"},
-                {"XXX XXX XX XX:XX:XX", "XXXX", "XXXXXXXXXXXXXXXXXX", "Financial", "XXXX", "XXX.XX", "XX", "XXX.XX"},
-        };
+        for (int col = 0; col < historyTable.getColumnCount(); col++) {
+            TableColumn column = historyTable.getColumnModel().getColumn(col);
+            int columnWidth = (int) (COLUMN_PROPORTIONS[col] * availableWidth);
+            column.setPreferredWidth(columnWidth);
+        }
+    }
 
-        return new DefaultTableModel(data, columnNames) {
+    private void updateTransactionTable(TransactionHistory transactionHistory) {
+        if (transactionHistory == null) {
+            System.err.println("No transaction history available to update.");
+            return;
+        }
+
+        // 1. Create new table model with column names
+        DefaultTableModel newModel = new DefaultTableModel(COLUMN_NAMES, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return String.class;
+            }
         };
+
+        // 2. Add data rows
+        for (Transaction transaction : transactionHistory.getAllTransactions()) {
+            Object[] rowData = createRowData(transaction);
+            newModel.addRow(rowData);
+        }
+
+        // 3. Update table model
+        historyTable.setModel(newModel);
+        tableModel = newModel;  // Update the reference to the new model
+
+        // 4. Reapply column properties
+        for (int i = 0; i < historyTable.getColumnCount(); i++) {
+            TableColumn column = historyTable.getColumnModel().getColumn(i);
+            column.setResizable(true);
+        }
+
+        // 5. Reset header properties
+        historyTable.getTableHeader().setFont(new Font(FONT_FAMILY, Font.BOLD, TABLE_FONT_SIZE));
+        historyTable.getTableHeader().setForeground(Color.GRAY);
+
+        // 6. Reapply row properties
+        historyTable.setRowHeight(ROW_HEIGHT);
+        historyTable.setFont(new Font(FONT_FAMILY, Font.PLAIN, TABLE_FONT_SIZE));
+
+        // 7. Reapply column widths
+        adjustColumnWidths();
+
+        // 8. Ensure visual update
+        historyTable.revalidate();
+        historyTable.repaint();
     }
 
-    /**
-     * Gets the set table column names
-     *
-     * @return column names
-     */
-    private String[] getColumnNames() {
-        return new String[]{"Date", "Ticker", "Company Name", "Industry", "Action", "Price", "Quantity", "Total Price"};
-    }
-
-    /**
-     * Creates new table entry based on transaction data
-     *
-     * @param transaction the transaction to be displayed
-     * @return new table row data
-     */
     private Object[] createRowData(Transaction transaction) {
-        // Retrieves data from transaction
         String ticker = transaction.getTicker();
-        Date date = transaction.getTimestamp();
-        String company = "Unknown Company";
-        String industry = "Unknown Industry";
+        String formattedDate = DATE_FORMAT.format(transaction.getTimestamp());
+        String company = "Unknown Company";  // You might want to fetch this from somewhere
+        String industry = "Unknown Industry";  // You might want to fetch this from somewhere
         String action = transaction.getType();
         double price = transaction.getPrice();
         int quantity = transaction.getQuantity();
         double totalPrice = price * quantity;
 
-        // Creates new formatted row data
         return new Object[]{
-                date.toString(),
+                formattedDate,
                 ticker,
                 company,
                 industry,
                 action,
-                String.format("%.2f", price),
+                String.format("$" + CURRENCY_FORMAT, price),
                 quantity,
-                String.format("%.2f", totalPrice),
+                String.format("$" + CURRENCY_FORMAT, totalPrice)
         };
     }
 
-    /**
-     * Handles a received event.
-     *
-     * @param event The event to handle.
-     */
     @Override
     public void receiveViewEvent(ViewEvent event) {
-        if (event instanceof ViewHistoryEvent updateEvent) {
-            // Retrieves transaction history
-            TransactionHistory transactionHistory = updateEvent.getTransactionHistory();
-
-            // Resets the table
-            tableModel.setRowCount(0);
-
-            // Stores all current transaction history data in table
-            transactionHistory.getAllTransactions().forEach(transaction -> {
-                Object[] rowData = createRowData(transaction);
-                tableModel.addRow(rowData);
-            });
+        if (event instanceof UpdateTransactionHistoryEvent historyEvent) {
+            System.out.println("TransactionHistoryPanel received UpdateTransactionHistoryEvent");
+            SwingUtilities.invokeLater(() -> updateTransactionTable(historyEvent.getTransactionHistory()));
         }
     }
-
-    /**
-     * Gets the event type this panel handles
-     *
-     * @return the event type
-     */
-    @Override
-    public EnumSet<EventType> getSupportedEventTypes() {
-        // TransactionHistoryPanel only supports VIEW_HISTORY events
-        return EnumSet.of(EventType.VIEW_HISTORY);
-    }
-
 }
