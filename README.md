@@ -1,23 +1,12 @@
-# StockSim
+# ℹ️ Overview
 
-- [StockSim](#stocksim)
-  - [Members](#members)
-  - [User Stories and Use Cases](#user-stories-and-use-cases)
-    - [Use Case 1: User Registration](#use-case-1-user-registration)
-    - [Use Case 2: User Login](#use-case-2-user-login)
-    - [Use Case 3: Execute Trades BUY](#use-case-3-execute-trades-buy)
-    - [Use Case 4: Execute Trades SELL](#use-case-4-execute-trades-sell)
-    - [Use Case 5: Execute Trades SHORTSELL](#use-case-5-execute-trades-shortsell)
-    - [Use Case 6: View Portfolio (Position)](#use-case-6-view-portfolio-position)
-    - [Use Case 7: View Transaction History](#use-case-7-view-transaction-history)
-    - [Use Case 8: View Ranking](#use-case-8-view-ranking)
-    - [Use Case 9: Password Reset + Email Verification](#use-case-9-password-reset--email-verification)
-    - [Use Case 10: Feedback / Support](#use-case-10-feedback--support)
-    - [Use Case 11: Minimum number of trades](#use-case-11-minimum-number-of-trades)
-  - [Prototype](#prototype)
+## 📈 StockSim
+StockSim is a desktop trading application designed to simulate the real-world market conditions. It provides business students and traders a risk-free setting to learn, practice, and polish their trading skills.
 
-## Members
+## 🌟 Highlights
 
+
+## ✍ Authors
 | Name          | GitHub Username                                         |
 | ------------- | ------------------------------------------------------- |
 | Angel Chen    | [`AngelChen09`](https://github.com/AngelChen09)         |
@@ -26,7 +15,27 @@
 | Raine Yang    | [`Raine-Yang-UofT`](https://github.com/Raine-Yang-UofT) |
 | Jifeng Qiu    | [`thqi3541`](https://github.com/thqi3541)               |
 
-## User Stories and Use Cases
+# 🔑 Key Features
+__📑Table of Contents__
+  - [Use Cases and User Stories](#user-stories-and-use-cases)
+    - [Use Case 1: User Registration](#use-case-1-user-registration)
+    - [Use Case 2: User Log In](#use-case-2-user-login)
+    - [Use Case 3: User Log Out](#use-case-3-execute-trades-buy)
+    - [Use Case 4: Execute Trades BUY](#use-case-3-execute-trades-buy)
+    - [Use Case 5: Execute Trades SELL](#use-case-4-execute-trades-sell)
+    - [Use Case 6: View Transaction History](#use-case-7-view-transaction-history)
+  - [Optional Use Cases(not yet implemented)]
+    - [Use Case 7: View Ranking](#use-case-8-view-ranking)
+    - [Use Case 8: Password Reset + Email Verification](#use-case-9-password-reset--email-verification)
+    - [Use Case 9: Feedback / Support](#use-case-10-feedback--support)
+    - [Use Case 10: Minimum number of trades](#use-case-11-minimum-number-of-trades)
+  - Financial Terminologies
+  - [UI Design](#UI-Design(View))
+
+
+## Use Cases and User Stories
+
+user can check portfolio/ position/ history - a complete flow
 
 ### Use Case 1: User Registration
 
@@ -112,9 +121,9 @@ User Story: As a user, I am not holding any shares of APPL(Apple). I want to sho
   - As a trader, I want to access my transaction history and check bought and/or sold price, quantity, current market price, profit/loss per share, total profit/loss, and [Optional for sold stocks] current mp profit/loss per share, current mp total profit/loss so I can learn from past trades.
   - (Optional) As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantities so I can view certain trades.
 - Implementation:
-  - Interactor: UserHistory
-  - Controller: HistoryController
-  - Presenter: HistoryView
+  - Interactor: ViewHistoryInteractor
+  - Controller: ViewHistoryController
+  - Presenter: ViewHistoryPresenter
 - Steps:
   - The user selects a page and/or rows per page for pagination-based item selection from the selection provided near the bottom (Interactor to Controller).
   - The HistoryController filters all user trades to the select rows, quantity, and column sort (Controller).
@@ -179,6 +188,6 @@ User Story: As a user, I am not holding any shares of APPL(Apple). I want to sho
   - The TradeRequirementController checks this total against the minimum threshold, or other requirements, such as qualifying for promotions or eligibility
   - The TradeRequirementController sends the data to the TradeRequirementView and displays the user's trade count, progress toward the minimum trade requirement, and any relevant messages (eg: "You need 5 more trades to qualify").
 
-## Prototype
+## UI Design(Views)
 
 [View in Figma](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=0%3A1&node-id=1-3&node-type=canvas&viewport=112%2C276%2C0.21&t=eb23w81NZYAyvS8O-1&scaling=contain&content-scaling=fixed&starting-point-node-id=1%3A3)

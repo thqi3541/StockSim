@@ -2,22 +2,25 @@ package app;
 
 import javax.swing.*;
 
-/**
- * The main class of the application
- */
 public class Main {
-    /**
-     * The main method of the application
-     *
-     * @param args: the arguments passed to the application
-     */
     public static void main(String[] args) {
-        final AppBuilder appBuilder = new AppBuilder();
-        final JFrame application = appBuilder.addTradeSimulation().build();
+        // Instantiate the AppBuilder
+        AppBuilder appBuilder = new AppBuilder();
 
-        appBuilder.showTradeSimulation();
+        // Configure the application by adding various panels and components
+        appBuilder
+                .withTitle("Trading Simulator")
+                .withDimensions(1200, 900)
+                .withInitialPanel("LogInPanel")
+                .addAuthenticationPanels()
+                .addDashboardPanel()
+                .addActionPanels()
+                .addDialogComponent();
 
-        application.pack();
+        // Build the application frame
+        JFrame application = appBuilder.build();
+
+        // Make the application visible
         application.setVisible(true);
     }
 }
