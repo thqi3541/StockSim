@@ -56,6 +56,7 @@
 - Added test cases for `ViewHistoryInteractor` with mock buy and sell transactions.
 - Refined ui components, extracted table component to its own class
 - Refactored `ServiceManager` registration process into object constructor
+- Modified `StockDataAccessObject` to store stock data in JSON file
 
 ### Bug Fixes
 
