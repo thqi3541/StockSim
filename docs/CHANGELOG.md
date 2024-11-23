@@ -20,6 +20,8 @@
 - Added new api calls in `StockDataAccess` to retrieve and store company name and industry
 - Modified `Stock`, `StockMarket`, and `InMemoryStockDataAccessObject` to store and utilize new company and industry data
 - Modified `InMemoryUserDataAccessObject` to utilize `ViewHistoryDataAccessInterface` as well
+- Updated stock data provider from Alpha Vantage to Finnhub.
+- Modified references to Alpha Vantage in documentation and codebase.
 
 ### Bug Fixes
 

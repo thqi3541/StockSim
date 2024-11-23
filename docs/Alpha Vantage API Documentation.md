@@ -1,96 +1,76 @@
-# Alpha Vantage API Documentation
+# Finnhub API Documentation
 
 ## Introduction
 
-We utilize the Alpha Vantage API. Detailed documentation is available [here](https://www.alphavantage.co/documentation/).
+We utilize the Finnhub API for retrieving stock prices, company profiles, and other market data. Detailed documentation is available [here](https://finnhub.io/docs/api).
 
 ### Response Data Type
 
-The Alpha Vantage API can return responses in either `JSON` or `CSV` format.
-
-Specify your preferred format by setting the `datatype` parameter in your API request to either `json` or `csv`.
+The Finnhub API returns responses in JSON format.
 
 ### Language-specific guides: Java wrapper
 
-Alpha Vantage does not directly support Java. We use this wrapper on GitHub: [alphavantage-java](https://github.com/crazzyghost/alphavantage-java).
-
-Note: In issues, a contributor named `Creeeeger` added a search section.
+Finnhub does not directly support Java, but we handle API calls using the OkHttp client for HTTP requests.
 
 ## API Usage Examples
 
-### Time Series Intraday
+### Stock Quote
 
 **Parameters:**
 
-- `function`
-- `symbol`
-- `interval`
-- `apikey`
+- `symbol`: The stock ticker.
+- `token`: The API token.
 
 **Sample request:**
 
 ```txt
-https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo
+https://finnhub.io/api/v1/quote?symbol=AAPL&token=ct11pv9r01qkcukbkdv0ct11pv9r01qkcukbkdvg
 ```
 
 **Sample response (JSON output):**
 
 ```json
 {
-  "Meta Data": {
-    "Information": "Intraday (5min) open, high, low, close prices and volume",
-    "Symbol": "IBM",
-    "Last Refreshed": "2023-11-20 16:00:00",
-    "Interval": "5min",
-    "Output Size": "Compact",
-    "Time Zone": "US/Eastern"
-  },
-  "Time Series (5min)": {
-    "2023-11-20 16:00:00": {
-      "1. open": "125.6700",
-      "2. high": "125.8850",
-      "3. low": "125.5700",
-      "4. close": "125.8800",
-      "5. volume": "300158"
-    }
-  }
+  "c": 229.87,
+  "d": 1.35,
+  "dp": 0.5908,
+  "h": 230.7199,
+  "l": 228.06,
+  "o": 228.06,
+  "pc": 228.52,
+  "t": 1732309200
 }
 ```
 
-### Real-Time Bulk Quotes
+### Company Profile
 
 **Parameters:**
 
-- `function`
-- `symbol`
-- `apikey`
+- `symbol`: Stock ticker symbol.
+- `token`: The API token
 
 **Sample request:**
 
 ```txt
-https://www.alphavantage.co/query?function=REALTIME_BULK_QUOTES&symbol=MSFT,AAPL,IBM&apikey=demo
+https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=ct11pv9r01qkcukbkdv0ct11pv9r01qkcukbkdvg
 ```
 
 **Sample response (JSON output):**
 
 ```json
 {
-  "Stock Quotes": [
-    {
-      "symbol": "MSFT",
-      "price": "280.00",
-      "volume": "2045683"
-    },
-    {
-      "symbol": "AAPL",
-      "price": "150.00",
-      "volume": "1584231"
-    },
-    {
-      "symbol": "IBM",
-      "price": "130.00",
-      "volume": "305689"
-    }
-  ]
+  "country": "US",
+  "currency": "USD",
+  "estimateCurrency": "USD",
+  "exchange": "NASDAQ NMS - GLOBAL MARKET",
+  "finnhubIndustry": "Technology",
+  "ipo": "1980-12-12",
+  "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.png",
+  "marketCapitalization": 3474674.353644472,
+  "name": "Apple Inc",
+  "phone": "14089961010",
+  "shareOutstanding": 15115.82,
+  "ticker": "AAPL",
+  "weburl": "https://www.apple.com/"
 }
 ```
