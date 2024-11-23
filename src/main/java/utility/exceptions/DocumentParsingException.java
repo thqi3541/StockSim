@@ -1,2 +1,4 @@
-package utility.exceptions;public class DocumentParsingException {
+package utility.exceptions;
+
+public class DocumentParsingException extends Exception {
 }

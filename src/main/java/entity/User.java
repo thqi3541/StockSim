@@ -1,5 +1,7 @@
 package entity;
 
+import org.bson.Document;
+
 /**
  * A class representing a user
  */
