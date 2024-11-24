@@ -193,7 +193,7 @@ User Story: As a user, I am not holding any shares of AAPL (Apple). I want to sh
 
 ## UI and UX Design
 
-[View Prototype in Figma ->](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=0%3A1&node-id=1-3&node-type=canvas&viewport=112%2C276%2C0.21&t=eb23w81NZYAyvS8O-1&scaling=contain&content-scaling=fixed&starting-point-node-id=1%3A3)
+[View Prototype in Figma ->](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=89%3A589&node-id=89-603&node-type=canvas&viewport=351%2C190%2C0.14&t=2N4BKpzFNg0XUjDq-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=89%3A603)
 
 ![sign-up](/assets/images/3.0-snapshot-sign-up.png)
 
