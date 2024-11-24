@@ -17,6 +17,8 @@
 
 - Refactored `StockMarket` to `MarketTracker`
 - Refined all ui components to have a consistent style
+- Changed `StockDataAccessInterface` to have two methods to do different api calls
+- Implemented new methods from `StockDataAccessInterface` in `InMemoryStockDataAccessObject` and `StockDataAccessObject`
 - Separate API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
 
 ### Bug Fixes
@@ -56,7 +58,6 @@
 - Added test cases for `ViewHistoryInteractor` with mock buy and sell transactions.
 - Refined ui components, extracted table component to its own class
 - Refactored `ServiceManager` registration process into object constructor
-- Modified `StockDataAccessObject` to store stock data in JSON file
 
 ### Bug Fixes
 
