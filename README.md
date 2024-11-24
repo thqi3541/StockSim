@@ -7,7 +7,7 @@
   - [Overview](#overview)
   - [Highlights](#highlights)
   - [Authors](#authors)
-- [Key Features](#key-features)
+  - [Key Features](#key-features)
   - [Use Cases and User Stories](#use-cases-and-user-stories)
     - [Use Case 1: User Registration](#use-case-1-user-registration)
     - [Use Case 2: User Login](#use-case-2-user-login)
@@ -26,7 +26,11 @@
 
 StockSim is a desktop trading application designed to simulate real-world market conditions. It provides business students and traders with a risk-free setting to learn, practice, and polish their trading skills.
 
+More information can be found [here](/docs/Project%20Overview.md).
+
 ## Highlights
+
+1. Global [utility package](/docs/Utilities%20Overview.md).
 
 ## Authors
 
@@ -38,7 +42,9 @@ StockSim is a desktop trading application designed to simulate real-world market
 | Raine Yang    | [`Raine-Yang-UofT`](https://github.com/Raine-Yang-UofT) |
 | Jifeng Qiu    | [`thqi3541`](https://github.com/thqi3541)               |
 
-# Key Features
+## Key Features
+
+WIP.
 
 ## Use Cases and User Stories
 
@@ -195,12 +201,22 @@ User Story: As a user, I am not holding any shares of AAPL (Apple). I want to sh
 
 [View Prototype in Figma ->](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=89%3A589&node-id=89-603&node-type=canvas&viewport=351%2C190%2C0.14&t=2N4BKpzFNg0XUjDq-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=89%3A603)
 
+1. Sign Up View
+
 ![sign-up](/assets/images/3.0-snapshot-sign-up.png)
+
+2. Log In View
 
 ![log-in](/assets/images/3.0-snapshot-log-in.png)
 
+3. Dashboard
+
 ![dashboard](/assets/images/3.0-snapshot-dashboard.png)
 
+4. Trade Simulation
+
 ![trade-simulation](/assets/images/3.0-snapshot-trade-simulation.png)
+
+5. Transaction History
 
 ![history](/assets/images/3.0-snapshot-history.png)
