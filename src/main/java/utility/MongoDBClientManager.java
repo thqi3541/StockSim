@@ -8,8 +8,12 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class MongoDBClientManager {
+
+    private static final long DATABASE_CONNECTION_TIMEOUT = 10;
 
     private static MongoClient instance;
 
@@ -21,8 +25,8 @@ public class MongoDBClientManager {
                     .version(ServerApiVersion.V1)
                     .build();
             MongoClientSettings settings = MongoClientSettings.builder()
-                    .applyConnectionString(new ConnectionString(connectionString))
-                    .serverApi(serverApi)
+                    .applyToClusterSettings(builder ->
+                            builder.serverSelectionTimeout(DATABASE_CONNECTION_TIMEOUT, TimeUnit.SECONDS))
                     .build();
             instance = MongoClients.create(settings);
         }

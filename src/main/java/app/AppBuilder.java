@@ -1,5 +1,6 @@
 package app;
 
+import data_access.DatabaseUserDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import data_access.StockDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
@@ -20,6 +21,7 @@ import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
 import use_case.view_history.ViewHistoryOutputBoundary;
+import utility.MarketObserver;
 import utility.MarketTracker;
 import utility.ServiceManager;
 import view.ViewManager;
@@ -120,7 +122,7 @@ public class AppBuilder {
      */
     private void initializeServices() {
         // 1. Initialize DAOs first
-        new InMemoryUserDataAccessObject();
+        MarketObserver.Instance().initialize(new DatabaseUserDataAccessObject());
         MarketTracker.Instance().initialize(new StockDataAccessObject());
 
         // 2. Initialize Presenters
