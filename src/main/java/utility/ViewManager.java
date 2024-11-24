@@ -32,23 +32,26 @@ public class ViewManager {
     }
 
     public void registerComponent(IComponent component) {
-        components.add(component);
+        if (!components.contains(component)) {
+            components.add(component);
+        }
     }
 
     public void broadcastEvent(ViewEvent event) {
-        // Handle SwitchPanelEvent directly within ViewManager
         if (event instanceof SwitchPanelEvent switchEvent) {
             switchPanel(switchEvent.getPanelName());
-            return; // No need to broadcast to other components
+            return;
         }
 
-        // For other event types, broadcast to components
-        components.stream()
-                .filter(component -> event.getTypes().stream().anyMatch(component::supportsEvent))
-                .forEach(component -> {
-                    System.out.println("Broadcasting " + event.getClass().getSimpleName() + " to " + component.getClass().getSimpleName());
-                    component.receiveViewEvent(event);
-                });
+        boolean eventHandled = false;
+        for (IComponent component : components) {
+            component.receiveViewEvent(event);
+            eventHandled = true;
+        }
+
+        if (!eventHandled) {
+            System.out.println("Warning: Event " + event.getClass().getSimpleName() + " was broadcasted but not handled by any component.");
+        }
     }
 
     private void switchPanel(String panelName) {
