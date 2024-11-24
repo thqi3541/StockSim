@@ -6,18 +6,18 @@ labels: task
 assignees: ""
 ---
 
-# Due date (eg. 2024.01.01)
+# Due date (YYYY-MM-DD)
 
 ## Tasks
 
-1. xxx
-2. xxx
-3. xxx
+1. [Task description]
+2. [Task description]
+3. [Task description]
 
 ## Meeting Time
 
-1. 2024.01.01, 3pm - 5pm
+1. YYYY-MM-DD, HH:MM - HH:MM
 
 ## Notes
 
-xxx
+[Additional notes and context]
