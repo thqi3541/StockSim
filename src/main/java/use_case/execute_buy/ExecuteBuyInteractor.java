@@ -1,12 +1,14 @@
 package use_case.execute_buy;
 
 import entity.*;
+import utility.MarketTracker;
+import utility.ServiceManager;
 import utility.exceptions.ValidationException;
 
 import java.util.Date;
 
 /**
- * The Execute Buy Interactor.
+ * The interactor for the Buy Stock use case
  */
 public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
@@ -23,6 +25,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     public ExecuteBuyInteractor(ExecuteBuyDataAccessInterface dataAccess, ExecuteBuyOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
+        ServiceManager.Instance().registerService(ExecuteBuyInputBoundary.class, this);
     }
 
     /**
@@ -32,19 +35,17 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
      */
     @Override
     public void execute(ExecuteBuyInputData data) {
-        // TODO: after the transaction is successful, the updated date should be saved in the database
         try {
             // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());
 
             // Get stock and quantity
             String ticker = data.ticker();
-
             int quantity = data.quantity();
-            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
+            Stock stock = MarketTracker.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             // Calculate some values for this transaction
-            double currentPrice = stock.getPrice();
+            double currentPrice = stock.getMarketPrice();
             double totalCost = currentPrice * quantity;
 
             if (currentUser.getBalance() >= totalCost) {
@@ -57,13 +58,14 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
                 // Add transaction
                 Date timestamp = new Date();
-                Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "buy");
+                Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "BUY");
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
                         currentUser.getBalance(),
-                        currentUser.getPortfolio()
+                        currentUser.getPortfolio(),
+                        currentUser.getTransactionHistory()
                 ));
             } else {
                 throw new InsufficientBalanceException();
@@ -83,13 +85,13 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
      * @param portfolio    the portfolio of the user
      * @param stock        the stock the user buys
      * @param quantity     the quantity the user buys
-     * @param currentPrice the current price of the stock
+     * @param currentPrice the current executionPrice of the stock
      */
     private void updateOrAddStockToPortfolio(Portfolio portfolio, Stock stock, int quantity, double currentPrice) {
         portfolio.getUserStock(stock.getTicker())
                 .ifPresentOrElse(
-                        existingStock -> existingStock.updateUserStock(currentPrice, quantity),
-                        () -> portfolio.addStock(new UserStock(stock, currentPrice, quantity))
+                        existingUserStock -> existingUserStock.updateUserStock(currentPrice, quantity),
+                        () -> portfolio.addUserStock(new UserStock(stock, currentPrice, quantity))
                 );
     }
 

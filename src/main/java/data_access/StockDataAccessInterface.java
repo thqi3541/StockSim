@@ -3,6 +3,7 @@ package data_access;
 import entity.Stock;
 import utility.exceptions.RateLimitExceededException;
 
+import java.io.IOException;
 import java.util.Map;
 
 public interface StockDataAccessInterface {
@@ -13,5 +14,6 @@ public interface StockDataAccessInterface {
      * @return a hashmap with the stock ticker as the key and the Stock entity as the value.
      * It should contain all stocks in the database.
      */
-    Map<String, Stock> getStocks() throws RateLimitExceededException;
+    // TODO: should this be a list instead of a map? as we are not using the key anywhere
+    Map<String, Stock> getStocks() throws RateLimitExceededException, IOException;
 }

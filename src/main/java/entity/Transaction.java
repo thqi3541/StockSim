@@ -9,7 +9,7 @@ public record Transaction(
         Date timestamp,
         String ticker,
         int quantity,
-        double price,
+        double executionPrice,
         String type
 ) {
 
@@ -41,12 +41,12 @@ public record Transaction(
     }
 
     /**
-     * Getter to retrieve transaction stock price
+     * Getter to retrieve transaction stock executionPrice
      *
-     * @return price of a single stock from transaction
+     * @return executionPrice of a single stock from transaction
      */
-    public double getPrice() {
-        return price;
+    public double getExecutionPrice() {
+        return executionPrice;
     }
 
     /**

@@ -10,19 +10,19 @@ import java.util.Optional;
  */
 public class Portfolio {
 
-    private final Map<String, UserStock> stocks;
+    private final Map<String, UserStock> userStocks;
 
     public Portfolio() {
-        this.stocks = new HashMap<>();
+        this.userStocks = new HashMap<>();
     }
 
     /**
      * Create a portfolio with the given stocks
      *
-     * @param stocks the stocks in the portfolio
+     * @param userStocks the stocks in the portfolio
      */
-    public Portfolio(Map<String, UserStock> stocks) {
-        this.stocks = new HashMap<>(stocks);
+    public Portfolio(Map<String, UserStock> userStocks) {
+        this.userStocks = new HashMap<>(userStocks);
     }
 
     /**
@@ -31,8 +31,8 @@ public class Portfolio {
      * @return the value of all stocks in the portfolio
      */
     public double getTotalValue() {
-        return stocks.values().stream()
-                .mapToDouble(UserStock::getCurrentMarketValue)
+        return userStocks.values().stream()
+                .mapToDouble(UserStock::getMarketValue)
                 .sum();
     }
 
@@ -43,7 +43,7 @@ public class Portfolio {
      * @return an Optional containing the UserStock if found, or an empty Optional otherwise
      */
     public Optional<UserStock> getUserStock(String ticker) {
-        return Optional.ofNullable(stocks.get(ticker));
+        return Optional.ofNullable(userStocks.get(ticker));
     }
 
     /**
@@ -51,8 +51,8 @@ public class Portfolio {
      *
      * @return a collection of all UserStock objects
      */
-    public Collection<UserStock> getAllStocks() {
-        return stocks.values();
+    public Collection<UserStock> getAllUserStocks() {
+        return userStocks.values();
     }
 
     /**
@@ -60,8 +60,8 @@ public class Portfolio {
      *
      * @param userStock the UserStock to add or update
      */
-    public void addStock(UserStock userStock) {
-        stocks.put(userStock.getStock().getTicker(), userStock);
+    public void addUserStock(UserStock userStock) {
+        userStocks.put(userStock.getStock().getTicker(), userStock);
     }
 
     /**
@@ -69,7 +69,7 @@ public class Portfolio {
      *
      * @param userStock the UserStock to remove
      */
-    public void removeStock(UserStock userStock) {
-        stocks.remove(userStock.getStock().getTicker());
+    public void removeUserStock(UserStock userStock) {
+        userStocks.remove(userStock.getStock().getTicker());
     }
 }

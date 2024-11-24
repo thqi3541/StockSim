@@ -1,6 +1,29 @@
 # Project Changelog
 
+## Tags
+
+- [Unreleased](#Unreleased)
+- [0.2.0](#0.2.0)
+- [0.1.0](#0.1.0)
+
 ## Unreleased
+
+### New Features
+
+- Implemented MarketObserver to update user data when stock market changes
+- Implemented `FontManager` to set custom font for GUI components
+
+### Internal Changes
+
+- Refactored `StockMarket` to `MarketTracker`
+- Refined all ui components to have a consistent style
+
+### Bug Fixes
+
+- Fixed `MarketTracker` not update prices after first initialization
+- Fixed `AssetPanel` and `PortfolioPanel` not updated after buy use case
+
+## 0.2.0
 
 ### New Features
 
@@ -8,12 +31,14 @@
 - Added GUI components for view transaction history page
 - Implemented login use case
 - Implemented periodic update of stock information from data access interface in `StockMarket` that self-adjust based on API rate limit
+- Changed API to Finnhub API
+- Implemented integration of `StockMarket` and `StockDataAccessObject`
 
 ### Internal Changes
 
-- Implemented `ClientSessionManager` for client-side session management.
-- Implemented credential verification in `BuyStockController`.
-- Moved `ValidationException` into a separate class in utility.
+- Implemented `ClientSessionManager` for client-side session management
+- Implemented credential verification in `BuyStockController`
+- Moved `ValidationException` into a separate class in utility
 - Implemented `StockDataAccess` to retrieve current market price for set tickers
 - Modified `StockMarket` to utilize new IStockDataAccess return type
 - Updated maven configuration with api request dependencies
@@ -28,8 +53,12 @@
 - Reformated app builder to accept more configs
 - Implemented singleton pattern for service manager
 - Added test cases for `ViewHistoryInteractor` with mock buy and sell transactions.
+- Refined ui components, extracted table component to its own class
+- Refactored `ServiceManager` registration process into object constructor
 
 ### Bug Fixes
+
+- Fixed `TransactionHistoryPanel` not updated after buy use case
 
 ## 0.1.0
 

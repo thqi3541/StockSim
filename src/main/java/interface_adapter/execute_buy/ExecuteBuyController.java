@@ -3,6 +3,7 @@ package interface_adapter.execute_buy;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInputData;
 import utility.ClientSessionManager;
+import utility.ServiceManager;
 
 public class ExecuteBuyController {
 
@@ -10,6 +11,7 @@ public class ExecuteBuyController {
 
     public ExecuteBuyController(ExecuteBuyInputBoundary interactor) {
         this.interactor = interactor;
+        ServiceManager.Instance().registerService(ExecuteBuyController.class, this);
     }
 
     public void execute(String ticker, String quantity) {
