@@ -35,7 +35,6 @@ public class Stock {
 
     /**
      * Update the current market price of the stock
-     * This method will be called every two minutes. (interval)
      * @param price the new market price
      */
     public void updatePrice(double price) {
