@@ -38,8 +38,13 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
             // Get stock and quantity
             String ticker = data.ticker();
-
             int quantity = data.quantity();
+
+            // Validation to ensure quantity is greater than zero
+            if (quantity <= 0) {
+                throw new InvalidQuantityException("Buy quantity must be greater than zero.");
+            }
+
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             // Calculate some values for this transaction
@@ -108,5 +113,11 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     }
 
     static class StockNotFoundException extends Exception {
+    }
+
+    static class InvalidQuantityException extends Exception {
+        public InvalidQuantityException(String message) {
+            super(message);
+        }
     }
 }
