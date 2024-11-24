@@ -1,8 +1,5 @@
 package data_access;
 
-import com.mongodb.*;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -11,7 +8,9 @@ import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.MongoDBClientManager;
+import utility.MongoDBDocumentParser;
 import utility.SessionManager;
+import utility.exceptions.DocumentParsingException;
 import utility.exceptions.ValidationException;
 
 
@@ -25,6 +24,7 @@ public class UserDatabase implements
     public User getUserWithCredential(String credential) throws ValidationException {
         // get username from credential
         String username = SessionManager.Instance().getUsername(credential).orElseThrow(ValidationException::new);
+
         // retrieve user data from database
         try {
             MongoDatabase database = MongoDBClientManager.Instance().getDatabase("StockSimDB");
@@ -34,9 +34,12 @@ public class UserDatabase implements
             if (result == null) {
                 throw new ValidationException();
             }
-            return
-        }  catch (Exception e) {
+            return MongoDBDocumentParser.fromDocument(User.class, result);
+        } catch (DocumentParsingException e) {
+            // TODO: use a more robust logging approach than printStackTrace
             e.printStackTrace();
         }
+
+        return null;
     }
 }

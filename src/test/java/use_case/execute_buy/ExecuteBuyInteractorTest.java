@@ -9,7 +9,6 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import utility.MarketTracker;
 import utility.exceptions.ValidationException;
-import view.ViewManager;
 
 import java.util.Optional;
 
@@ -22,14 +21,12 @@ class ExecuteBuyInteractorTest {
     private ExecuteBuyDataAccessInterface dataAccess;
     private ExecuteBuyOutputBoundary outputPresenter;
     private MarketTracker marketTrackerMock;
-    private ViewManager viewManagerMock;
 
     @BeforeEach
     void setUp() {
         dataAccess = mock(ExecuteBuyDataAccessInterface.class);
         outputPresenter = mock(ExecuteBuyOutputBoundary.class);
         marketTrackerMock = mock(MarketTracker.class);
-        viewManagerMock = mock(ViewManager.class);
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import io.github.cdimascio.dotenv.Dotenv;
 
 
 public class MongoDBClientManager {
@@ -14,14 +15,8 @@ public class MongoDBClientManager {
 
     public static MongoClient Instance() {
         if (instance == null) {
-            // Note: for security concern, MongoDB access credential is stored locally in environment variable
-            // To create new client with credential, invoke the following commands:
-            // Windows:
-            // setx MONGODB_URI "mongodb+srv://username:password@cluster.mongodb.net/mydb"
-            // Linux:
-            // export MONGODB_URI="mongodb+srv://username:password@cluster.mongodb.net/mydb"
-            // source ~/.bashrc
-            String connectionString = System.getenv("MONGODB_URI");
+            Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
+            String connectionString = dotenv.get("MONGODB_API_KEY");
             ServerApi serverApi = ServerApi.builder()
                     .version(ServerApiVersion.V1)
                     .build();

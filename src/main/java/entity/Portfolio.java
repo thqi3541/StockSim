@@ -47,7 +47,14 @@ public class Portfolio {
     }
 
     /**
-     * Retrieve all UserStock objects in the portfolio.
+     * Retrieve all UserStock objects in the portfolio in a Map.
+     *
+     * @return a collection of all UserStock objects
+     */
+    public Map<String, UserStock> getUserStocks() { return userStocks; }
+
+    /**
+     * Retrieve all UserStock objects in the portfolio in a Collection.
      *
      * @return a collection of all UserStock objects
      */
