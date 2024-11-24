@@ -125,7 +125,7 @@ public class MarketTracker {
             System.out.println("Broadcasting stock update...");
             ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
 
-            // notify observer of executionPrice update
+            // notify observer of price update
             System.out.println("Notifying observers...");
             MarketObserver.Instance().onMarketUpdate();
         } catch (RateLimitExceededException | IOException e) {
@@ -143,14 +143,14 @@ public class MarketTracker {
      */
     public synchronized void startUpdatingStockPrices() {
         if (scheduler != null && !scheduler.isShutdown()) {
-            throw new IllegalStateException("Stock executionPrice updating is already running.");
+            throw new IllegalStateException("Stock price updating is already running.");
         }
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::updateStocks, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
     }
 
     /**
-     * Stops the periodic stock executionPrice updates.
+     * Stops the periodic stock price updates.
      */
     public synchronized void stopUpdatingStockPrices() {
         if (scheduler != null) {

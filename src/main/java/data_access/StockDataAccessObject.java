@@ -68,7 +68,7 @@ public class StockDataAccessObject implements StockDataAccessInterface {
                 String profileUrl = String.format("%s/stock/profile2?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
                 Request profileRequest = new Request.Builder().url(profileUrl).build();
 
-                // Quote api call to get current market executionPrice
+                // Quote api call to get current market price
                 try (Response quoteResponse = client.newCall(quoteRequest).execute()) {
                     if (quoteResponse.isSuccessful()) {
                         String quoteResponseBody = quoteResponse.body().string();

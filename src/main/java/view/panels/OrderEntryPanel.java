@@ -81,7 +81,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
 
-        // Configure quantity input
+        // Configure ticker input
         FontManager.Instance().useRegular(tickerInput, 14f);
         tickerInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, tickerInput.getPreferredSize().height));
         tickerInput.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -90,7 +90,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         // Add gap between inputs
         inputPanel.add(Box.createRigidArea(new Dimension(0, INNER_GAP)));
 
-        // Configure executionPrice input
+        // Configure quantity input
         FontManager.Instance().useRegular(quantityInput, 14f);
         quantityInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, quantityInput.getPreferredSize().height));
         quantityInput.setAlignmentX(Component.LEFT_ALIGNMENT);
