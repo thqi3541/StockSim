@@ -5,6 +5,9 @@
 - [StockSim](#stocksim)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
+  - [Requirements](#requirements)
+    - [Development Requirements](#development-requirements)
+    - [System Requirements](#system-requirements)
   - [How to Install](#how-to-install)
     - [Build from Source](#build-from-source)
     - [Download](#download)
@@ -26,9 +29,18 @@
 
 ## Overview
 
-StockSim is a desktop trading application designed to simulate real-world market conditions.
+StockSim is a sophisticated desktop trading simulator designed to replicate real-world market conditions with high fidelity. Built with a focus on educational value and practical experience, it provides business students, aspiring traders, and financial professionals with a risk-free environment to develop and refine their trading strategies. The platform offers real-time market data integration through Finnhub API and supports various trading operations including long positions, short selling, and portfolio management.
 
-It provides business students and traders with a risk-free setting to learn, practice, and polish their trading skills.
+## Requirements
+
+### Development Requirements
+
+- Java Development Kit (JDK) 21 or higher
+- Apache Maven 3.8.0 or higher
+
+### System Requirements
+
+- Internet connection for real-time market data
 
 ## How to Install
 
@@ -37,7 +49,7 @@ It provides business students and traders with a risk-free setting to learn, pra
 1. Clone the `main` branch of the repository
 2. Apply for a API from [Finnhub](https://finnhub.io/)
 3. Set up `STOCK_API_KEY` in `.env.local`
-4. Rub the main app
+4. Run the main app
 
 ### Download
 
