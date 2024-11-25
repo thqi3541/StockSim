@@ -23,13 +23,13 @@ public class MarketTracker {
     // market information update interval in milliseconds
     // initial interval in milliseconds
     private static final long INITIAL_UPDATE_MARKET_INTERVAL
-            = Long.parseLong(ConfigLoader.getMarketTrackerProperty("INITIAL_UPDATE_MARKET_INTERVAL"));
+            = Long.parseLong(MarketTrackerConfigLoader.getMarketTrackerProperty("INITIAL_UPDATE_MARKET_INTERVAL"));
     // interval adjustment rate in milliseconds
     private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE
-            = Long.parseLong(ConfigLoader.getMarketTrackerProperty("UPDATE_INTERVAL_ADJUSTMENT_RATE"));
+            = Long.parseLong(MarketTrackerConfigLoader.getMarketTrackerProperty("UPDATE_INTERVAL_ADJUSTMENT_RATE"));
     // number of rounds without rate limit
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
-            = Integer.parseInt(ConfigLoader.getMarketTrackerProperty("ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));;
+            = Integer.parseInt(MarketTrackerConfigLoader.getMarketTrackerProperty("ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));;
 
     // thread-safe Singleton instance
     private static volatile MarketTracker instance = null;
