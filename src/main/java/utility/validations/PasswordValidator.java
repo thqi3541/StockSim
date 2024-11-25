@@ -17,7 +17,7 @@ public class PasswordValidator {
             return false;
         }
 
-        // Check for at least one uppercase letter
+        // Check for at least one uppercase letters
         boolean hasUppercase = !password.equals(password.toLowerCase());
 
         // Check for at least one lowercase letter
