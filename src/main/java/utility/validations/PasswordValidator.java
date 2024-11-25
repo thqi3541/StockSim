@@ -13,7 +13,7 @@ public class PasswordValidator {
         }
 
         // Minimum length of 8 characters
-        if (password.length() < 8) {
+        else if (password.length() < 8) {
             return false;
         }
 
