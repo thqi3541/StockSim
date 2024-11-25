@@ -45,8 +45,6 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 throw new InvalidQuantityException("Buy quantity must be greater than zero.");
             }
 
-
-
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             // Calculate some values for this transaction

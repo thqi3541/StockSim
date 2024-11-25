@@ -27,8 +27,20 @@ public class RegistrationPresenter implements RegistrationOutputBoundary {
         ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
     }
 
+    @Override
     public void preparePasswordsDoNotMatchView(String errorMessage) {
         // Display an error message for passwords that don't match
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
+    }
+
+    @Override
+    public void prepareWeakPasswordView(String errorMessage) {
+        // Display an error message for weak password
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
+    }
+
+    @Override
+    public void prepareInvalidUsernameView(String errorMessage) {
         ViewManager.Instance().broadcastEvent(new DialogEvent("Registration Error", errorMessage));
     }
 }

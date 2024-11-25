@@ -5,6 +5,10 @@ import entity.UserFactory;
 import utility.exceptions.DuplicateUsernameException;
 import utility.exceptions.InvalidInputException;
 import utility.exceptions.PasswordsDoNotMatchException;
+import utility.exceptions.WeakPasswordException;
+import utility.exceptions.InvalidUsernameException;
+import utility.validations.PasswordValidator;
+import utility.validations.UsernameValidator;
 
 /**
  * The Registration Interactor.
@@ -61,16 +65,31 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             presenter.prepareDuplicateUsernameView(e.getMessage());
         } catch (PasswordsDoNotMatchException e) {
             presenter.preparePasswordsDoNotMatchView(e.getMessage());
+        } catch (WeakPasswordException e) {
+            presenter.prepareWeakPasswordView(e.getMessage());
+        } catch (InvalidUsernameException e) {
+            presenter.prepareInvalidUsernameView(e.getMessage());
         }
     }
 
-    private void validateInput(RegistrationInputData inputData) throws InvalidInputException, DuplicateUsernameException, PasswordsDoNotMatchException{
+    private void validateInput(RegistrationInputData inputData) throws InvalidInputException, DuplicateUsernameException, PasswordsDoNotMatchException, WeakPasswordException, InvalidUsernameException {
         if (inputData.username().isEmpty() || inputData.password().isEmpty()) {
             throw new InvalidInputException("Username and password cannot be empty.");
         }
 
         else if (!inputData.password().equals(inputData.confirmPassword())) {
             throw new PasswordsDoNotMatchException("Passwords do not match.");
+        }
+
+        // Use PasswordValidator here
+        else if (!PasswordValidator.isStrongPassword(inputData.password())) {
+            throw new WeakPasswordException("Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
+        }
+
+        // Check if username is valid by calling UsernameValidator
+        String usernameValidationMessage = UsernameValidator.validateUsername(inputData.username());
+        if (!usernameValidationMessage.isEmpty()) {
+            throw new InvalidUsernameException(usernameValidationMessage);
         }
     }
 }

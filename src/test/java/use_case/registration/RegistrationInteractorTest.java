@@ -6,8 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import utility.exceptions.DuplicateUsernameException;
-import utility.exceptions.InvalidInputException;
-import utility.exceptions.PasswordsDoNotMatchException;
+
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -109,5 +108,52 @@ class RegistrationInteractorTest {
 
         // Verify that the duplicate username view is prepared
         verify(outputPresenter).prepareDuplicateUsernameView("Username already exists. Please choose another one.");
+    }
+
+    @Test
+    void weakPasswordTest() {
+        // Prepare input data with a weak password
+        RegistrationInputData inputData = new RegistrationInputData("newuser", "weak", "weak");
+
+        // Create interactor
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputData);
+
+        // Verify that the weak password view is prepared
+        verify(outputPresenter).prepareWeakPasswordView("Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
+    }
+
+    @Test
+    void invalidUsernameTest() {
+        // Prepare input data with an invalid username
+        RegistrationInputData inputData = new RegistrationInputData("adm!", "password123", "password123");
+
+        // Create interactor
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputData);
+
+        // Verify that the invalid input view is prepared for invalid username
+        verify(outputPresenter).prepareInvalidInputView("Username must start with a letter and contain only letters, digits, or underscores.");
+    }
+
+    @Test
+    void usernameTooShortTest() {
+        RegistrationInputData inputData = new RegistrationInputData("a", "ValidPassword123!", "ValidPassword123!");
+
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputData);
+
+        verify(outputPresenter).prepareInvalidInputView("Username must be at least 5 characters long.");
+    }
+
+    @Test
+    void usernameTooLongTest() {
+        String longUsername = "a".repeat(51);  // assuming max length is 50 characters
+        RegistrationInputData inputData = new RegistrationInputData(longUsername, "ValidPassword123!", "ValidPassword123!");
+
+        RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess, userFactory);
+        interactor.execute(inputData);
+
+        verify(outputPresenter).prepareInvalidInputView("Username cannot be longer than 50 characters.");
     }
 }

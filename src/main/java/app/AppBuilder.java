@@ -22,6 +22,7 @@ import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
 import use_case.view_history.ViewHistoryOutputBoundary;
+import use_case.registration.RegistrationDataAccessInterface;
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.components.DialogComponent;
@@ -146,6 +147,7 @@ public class AppBuilder {
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, userDAO);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, userDAO);
         ServiceManager.Instance().registerService(LoginDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, userDAO);
 
         // 2. Initialize Presenters and register them as output boundaries
         ExecuteBuyOutputBoundary buyPresenter = new ExecuteBuyPresenter();

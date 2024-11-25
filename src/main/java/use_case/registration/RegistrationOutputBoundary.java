@@ -8,4 +8,8 @@ public interface RegistrationOutputBoundary {
     void prepareDuplicateUsernameView(String errorMessage);
 
     void preparePasswordsDoNotMatchView(String errorMessage);
+
+    void prepareWeakPasswordView(String errorMessage);
+
+    void prepareInvalidUsernameView(String errorMessage);
 }
