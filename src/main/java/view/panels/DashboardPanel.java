@@ -116,6 +116,7 @@ public class DashboardPanel extends JPanel implements IComponent {
         );
 
         historyButton.addActionListener(e ->
+                // TODO: add service manager to follow this event (add dashboard and transaction history panel connection to diagram
                 ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel"))
         );
 

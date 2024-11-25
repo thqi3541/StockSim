@@ -139,8 +139,6 @@ public class MarketTracker {
             currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
             roundsWithoutRateLimit = 0;
             restartScheduler(); // restart scheduler with new interval
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             lock.writeLock().unlock();
         }
