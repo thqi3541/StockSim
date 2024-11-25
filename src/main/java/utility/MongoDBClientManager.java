@@ -15,21 +15,24 @@ public class MongoDBClientManager {
 
     private static final long DATABASE_CONNECTION_TIMEOUT = 10;
 
-    private static MongoClient instance;
+    private static final MongoClient instance = createInstance();
+
+    private static MongoClient createInstance() {
+        Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
+        String connectionString = dotenv.get("MONGODB_API_KEY");
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(connectionString))
+                .applyToClusterSettings(builder ->
+                        builder.serverSelectionTimeout(DATABASE_CONNECTION_TIMEOUT, TimeUnit.SECONDS))
+                .serverApi(serverApi)
+                .build();
+        return MongoClients.create(settings);
+    }
 
     public static MongoClient Instance() {
-        if (instance == null) {
-            Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
-            String connectionString = dotenv.get("MONGODB_API_KEY");
-            ServerApi serverApi = ServerApi.builder()
-                    .version(ServerApiVersion.V1)
-                    .build();
-            MongoClientSettings settings = MongoClientSettings.builder()
-                    .applyToClusterSettings(builder ->
-                            builder.serverSelectionTimeout(DATABASE_CONNECTION_TIMEOUT, TimeUnit.SECONDS))
-                    .build();
-            instance = MongoClients.create(settings);
-        }
         return instance;
     }
 
@@ -38,5 +41,10 @@ public class MongoDBClientManager {
         if (instance != null) {
             instance.close();
         }
+    }
+
+    static {
+        // Close MongoClient at shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(MongoDBClientManager::closeMongoClient));
     }
 }

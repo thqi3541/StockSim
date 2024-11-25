@@ -66,6 +66,6 @@ public class DatabaseUserDataAccessObject implements
         if (result == null) {
             throw new ValidationException();
         }
-        return MongoDBDocumentParser.fromDocument(User.class, result);
+        return MongoDBDocumentParser.fromDocument(result, User.class);
     }
 }

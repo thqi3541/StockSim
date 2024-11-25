@@ -77,7 +77,7 @@ class ExecuteBuyInteractorTest {
             assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to insufficient funds");
             assertEquals(500.0, mockUser.getBalance(), "Balance should remain unchanged");
-            assertTrue(mockUser.getTransactionHistory().getAllTransactions().isEmpty(),
+            assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
                     "No transaction should be recorded");
         }
     }

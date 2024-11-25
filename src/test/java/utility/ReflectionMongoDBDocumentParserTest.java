@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MongoDBDocumentParserTest {
+public class ReflectionMongoDBDocumentParserTest {
 
     @Test
     public void testStockSerialization() throws DocumentParsingException {
@@ -24,8 +24,8 @@ public class MongoDBDocumentParserTest {
         Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 190.25);
 
         // Act
-        Document stockDoc = MongoDBDocumentParser.toDocument(stock);
-        Stock parsedStock = MongoDBDocumentParser.fromDocument(Stock.class, stockDoc);
+        Document stockDoc = ReflectionMongoDBDocumentParser.toDocument(stock);
+        Stock parsedStock = ReflectionMongoDBDocumentParser.fromDocument(stockDoc, Stock.class);
 
         // Assert
         assertNotNull(parsedStock);
@@ -41,8 +41,8 @@ public class MongoDBDocumentParserTest {
         Transaction transaction = new Transaction(new Date(), "GOOG", 100, 2800.50, "BUY");
 
         // Act
-        Document transactionDoc = MongoDBDocumentParser.toDocument(transaction);
-        Transaction parsedTransaction = MongoDBDocumentParser.fromDocument(Transaction.class, transactionDoc);
+        Document transactionDoc = ReflectionMongoDBDocumentParser.toDocument(transaction);
+        Transaction parsedTransaction = ReflectionMongoDBDocumentParser.fromDocument(transactionDoc, Transaction.class);
 
         // Assert
         assertNotNull(parsedTransaction);
@@ -60,8 +60,8 @@ public class MongoDBDocumentParserTest {
         UserStock userStock = new UserStock(stock, 1100.0, 5);
 
         // Act
-        Document userStockDoc = MongoDBDocumentParser.toDocument(userStock);
-        UserStock parsedUserStock = MongoDBDocumentParser.fromDocument(UserStock.class, userStockDoc);
+        Document userStockDoc = ReflectionMongoDBDocumentParser.toDocument(userStock);
+        UserStock parsedUserStock = ReflectionMongoDBDocumentParser.fromDocument(userStockDoc, UserStock.class);
 
         // Assert
         assertNotNull(parsedUserStock);
@@ -82,8 +82,26 @@ public class MongoDBDocumentParserTest {
         Portfolio portfolio = new Portfolio(userStocks);
 
         // Act
-        Document portfolioDoc = MongoDBDocumentParser.toDocument(portfolio);
-        Portfolio parsedPortfolio = MongoDBDocumentParser.fromDocument(Portfolio.class, portfolioDoc);
+        Document portfolioDoc = ReflectionMongoDBDocumentParser.toDocument(portfolio);
+        Portfolio parsedPortfolio = ReflectionMongoDBDocumentParser.fromDocument(portfolioDoc, Portfolio.class);
+
+        // Assert
+        assertNotNull(parsedPortfolio);
+        assertEquals(portfolio.getUserStocks().size(), parsedPortfolio.getUserStocks().size());
+        for (String key : portfolio.getUserStocks().keySet()) {
+            assertEquals(portfolio.getUserStocks().get(key).getStock().getTicker(),
+                    parsedPortfolio.getUserStocks().get(key).getStock().getTicker());
+        }
+    }
+
+    @Test
+    public void testEmptyPortfolioSerialization() throws DocumentParsingException {
+        // Arrange
+        Portfolio portfolio = new Portfolio();
+
+        // Act
+        Document portfolioDoc = ReflectionMongoDBDocumentParser.toDocument(portfolio);
+        Portfolio parsedPortfolio = ReflectionMongoDBDocumentParser.fromDocument(portfolioDoc, Portfolio.class);
 
         // Assert
         assertNotNull(parsedPortfolio);
@@ -104,14 +122,31 @@ public class MongoDBDocumentParserTest {
         TransactionHistory history = new TransactionHistory(transactions);
 
         // Act
-        Document historyDoc = MongoDBDocumentParser.toDocument(history);
-        TransactionHistory parsedHistory = MongoDBDocumentParser.fromDocument(TransactionHistory.class, historyDoc);
+        Document historyDoc = ReflectionMongoDBDocumentParser.toDocument(history);
+        TransactionHistory parsedHistory = ReflectionMongoDBDocumentParser.fromDocument(historyDoc, TransactionHistory.class);
 
         // Assert
         assertNotNull(parsedHistory);
-        assertEquals(history.getAllTransactions().size(), parsedHistory.getAllTransactions().size());
-        for (int i = 0; i < history.getAllTransactions().size(); i++) {
-            assertEquals(history.getAllTransactions().get(i), parsedHistory.getAllTransactions().get(i));
+        assertEquals(history.getTransactions().size(), parsedHistory.getTransactions().size());
+        for (int i = 0; i < history.getTransactions().size(); i++) {
+            assertEquals(history.getTransactions().get(i), parsedHistory.getTransactions().get(i));
+        }
+    }
+
+    @Test
+    public void testEmptyTransactionHistorySerialization() throws DocumentParsingException {
+        // Arrange
+        TransactionHistory history = new TransactionHistory();
+
+        // Act
+        Document historyDoc = ReflectionMongoDBDocumentParser.toDocument(history);
+        TransactionHistory parsedHistory = ReflectionMongoDBDocumentParser.fromDocument(historyDoc, TransactionHistory.class);
+
+        // Assert
+        assertNotNull(parsedHistory);
+        assertEquals(history.getTransactions().size(), parsedHistory.getTransactions().size());
+        for (int i = 0; i < history.getTransactions().size(); i++) {
+            assertEquals(history.getTransactions().get(i), parsedHistory.getTransactions().get(i));
         }
     }
 
@@ -127,8 +162,25 @@ public class MongoDBDocumentParserTest {
         User user = new User("user", "password", 5000.0, portfolio, transactionHistory);
 
         // Act
-        Document userDoc = MongoDBDocumentParser.toDocument(user);
-        User parsedUser = MongoDBDocumentParser.fromDocument(User.class, userDoc);
+        Document userDoc = ReflectionMongoDBDocumentParser.toDocument(user);
+        User parsedUser = ReflectionMongoDBDocumentParser.fromDocument(userDoc, User.class);
+
+        // Assert
+        assertNotNull(parsedUser);
+        assertEquals(user.getUsername(), parsedUser.getUsername());
+        assertEquals(user.getPassword(), parsedUser.getPassword());
+        assertEquals(user.getPortfolio().getUserStocks().size(), parsedUser.getPortfolio().getUserStocks().size());
+        assertEquals(user.getBalance(), parsedUser.getBalance());
+    }
+
+    @Test
+    public void testEmptyUserSerialization() throws DocumentParsingException {
+        // Arrange
+        User user = new User("user", "password");
+
+        // Act
+        Document userDoc = ReflectionMongoDBDocumentParser.toDocument(user);
+        User parsedUser = ReflectionMongoDBDocumentParser.fromDocument(userDoc, User.class);
 
         // Assert
         assertNotNull(parsedUser);
