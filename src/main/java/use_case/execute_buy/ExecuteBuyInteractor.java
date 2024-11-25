@@ -45,6 +45,8 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 throw new InvalidQuantityException("Buy quantity must be greater than zero.");
             }
 
+
+
             Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             // Calculate some values for this transaction
@@ -79,6 +81,8 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             outputPresenter.prepareStockNotFoundExceptionView();
         } catch (InsufficientBalanceException e) {
             outputPresenter.prepareInsufficientBalanceExceptionView();
+        } catch (InvalidQuantityException e) {
+            outputPresenter.prepareInvalidQuantityExceptionView(e.getMessage());
         }
     }
 

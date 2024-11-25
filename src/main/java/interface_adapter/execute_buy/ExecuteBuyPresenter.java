@@ -36,6 +36,6 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
 
     @Override
     public void prepareInvalidQuantityExceptionView(String errorMessage) {
-        ViewManager.Instance().broadcastEvent(new DialogEvent("Invalid Quantity", errorMessage));
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", errorMessage));
     }
 }
