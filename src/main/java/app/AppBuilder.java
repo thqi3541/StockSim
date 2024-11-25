@@ -23,6 +23,7 @@ import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
 import use_case.view_history.ViewHistoryOutputBoundary;
 import use_case.registration.RegistrationDataAccessInterface;
+
 import utility.ServiceManager;
 import utility.ViewManager;
 import view.components.DialogComponent;
