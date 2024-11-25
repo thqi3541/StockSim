@@ -6,19 +6,19 @@ package entity;
 public class UserStock {
 
     private final Stock stock;
-    private double cost;
+    private double avgCost;
     private int quantity;
 
     /**
      * Constructor for UserStock class
      *
      * @param stock:    the stock object
-     * @param cost:     the average cost of the stock
+     * @param avgCost:  the average cost of the stock
      * @param quantity: the quantity of the stock owned by user
      */
-    public UserStock(Stock stock, double cost, int quantity) {
+    public UserStock(Stock stock, double avgCost, int quantity) {
         this.stock = stock;
-        this.cost = cost;
+        this.avgCost = avgCost;
         this.quantity = quantity;
     }
 
@@ -26,8 +26,8 @@ public class UserStock {
         return stock;
     }
 
-    public double getCost() {
-        return cost;
+    public double getAvgCost() {
+        return avgCost;
     }
 
     public int getQuantity() {
@@ -39,8 +39,8 @@ public class UserStock {
      *
      * @return the total cost spent on this stock
      */
-    public double getPurchasedTotalCost() {
-        return cost * quantity;
+    public double getTotalCost() {
+        return avgCost * quantity;
     }
 
     /**
@@ -48,18 +48,18 @@ public class UserStock {
      *
      * @return the current market value of this stock in the stock market
      */
-    public double getCurrentMarketValue() {
-        return stock.getPrice() * quantity;
+    public double getMarketValue() {
+        return stock.getMarketPrice() * quantity;
     }
 
     /**
      * Update the average cost and quantity of the stock
      *
-     * @param price:    the price of the stock
+     * @param price:    the executionPrice of the stock
      * @param quantity: the quantity of the stock
      */
     public void updateUserStock(double price, int quantity) {
-        this.cost = (this.cost * this.quantity + price * quantity) / (quantity + this.quantity);
+        this.avgCost = (this.avgCost * this.quantity + price * quantity) / (quantity + this.quantity);
         this.quantity += quantity;
     }
 }

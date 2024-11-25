@@ -8,13 +8,13 @@ public class Stock {
     private final String ticker;
     private final String company;
     private final String industry;
-    private double price;
+    private double marketPrice;
 
-    public Stock(String ticker, String company, String industry, double price) {
+    public Stock(String ticker, String company, String industry, double marketPrice) {
         this.ticker = ticker;
         this.company = company;
         this.industry = industry;
-        this.price = price;
+        this.marketPrice = marketPrice;
     }
 
     public String getTicker() {
@@ -29,16 +29,15 @@ public class Stock {
         return industry;
     }
 
-    public double getPrice() {
-        return price;
+    public double getMarketPrice() {
+        return marketPrice;
     }
 
     /**
      * Update the current market price of the stock
-     *
-     * @param price the new price
+     * @param price the new market price
      */
     public void updatePrice(double price) {
-        this.price = price;
+        this.marketPrice = price;
     }
 }
