@@ -7,9 +7,10 @@ import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.registration.RegistrationDataAccessInterface;
 import utility.ServiceManager;
 import utility.SessionManager;
-import utility.exceptions.DuplicateUsernameException;
+import use_case.registration.DuplicateUsernameException;
 import utility.exceptions.ValidationException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,7 +23,7 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
     private final Map<String, User> users;
 
     public InMemoryUserDataAccessObject() {
-        this.users = new java.util.HashMap<>();
+        this.users = new HashMap<>();
 
         // Initialize with predefined users
         User user1 = new User("1", DEFAULT_PASSWORD);

@@ -1,12 +1,6 @@
 package use_case.registration;
 
 import entity.User;
-import entity.UserFactory;
-import utility.exceptions.DuplicateUsernameException;
-import utility.exceptions.InvalidInputException;
-import utility.exceptions.PasswordsDoNotMatchException;
-import utility.exceptions.WeakPasswordException;
-import utility.exceptions.InvalidUsernameException;
 import utility.validations.PasswordValidator;
 import utility.validations.UsernameValidator;
 
@@ -21,20 +15,15 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     // Reference to the data access object as an interface type
     private final RegistrationDataAccessInterface dataAccess;
 
-    // Reference to the user factory for creating new user instances
-    private final UserFactory userFactory;
-
     /**
      * Constructs a RegistrationInteractor with dependencies on presenter, data access, and user factory.
      *
      * @param presenter   The output boundary for displaying results to the user.
      * @param dataAccess  The data access object for storing and retrieving users.
-     * @param userFactory The factory used to create new user instances.
      */
-    public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess, UserFactory userFactory) {
+    public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
-        this.userFactory = userFactory;
     }
 
     /**
@@ -52,7 +41,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             validateInput(inputData);
 
             // Create a new user
-            User newUser = userFactory.create(inputData.username(), inputData.password());
+            User newUser = new User(inputData.username(), inputData.password());
 
             // Save the user
             dataAccess.saveUser(newUser);
@@ -90,6 +79,30 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         String usernameValidationMessage = UsernameValidator.validateUsername(inputData.username());
         if (!usernameValidationMessage.isEmpty()) {
             throw new InvalidUsernameException(usernameValidationMessage);
+        }
+    }
+
+    static class InvalidInputException extends Exception {
+        public InvalidInputException(String message) {
+            super(message);
+        }
+    }
+
+    static class InvalidUsernameException extends Exception {
+        public InvalidUsernameException(String message) {
+            super(message);
+        }
+    }
+
+    static class PasswordsDoNotMatchException extends Exception {
+        public PasswordsDoNotMatchException(String message) {
+            super(message);
+        }
+    }
+
+    static class WeakPasswordException extends Exception {
+        public WeakPasswordException(String message) {
+            super(message);
         }
     }
 }

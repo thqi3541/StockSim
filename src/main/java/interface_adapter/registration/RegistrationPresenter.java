@@ -4,7 +4,7 @@ import use_case.registration.RegistrationOutputBoundary;
 import use_case.registration.RegistrationOutputData;
 import view.view_events.DialogEvent;
 import view.view_events.SwitchPanelEvent;
-import utility.ViewManager;
+import view.ViewManager;
 
 public class RegistrationPresenter implements RegistrationOutputBoundary {
 
