@@ -1,5 +1,7 @@
 package view.panels;
 
+import interface_adapter.view_history.ViewHistoryController;
+import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
@@ -115,9 +117,10 @@ public class DashboardPanel extends JPanel implements IComponent {
                 ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel"))
         );
 
-        historyButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel"))
-        );
+        historyButton.addActionListener(e -> {
+            ServiceManager.Instance().getService(ViewHistoryController.class).execute();
+            ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel"));
+        });
 
         logoutButton.addActionListener(e ->
                 ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"))
