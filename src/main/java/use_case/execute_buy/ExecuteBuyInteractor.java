@@ -37,6 +37,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     public void execute(ExecuteBuyInputData data) {
         try {
             // Get current user
+            System.out.println(data.credential());
             User currentUser = dataAccess.getUserWithCredential(data.credential());
 
             // Get stock and quantity

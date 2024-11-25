@@ -65,7 +65,7 @@ public class MarketTracker {
         }
         this.dataAccess = dataAccess;
         this.initialized = true;
-        //updateStocks();  // First update
+        updateStocks();  // First update
         startUpdatingStockPrices();  // Then start periodic updates
     }
 

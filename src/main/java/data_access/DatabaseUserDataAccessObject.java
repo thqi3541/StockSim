@@ -34,16 +34,14 @@ public class DatabaseUserDataAccessObject implements
     public User getUserWithCredential(String credential) throws ValidationException {
         // get username from credential
         String username = SessionManager.Instance().getUsername(credential).orElseThrow(ValidationException::new);
-
         // retrieve user data from database
         try {
-            getUserByQuery(new Document("username", username));
+            return getUserByQuery(new Document("username", username));
         } catch (DocumentParsingException e) {
             // TODO: use a more robust logging approach than printStackTrace
             e.printStackTrace();
+            throw new ValidationException();
         }
-
-        return null;
     }
 
     @Override
@@ -54,9 +52,8 @@ public class DatabaseUserDataAccessObject implements
         } catch (DocumentParsingException e) {
             // TODO: use a more robust logging approach than printStackTrace
             e.printStackTrace();
+            throw new ValidationException();
         }
-
-        return null;
     }
 
     private User getUserByQuery(Document query) throws ValidationException, DocumentParsingException {
