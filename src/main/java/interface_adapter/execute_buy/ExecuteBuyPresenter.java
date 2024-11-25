@@ -2,11 +2,17 @@ package interface_adapter.execute_buy;
 
 import use_case.execute_buy.ExecuteBuyOutputBoundary;
 import use_case.execute_buy.ExecuteBuyOutputData;
-import utility.ViewManager;
+import utility.ServiceManager;
+import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.UpdateAssetEvent;
+import view.view_events.UpdateTransactionHistoryEvent;
 
 public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
+
+    public ExecuteBuyPresenter() {
+        ServiceManager.Instance().registerService(ExecuteBuyOutputBoundary.class, this);
+    }
 
     @Override
     public void prepareSuccessView(ExecuteBuyOutputData outputData) {
@@ -16,7 +22,9 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
                         outputData.newBalance()
                 )
         );
-        // TODO: both buy and sell should be logged in transaction history
+        ViewManager.Instance().broadcastEvent(
+                new UpdateTransactionHistoryEvent(outputData.newTransactionHistory())
+        );
     }
 
     @Override

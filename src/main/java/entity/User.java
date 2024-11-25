@@ -14,7 +14,7 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.balance = 0;
+        this.balance = 0.0;
         this.portfolio = new Portfolio();
         this.transactionHistory = new TransactionHistory();
     }
@@ -33,15 +33,6 @@ public class User {
 
     public void deductBalance(double amount) {
         this.balance -= amount;
-    }
-
-    /**
-     * Get total assets (cash balance + portfolio value)
-     *
-     * @return total value of user's cash and investments
-     */
-    public double getAssets() {
-        return balance + portfolio.getTotalValue();
     }
 
     public String getUsername() {

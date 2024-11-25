@@ -2,13 +2,19 @@ package interface_adapter.view_history;
 
 import use_case.view_history.ViewHistoryOutputBoundary;
 import use_case.view_history.ViewHistoryOutputData;
-import utility.ViewManager;
+import utility.ServiceManager;
+import view.ViewManager;
+import view.view_events.DialogEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
 /**
  * Presenter for the ViewHistory Use Case
  */
 public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
+
+    public ViewHistoryPresenter() {
+        ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, this);
+    }
 
     /**
      * Prepares the success view of the ViewHistory use case
@@ -29,5 +35,8 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
      */
     @Override
     public void prepareValidationExceptionView() {
+        ViewManager.Instance().broadcastEvent(
+                new DialogEvent("Sorry", "Please try again.")
+        );
     }
 }

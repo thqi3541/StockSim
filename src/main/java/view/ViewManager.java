@@ -1,6 +1,5 @@
-package utility;
+package view;
 
-import view.IComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
@@ -26,17 +25,6 @@ public class ViewManager {
         return instance;
     }
 
-    public void setCardLayout(CardLayout cardLayout, JPanel cardPanel) {
-        this.cardLayout = cardLayout;
-        this.cardPanel = cardPanel;
-    }
-
-    public void registerComponent(IComponent component) {
-        if (!components.contains(component)) {
-            components.add(component);
-        }
-    }
-
     public void broadcastEvent(ViewEvent event) {
         if (event instanceof SwitchPanelEvent switchEvent) {
             switchPanel(switchEvent.getPanelName());
@@ -52,6 +40,17 @@ public class ViewManager {
         if (!eventHandled) {
             System.out.println("Warning: Event " + event.getClass().getSimpleName() + " was broadcasted but not handled by any component.");
         }
+    }
+
+    public void registerComponent(IComponent component) {
+        if (!components.contains(component)) {
+            components.add(component);
+        }
+    }
+
+    public void setCardLayout(CardLayout cardLayout, JPanel cardPanel) {
+        this.cardLayout = cardLayout;
+        this.cardPanel = cardPanel;
     }
 
     private void switchPanel(String panelName) {

@@ -3,12 +3,12 @@ package data_access;
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
-import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
+import use_case.registration.RegistrationDataAccessInterface;
 import utility.ServiceManager;
 import utility.SessionManager;
-import utility.exceptions.ValidationException;
 import utility.exceptions.DuplicateUsernameException;
+import utility.exceptions.ValidationException;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ import java.util.Map;
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface, RegistrationDataAccessInterface{
+public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface, RegistrationDataAccessInterface {
     private static final String DEFAULT_PASSWORD = "0";
 
     private final Map<String, User> users;
