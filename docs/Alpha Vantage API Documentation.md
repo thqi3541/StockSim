@@ -14,7 +14,7 @@ Finnhub does not directly support Java, but we handle API calls using the OkHttp
 
 ## API Usage Examples
 
-### Stock Quote
+### Time Series Intraday
 
 **Parameters:**
 
@@ -24,7 +24,7 @@ Finnhub does not directly support Java, but we handle API calls using the OkHttp
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/quote?symbol=AAPL&token=ct11pv9r01qkcukbkdv0ct11pv9r01qkcukbkdvg
+https://finnhub.io/api/v1/quote?symbol=AAPL&token=ct152k9r01qkcukbmok0ct152k9r01qkcukbmokg
 ```
 
 **Sample response (JSON output):**
@@ -46,13 +46,13 @@ https://finnhub.io/api/v1/quote?symbol=AAPL&token=ct11pv9r01qkcukbkdv0ct11pv9r01
 
 **Parameters:**
 
-- `symbol`: Stock ticker symbol.
-- `token`: The API token
+- `symbol`: The stock ticker.
+- `token`: The API token.
 
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=ct11pv9r01qkcukbkdv0ct11pv9r01qkcukbkdvg
+https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=ct152k9r01qkcukbmok0ct152k9r01qkcukbmokg
 ```
 
 **Sample response (JSON output):**

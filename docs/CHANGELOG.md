@@ -81,10 +81,16 @@
 - Updated `UserStock`: Rename `PurchasePrice` to `cost`
 - Implemented controller and presenter for execute buy use case
 - Implemented framework for view component update
-- Added GUI components for trading page
+- Added GUI components for trading age
 - Implemented buy use case interactor and set up unit tests
 - Removed outdated classes and methods that are incompatible with current codebase version
 - Updated maven configuration with unit test and api request dependencies
 - Implemented the frontend framework
+- Updated stock data provider from Alpha Vantage to Finnhub.
+- Removed references to Alpha Vantage in documentation and codebase.
+- Modified the registration use case to match the try-catch block exceptions
+- Updated the buy stock the check the quantity lower bound and then add corresponding exceptions
+- Implemented isStrongPassword and Username
+- Added more test cases for Registration use case
 
 ### Bug Fixes

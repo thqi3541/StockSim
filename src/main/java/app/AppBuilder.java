@@ -1,7 +1,9 @@
 package app;
 
+import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
-import data_access.StockDataAccessObject;
+import data_access.StockDataAccessInterface;
+import entity.StockMarket;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import interface_adapter.login.LoginController;
@@ -20,9 +22,9 @@ import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.view_history.ViewHistoryInputBoundary;
 import use_case.view_history.ViewHistoryInteractor;
 import use_case.view_history.ViewHistoryOutputBoundary;
-import utility.MarketTracker;
+import use_case.registration.RegistrationDataAccessInterface;
 import utility.ServiceManager;
-import view.ViewManager;
+import utility.ViewManager;
 import view.components.DialogComponent;
 import view.panels.*;
 
@@ -37,9 +39,9 @@ import java.util.Map;
  */
 public class AppBuilder {
     // Default dimensions and title for the application window
-    private static final int DEFAULT_WIDTH = 1200;
-    private static final int DEFAULT_HEIGHT = 900;
-    private static final String DEFAULT_TITLE = "StockSim";
+    private static final int DEFAULT_WIDTH = 1000;
+    private static final int DEFAULT_HEIGHT = 800;
+    private static final String DEFAULT_TITLE = "Application";
 
     // Components for the application
     private final JPanel cardPanel;
@@ -63,19 +65,19 @@ public class AppBuilder {
     }
 
     /**
-     * Sets custom title for the application window
-     */
-    public AppBuilder withTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    /**
      * Sets custom dimensions for the application window
      */
     public AppBuilder withDimensions(int width, int height) {
         this.width = width;
         this.height = height;
+        return this;
+    }
+
+    /**
+     * Sets custom title for the application window
+     */
+    public AppBuilder withTitle(String title) {
+        this.title = title;
         return this;
     }
 
@@ -88,14 +90,36 @@ public class AppBuilder {
     }
 
     /**
-     * Add all panels
+     * Adds authentication panels (Login and SignUp)
      */
-    public AppBuilder addAllPanels() {
+    public AppBuilder addAuthenticationPanels() {
         addPanel("LogInPanel", new LogInPanel());
         addPanel("SignUpPanel", new SignUpPanel());
+        return this;
+    }
+
+    /**
+     * Adds the dashboard panel with user information
+     */
+    public AppBuilder addDashboardPanel() {
         addPanel("DashboardPanel", new DashboardPanel());
+        return this;
+    }
+
+    /**
+     * Adds the action panels
+     */
+    public AppBuilder addActionPanels() {
         addPanel("TradeSimulationPanel", new TradeSimulationPanel());
         addPanel("TransactionHistoryPanel", new TransactionHistoryPanel());
+        return this;
+    }
+
+    /**
+     * Adds the dialog component
+     */
+    public AppBuilder addDialogComponent() {
+        ServiceManager.Instance().registerService(DialogComponent.class, new DialogComponent());
         return this;
     }
 
@@ -108,49 +132,59 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the dialog component
-     */
-    public AppBuilder addDialogComponent() {
-        ServiceManager.Instance().registerService(DialogComponent.class, new DialogComponent());
-        return this;
-    }
-
-    /**
      * Initializes all required services
      */
     private void initializeServices() {
         // 1. Initialize DAOs first
-        new InMemoryUserDataAccessObject();
-        MarketTracker.Instance().initialize(new StockDataAccessObject());
+        InMemoryStockDataAccessObject stockDAO = new InMemoryStockDataAccessObject();
+        InMemoryUserDataAccessObject userDAO = new InMemoryUserDataAccessObject();
 
-        // 2. Initialize Presenters
-        new LoginPresenter();
-        new ExecuteBuyPresenter();
-        new ViewHistoryPresenter();
+        // Register concrete DAOs and their interfaces
+        ServiceManager.Instance().registerService(StockDataAccessInterface.class, stockDAO);
+        StockMarket.Instance().initialize(stockDAO);
 
-        // 3. Initialize Interactors
-        new LoginInteractor(
-                ServiceManager.Instance().getService(LoginDataAccessInterface.class),
-                ServiceManager.Instance().getService(LoginOutputBoundary.class)
-        );
-        new ExecuteBuyInteractor(
+        ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, userDAO);
+        ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, userDAO);
+        ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, userDAO);
+
+        // 2. Initialize Presenters and register them as output boundaries
+        ExecuteBuyOutputBoundary buyPresenter = new ExecuteBuyPresenter();
+        ViewHistoryOutputBoundary viewHistoryPresenter = new ViewHistoryPresenter();
+        LoginOutputBoundary loginPresenter = new LoginPresenter();
+
+        ServiceManager.Instance().registerService(ExecuteBuyOutputBoundary.class, buyPresenter);
+        ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, viewHistoryPresenter);
+        ServiceManager.Instance().registerService(LoginOutputBoundary.class, loginPresenter);
+
+        // 3. Initialize Interactors and register them as input boundaries
+        ExecuteBuyInputBoundary buyInteractor = new ExecuteBuyInteractor(
                 ServiceManager.Instance().getService(ExecuteBuyDataAccessInterface.class),
                 ServiceManager.Instance().getService(ExecuteBuyOutputBoundary.class)
         );
-        new ViewHistoryInteractor(
+        ViewHistoryInputBoundary viewHistoryInteractor = new ViewHistoryInteractor(
                 ServiceManager.Instance().getService(ViewHistoryDataAccessInterface.class),
                 ServiceManager.Instance().getService(ViewHistoryOutputBoundary.class)
         );
+        LoginInputBoundary loginInteractor = new LoginInteractor(
+                ServiceManager.Instance().getService(LoginDataAccessInterface.class),
+                ServiceManager.Instance().getService(LoginOutputBoundary.class)
+        );
+
+        ServiceManager.Instance().registerService(ExecuteBuyInputBoundary.class, buyInteractor);
+        ServiceManager.Instance().registerService(ViewHistoryInputBoundary.class, viewHistoryInteractor);
+        ServiceManager.Instance().registerService(LoginInputBoundary.class, loginInteractor);
 
         // 4. Initialize Controllers
-        new LoginController(
-                ServiceManager.Instance().getService(LoginInputBoundary.class)
+        ServiceManager.Instance().registerService(ExecuteBuyController.class, new ExecuteBuyController(
+                ServiceManager.Instance().getService(ExecuteBuyInputBoundary.class))
         );
-        new ExecuteBuyController(
-                ServiceManager.Instance().getService(ExecuteBuyInputBoundary.class)
+        ServiceManager.Instance().registerService(ViewHistoryController.class, new ViewHistoryController(
+                ServiceManager.Instance().getService(ViewHistoryInputBoundary.class))
         );
-        new ViewHistoryController(
-                ServiceManager.Instance().getService(ViewHistoryInputBoundary.class)
+        ServiceManager.Instance().registerService(LoginController.class, new LoginController(
+                ServiceManager.Instance().getService(LoginInputBoundary.class))
         );
     }
 
