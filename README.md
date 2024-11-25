@@ -5,9 +5,11 @@
 - [StockSim](#stocksim)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
-  - [Highlights](#highlights)
-  - [Authors](#authors)
+  - [How to Install](#how-to-install)
+    - [Build from Source](#build-from-source)
+    - [Download](#download)
   - [Key Features](#key-features)
+  - [Highlights](#highlights)
   - [Use Cases and User Stories](#use-cases-and-user-stories)
     - [Use Case 1: User Registration](#use-case-1-user-registration)
     - [Use Case 2: User Login](#use-case-2-user-login)
@@ -20,35 +22,59 @@
     - [Use Case 9: Password Reset + Email Verification](#use-case-9-password-reset--email-verification)
     - [Use Case 10: Feedback/Support](#use-case-10-feedbacksupport)
     - [Use Case 11: Minimum Number of Trades](#use-case-11-minimum-number-of-trades)
-  - [UI and UX Design](#ui-and-ux-design)
+  - [Credits](#credits)
 
 ## Overview
 
-StockSim is a desktop trading application designed to simulate real-world market conditions. It provides business students and traders with a risk-free setting to learn, practice, and polish their trading skills.
+StockSim is a desktop trading application designed to simulate real-world market conditions.
 
-More information can be found [here](/docs/Project%20Overview.md).
+It provides business students and traders with a risk-free setting to learn, practice, and polish their trading skills.
 
-## Highlights
+## How to Install
 
-1. Global [utility package](/docs/Utilities%20Overview.md).
+### Build from Source
 
-## Authors
+1. Clone the `main` branch of the repository
+2. Apply for a API from [Finnhub](https://finnhub.io/)
+3. Set up `STOCK_API_KEY` in `.env.local`
+4. Rub the main app
 
-| Name          | GitHub Username                                         |
-| ------------- | ------------------------------------------------------- |
-| Angel Chen    | [`AngelChen09`](https://github.com/AngelChen09)         |
-| Yue Cheng     | [`ivorkchan`](https://github.com/ivorkchan)             |
-| Corrine Xiang | [`TheGreatCorrine`](https://github.com/TheGreatCorrine) |
-| Raine Yang    | [`Raine-Yang-UofT`](https://github.com/Raine-Yang-UofT) |
-| Jifeng Qiu    | [`thqi3541`](https://github.com/thqi3541)               |
+### Download
+
+1. Download the latest release from [here](https://github.com/ivorkchan/StockSim/releases)
+2. To run the jar file, run `java -jar StockSim.jar`
 
 ## Key Features
 
-WIP.
+1. Sign Up
+
+![sign-up](/assets/images/3.0-snapshot-sign-up.png)
+
+2. Log In
+
+![log-in](/assets/images/3.0-snapshot-log-in.png)
+
+3. Dashboard
+
+![dashboard](/assets/images/3.0-snapshot-dashboard.png)
+
+4. Trade Simulation
+
+![trade-simulation](/assets/images/3.0-snapshot-trade-simulation.png)
+
+5. Transaction History
+
+![history](/assets/images/3.0-snapshot-history.png)
+
+## Highlights
+
+1. SOLID and Clean Architecture
+2. API Cache
+3. Scheduled Market Update
+4. Multi-user Support and Persistent Data
+5. UI and UX Design: [View Prototype in Figma ->](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=89%3A589&node-id=89-603&node-type=canvas&viewport=351%2C190%2C0.14&t=2N4BKpzFNg0XUjDq-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=89%3A603)
 
 ## Use Cases and User Stories
-
-User can check portfolio/position/history - a complete flow.
 
 ### Use Case 1: User Registration
 
@@ -197,26 +223,12 @@ User Story: As a user, I am not holding any shares of AAPL (Apple). I want to sh
   - The TradeRequirementController checks this total against the minimum threshold or other requirements, such as qualifying for promotions or eligibility.
   - The TradeRequirementController sends the data to the TradeRequirementView and displays the user's trade count, progress toward the minimum trade requirement, and any relevant messages (e.g., "You need 5 more trades to qualify").
 
-## UI and UX Design
+## Credits
 
-[View Prototype in Figma ->](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=89%3A589&node-id=89-603&node-type=canvas&viewport=351%2C190%2C0.14&t=2N4BKpzFNg0XUjDq-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=89%3A603)
-
-1. Sign Up View
-
-![sign-up](/assets/images/3.0-snapshot-sign-up.png)
-
-2. Log In View
-
-![log-in](/assets/images/3.0-snapshot-log-in.png)
-
-3. Dashboard
-
-![dashboard](/assets/images/3.0-snapshot-dashboard.png)
-
-4. Trade Simulation
-
-![trade-simulation](/assets/images/3.0-snapshot-trade-simulation.png)
-
-5. Transaction History
-
-![history](/assets/images/3.0-snapshot-history.png)
+| Name          | GitHub Username                                         |
+| ------------- | ------------------------------------------------------- |
+| Angel Chen    | [`AngelChen09`](https://github.com/AngelChen09)         |
+| Yue Cheng     | [`ivorkchan`](https://github.com/ivorkchan)             |
+| Corrine Xiang | [`TheGreatCorrine`](https://github.com/TheGreatCorrine) |
+| Raine Yang    | [`Raine-Yang-UofT`](https://github.com/Raine-Yang-UofT) |
+| Jifeng Qiu    | [`thqi3541`](https://github.com/thqi3541)               |
