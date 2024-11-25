@@ -20,6 +20,8 @@ import java.util.Scanner;
 public class StockDataAccessObject implements StockDataAccessInterface {
     private static final String BASE_URL = "https://finnhub.io/api/v1";
     private static final String TICKERS_FILE = "/config/tickers.txt";
+    // Rate limit exceeded error code provided by Finnhub documentation
+    private static final int LIMIT_EXCEED_ERROR_CODE = 429;
 
     private final OkHttpClient client;
     private final String apiKey;
@@ -86,7 +88,10 @@ public class StockDataAccessObject implements StockDataAccessInterface {
                         company = jsonObject.optString("name", company);
                         // Gets the company's industry "finnhubIndustry" based on finnhub's classification or returns default industry if unavailable
                         industry = jsonObject.optString("finnhubIndustry", industry);
+                    } else if (profileResponse.code() == LIMIT_EXCEED_ERROR_CODE) {
+                            throw new RateLimitExceededException();
                     } else {
+                        // Error message for errors other than exceed rate limit
                         System.out.println("Failed to fetch profile data for ticker: " + ticker);
                     }
                 }
@@ -101,9 +106,8 @@ public class StockDataAccessObject implements StockDataAccessInterface {
                     stocks.put(ticker, stock);
                 }
 
-            } catch (Exception e) {
-                // Throws RateLimitExceededException if api call limit is exceeded
-                throw new RateLimitExceededException();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
@@ -149,16 +153,17 @@ public class StockDataAccessObject implements StockDataAccessInterface {
                     JSONObject jsonObject = new JSONObject(quoteResponse.body().string());
                     // Gets the current market price "c"
                     return jsonObject.getDouble("c");
+                } else if (quoteResponse.code() == LIMIT_EXCEED_ERROR_CODE) {
+                    throw new RateLimitExceededException();
                 } else {
+                    // Error message for errors other than exceed rate limit
                     System.out.println("Failed to fetch quote data for ticker: " + ticker);
                 }
             }
-        } catch (Exception e) {
-            // Throws RateLimitExceededException if api call limit is exceeded
-            throw new RateLimitExceededException();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         // Returns default price if call failed
         return 0.0;
     }
-
 }
