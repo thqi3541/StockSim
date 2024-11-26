@@ -14,8 +14,8 @@ public class RegistrationController {
         ServiceManager.Instance().registerService(RegistrationController.class, this);
     }
 
-    public void register(String userId, String password, String confirmPassword) {
-        RegistrationInputData inputData = new RegistrationInputData(userId, password, confirmPassword);
+    public void execute(String username, String password, String confirmPassword) {
+        RegistrationInputData inputData = new RegistrationInputData(username, password, confirmPassword);
         interactor.execute(inputData);
     }
 }

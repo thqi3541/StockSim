@@ -2,7 +2,7 @@
 
 ## Team Name
 
-StockSim (TBD)
+StockSim
 
 ## Domain
 
@@ -14,7 +14,7 @@ The Trading Simulation App aims to provide users with a practice environment to 
 
 ## Proposed Entities for the Domain
 
-UML to be added.
+![UML](/assets/images/uml.png)
 
 ## Proposed API for the Project
 

@@ -8,10 +8,6 @@ We utilize the Finnhub API for retrieving stock prices, company profiles, and ot
 
 The Finnhub API returns responses in JSON format.
 
-### Language-specific guides: Java wrapper
-
-Finnhub does not directly support Java, but we handle API calls using the OkHttp client for HTTP requests.
-
 ## API Usage Examples
 
 ### Time Series Intraday
@@ -24,7 +20,7 @@ Finnhub does not directly support Java, but we handle API calls using the OkHttp
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/quote?symbol=AAPL&token=YOUR_API_TOKEN
+https://finnhub.io/api/v1/quote?symbol=AAPL&token={YOUR_API_TOKEN}
 ```
 
 **Sample response (JSON output):**
@@ -52,7 +48,7 @@ https://finnhub.io/api/v1/quote?symbol=AAPL&token=YOUR_API_TOKEN
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=YOUR_API_TOKEN
+https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token={YOUR_API_TOKEN}
 ```
 
 **Sample response (JSON output):**

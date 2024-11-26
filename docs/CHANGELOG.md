@@ -13,12 +13,16 @@
 - Implemented MarketObserver to update user data when stock market changes
 - Implemented `FontManager` to set custom font for GUI components
 - Implemented logout use case
+- Implemented registration use case
 
 ### Internal Changes
 
 - Refactored `StockMarket` to `MarketTracker`
 - Refined all ui components to have a consistent style
-- Separate API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
+- Separated API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
+- Updated stock data provider from Alpha Vantage to Finnhub
+- Removed references to Alpha Vantage in documentation and codebase
+- Added service manager for `RegistrationController`, `RegistrationInteractor`, and `RegistrationPresenter`
 
 ### Bug Fixes
 
@@ -87,8 +91,5 @@
 - Removed outdated classes and methods that are incompatible with current codebase version
 - Updated maven configuration with unit test and api request dependencies
 - Implemented the frontend framework
-- Updated stock data provider from Alpha Vantage to Finnhub.
-- Removed references to Alpha Vantage in documentation and codebase.
-- Add service manager for RegistrationController, RegistrationInteractor, and RegistrationPresenter
 
 ### Bug Fixes

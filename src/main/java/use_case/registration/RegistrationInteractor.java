@@ -12,20 +12,18 @@ import utility.validations.UsernameValidator;
  */
 public class RegistrationInteractor implements RegistrationInputBoundary {
 
+    // Default initial balance for new users
+    private static final double INITIAL_BALANCE = 200000.0;
     // Reference to the output boundary (presenter) for displaying feedback
     private final RegistrationOutputBoundary presenter;
-
     // Reference to the data access object as an interface type
     private final RegistrationDataAccessInterface dataAccess;
-
-    // Default initial balance for new users
-    private static final double INITIAL_BALANCE = 5000.0;
 
     /**
      * Constructs a RegistrationInteractor with dependencies on presenter, data access, and user factory.
      *
-     * @param presenter   The output boundary for displaying results to the user.
-     * @param dataAccess  The data access object for storing and retrieving users.
+     * @param presenter  The output boundary for displaying results to the user.
+     * @param dataAccess The data access object for storing and retrieving users.
      */
     public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess) {
         this.presenter = presenter;
@@ -49,14 +47,21 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             // Check for empty username/password, matching passwords, password strength, and valid username
             validateInput(inputData);
 
-            // Create a new user
-            User newUser = new User(inputData.username(), inputData.password(), INITIAL_BALANCE, new Portfolio(), new TransactionHistory());
+            // Check if username exists
+            if (!dataAccess.hasUsername(inputData.username())) {
+                // Create a new user
+                User newUser = new User(inputData.username(), inputData.password(), INITIAL_BALANCE, new Portfolio(), new TransactionHistory());
 
-            // Save the user
-            dataAccess.saveUser(newUser);
+                // Save the user
+                dataAccess.saveUser(newUser);
 
-            // Notify success
-            presenter.prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
+                // Notify success
+                presenter.prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
+            } else {
+                throw new DuplicateUsernameException("Username already exists!");
+            }
+
+
         } catch (InvalidInputException e) {
             presenter.prepareInvalidInputView(e.getMessage());
         } catch (DuplicateUsernameException e) {
@@ -70,12 +75,10 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         }
     }
 
-    private void validateInput(RegistrationInputData inputData) throws InvalidInputException, DuplicateUsernameException, PasswordsDoNotMatchException, WeakPasswordException, InvalidUsernameException {
+    private void validateInput(RegistrationInputData inputData) throws InvalidInputException, PasswordsDoNotMatchException, WeakPasswordException, InvalidUsernameException {
         if (inputData.username().isEmpty() || inputData.password().isEmpty()) {
             throw new InvalidInputException("Username and password cannot be empty.");
-        }
-
-        else if (!inputData.password().equals(inputData.confirmPassword())) {
+        } else if (!inputData.password().equals(inputData.confirmPassword())) {
             throw new PasswordsDoNotMatchException("Passwords do not match.");
         }
 
@@ -111,6 +114,12 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
 
     static class WeakPasswordException extends Exception {
         public WeakPasswordException(String message) {
+            super(message);
+        }
+    }
+
+    static class DuplicateUsernameException extends Exception {
+        public DuplicateUsernameException(String message) {
             super(message);
         }
     }
