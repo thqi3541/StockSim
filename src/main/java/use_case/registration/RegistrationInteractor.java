@@ -54,7 +54,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
                 User newUser = new User(inputData.username(), inputData.password(), INITIAL_BALANCE, new Portfolio(), new TransactionHistory());
 
                 // Save the user
-                dataAccess.saveUser(newUser);
+                dataAccess.createUser(newUser);
 
                 // Notify success
                 presenter.prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));

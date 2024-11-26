@@ -6,5 +6,5 @@ import utility.exceptions.DocumentParsingException;
 public interface RegistrationDataAccessInterface {
     boolean hasUsername(String username);
 
-    void saveUser(User user) throws DocumentParsingException;
+    void createUser(User user) throws DocumentParsingException;
 }

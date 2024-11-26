@@ -8,6 +8,8 @@ import view.view_events.DialogEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
+import javax.swing.text.View;
+
 public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
 
     public ExecuteBuyPresenter() {
@@ -45,5 +47,10 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
     @Override
     public void prepareInvalidQuantityExceptionView(String errorMessage) {
         ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", errorMessage));
+    }
+
+    @Override
+    public void prepareServerErrorView() {
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "Server Internal Error."));
     }
 }
