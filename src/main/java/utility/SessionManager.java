@@ -7,45 +7,45 @@ import java.util.UUID;
 
 public class SessionManager {
 
-    // singleton instance
-    private static volatile SessionManager instance;
+  // singleton instance
+  private static volatile SessionManager instance;
 
-    // map to store session credentials and associated usernames
-    private final Map<String, String> sessions;
+  // map to store session credentials and associated usernames
+  private final Map<String, String> sessions;
 
-    // singleton constructor
-    private SessionManager() {
-        sessions = new HashMap<>();
+  // singleton constructor
+  private SessionManager() {
+    sessions = new HashMap<>();
+  }
+
+  public static synchronized SessionManager Instance() {
+    if (instance == null) {
+      instance = new SessionManager();
     }
+    return instance;
+  }
 
-    public static synchronized SessionManager Instance() {
-        if (instance == null) {
-            instance = new SessionManager();
-        }
-        return instance;
-    }
+  // create a new session and return the unique credential key
+  public String createSession(String username) {
+    String credentialKey = UUID.randomUUID().toString();
+    sessions.put(credentialKey, username);
+    return credentialKey;
+  }
 
-    // create a new session and return the unique credential key
-    public String createSession(String username) {
-        String credentialKey = UUID.randomUUID().toString();
-        sessions.put(credentialKey, username);
-        return credentialKey;
-    }
+  // get the username associated with a session credential
+  public Optional<String> getUsername(String credentialKey) {
+    return Optional.ofNullable(sessions.get(credentialKey));
+  }
 
-    // get the username associated with a session credential
-    public Optional<String> getUsername(String credentialKey) {
-        return Optional.ofNullable(sessions.get(credentialKey));
+  // end a session
+  public void endSession(String credentialKey) {
+    if (isValidSession(credentialKey)) {
+      sessions.remove(credentialKey);
     }
+  }
 
-    // end a session
-    public void endSession(String credentialKey) {
-        if (isValidSession(credentialKey)) {
-            sessions.remove(credentialKey);
-        }
-    }
-
-    // check if a session is valid
-    public boolean isValidSession(String credentialKey) {
-        return sessions.containsKey(credentialKey);
-    }
+  // check if a session is valid
+  public boolean isValidSession(String credentialKey) {
+    return sessions.containsKey(credentialKey);
+  }
 }

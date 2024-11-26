@@ -6,4 +6,5 @@ package use_case.view_history;
  * @param credential the credential of the user
  */
 public record ViewHistoryInputData(String credential) {
+
 }

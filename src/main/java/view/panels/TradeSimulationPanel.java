@@ -1,5 +1,16 @@
 package view.panels;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
@@ -7,107 +18,105 @@ import view.components.ButtonComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class TradeSimulationPanel extends JPanel implements IComponent {
-    private static final int PADDING = 20;
-    private static final double MAIN_PANEL_RATIO = 0.8;
-    private static final double SIDE_PANEL_RATIO = 0.2;
 
-    public TradeSimulationPanel() {
-        ViewManager.Instance().registerComponent(this);
+  private static final int PADDING = 20;
+  private static final double MAIN_PANEL_RATIO = 0.8;
+  private static final double SIDE_PANEL_RATIO = 0.2;
 
-        // Set up main panel with vertical BoxLayout
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
+  public TradeSimulationPanel() {
+    ViewManager.Instance().registerComponent(this);
 
-        // Add header (fill width)
-        JPanel headerPanel = createHeaderPanel();
-        headerPanel.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE, headerPanel.getPreferredSize().height));
-        headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(headerPanel);
+    // Set up main panel with vertical BoxLayout
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
 
-        // Add gap (20)
-        add(Box.createRigidArea(new Dimension(0, PADDING)));
+    // Add header (fill width)
+    JPanel headerPanel = createHeaderPanel();
+    headerPanel.setMaximumSize(
+        new Dimension(Integer.MAX_VALUE, headerPanel.getPreferredSize().height));
+    headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    add(headerPanel);
 
-        // Add trading section (fixed height, fill width)
-        JPanel tradingPanel = createTradingSection();
-        tradingPanel.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE, tradingPanel.getPreferredSize().height));
-        tradingPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(tradingPanel);
+    // Add gap (20)
+    add(Box.createRigidArea(new Dimension(0, PADDING)));
 
-        // Add gap (20)
-        add(Box.createRigidArea(new Dimension(0, PADDING)));
+    // Add trading section (fixed height, fill width)
+    JPanel tradingPanel = createTradingSection();
+    tradingPanel.setMaximumSize(
+        new Dimension(Integer.MAX_VALUE, tradingPanel.getPreferredSize().height));
+    tradingPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    add(tradingPanel);
 
-        // Add portfolio section (automatic height, fill width)
-        JPanel portfolioPanel = createAccountSection();
-        portfolioPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        portfolioPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(portfolioPanel);
-    }
+    // Add gap (20)
+    add(Box.createRigidArea(new Dimension(0, PADDING)));
 
-    private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
+    // Add portfolio section (automatic height, fill width)
+    JPanel portfolioPanel = createAccountSection();
+    portfolioPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+    portfolioPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    add(portfolioPanel);
+  }
 
-        // Title on the left
-        JLabel titleLabel = new JLabel("Trade Simulation");
-        FontManager.Instance().useBold(titleLabel, 24f);
-        headerPanel.add(titleLabel, BorderLayout.WEST);
+  private JPanel createHeaderPanel() {
+    JPanel headerPanel = new JPanel(new BorderLayout());
 
-        // Back button on the right
-        ButtonComponent backButton = new ButtonComponent("Back to Home");
-        backButton.addActionListener(
-                e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
-        headerPanel.add(backButton, BorderLayout.EAST);
+    // Title on the left
+    JLabel titleLabel = new JLabel("Trade Simulation");
+    FontManager.Instance().useBold(titleLabel, 24f);
+    headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        return headerPanel;
-    }
+    // Back button on the right
+    ButtonComponent backButton = new ButtonComponent("Back to Home");
+    backButton.addActionListener(
+        e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
+    headerPanel.add(backButton, BorderLayout.EAST);
 
-    private JPanel createTwoColumnPanel(JPanel leftPanel, JPanel rightPanel) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    return headerPanel;
+  }
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = 1.0;
-        gbc.gridheight = 1;
-        gbc.gridy = 0;
+  private JPanel createTwoColumnPanel(JPanel leftPanel, JPanel rightPanel) {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Left panel (75% width)
-        gbc.gridx = 0;
-        gbc.weightx = MAIN_PANEL_RATIO;
-        gbc.insets = new Insets(0, 0, 0, PADDING / 2);
-        panel.add(leftPanel, gbc);
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.weighty = 1.0;
+    gbc.gridheight = 1;
+    gbc.gridy = 0;
 
-        // Right panel (25% width)
-        gbc.gridx = 1;
-        gbc.weightx = SIDE_PANEL_RATIO;
-        gbc.insets = new Insets(0, PADDING / 2, 0, 0);
-        panel.add(rightPanel, gbc);
+    // Left panel (75% width)
+    gbc.gridx = 0;
+    gbc.weightx = MAIN_PANEL_RATIO;
+    gbc.insets = new Insets(0, 0, 0, PADDING / 2);
+    panel.add(leftPanel, gbc);
 
-        // Force minimum sizes to help maintain proportions
-        leftPanel.setMinimumSize(new Dimension(0, 0));
-        rightPanel.setMinimumSize(new Dimension(0, 0));
+    // Right panel (25% width)
+    gbc.gridx = 1;
+    gbc.weightx = SIDE_PANEL_RATIO;
+    gbc.insets = new Insets(0, PADDING / 2, 0, 0);
+    panel.add(rightPanel, gbc);
 
-        return panel;
-    }
+    // Force minimum sizes to help maintain proportions
+    leftPanel.setMinimumSize(new Dimension(0, 0));
+    rightPanel.setMinimumSize(new Dimension(0, 0));
 
-    private JPanel createTradingSection() {
-        MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
-        OrderEntryPanel orderEntryPanel = new OrderEntryPanel();
-        return createTwoColumnPanel(marketSearchPanel, orderEntryPanel);
-    }
+    return panel;
+  }
 
-    private JPanel createAccountSection() {
-        PortfolioPanel portfolioTablePanel = new PortfolioPanel();
-        AssetPanel assetPanel = new AssetPanel();
-        return createTwoColumnPanel(portfolioTablePanel, assetPanel);
-    }
+  private JPanel createTradingSection() {
+    MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
+    OrderEntryPanel orderEntryPanel = new OrderEntryPanel();
+    return createTwoColumnPanel(marketSearchPanel, orderEntryPanel);
+  }
 
-    @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+  private JPanel createAccountSection() {
+    PortfolioPanel portfolioTablePanel = new PortfolioPanel();
+    AssetPanel assetPanel = new AssetPanel();
+    return createTwoColumnPanel(portfolioTablePanel, assetPanel);
+  }
+
+  @Override
+  public void receiveViewEvent(ViewEvent event) {
+  }
 }

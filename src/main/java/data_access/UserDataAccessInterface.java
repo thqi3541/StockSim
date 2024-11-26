@@ -5,5 +5,5 @@ import utility.exceptions.ValidationException;
 
 public interface UserDataAccessInterface {
 
-    User getUserWithCredential(String credential) throws ValidationException;
+  User getUserWithCredential(String credential) throws ValidationException;
 }

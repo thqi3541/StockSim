@@ -1,6 +1,16 @@
 package view.panels;
 
 import interface_adapter.registration.RegistrationController;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -11,121 +21,119 @@ import view.components.PasswordInputComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class SignUpPanel extends JPanel implements IComponent {
-    private final InputComponent usernameField;
-    private final PasswordInputComponent passwordField;
-    private final PasswordInputComponent repeatPasswordField;
-    private final ButtonComponent signUpButton;
-    private final ButtonComponent logInButton;
 
-    public SignUpPanel() {
-        usernameField = new InputComponent("Username", 20);
-        passwordField = new PasswordInputComponent("Password", 20);
-        repeatPasswordField = new PasswordInputComponent("Repeat password", 20);
-        signUpButton = new ButtonComponent("Sign Up");
-        logInButton = new ButtonComponent("Go to Log In");
+  private final InputComponent usernameField;
+  private final PasswordInputComponent passwordField;
+  private final PasswordInputComponent repeatPasswordField;
+  private final ButtonComponent signUpButton;
+  private final ButtonComponent logInButton;
 
-        ViewManager.Instance().registerComponent(this);
+  public SignUpPanel() {
+    usernameField = new InputComponent("Username", 20);
+    passwordField = new PasswordInputComponent("Password", 20);
+    repeatPasswordField = new PasswordInputComponent("Repeat password", 20);
+    signUpButton = new ButtonComponent("Sign Up");
+    logInButton = new ButtonComponent("Go to Log In");
 
-        setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    ViewManager.Instance().registerComponent(this);
 
-        add(createHeader(), BorderLayout.NORTH);
-        add(createCenteredFormPanel(), BorderLayout.CENTER);
+    setLayout(new BorderLayout());
+    setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        configureButtonActions();
-    }
+    add(createHeader(), BorderLayout.NORTH);
+    add(createCenteredFormPanel(), BorderLayout.CENTER);
 
-    private JPanel createHeader() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-        headerPanel.add(logInButton, BorderLayout.EAST);
-        return headerPanel;
-    }
+    configureButtonActions();
+  }
 
-    private JPanel createCenteredFormPanel() {
-        JPanel centeringPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        centeringPanel.add(createOuterFormPanel(), gbc);
-        return centeringPanel;
-    }
+  private JPanel createHeader() {
+    JPanel headerPanel = new JPanel(new BorderLayout());
+    headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+    headerPanel.add(logInButton, BorderLayout.EAST);
+    return headerPanel;
+  }
 
-    private JPanel createOuterFormPanel() {
-        JPanel outerPanel = new JPanel();
-        outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
+  private JPanel createCenteredFormPanel() {
+    JPanel centeringPanel = new JPanel(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.anchor = GridBagConstraints.CENTER;
+    centeringPanel.add(createOuterFormPanel(), gbc);
+    return centeringPanel;
+  }
 
-        outerPanel.add(createTitleSection());
-        outerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        outerPanel.add(createInputSection());
-        outerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        outerPanel.add(createButtonSection());
+  private JPanel createOuterFormPanel() {
+    JPanel outerPanel = new JPanel();
+    outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
 
-        return outerPanel;
-    }
+    outerPanel.add(createTitleSection());
+    outerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+    outerPanel.add(createInputSection());
+    outerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+    outerPanel.add(createButtonSection());
 
-    private JPanel createTitleSection() {
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    return outerPanel;
+  }
 
-        JLabel titleLabel = new JLabel("Registration");
-        FontManager.Instance().useBold(titleLabel, 24f);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titlePanel.add(titleLabel);
+  private JPanel createTitleSection() {
+    JPanel titlePanel = new JPanel();
+    titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+    titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        return titlePanel;
-    }
+    JLabel titleLabel = new JLabel("Registration");
+    FontManager.Instance().useBold(titleLabel, 24f);
+    titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    titlePanel.add(titleLabel);
 
-    private JPanel createInputSection() {
-        JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
-        inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    return titlePanel;
+  }
 
-        inputPanel.add(usernameField);
-        inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        inputPanel.add(passwordField);
-        inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        inputPanel.add(repeatPasswordField);
+  private JPanel createInputSection() {
+    JPanel inputPanel = new JPanel();
+    inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+    inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        usernameField.setMaximumSize(new Dimension(300, usernameField.getPreferredSize().height));
-        passwordField.setMaximumSize(new Dimension(300, passwordField.getPreferredSize().height));
-        repeatPasswordField.setMaximumSize(
-                new Dimension(300, repeatPasswordField.getPreferredSize().height));
+    inputPanel.add(usernameField);
+    inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    inputPanel.add(passwordField);
+    inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    inputPanel.add(repeatPasswordField);
 
-        return inputPanel;
-    }
+    usernameField.setMaximumSize(new Dimension(300, usernameField.getPreferredSize().height));
+    passwordField.setMaximumSize(new Dimension(300, passwordField.getPreferredSize().height));
+    repeatPasswordField.setMaximumSize(
+        new Dimension(300, repeatPasswordField.getPreferredSize().height));
 
-    private JPanel createButtonSection() {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonPanel.add(signUpButton);
-        return buttonPanel;
-    }
+    return inputPanel;
+  }
 
-    private void configureButtonActions() {
-        signUpButton.addActionListener(e -> {
-            String username = usernameField.getText();
-            char[] passwordChars = passwordField.getPassword();
-            String password = new String(passwordChars);
-            char[] repeatPasswordChars = repeatPasswordField.getPassword();
-            String repeatPassword = new String(repeatPasswordChars);
-            ServiceManager.Instance().getService(RegistrationController.class)
-                          .execute(username, password, repeatPassword);
+  private JPanel createButtonSection() {
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    buttonPanel.add(signUpButton);
+    return buttonPanel;
+  }
+
+  private void configureButtonActions() {
+    signUpButton.addActionListener(e -> {
+      String username = usernameField.getText();
+      char[] passwordChars = passwordField.getPassword();
+      String password = new String(passwordChars);
+      char[] repeatPasswordChars = repeatPasswordField.getPassword();
+      String repeatPassword = new String(repeatPasswordChars);
+      ServiceManager.Instance().getService(RegistrationController.class)
+                    .execute(username, password, repeatPassword);
+    });
+
+    logInButton.addActionListener(
+        e -> {
+          ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"));
         });
+  }
 
-        logInButton.addActionListener(
-                e -> {
-                    ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"));
-                });
-    }
-
-    @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+  @Override
+  public void receiveViewEvent(ViewEvent event) {
+  }
 }

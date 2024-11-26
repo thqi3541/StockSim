@@ -5,17 +5,19 @@ import use_case.registration.RegistrationInputData;
 import utility.ServiceManager;
 
 public class RegistrationController {
-    private final RegistrationInputBoundary interactor;
 
-    public RegistrationController(RegistrationInputBoundary interactor) {
-        this.interactor = interactor;
+  private final RegistrationInputBoundary interactor;
 
-        // Register the controller with ServiceManager
-        ServiceManager.Instance().registerService(RegistrationController.class, this);
-    }
+  public RegistrationController(RegistrationInputBoundary interactor) {
+    this.interactor = interactor;
 
-    public void execute(String username, String password, String confirmPassword) {
-        RegistrationInputData inputData = new RegistrationInputData(username, password, confirmPassword);
-        interactor.execute(inputData);
-    }
+    // Register the controller with ServiceManager
+    ServiceManager.Instance().registerService(RegistrationController.class, this);
+  }
+
+  public void execute(String username, String password, String confirmPassword) {
+    RegistrationInputData inputData = new RegistrationInputData(username, password,
+        confirmPassword);
+    interactor.execute(inputData);
+  }
 }

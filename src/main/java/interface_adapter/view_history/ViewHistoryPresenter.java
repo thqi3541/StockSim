@@ -12,26 +12,26 @@ import view.view_events.UpdateTransactionHistoryEvent;
  */
 public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
 
-    public ViewHistoryPresenter() {
-        ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, this);
-    }
+  public ViewHistoryPresenter() {
+    ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, this);
+  }
 
-    /**
-     * Prepares the success view of the ViewHistory use case
-     *
-     * @param outputData the required display output data
-     */
-    @Override
-    public void prepareSuccessView(ViewHistoryOutputData outputData) {
-        ViewManager.Instance()
-                   .broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
-    }
+  /**
+   * Prepares the success view of the ViewHistory use case
+   *
+   * @param outputData the required display output data
+   */
+  @Override
+  public void prepareSuccessView(ViewHistoryOutputData outputData) {
+    ViewManager.Instance()
+               .broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
+  }
 
-    /**
-     * Prepares the ValidationException view for the ViewHistory use case
-     */
-    @Override
-    public void prepareValidationExceptionView() {
-        ViewManager.Instance().broadcastEvent(new DialogEvent("Sorry", "Please try again."));
-    }
+  /**
+   * Prepares the ValidationException view for the ViewHistory use case
+   */
+  @Override
+  public void prepareValidationExceptionView() {
+    ViewManager.Instance().broadcastEvent(new DialogEvent("Sorry", "Please try again."));
+  }
 }

@@ -5,5 +5,6 @@ import entity.User;
 import utility.exceptions.ValidationException;
 
 public interface ExecuteBuyDataAccessInterface extends UserDataAccessInterface {
-    User getUserWithCredential(String credential) throws ValidationException;
+
+  User getUserWithCredential(String credential) throws ValidationException;
 }

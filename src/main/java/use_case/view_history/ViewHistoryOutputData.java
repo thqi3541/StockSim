@@ -8,4 +8,5 @@ import entity.TransactionHistory;
  * @param transactionHistory the transaction history of the user
  */
 public record ViewHistoryOutputData(TransactionHistory transactionHistory) {
+
 }

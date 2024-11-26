@@ -6,15 +6,15 @@ import utility.ServiceManager;
 
 public class LoginController {
 
-    private final LoginInputBoundary interactor;
+  private final LoginInputBoundary interactor;
 
-    public LoginController(LoginInputBoundary interactor) {
-        this.interactor = interactor;
-        ServiceManager.Instance().registerService(LoginController.class, this);
-    }
+  public LoginController(LoginInputBoundary interactor) {
+    this.interactor = interactor;
+    ServiceManager.Instance().registerService(LoginController.class, this);
+  }
 
-    public void execute(String username, String password) {
-        final LoginInputData data = new LoginInputData(username, password);
-        interactor.execute(data);
-    }
+  public void execute(String username, String password) {
+    final LoginInputData data = new LoginInputData(username, password);
+    interactor.execute(data);
+  }
 }

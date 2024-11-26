@@ -9,13 +9,13 @@ import utility.exceptions.ValidationException;
  */
 public interface ViewHistoryDataAccessInterface extends UserDataAccessInterface {
 
-    /**
-     * Gets the current user from the user credential and throws ValidationException if credential is
-     * invalid
-     *
-     * @param credential the user's credential
-     * @return the user associated with the credential
-     * @throws ValidationException if provided credential is invalid
-     */
-    User getUserWithCredential(String credential) throws ValidationException;
+  /**
+   * Gets the current user from the user credential and throws ValidationException if credential is
+   * invalid
+   *
+   * @param credential the user's credential
+   * @return the user associated with the credential
+   * @throws ValidationException if provided credential is invalid
+   */
+  User getUserWithCredential(String credential) throws ValidationException;
 }

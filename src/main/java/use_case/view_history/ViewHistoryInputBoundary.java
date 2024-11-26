@@ -5,10 +5,10 @@ package use_case.view_history;
  */
 public interface ViewHistoryInputBoundary {
 
-    /**
-     * Executes the view transaction history use case.
-     *
-     * @param input the input data
-     */
-    void execute(ViewHistoryInputData input);
+  /**
+   * Executes the view transaction history use case.
+   *
+   * @param input the input data
+   */
+  void execute(ViewHistoryInputData input);
 }
