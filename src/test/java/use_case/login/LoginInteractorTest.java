@@ -30,7 +30,7 @@ class LoginInteractorTest {
 
         // Create a synchronous executor for testing
         Executor directExecutor = Runnable::run;
-        interactor = new LoginInteractor(dataAccess, outputPresenter, directExecutor);
+        interactor = new LoginInteractor(dataAccess, outputPresenter);
     }
 
     @Test
@@ -54,7 +54,7 @@ class LoginInteractorTest {
 
             // Act
             LoginInputData inputData = new LoginInputData("testUser", "password");
-            interactor.execute(inputData).join();
+            interactor.execute(inputData);
 
             // Assert
             verify(outputPresenter)
@@ -82,7 +82,7 @@ class LoginInteractorTest {
 
             // Act
             LoginInputData inputData = new LoginInputData("invalidUser", "wrongPassword");
-            interactor.execute(inputData).join();
+            interactor.execute(inputData);
 
             // Assert
             verify(outputPresenter).prepareValidationExceptionView();

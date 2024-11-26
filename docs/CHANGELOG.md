@@ -12,11 +12,13 @@
 
 - Implemented `MarketObserver` to update user data when stock market changes
 - Implemented `FontManager` to set custom font for GUI components
+- Implemented logout use case
 
 ### Internal Changes
 
 - Refactored `StockMarket` to `MarketTracker`
 - Refined all UI components to have a consistent style
+- Separate API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
 
 ### Bug Fixes
 

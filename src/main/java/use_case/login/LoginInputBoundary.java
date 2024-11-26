@@ -1,7 +1,5 @@
 package use_case.login;
 
-import java.util.concurrent.CompletableFuture;
-
 /**
  * Input Boundary for actions which are related to logging in.
  */
@@ -12,5 +10,5 @@ public interface LoginInputBoundary {
      * @param data the input data
      * @return CompletableFuture that completes when the login process is done
      */
-    CompletableFuture<Void> execute(LoginInputData data);
+    void execute(LoginInputData data);
 }
