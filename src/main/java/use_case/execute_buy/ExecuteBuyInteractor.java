@@ -100,4 +100,10 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
     static class StockNotFoundException extends Exception {
     }
+
+    static class InvalidQuantityException extends Exception {
+        public InvalidQuantityException(String message) {
+            super(message);
+        }
+    }
 }
