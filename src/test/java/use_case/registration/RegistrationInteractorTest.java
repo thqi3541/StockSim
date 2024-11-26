@@ -4,6 +4,7 @@ import entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import utility.exceptions.DocumentParsingException;
 
 import static org.mockito.Mockito.*;
 
@@ -138,7 +139,7 @@ class RegistrationInteractorTest {
     }
 
     @Test
-    void duplicateUsernameTest() {
+    void duplicateUsernameTest() throws DocumentParsingException {
         String existingUsername = "existingUser";
         String password = "Password123!";
         String confirmPassword = "Password123!";

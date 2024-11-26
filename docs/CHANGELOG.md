@@ -11,7 +11,8 @@
 
 ### New Features
 
-- Implement `DatabaseUserDataAcces` with MongoDB database.
+- Implemented `DatabaseUserDataAcces` with MongoDB database
+- Implemented database integration with sign up and log in
 
 ### Internal Changes
 

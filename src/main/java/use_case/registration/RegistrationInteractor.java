@@ -4,6 +4,7 @@ import entity.Portfolio;
 import entity.TransactionHistory;
 import entity.User;
 import utility.ServiceManager;
+import utility.exceptions.DocumentParsingException;
 import utility.validations.PasswordValidator;
 import utility.validations.UsernameValidator;
 
@@ -72,6 +73,8 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             presenter.prepareWeakPasswordView(e.getMessage());
         } catch (InvalidUsernameException e) {
             presenter.prepareInvalidUsernameView(e.getMessage());
+        } catch (DocumentParsingException e) {
+            throw new RuntimeException(e);
         }
     }
 

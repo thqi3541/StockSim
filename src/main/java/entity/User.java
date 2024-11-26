@@ -2,10 +2,8 @@ package entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bson.Document;
+
 import java.util.Objects;
-import java.util.Map;
-import java.util.List;
 
 /**
  * A class representing a user.
@@ -35,11 +33,11 @@ public class User {
     /**
      * Full constructor for creating a user with all details.
      *
-     * @param username            the username of the user
-     * @param password            the user's password
-     * @param balance             the user's initial balance
-     * @param portfolio           the user's portfolio
-     * @param transactionHistory  the user's transaction history
+     * @param username           the username of the user
+     * @param password           the user's password
+     * @param balance            the user's initial balance
+     * @param portfolio          the user's portfolio
+     * @param transactionHistory the user's transaction history
      */
     @JsonCreator
     public User(

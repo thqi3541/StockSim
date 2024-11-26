@@ -1,7 +1,6 @@
 package app;
 
 import data_access.DatabaseUserDataAccessObject;
-import data_access.InMemoryUserDataAccessObject;
 import data_access.StockDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;

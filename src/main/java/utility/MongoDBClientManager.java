@@ -17,6 +17,11 @@ public class MongoDBClientManager {
 
     private static final MongoClient instance = createInstance();
 
+    static {
+        // Close MongoClient at shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(MongoDBClientManager::closeMongoClient));
+    }
+
     private static MongoClient createInstance() {
         Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
         String connectionString = dotenv.get("MONGODB_API_KEY");
@@ -41,10 +46,5 @@ public class MongoDBClientManager {
         if (instance != null) {
             instance.close();
         }
-    }
-
-    static {
-        // Close MongoClient at shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(MongoDBClientManager::closeMongoClient));
     }
 }
