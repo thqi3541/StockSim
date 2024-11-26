@@ -3,6 +3,7 @@
 ## Tags
 
 - [Unreleased](#Unreleased)
+- [0.2.1](#0.2.1)
 - [0.2.0](#0.2.0)
 - [0.1.0](#0.1.0)
 
@@ -10,7 +11,17 @@
 
 ### New Features
 
-- Implemented MarketObserver to update user data when stock market changes
+- Implement `DatabaseUserDataAcces` with MongoDB database.
+
+### Internal Changes
+
+### Bug Fixes
+
+## 0.2.1
+
+### New Features
+
+- Implemented `MarketObserver` to update user data when stock market changes
 - Implemented `FontManager` to set custom font for GUI components
 
 ### Internal Changes
