@@ -87,7 +87,12 @@ public class Portfolio {
         UserStock userStock = userStocks.get(stock.getTicker());
         if (userStock != null) {
             // update the stock in the portfolio
-            userStock.updateUserStock(currentPrice, quantity);
+            // if the new quantity is 0, remove the userStock from the portfolio
+            if (userStock.getQuantity() + quantity == 0) {
+                userStocks.remove(stock.getTicker());
+            } else
+                // if the new quantity is not 0, simply update the stock in the portfolio
+                userStock.updateUserStock(currentPrice, quantity);
         } else {
             // add the stock to the portfolio
             userStocks.put(stock.getTicker(), new UserStock(stock, currentPrice, quantity));
