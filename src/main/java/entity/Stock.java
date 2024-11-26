@@ -35,6 +35,7 @@ public class Stock {
 
     /**
      * Update the current market price of the stock
+     *
      * @param price the new market price
      */
     public void updatePrice(double price) {
