@@ -4,23 +4,26 @@ import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
+import use_case.registration.RegistrationDataAccessInterface;
 import utility.ServiceManager;
 import utility.SessionManager;
+import use_case.registration.DuplicateUsernameException;
 import utility.exceptions.ValidationException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
+public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface, RegistrationDataAccessInterface {
     private static final String DEFAULT_PASSWORD = "0";
 
     private final Map<String, User> users;
 
     public InMemoryUserDataAccessObject() {
-        this.users = new java.util.HashMap<>();
+        this.users = new HashMap<>();
 
         // Initialize with predefined users
         User user1 = new User("1", DEFAULT_PASSWORD);
@@ -71,5 +74,13 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
         }
 
         return user;
+    }
+
+    @Override
+    public void saveUser(User user) throws DuplicateUsernameException {
+        if (users.containsKey(user.getUsername())) {
+            throw new DuplicateUsernameException("Username '" + user.getUsername() + "' already exists.");
+        }
+        users.put(user.getUsername(), user);
     }
 }

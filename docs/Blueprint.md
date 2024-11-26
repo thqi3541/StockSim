@@ -18,7 +18,6 @@ UML to be added.
 
 ## Proposed API for the Project
 
-- [Alpha Vantage](https://www.alphavantage.co/)
 - [Finnhub](https://finnhub.io/)
 
 ## Scheduled Meeting Times + Mode of Communication
