@@ -38,6 +38,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     public void execute(ExecuteBuyInputData data) {
         try {
             // Get current user
+            System.out.println(data.credential());
             User currentUser = dataAccess.getUserWithCredential(data.credential());
 
             // Get stock and quantity
@@ -102,5 +103,11 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     }
 
     static class StockNotFoundException extends Exception {
+    }
+
+    static class InvalidQuantityException extends Exception {
+        public InvalidQuantityException(String message) {
+            super(message);
+        }
     }
 }

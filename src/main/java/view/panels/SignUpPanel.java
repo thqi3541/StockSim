@@ -1,12 +1,13 @@
 package view.panels;
 
+import interface_adapter.registration.RegistrationController;
+import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.components.PasswordInputComponent;
-import view.view_events.DialogEvent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
@@ -108,10 +109,14 @@ public class SignUpPanel extends JPanel implements IComponent {
     }
 
     private void configureButtonActions() {
-        signUpButton.addActionListener(
-                e -> {
-                    ViewManager.Instance().broadcastEvent(new DialogEvent("Sign Up", "WIP"));
-                });
+        signUpButton.addActionListener(e -> {
+            String username = usernameField.getText();
+            char[] passwordChars = passwordField.getPassword();
+            String password = new String(passwordChars);
+            char[] repeatPasswordChars = repeatPasswordField.getPassword();
+            String repeatPassword = new String(repeatPasswordChars);
+            ServiceManager.Instance().getService(RegistrationController.class).execute(username, password, repeatPassword);
+        });
 
         logInButton.addActionListener(
                 e -> {

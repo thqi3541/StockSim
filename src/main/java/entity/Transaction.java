@@ -1,55 +1,52 @@
 package entity;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
- * A class representing a transaction
+ * A record representing a transaction.
  */
 public record Transaction(
-        Date timestamp, String ticker, int quantity, double executionPrice, String type) {
-
+        Date timestamp,
+        String ticker,
+        int quantity,
+        double executionPrice,
+        String type
+) {
     /**
-     * Getter to retrieve transaction date
+     * Constructs a new Transaction with validation for inputs.
      *
-     * @return date of transaction
+     * @param timestamp      the date and time of the transaction
+     * @param ticker         the stock ticker symbol
+     * @param quantity       the number of stocks involved in the transaction
+     * @param executionPrice the execution price per stock
+     * @param type           the type of transaction (e.g., "buy", "sell")
+     * @throws IllegalArgumentException if any field is invalid
      */
-    public Date getTimestamp() {
-        return timestamp;
+    public Transaction {
+        Objects.requireNonNull(timestamp, "Timestamp cannot be null.");
+        Objects.requireNonNull(ticker, "Ticker cannot be null or empty.");
+        Objects.requireNonNull(type, "Transaction type cannot be null or empty.");
+
+        if (ticker.isEmpty()) {
+            throw new IllegalArgumentException("Ticker cannot be empty.");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than zero.");
+        }
+        if (executionPrice < 0) {
+            throw new IllegalArgumentException("Execution price cannot be negative.");
+        }
+        if (!type.equalsIgnoreCase("buy") && !type.equalsIgnoreCase("sell")) {
+            throw new IllegalArgumentException("Transaction type must be either 'buy' or 'sell'.");
+        }
     }
 
-    /**
-     * Getter to retrieve transaction ticker
-     *
-     * @return ticker of transaction
-     */
-    public String getTicker() {
-        return ticker;
-    }
-
-    /**
-     * Getter to retrieve transaction quantity
-     *
-     * @return number of stocks involved in the transaction
-     */
-    public int getQuantity() {
-        return quantity;
-    }
-
-    /**
-     * Getter to retrieve transaction stock executionPrice
-     *
-     * @return executionPrice of a single stock from transaction
-     */
-    public double getExecutionPrice() {
-        return executionPrice;
-    }
-
-    /**
-     * Getter to retrieve type of transaction (i.e. buy or sell)
-     *
-     * @return the transaction type
-     */
-    public String getType() {
-        return type;
+    @Override
+    public String toString() {
+        return String.format(
+                "Transaction[timestamp=%s, ticker=%s, quantity=%d, executionPrice=%.2f, type=%s]",
+                timestamp, ticker, quantity, executionPrice, type
+        );
     }
 }
