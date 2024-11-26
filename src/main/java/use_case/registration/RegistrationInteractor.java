@@ -1,6 +1,9 @@
 package use_case.registration;
 
+import entity.Portfolio;
+import entity.TransactionHistory;
 import entity.User;
+import utility.ServiceManager;
 import utility.validations.PasswordValidator;
 import utility.validations.UsernameValidator;
 
@@ -15,6 +18,9 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     // Reference to the data access object as an interface type
     private final RegistrationDataAccessInterface dataAccess;
 
+    // Default initial balance for new users
+    private static final double INITIAL_BALANCE = 1000.0;
+
     /**
      * Constructs a RegistrationInteractor with dependencies on presenter, data access, and user factory.
      *
@@ -24,6 +30,9 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
+
+        // Register the interactor with ServiceManager
+        ServiceManager.Instance().registerService(RegistrationInputBoundary.class, this);
     }
 
     /**
@@ -37,11 +46,11 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     @Override
     public void execute(RegistrationInputData inputData) {
         try {
-            // Check for empty username/password
+            // Check for empty username/password, matching passwords, password strength, and valid username
             validateInput(inputData);
 
             // Create a new user
-            User newUser = new User(inputData.username(), inputData.password());
+            User newUser = new User(inputData.username(), inputData.password(), INITIAL_BALANCE, new Portfolio(), new TransactionHistory());
 
             // Save the user
             dataAccess.saveUser(newUser);

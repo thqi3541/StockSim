@@ -2,11 +2,17 @@ package interface_adapter.registration;
 
 import use_case.registration.RegistrationOutputBoundary;
 import use_case.registration.RegistrationOutputData;
+import utility.ServiceManager;
 import view.view_events.DialogEvent;
 import view.view_events.SwitchPanelEvent;
 import view.ViewManager;
 
 public class RegistrationPresenter implements RegistrationOutputBoundary {
+
+    public RegistrationPresenter() {
+        // Register the presenter with ServiceManager
+        ServiceManager.Instance().registerService(RegistrationOutputBoundary.class, this);
+    }
 
     @Override
     public void prepareSuccessView(RegistrationOutputData outputData) {
