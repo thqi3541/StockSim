@@ -24,7 +24,7 @@ Finnhub does not directly support Java, but we handle API calls using the OkHttp
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/quote?symbol=AAPL&token=ct152k9r01qkcukbmok0ct152k9r01qkcukbmokg
+https://finnhub.io/api/v1/quote?symbol=AAPL&token=YOUR_API_TOKEN
 ```
 
 **Sample response (JSON output):**
@@ -52,7 +52,7 @@ https://finnhub.io/api/v1/quote?symbol=AAPL&token=ct152k9r01qkcukbmok0ct152k9r01
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=ct152k9r01qkcukbmok0ct152k9r01qkcukbmokg
+https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=YOUR_API_TOKEN
 ```
 
 **Sample response (JSON output):**

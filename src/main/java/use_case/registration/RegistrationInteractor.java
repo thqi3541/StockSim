@@ -19,7 +19,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     private final RegistrationDataAccessInterface dataAccess;
 
     // Default initial balance for new users
-    private static final double INITIAL_BALANCE = 1000.0;
+    private static final double INITIAL_BALANCE = 5000.0;
 
     /**
      * Constructs a RegistrationInteractor with dependencies on presenter, data access, and user factory.
