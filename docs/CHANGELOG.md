@@ -31,6 +31,9 @@
 
 - Refactored `StockMarket` to `MarketTracker`
 - Refined all ui components to have a consistent style
+- Changed `StockDataAccessInterface` to have two methods to do different api calls
+- Implemented new methods from `StockDataAccessInterface` in `InMemoryStockDataAccessObject` and `StockDataAccessObject`
+- Separate API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
 - Separated API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
 - Updated stock data provider from Alpha Vantage to Finnhub
 - Removed references to Alpha Vantage in documentation and codebase

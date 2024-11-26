@@ -112,9 +112,7 @@ public class DashboardPanel extends JPanel implements IComponent {
 
     private void setupButtonActions() {
         tradeButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
-
         historyButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel")));
-
         logoutButton.addActionListener(e -> ServiceManager.Instance().getService(LogoutController.class).execute());
     }
 
