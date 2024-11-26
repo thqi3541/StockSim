@@ -10,6 +10,7 @@
 
 ### New Features
 
+- Implemented the `execute_buy` and `execute_sell` use cases (invalid inputs are not yet handled)
 - Implemented MarketObserver to update user data when stock market changes
 - Implemented `FontManager` to set custom font for GUI components
 
