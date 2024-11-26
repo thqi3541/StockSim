@@ -3,6 +3,7 @@
 ## Tags
 
 - [Unreleased](#Unreleased)
+- [0.2.1](#0.2.1)
 - [0.2.0](#0.2.0)
 - [0.1.0](#0.1.0)
 
@@ -10,8 +11,21 @@
 
 ### New Features
 
-- Implemented MarketObserver to update user data when stock market changes
+- Implemented `DatabaseUserDataAcces` with MongoDB database
+- Implemented database integration with sign up and log in
+
+### Internal Changes
+
+### Bug Fixes
+
+## 0.2.1
+
+### New Features
+
+- Implemented `MarketObserver` to update user data when stock market changes
 - Implemented `FontManager` to set custom font for GUI components
+- Implemented logout use case
+- Implemented registration use case
 
 ### Internal Changes
 
@@ -20,6 +34,10 @@
 - Changed `StockDataAccessInterface` to have two methods to do different api calls
 - Implemented new methods from `StockDataAccessInterface` in `InMemoryStockDataAccessObject` and `StockDataAccessObject`
 - Separate API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
+- Separated API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
+- Updated stock data provider from Alpha Vantage to Finnhub
+- Removed references to Alpha Vantage in documentation and codebase
+- Added service manager for `RegistrationController`, `RegistrationInteractor`, and `RegistrationPresenter`
 
 ### Bug Fixes
 

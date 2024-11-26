@@ -41,4 +41,9 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
     public void prepareValidationExceptionView() {
         ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You are not authorized to do this."));
     }
+
+    @Override
+    public void prepareInvalidQuantityExceptionView(String errorMessage) {
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", errorMessage));
+    }
 }
