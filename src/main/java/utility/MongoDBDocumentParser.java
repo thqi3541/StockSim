@@ -40,8 +40,9 @@ public class MongoDBDocumentParser {
      */
     public static Document toDocument(Object object) throws DocumentParsingException {
         try {
-            return Document.parse(object.toString());
+            return Document.parse(objectMapper.writeValueAsString(object));
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DocumentParsingException("Failed to convert object to BSON Document", e);
         }
     }

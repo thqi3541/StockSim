@@ -13,8 +13,17 @@ import utility.*;
 import utility.exceptions.DocumentParsingException;
 import utility.exceptions.ValidationException;
 
+import java.rmi.ServerException;
 
-public class DatabaseUserDataAccessObject implements RegistrationDataAccessInterface, LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
+import static com.mongodb.client.model.Filters.*;
+
+
+public class DatabaseUserDataAccessObject implements
+        RegistrationDataAccessInterface,
+        LoginDataAccessInterface,
+        ExecuteBuyDataAccessInterface,
+        ViewHistoryDataAccessInterface
+{
 
     public DatabaseUserDataAccessObject() {
         ServiceManager.Instance().registerService(DatabaseUserDataAccessObject.class, this);
@@ -27,8 +36,7 @@ public class DatabaseUserDataAccessObject implements RegistrationDataAccessInter
     @NotNull
     private static MongoCollection<Document> getUserCollection() {
         MongoDatabase database = MongoDBClientManager.Instance().getDatabase("StockSimDB");
-        MongoCollection<Document> collection = database.getCollection("users");
-        return collection;
+        return database.getCollection("users");
     }
 
     @Override
@@ -42,6 +50,19 @@ public class DatabaseUserDataAccessObject implements RegistrationDataAccessInter
             // TODO: use a more robust logging approach than printStackTrace
             e.printStackTrace();
             throw new ValidationException();
+        }
+    }
+
+    @Override
+    public void updateUserData(User user) throws ServerException {
+        try {
+            MongoCollection<Document> collection = getUserCollection();
+            collection.replaceOne(
+                    eq("username", user.getUsername()),
+                    MongoDBUserDocumentParser.toDocument(user)
+            );
+        } catch (DocumentParsingException e) {
+            throw new ServerException("Parsing document error", e);
         }
     }
 
@@ -63,7 +84,8 @@ public class DatabaseUserDataAccessObject implements RegistrationDataAccessInter
         if (result == null) {
             throw new ValidationException();
         }
-        return MongoDBDocumentParser.fromDocument(result, User.class);
+        System.out.println(result);
+        return MongoDBUserDocumentParser.fromDocument(result);
     }
 
     @Override
@@ -75,9 +97,9 @@ public class DatabaseUserDataAccessObject implements RegistrationDataAccessInter
     }
 
     @Override
-    public void saveUser(User user) throws DocumentParsingException {
+    public void createUser(User user) throws DocumentParsingException {
         MongoCollection<Document> collection = getUserCollection();
-        Document userDocument = ReflectionMongoDBDocumentParser.toDocument(user);
+        Document userDocument = MongoDBUserDocumentParser.toDocument(user);
         userDocument.remove("_id");
         collection.insertOne(userDocument);
     }

@@ -9,6 +9,7 @@ import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
+import java.rmi.ServerException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,12 @@ import java.util.Map;
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface, RegistrationDataAccessInterface {
+public class InMemoryUserDataAccessObject implements
+        LoginDataAccessInterface,
+        ExecuteBuyDataAccessInterface,
+        ViewHistoryDataAccessInterface,
+        RegistrationDataAccessInterface
+{
     private static final String DEFAULT_PASSWORD = "0";
 
     private final Map<String, User> users;
@@ -51,6 +57,11 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
         return getUserWithUsername(username);
     }
 
+    @Override
+    public void updateUserData(User user) throws ServerException {
+        // in memory data access does not need to explicit update user as User objects are modified by interactor directly.
+    }
+
     // TODO: should we throw a different exception if the user is not found?
     private User getUserWithUsername(String username) throws ValidationException {
         User user = users.get(username);
@@ -82,7 +93,7 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
     }
 
     @Override
-    public void saveUser(User user) {
+    public void createUser(User user) {
         users.put(user.getUsername(), user);
     }
 }

@@ -41,11 +41,11 @@ public class User {
      */
     @JsonCreator
     public User(
-            @JsonProperty("username") String username,
-            @JsonProperty("password") String password,
-            @JsonProperty("balance") double balance,
-            @JsonProperty("portfolio") Portfolio portfolio,
-            @JsonProperty("transactionHistory") TransactionHistory transactionHistory) {
+            String username,
+            String password,
+            double balance,
+            Portfolio portfolio,
+            TransactionHistory transactionHistory) {
         this.username = username;
         this.password = password;
         this.balance = balance;
