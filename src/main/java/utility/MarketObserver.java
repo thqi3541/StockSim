@@ -40,7 +40,7 @@ public class MarketObserver {
 
             System.out.println("Current user: " + user.getUsername());
             ViewManager.Instance()
-                    .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
+                       .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
         } catch (ValidationException e) {
             System.out.println("Failed to find current user.");
         }

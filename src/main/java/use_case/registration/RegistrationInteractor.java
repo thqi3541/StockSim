@@ -51,7 +51,8 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             // Check if username exists
             if (!dataAccess.hasUsername(inputData.username())) {
                 // Create a new user
-                User newUser = new User(inputData.username(), inputData.password(), INITIAL_BALANCE, new Portfolio(), new TransactionHistory());
+                User newUser = new User(inputData.username(), inputData.password(), INITIAL_BALANCE, new Portfolio(),
+                                        new TransactionHistory());
 
                 // Save the user
                 dataAccess.saveUser(newUser);
@@ -78,7 +79,8 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         }
     }
 
-    private void validateInput(RegistrationInputData inputData) throws InvalidInputException, PasswordsDoNotMatchException, WeakPasswordException, InvalidUsernameException {
+    private void validateInput(
+            RegistrationInputData inputData) throws InvalidInputException, PasswordsDoNotMatchException, WeakPasswordException, InvalidUsernameException {
         if (inputData.username().isEmpty() || inputData.password().isEmpty()) {
             throw new InvalidInputException("Username and password cannot be empty.");
         } else if (!inputData.password().equals(inputData.confirmPassword())) {
@@ -87,7 +89,8 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
 
         // Use PasswordValidator here
         else if (!PasswordValidator.isStrongPassword(inputData.password())) {
-            throw new WeakPasswordException("Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
+            throw new WeakPasswordException(
+                    "Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
         }
 
         // Check if username is valid by calling UsernameValidator

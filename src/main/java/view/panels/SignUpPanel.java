@@ -115,7 +115,8 @@ public class SignUpPanel extends JPanel implements IComponent {
             String password = new String(passwordChars);
             char[] repeatPasswordChars = repeatPasswordField.getPassword();
             String repeatPassword = new String(repeatPasswordChars);
-            ServiceManager.Instance().getService(RegistrationController.class).execute(username, password, repeatPassword);
+            ServiceManager.Instance().getService(RegistrationController.class)
+                          .execute(username, password, repeatPassword);
         });
 
         logInButton.addActionListener(

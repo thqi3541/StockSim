@@ -143,11 +143,15 @@ public class AppBuilder {
         new ViewHistoryPresenter();
 
         // 3. Initialize Interactors
-        new RegistrationInteractor(ServiceManager.Instance().getService(RegistrationOutputBoundary.class), ServiceManager.Instance().getService(RegistrationDataAccessInterface.class));
-        new LoginInteractor(ServiceManager.Instance().getService(LoginDataAccessInterface.class), ServiceManager.Instance().getService(LoginOutputBoundary.class));
+        new RegistrationInteractor(ServiceManager.Instance().getService(RegistrationOutputBoundary.class),
+                                   ServiceManager.Instance().getService(RegistrationDataAccessInterface.class));
+        new LoginInteractor(ServiceManager.Instance().getService(LoginDataAccessInterface.class),
+                            ServiceManager.Instance().getService(LoginOutputBoundary.class));
         new LogoutInteractor(ServiceManager.Instance().getService(LogoutOutputBoundary.class));
-        new ExecuteBuyInteractor(ServiceManager.Instance().getService(ExecuteBuyDataAccessInterface.class), ServiceManager.Instance().getService(ExecuteBuyOutputBoundary.class));
-        new ViewHistoryInteractor(ServiceManager.Instance().getService(ViewHistoryDataAccessInterface.class), ServiceManager.Instance().getService(ViewHistoryOutputBoundary.class));
+        new ExecuteBuyInteractor(ServiceManager.Instance().getService(ExecuteBuyDataAccessInterface.class),
+                                 ServiceManager.Instance().getService(ExecuteBuyOutputBoundary.class));
+        new ViewHistoryInteractor(ServiceManager.Instance().getService(ViewHistoryDataAccessInterface.class),
+                                  ServiceManager.Instance().getService(ViewHistoryOutputBoundary.class));
 
         // 4. Initialize Controllers
         new RegistrationController(ServiceManager.Instance().getService(RegistrationInputBoundary.class));

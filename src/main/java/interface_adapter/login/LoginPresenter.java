@@ -22,11 +22,11 @@ public class LoginPresenter implements LoginOutputBoundary {
 
         // Update user asset data
         ViewManager.Instance()
-                .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
+                   .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
 
         // Update history data
         ViewManager.Instance()
-                .broadcastEvent(new UpdateTransactionHistoryEvent(user.getTransactionHistory()));
+                   .broadcastEvent(new UpdateTransactionHistoryEvent(user.getTransactionHistory()));
 
         // Switch to dashboard - stock data will be updated by MarketTracker automatically
         ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel"));

@@ -26,14 +26,16 @@ public class MongoDBClientManager {
         Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
         String connectionString = dotenv.get("MONGODB_API_KEY");
         ServerApi serverApi = ServerApi.builder()
-                .version(ServerApiVersion.V1)
-                .build();
+                                       .version(ServerApiVersion.V1)
+                                       .build();
         MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(connectionString))
-                .applyToClusterSettings(builder ->
-                        builder.serverSelectionTimeout(DATABASE_CONNECTION_TIMEOUT, TimeUnit.SECONDS))
-                .serverApi(serverApi)
-                .build();
+                                                          .applyConnectionString(new ConnectionString(connectionString))
+                                                          .applyToClusterSettings(builder ->
+                                                                                          builder.serverSelectionTimeout(
+                                                                                                  DATABASE_CONNECTION_TIMEOUT,
+                                                                                                  TimeUnit.SECONDS))
+                                                          .serverApi(serverApi)
+                                                          .build();
         return MongoClients.create(settings);
     }
 

@@ -34,7 +34,10 @@ class LogoutInteractorTest {
         LogoutInputData inputData = new LogoutInputData(TEST_CREDENTIAL);
 
         // Mock static methods of the managers
-        try (MockedStatic<SessionManager> sessionManagerStatic = Mockito.mockStatic(SessionManager.class); MockedStatic<ClientSessionManager> clientSessionManagerStatic = Mockito.mockStatic(ClientSessionManager.class); MockedStatic<ServiceManager> serviceManagerStatic = Mockito.mockStatic(ServiceManager.class)) {
+        try (MockedStatic<SessionManager> sessionManagerStatic = Mockito.mockStatic(
+                SessionManager.class); MockedStatic<ClientSessionManager> clientSessionManagerStatic = Mockito.mockStatic(
+                ClientSessionManager.class); MockedStatic<ServiceManager> serviceManagerStatic = Mockito.mockStatic(
+                ServiceManager.class)) {
 
             // Setup static method mocks
             sessionManagerStatic.when(SessionManager::Instance).thenReturn(sessionManagerMock);
@@ -50,7 +53,8 @@ class LogoutInteractorTest {
 
             // Verify initial state
             assertTrue(sessionManagerMock.isValidSession(TEST_CREDENTIAL), "Session should be valid before logout");
-            assertEquals(TEST_CREDENTIAL, clientSessionManagerMock.getCredential(), "Credential should exist before logout");
+            assertEquals(TEST_CREDENTIAL, clientSessionManagerMock.getCredential(),
+                         "Credential should exist before logout");
 
             // Execute logout
             interactor.execute(inputData);

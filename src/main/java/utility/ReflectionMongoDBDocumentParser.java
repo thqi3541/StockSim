@@ -51,8 +51,8 @@ public class ReflectionMongoDBDocumentParser {
 
             // Prepare arguments for the constructor
             Object[] constructorArgs = Arrays.stream(matchingConstructor.getParameters())
-                    .map(param -> parseParameter(param, doc))
-                    .toArray();
+                                             .map(param -> parseParameter(param, doc))
+                                             .toArray();
 
             // Create an instance using the matching constructor
             matchingConstructor.setAccessible(true);
@@ -68,8 +68,8 @@ public class ReflectionMongoDBDocumentParser {
     private static boolean doesConstructorMatch(Parameter[] parameters, Document doc) {
         // Collect parameter names
         Set<String> paramNames = Arrays.stream(parameters)
-                .map(Parameter::getName)
-                .collect(Collectors.toSet());
+                                       .map(Parameter::getName)
+                                       .collect(Collectors.toSet());
 
         // Collect document field names
         Set<String> docFieldNames = doc.keySet();
@@ -95,14 +95,15 @@ public class ReflectionMongoDBDocumentParser {
                     // Recursively parse elements if they are entities
                     if (genericType.getPackageName().startsWith("entity")) {
                         return StreamSupport.stream(iterable.spliterator(), false)
-                                .map(item -> {
-                                    try {
-                                        return item instanceof Document ? fromDocument((Document) item, genericType) : item;
-                                    } catch (DocumentParsingException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                })
-                                .collect(Collectors.toCollection(() -> createEmptyCollection(value)));
+                                            .map(item -> {
+                                                try {
+                                                    return item instanceof Document ? fromDocument((Document) item,
+                                                                                                   genericType) : item;
+                                                } catch (DocumentParsingException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                            })
+                                            .collect(Collectors.toCollection(() -> createEmptyCollection(value)));
                     }
                 }
             }
@@ -122,8 +123,8 @@ public class ReflectionMongoDBDocumentParser {
             case List list -> new ArrayList<>();
             case Set set -> new HashSet<>();
             case Queue queue -> new LinkedList<>();
-            case null, default ->
-                    throw new UnsupportedOperationException("Unsupported collection type: " + iterable.getClass().getName());
+            case null, default -> throw new UnsupportedOperationException(
+                    "Unsupported collection type: " + iterable.getClass().getName());
         };
     }
 
