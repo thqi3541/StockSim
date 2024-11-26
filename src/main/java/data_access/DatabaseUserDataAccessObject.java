@@ -103,6 +103,4 @@ public class DatabaseUserDataAccessObject implements
         userDocument.remove("_id");
         collection.insertOne(userDocument);
     }
-
-
 }
