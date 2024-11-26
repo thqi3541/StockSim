@@ -88,5 +88,6 @@
 - Implemented the frontend framework
 - Updated stock data provider from Alpha Vantage to Finnhub.
 - Removed references to Alpha Vantage in documentation and codebase.
+- Add service manager for RegistrationController, RegistrationInteractor, and RegistrationPresenter
 
 ### Bug Fixes
