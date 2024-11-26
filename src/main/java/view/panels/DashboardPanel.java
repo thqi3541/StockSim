@@ -118,11 +118,14 @@ public class DashboardPanel extends JPanel implements IComponent {
         String.format(CURRENCY_FORMAT, portfolio));
   }
 
-    private void setupButtonActions() {
-        tradeButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
-        historyButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel")));
-        logoutButton.addActionListener(e -> ServiceManager.Instance().getService(LogoutController.class).execute());
-    }
+  private void setupButtonActions() {
+    tradeButton.addActionListener(
+        e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
+    historyButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(
+        new SwitchPanelEvent("TransactionHistoryPanel")));
+    logoutButton.addActionListener(
+        e -> ServiceManager.Instance().getService(LogoutController.class).execute());
+  }
 
   @Override
   public void receiveViewEvent(ViewEvent event) {

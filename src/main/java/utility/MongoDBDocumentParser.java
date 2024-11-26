@@ -32,19 +32,19 @@ public class MongoDBDocumentParser {
     }
   }
 
-    /**
-     * Converts an object into a BSON Document.
-     *
-     * @param object the object to convert
-     * @return the BSON Document representation of the object
-     * @throws DocumentParsingException if conversion fails
-     */
-    public static Document toDocument(Object object) throws DocumentParsingException {
-        try {
-            return Document.parse(objectMapper.writeValueAsString(object));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new DocumentParsingException("Failed to convert object to BSON Document", e);
-        }
+  /**
+   * Converts an object into a BSON Document.
+   *
+   * @param object the object to convert
+   * @return the BSON Document representation of the object
+   * @throws DocumentParsingException if conversion fails
+   */
+  public static Document toDocument(Object object) throws DocumentParsingException {
+    try {
+      return Document.parse(objectMapper.writeValueAsString(object));
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new DocumentParsingException("Failed to convert object to BSON Document", e);
     }
+  }
 }

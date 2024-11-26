@@ -3,6 +3,7 @@ package utility.data_transfer;
 import java.util.Map;
 
 public record PortfolioDTO(
-        Map<String, UserStockDTO> userStocks
+    Map<String, UserStockDTO> userStocks
 ) {
+
 }

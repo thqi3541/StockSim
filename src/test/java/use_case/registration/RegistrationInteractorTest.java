@@ -36,8 +36,8 @@ class RegistrationInteractorTest {
     RegistrationInputData inputData = new RegistrationInputData(username, password,
         confirmPassword);
 
-        // Mock data access to not find any existing user with the same username
-        doNothing().when(dataAccess).createUser(any(User.class));
+    // Mock data access to not find any existing user with the same username
+    doNothing().when(dataAccess).createUser(any(User.class));
 
     // Create interactor
     RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess);
@@ -171,8 +171,8 @@ class RegistrationInteractorTest {
     interactor.execute(inputData);
     interactor.execute(inputData);
 
-        // Verify that duplicate username view is prepared
-        verify(outputPresenter).prepareDuplicateUsernameView("Username already exists!");
-        verify(dataAccess, times(1)).createUser(any(User.class));
-    }
+    // Verify that duplicate username view is prepared
+    verify(outputPresenter).prepareDuplicateUsernameView("Username already exists!");
+    verify(dataAccess, times(1)).createUser(any(User.class));
+  }
 }

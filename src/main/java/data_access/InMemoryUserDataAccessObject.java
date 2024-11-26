@@ -1,6 +1,7 @@
 package data_access;
 
 import entity.User;
+import java.rmi.ServerException;
 import java.util.HashMap;
 import java.util.Map;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
@@ -11,21 +12,17 @@ import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A class that implements the ExecuteBuyDataAccessInterface interface This class is used to get the
  * user with the given credential
  */
 public class InMemoryUserDataAccessObject implements
-        LoginDataAccessInterface,
-        ExecuteBuyDataAccessInterface,
-        ViewHistoryDataAccessInterface,
-        RegistrationDataAccessInterface
-{
-    private static final String DEFAULT_PASSWORD = "0";
+    LoginDataAccessInterface,
+    ExecuteBuyDataAccessInterface,
+    ViewHistoryDataAccessInterface,
+    RegistrationDataAccessInterface {
+
+  private static final String DEFAULT_PASSWORD = "0";
 
   private final Map<String, User> users;
 
@@ -52,17 +49,17 @@ public class InMemoryUserDataAccessObject implements
     ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
   }
 
-    @Override
-    public User getUserWithCredential(String credential) throws ValidationException {
-        SessionManager sessionManager = SessionManager.Instance();
-        String username = sessionManager.getUsername(credential).orElseThrow(ValidationException::new);
-        return getUserWithUsername(username);
-    }
+  @Override
+  public User getUserWithCredential(String credential) throws ValidationException {
+    SessionManager sessionManager = SessionManager.Instance();
+    String username = sessionManager.getUsername(credential).orElseThrow(ValidationException::new);
+    return getUserWithUsername(username);
+  }
 
-    @Override
-    public void updateUserData(User user) throws ServerException {
-        // in memory data access does not need to explicit update user as User objects are modified by interactor directly.
-    }
+  @Override
+  public void updateUserData(User user) throws ServerException {
+    // in memory data access does not need to explicit update user as User objects are modified by interactor directly.
+  }
 
   // TODO: should we throw a different exception if the user is not found?
   private User getUserWithUsername(String username) throws ValidationException {
@@ -94,8 +91,8 @@ public class InMemoryUserDataAccessObject implements
     return users.containsKey(username);
   }
 
-    @Override
-    public void createUser(User user) {
-        users.put(user.getUsername(), user);
-    }
+  @Override
+  public void createUser(User user) {
+    users.put(user.getUsername(), user);
+  }
 }
