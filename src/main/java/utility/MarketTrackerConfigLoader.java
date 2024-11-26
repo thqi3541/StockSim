@@ -30,7 +30,8 @@ public class MarketTrackerConfigLoader {
                 .getResourceAsStream(MarketTrackerConfigLoader.MARKET_TRACKER_CONFIG)
         ) {
             if (input == null) {
-                throw new RuntimeException("Unable to find configuration file: " + MarketTrackerConfigLoader.MARKET_TRACKER_CONFIG);
+                throw new RuntimeException(
+                        "Unable to find configuration file: " + MarketTrackerConfigLoader.MARKET_TRACKER_CONFIG);
             }
             marketTrackerProperties.load(input);
         } catch (IOException e) {

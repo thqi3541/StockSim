@@ -86,7 +86,7 @@ public class ReflectionMongoDBDocumentParserTest {
         assertEquals(portfolio.getUserStocks().size(), parsedPortfolio.getUserStocks().size());
         for (String key : portfolio.getUserStocks().keySet()) {
             assertEquals(portfolio.getUserStocks().get(key).getStock().getTicker(),
-                    parsedPortfolio.getUserStocks().get(key).getStock().getTicker());
+                         parsedPortfolio.getUserStocks().get(key).getStock().getTicker());
         }
     }
 
@@ -104,7 +104,7 @@ public class ReflectionMongoDBDocumentParserTest {
         assertEquals(portfolio.getUserStocks().size(), parsedPortfolio.getUserStocks().size());
         for (String key : portfolio.getUserStocks().keySet()) {
             assertEquals(portfolio.getUserStocks().get(key).getStock().getTicker(),
-                    parsedPortfolio.getUserStocks().get(key).getStock().getTicker());
+                         parsedPortfolio.getUserStocks().get(key).getStock().getTicker());
         }
     }
 
@@ -119,7 +119,8 @@ public class ReflectionMongoDBDocumentParserTest {
 
         // Act
         Document historyDoc = ReflectionMongoDBDocumentParser.toDocument(history);
-        TransactionHistory parsedHistory = ReflectionMongoDBDocumentParser.fromDocument(historyDoc, TransactionHistory.class);
+        TransactionHistory parsedHistory = ReflectionMongoDBDocumentParser.fromDocument(historyDoc,
+                                                                                        TransactionHistory.class);
 
         // Assert
         assertNotNull(parsedHistory);
@@ -136,7 +137,8 @@ public class ReflectionMongoDBDocumentParserTest {
 
         // Act
         Document historyDoc = ReflectionMongoDBDocumentParser.toDocument(history);
-        TransactionHistory parsedHistory = ReflectionMongoDBDocumentParser.fromDocument(historyDoc, TransactionHistory.class);
+        TransactionHistory parsedHistory = ReflectionMongoDBDocumentParser.fromDocument(historyDoc,
+                                                                                        TransactionHistory.class);
 
         // Assert
         assertNotNull(parsedHistory);

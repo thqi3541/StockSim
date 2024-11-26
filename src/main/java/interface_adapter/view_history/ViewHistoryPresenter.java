@@ -24,7 +24,7 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
     @Override
     public void prepareSuccessView(ViewHistoryOutputData outputData) {
         ViewManager.Instance()
-                .broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
+                   .broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
     }
 
     /**
