@@ -2,13 +2,13 @@ package view.view_events;
 
 public class UpdateUsernameEvent extends ViewEvent {
 
-  private final String username;
+    private final String username;
 
-  public UpdateUsernameEvent(String username) {
-    this.username = username;
-  }
+    public UpdateUsernameEvent(String username) {
+        this.username = username;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 }
