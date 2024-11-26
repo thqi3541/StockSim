@@ -29,7 +29,7 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
 
     @Override
     public void prepareInsufficientBalanceExceptionView() {
-        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You have insufficient balance to buy this stock."));
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You don't have sufficient cash balance to buy this stock."));
     }
 
     @Override
