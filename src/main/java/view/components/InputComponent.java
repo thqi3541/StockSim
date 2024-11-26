@@ -52,4 +52,8 @@ public class InputComponent extends JPanel {
     public void setText(String text) {
         textField.setText(text);
     }
+
+    public void clear() {
+        textField.setText("");
+    }
 }
