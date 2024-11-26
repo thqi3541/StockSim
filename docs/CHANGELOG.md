@@ -12,6 +12,7 @@
 
 - Implemented MarketObserver to update user data when stock market changes
 - Implemented `FontManager` to set custom font for GUI components
+- Implemented logout use case
 
 ### Internal Changes
 
