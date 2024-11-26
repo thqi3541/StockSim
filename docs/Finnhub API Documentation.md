@@ -20,7 +20,7 @@ The Finnhub API returns responses in JSON format.
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/quote?symbol=AAPL&token={YOUR_API_TOKEN}
+https://finnhub.io/api/v1/quote?symbol=AAPL&token=YOUR_API_TOKEN
 ```
 
 **Sample response (JSON output):**
@@ -48,7 +48,7 @@ https://finnhub.io/api/v1/quote?symbol=AAPL&token={YOUR_API_TOKEN}
 **Sample request:**
 
 ```txt
-https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token={YOUR_API_TOKEN}
+https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=YOUR_API_TOKEN
 ```
 
 **Sample response (JSON output):**
