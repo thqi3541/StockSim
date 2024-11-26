@@ -53,11 +53,11 @@ public class InputComponent extends JPanel {
     return textField.getText();
   }
 
-    public void setText(String text) {
-        textField.setText(text);
-    }
+  public void setText(String text) {
+    textField.setText(text);
+  }
 
-    public void clear() {
-        textField.setText("");
-    }
+  public void clear() {
+    textField.setText("");
+  }
 }

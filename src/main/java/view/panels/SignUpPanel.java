@@ -116,20 +116,21 @@ public class SignUpPanel extends JPanel implements IComponent {
     return buttonPanel;
   }
 
-    private void configureButtonActions() {
-        signUpButton.addActionListener(e -> {
-            String username = usernameField.getText();
-            char[] passwordChars = passwordField.getPassword();
-            String password = new String(passwordChars);
-            char[] repeatPasswordChars = repeatPasswordField.getPassword();
-            String repeatPassword = new String(repeatPasswordChars);
-            ServiceManager.Instance().getService(RegistrationController.class).execute(username, password, repeatPassword);
-            
-            // clear input fields
-            usernameField.clear();
-            passwordField.clear();
-            repeatPasswordField.clear();
-        });
+  private void configureButtonActions() {
+    signUpButton.addActionListener(e -> {
+      String username = usernameField.getText();
+      char[] passwordChars = passwordField.getPassword();
+      String password = new String(passwordChars);
+      char[] repeatPasswordChars = repeatPasswordField.getPassword();
+      String repeatPassword = new String(repeatPasswordChars);
+      ServiceManager.Instance().getService(RegistrationController.class)
+                    .execute(username, password, repeatPassword);
+
+      // clear input fields
+      usernameField.clear();
+      passwordField.clear();
+      repeatPasswordField.clear();
+    });
 
     logInButton.addActionListener(
         e -> {
