@@ -1,20 +1,16 @@
 package utility;
 
-import entity.Portfolio;
-import entity.Stock;
-import entity.User;
-import entity.UserStock;
-import entity.Transaction;
-import entity.TransactionHistory;
+import entity.*;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
 import utility.exceptions.DocumentParsingException;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ReflectionMongoDBDocumentParserTest {
 

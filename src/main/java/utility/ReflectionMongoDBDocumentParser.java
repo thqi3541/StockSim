@@ -1,6 +1,7 @@
 package utility;
 
 import org.bson.Document;
+import utility.exceptions.DocumentParsingException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -9,8 +10,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import utility.exceptions.DocumentParsingException;
 
 public class ReflectionMongoDBDocumentParser {
 
@@ -139,7 +138,7 @@ public class ReflectionMongoDBDocumentParser {
      * </p>
      *
      * @param object The object to be converted into a MongoDB {@link Document}.
-     * @param <T> The type of the object being converted.
+     * @param <T>    The type of the object being converted.
      * @return A {@link Document} representing the provided object's data.
      * @throws DocumentParsingException If the conversion process encounters errors,
      *                                  such as inaccessible fields or unsupported types.

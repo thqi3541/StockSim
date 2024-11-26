@@ -1,8 +1,7 @@
 package utility;
 
-import org.bson.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.bson.Document;
 import utility.exceptions.DocumentParsingException;
 
 /**

@@ -4,6 +4,8 @@ import entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import utility.exceptions.DocumentParsingException;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -137,21 +139,22 @@ class RegistrationInteractorTest {
     }
 
     @Test
-    void duplicateUsernameTest() throws DuplicateUsernameException {
+    void duplicateUsernameTest() throws DocumentParsingException {
         String existingUsername = "existingUser";
         String password = "Password123!";
         String confirmPassword = "Password123!";
         RegistrationInputData inputData = new RegistrationInputData(existingUsername, password, confirmPassword);
 
         // Mock data access to indicate that the user already exists
-        doThrow(new DuplicateUsernameException("Username already exists. Please choose another one."))
-                .when(dataAccess).saveUser(any(User.class));
+        when(dataAccess.hasUsername(existingUsername)).thenReturn(false).thenReturn(true);
 
         // Create interactor
         RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess);
         interactor.execute(inputData);
+        interactor.execute(inputData);
 
         // Verify that duplicate username view is prepared
-        verify(outputPresenter).prepareDuplicateUsernameView("Username already exists. Please choose another one.");
+        verify(outputPresenter).prepareDuplicateUsernameView("Username already exists!");
+        verify(dataAccess, times(1)).saveUser(any(User.class));
     }
 }

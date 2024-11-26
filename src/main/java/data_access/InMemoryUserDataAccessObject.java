@@ -3,11 +3,10 @@ package data_access;
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
-import use_case.view_history.ViewHistoryDataAccessInterface;
 import use_case.registration.RegistrationDataAccessInterface;
+import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.ServiceManager;
 import utility.SessionManager;
-import use_case.registration.DuplicateUsernameException;
 import utility.exceptions.ValidationException;
 
 import java.util.HashMap;
@@ -39,6 +38,7 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
         users.put("3", user3);
 
         ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, this);
+        ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
@@ -77,10 +77,12 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
     }
 
     @Override
-    public void saveUser(User user) throws DuplicateUsernameException {
-        if (users.containsKey(user.getUsername())) {
-            throw new DuplicateUsernameException("Username '" + user.getUsername() + "' already exists.");
-        }
+    public boolean hasUsername(String username) {
+        return users.containsKey(username);
+    }
+
+    @Override
+    public void saveUser(User user) {
         users.put(user.getUsername(), user);
     }
 }
