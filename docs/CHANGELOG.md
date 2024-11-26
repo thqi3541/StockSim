@@ -13,10 +13,15 @@
 
 - Implemented `DatabaseUserDataAcces` with MongoDB database
 - Implemented database integration with sign up and log in
+- Added writing to database for `execute_buy` use case
 
 ### Internal Changes
 
+- Implemented DTO objects for database data transfer
+
 ### Bug Fixes
+
+- Fixed issues with converting between entities and MongoDB `Document`
 
 ## 0.2.1
 
