@@ -26,4 +26,8 @@ public class ClientSessionManager {
     public void setCredential(String credential) {
         this.credential = credential;
     }
+
+    public void clearCredential() {
+        this.credential = null;
+    }
 }
