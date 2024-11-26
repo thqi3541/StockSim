@@ -1,6 +1,7 @@
 package view.panels;
 
 import interface_adapter.execute_buy.ExecuteBuyController;
+import interface_adapter.execute_sell.ExecuteSellController;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -106,10 +107,10 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         FontManager.Instance().useRegular(buyButton, 14f);
         buttonPanel.add(buyButton);
         buyButton.addActionListener(e -> handleBuyAction());
-
-        // TODO: add listener to call sell controller
+        
         FontManager.Instance().useRegular(sellButton, 14f);
         buttonPanel.add(sellButton);
+        sellButton.addActionListener(e -> handleSellAction());
 
         return buttonPanel;
     }
@@ -121,6 +122,16 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         // Execute buy action
         ExecuteBuyController controller = ServiceManager.Instance()
                 .getService(ExecuteBuyController.class);
+        controller.execute(ticker, quantity);
+    }
+
+    private void handleSellAction() {
+        String ticker = tickerInput.getText();
+        String quantity = quantityInput.getText();
+
+        // Execute sell action
+        ExecuteSellController controller = ServiceManager.Instance()
+                .getService(ExecuteSellController.class);
         controller.execute(ticker, quantity);
     }
 
