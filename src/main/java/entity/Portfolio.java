@@ -82,7 +82,7 @@ public class Portfolio {
      * @param quantity     the quantity the user buys
      * @param currentPrice the current executionPrice of the stock
      */
-    private void updatePortfolio(Stock stock, int quantity, double currentPrice) {
+    public void updatePortfolio(Stock stock, int quantity, double currentPrice) {
         // find the stock in the portfolio
         UserStock userStock = userStocks.get(stock.getTicker());
         if (userStock != null) {
