@@ -100,6 +100,7 @@
             <groupId>com.squareup.okhttp3</groupId>
             <version>5.0.0-alpha.14</version>
         </dependency>
+
         <dependency>
             <artifactId>java-dotenv</artifactId>
             <groupId>io.github.cdimascio</groupId>

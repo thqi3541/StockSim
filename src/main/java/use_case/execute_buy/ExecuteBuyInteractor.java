@@ -8,7 +8,11 @@ import entity.UserStock;
 import java.util.Date;
 import utility.MarketTracker;
 import utility.ServiceManager;
+import utility.exceptions.DocumentParsingException;
 import utility.exceptions.ValidationException;
+
+import java.rmi.ServerException;
+import java.util.Date;
 
 /**
  * The interactor for the Buy Stock use case
@@ -32,17 +36,16 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     ServiceManager.Instance().registerService(ExecuteBuyInputBoundary.class, this);
   }
 
-  /**
-   * This method executes the buy transaction.
-   *
-   * @param data the input data
-   */
-  @Override
-  public void execute(ExecuteBuyInputData data) {
-    try {
-      // Get current user
-      System.out.println(data.credential());
-      User currentUser = dataAccess.getUserWithCredential(data.credential());
+    /**
+     * This method executes the buy transaction.
+     *
+     * @param data the input data
+     */
+    @Override
+    public void execute(ExecuteBuyInputData data) {
+        try {
+            // Get current user
+            User currentUser = dataAccess.getUserWithCredential(data.credential());
 
       // Get stock and quantity
       String ticker = data.ticker();
@@ -62,28 +65,33 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         Portfolio portfolio = currentUser.getPortfolio();
         updateOrAddStockToPortfolio(portfolio, stock, quantity, currentPrice);
 
-        // Add transaction
-        Date timestamp = new Date();
-        Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "BUY");
-        currentUser.getTransactionHistory().addTransaction(transaction);
+                // Add transaction
+                Date timestamp = new Date();
+                Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "BUY");
+                currentUser.getTransactionHistory().addTransaction(transaction);
 
-        // Prepare success view
-        outputPresenter.prepareSuccessView(
-            new ExecuteBuyOutputData(
-                currentUser.getBalance(),
-                currentUser.getPortfolio(),
-                currentUser.getTransactionHistory()));
-      } else {
-        throw new InsufficientBalanceException();
-      }
-    } catch (ValidationException e) {
-      outputPresenter.prepareValidationExceptionView();
-    } catch (StockNotFoundException e) {
-      outputPresenter.prepareStockNotFoundExceptionView();
-    } catch (InsufficientBalanceException e) {
-      outputPresenter.prepareInsufficientBalanceExceptionView();
+                // update user data
+                dataAccess.updateUserData(currentUser);
+
+                // Prepare success view
+                outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
+                        currentUser.getBalance(),
+                        currentUser.getPortfolio(),
+                        currentUser.getTransactionHistory()
+                ));
+            } else {
+                throw new InsufficientBalanceException();
+            }
+        } catch (ValidationException e) {
+            outputPresenter.prepareValidationExceptionView();
+        } catch (StockNotFoundException e) {
+            outputPresenter.prepareStockNotFoundExceptionView();
+        } catch (InsufficientBalanceException e) {
+            outputPresenter.prepareInsufficientBalanceExceptionView();
+        } catch (ServerException e) {
+            outputPresenter.prepareServerErrorView();
+        }
     }
-  }
 
   /**
    * This method updates the stock in the portfolio or adds a stock to the user's portfolio.

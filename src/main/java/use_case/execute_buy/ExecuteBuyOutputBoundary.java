@@ -10,5 +10,7 @@ public interface ExecuteBuyOutputBoundary {
 
   void prepareValidationExceptionView();
 
-  void prepareInvalidQuantityExceptionView(String errorMessage);
+    void prepareInvalidQuantityExceptionView(String errorMessage);
+
+    void prepareServerErrorView();
 }

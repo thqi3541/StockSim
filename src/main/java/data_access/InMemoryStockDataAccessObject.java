@@ -2,6 +2,7 @@ package data_access;
 
 import entity.Stock;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryStockDataAccessObject implements StockDataAccessInterface {
@@ -44,9 +45,27 @@ public class InMemoryStockDataAccessObject implements StockDataAccessInterface {
     stocks.put("SPOT", new Stock("SPOT", "Spotify Technology", "Entertainment", 250.0));
   }
 
-  @Override
-  public Map<String, Stock> getStocks() {
-    // Return an unmodifiable view of the stocks map to prevent external modifications
-    return Collections.unmodifiableMap(stocks);
-  }
+    @Override
+    public Map<String, Stock> getStocks() {
+        // Return an unmodifiable view of the stocks map to prevent external modifications
+        return Collections.unmodifiableMap(stocks);
+    }
+
+    /**
+     * Get updated market price for all stocks
+     *
+     * @return a hashmap with the stock ticker as the key and the updated market price as the value.
+     */
+    @Override
+    public Map<String, Double> getUpdatedPrices() {
+        Map<String, Double> updatedPrices = new HashMap<>();
+
+        // Stores ticker and marketPrice in separate map to pass as updated price
+        for (Stock stock : stocks.values()) {
+            updatedPrices.put(stock.getTicker(), stock.getMarketPrice());
+        }
+
+        // Return an unmodifiable view of the updated prices map to prevent external modifications
+        return Collections.unmodifiableMap(updatedPrices);
+    }
 }

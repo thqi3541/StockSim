@@ -7,6 +7,8 @@ import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
+import javax.swing.text.View;
+
 /**
  * Presenter for the ViewHistory Use Case
  */
@@ -27,11 +29,13 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
                .broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
   }
 
-  /**
-   * Prepares the ValidationException view for the ViewHistory use case
-   */
-  @Override
-  public void prepareValidationExceptionView() {
-    ViewManager.Instance().broadcastEvent(new DialogEvent("Sorry", "Please try again."));
-  }
+    /**
+     * Prepares the ValidationException view for the ViewHistory use case
+     */
+    @Override
+    public void prepareValidationExceptionView() {
+        ViewManager.Instance().broadcastEvent(
+                new DialogEvent("Failed", "You are not authorized to do this.")
+        );
+    }
 }

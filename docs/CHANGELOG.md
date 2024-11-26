@@ -13,10 +13,15 @@
 
 - Implemented `DatabaseUserDataAcces` with MongoDB database
 - Implemented database integration with sign up and log in
+- Added writing to database for `execute_buy` use case
 
 ### Internal Changes
 
+- Implemented DTO objects for database data transfer
+
 ### Bug Fixes
+
+- Fixed issues with converting between entities and MongoDB `Document`
 
 ## 0.2.1
 
@@ -31,6 +36,9 @@
 
 - Refactored `StockMarket` to `MarketTracker`
 - Refined all UI components to have a consistent style
+- Changed `StockDataAccessInterface` to have two methods to do different api calls
+- Implemented new methods from `StockDataAccessInterface` in `InMemoryStockDataAccessObject` and `StockDataAccessObject`
+- Separate API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
 - Separated API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
 - Updated stock data provider from Alpha Vantage to Finnhub
 - Removed references to Alpha Vantage in documentation and codebase

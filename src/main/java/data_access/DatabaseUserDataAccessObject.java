@@ -17,9 +17,21 @@ import utility.SessionManager;
 import utility.exceptions.DocumentParsingException;
 import utility.exceptions.ValidationException;
 
+import java.rmi.ServerException;
 
-public class DatabaseUserDataAccessObject implements RegistrationDataAccessInterface,
-    LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
+import static com.mongodb.client.model.Filters.*;
+
+import java.rmi.ServerException;
+
+import static com.mongodb.client.model.Filters.*;
+
+
+public class DatabaseUserDataAccessObject implements
+        RegistrationDataAccessInterface,
+        LoginDataAccessInterface,
+        ExecuteBuyDataAccessInterface,
+        ViewHistoryDataAccessInterface
+{
 
   public DatabaseUserDataAccessObject() {
     ServiceManager.Instance().registerService(DatabaseUserDataAccessObject.class, this);
@@ -29,27 +41,38 @@ public class DatabaseUserDataAccessObject implements RegistrationDataAccessInter
     ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
   }
 
-  @NotNull
-  private static MongoCollection<Document> getUserCollection() {
-    MongoDatabase database = MongoDBClientManager.Instance().getDatabase("StockSimDB");
-    MongoCollection<Document> collection = database.getCollection("users");
-    return collection;
-  }
-
-  @Override
-  public User getUserWithCredential(String credential) throws ValidationException {
-    // get username from credential
-    String username = SessionManager.Instance().getUsername(credential)
-                                    .orElseThrow(ValidationException::new);
-    // retrieve user data from database
-    try {
-      return getUserByQuery(new Document("username", username));
-    } catch (DocumentParsingException e) {
-      // TODO: use a more robust logging approach than printStackTrace
-      e.printStackTrace();
-      throw new ValidationException();
+    @NotNull
+    private static MongoCollection<Document> getUserCollection() {
+        MongoDatabase database = MongoDBClientManager.Instance().getDatabase("StockSimDB");
+        return database.getCollection("users");
     }
-  }
+
+    @Override
+    public User getUserWithCredential(String credential) throws ValidationException {
+        // get username from credential
+        String username = SessionManager.Instance().getUsername(credential).orElseThrow(ValidationException::new);
+        // retrieve user data from database
+        try {
+            return getUserByQuery(new Document("username", username));
+        } catch (DocumentParsingException e) {
+            // TODO: use a more robust logging approach than printStackTrace
+            e.printStackTrace();
+            throw new ValidationException();
+        }
+    }
+
+    @Override
+    public void updateUserData(User user) throws ServerException {
+        try {
+            MongoCollection<Document> collection = getUserCollection();
+            collection.replaceOne(
+                    eq("username", user.getUsername()),
+                    MongoDBUserDocumentParser.toDocument(user)
+            );
+        } catch (DocumentParsingException e) {
+            throw new ServerException("Parsing document error", e);
+        }
+    }
 
   @Override
   public User getUserWithPassword(String username, String password) throws ValidationException {
@@ -63,14 +86,15 @@ public class DatabaseUserDataAccessObject implements RegistrationDataAccessInter
     }
   }
 
-  private User getUserByQuery(Document query) throws ValidationException, DocumentParsingException {
-    MongoCollection<Document> collection = getUserCollection();
-    Document result = collection.find(query).first();
-    if (result == null) {
-      throw new ValidationException();
+    private User getUserByQuery(Document query) throws ValidationException, DocumentParsingException {
+        MongoCollection<Document> collection = getUserCollection();
+        Document result = collection.find(query).first();
+        if (result == null) {
+            throw new ValidationException();
+        }
+        System.out.println(result);
+        return MongoDBUserDocumentParser.fromDocument(result);
     }
-    return MongoDBDocumentParser.fromDocument(result, User.class);
-  }
 
   @Override
   public boolean hasUsername(String username) {
@@ -80,11 +104,11 @@ public class DatabaseUserDataAccessObject implements RegistrationDataAccessInter
     return collection.countDocuments(query) > 0;
   }
 
-  @Override
-  public void saveUser(User user) throws DocumentParsingException {
-    MongoCollection<Document> collection = getUserCollection();
-    Document userDocument = ReflectionMongoDBDocumentParser.toDocument(user);
-    userDocument.remove("_id");
-    collection.insertOne(userDocument);
-  }
+    @Override
+    public void createUser(User user) throws DocumentParsingException {
+        MongoCollection<Document> collection = getUserCollection();
+        Document userDocument = MongoDBUserDocumentParser.toDocument(user);
+        userDocument.remove("_id");
+        collection.insertOne(userDocument);
+    }
 }

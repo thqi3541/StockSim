@@ -135,20 +135,18 @@ public class MarketTracker {
       System.out.println("Broadcasting stock update...");
       ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
 
-      // notify observer of price update
-      System.out.println("Notifying observers...");
-      MarketObserver.Instance().onMarketUpdate();
-    } catch (RateLimitExceededException e) {
-      // on rate limit, increase the update interval and reset the rounds counter
-      currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
-      roundsWithoutRateLimit = 0;
-      restartScheduler(); // restart scheduler with new interval
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      lock.writeLock().unlock();
+            // notify observer of executionPrice update
+            System.out.println("Notifying observers...");
+            MarketObserver.Instance().onMarketUpdate();
+        } catch (RateLimitExceededException e) {
+            // on rate limit, increase the update interval and reset the rounds counter
+            currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
+            roundsWithoutRateLimit = 0;
+            restartScheduler(); // restart scheduler with new interval
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
-  }
 
   /**
    * Starts a background thread to update stock prices at fixed intervals.
