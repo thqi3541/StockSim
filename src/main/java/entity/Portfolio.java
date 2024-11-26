@@ -72,4 +72,25 @@ public class Portfolio {
     public void removeUserStock(UserStock userStock) {
         userStocks.remove(userStock.getStock().getTicker());
     }
+
+    /** When a transaction is made
+     * this method updates the portfolio with the new stock and quantity
+     * If the stock is already in the portfolio, it updates the  and cost
+     * If the stock is not in the portfolio, it adds the stock to the portfolio
+     *
+     * @param stock        the stock the user buys
+     * @param quantity     the quantity the user buys
+     * @param currentPrice the current executionPrice of the stock
+     */
+    private void updatePortfolio(Stock stock, int quantity, double currentPrice) {
+        // find the stock in the portfolio
+        UserStock userStock = userStocks.get(stock.getTicker());
+        if (userStock != null) {
+            // update the stock in the portfolio
+            userStock.updateUserStock(currentPrice, quantity);
+        } else {
+            // add the stock to the portfolio
+            userStocks.put(stock.getTicker(), new UserStock(stock, currentPrice, quantity));
+        }
+    }
 }
