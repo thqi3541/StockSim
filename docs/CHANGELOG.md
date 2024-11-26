@@ -22,6 +22,7 @@
 ### Bug Fixes
 
 - Fixed issues with converting between entities and MongoDB `Document`
+- Fixed input fields not cleared after executing
 
 ## 0.2.1
 
