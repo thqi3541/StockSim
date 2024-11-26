@@ -54,7 +54,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
                 // Update portfolio
                 Portfolio portfolio = currentUser.getPortfolio();
-                updateOrAddStockToPortfolio(portfolio, stock, quantity, currentPrice);
+                portfolio.updatePortfolio(stock, quantity, currentPrice);
 
                 // Add transaction
                 Date timestamp = new Date();
@@ -79,21 +79,6 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         }
     }
 
-    /**
-     * This method updates the stock in the portfolio or adds a stock to the user's portfolio.
-     *
-     * @param portfolio    the portfolio of the user
-     * @param stock        the stock the user buys
-     * @param quantity     the quantity the user buys
-     * @param currentPrice the current executionPrice of the stock
-     */
-    private void updateOrAddStockToPortfolio(Portfolio portfolio, Stock stock, int quantity, double currentPrice) {
-        portfolio.getUserStock(stock.getTicker())
-                .ifPresentOrElse(
-                        existingUserStock -> existingUserStock.updateUserStock(currentPrice, quantity),
-                        () -> portfolio.addUserStock(new UserStock(stock, currentPrice, quantity))
-                );
-    }
 
     static class InsufficientBalanceException extends Exception {
     }
