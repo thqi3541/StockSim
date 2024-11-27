@@ -1,5 +1,6 @@
 package use_case.registration;
 
-public record RegistrationInputData(String username, String password, String confirmPassword) {
+public record RegistrationInputData(String username, String password,
+                                    String confirmPassword) {
 
 }

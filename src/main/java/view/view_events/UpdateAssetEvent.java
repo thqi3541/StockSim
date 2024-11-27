@@ -4,26 +4,26 @@ import entity.Portfolio;
 
 public class UpdateAssetEvent extends ViewEvent {
 
-  private final Portfolio portfolio;
-  private final double balance;
+    private final Portfolio portfolio;
+    private final double balance;
 
-  /**
-   * Constructs an UpdatePortfolioEvent with a specified portfolio and balance, using only the
-   * UPDATE_PORTFOLIO event type.
-   *
-   * @param portfolio The portfolio to update.
-   * @param balance   The balance associated with the portfolio.
-   */
-  public UpdateAssetEvent(Portfolio portfolio, double balance) {
-    this.portfolio = portfolio;
-    this.balance = balance;
-  }
+    /**
+     * Constructs an UpdatePortfolioEvent with a specified portfolio and balance, using only the
+     * UPDATE_PORTFOLIO event type.
+     *
+     * @param portfolio The portfolio to update.
+     * @param balance   The balance associated with the portfolio.
+     */
+    public UpdateAssetEvent(Portfolio portfolio, double balance) {
+        this.portfolio = portfolio;
+        this.balance = balance;
+    }
 
-  public Portfolio getPortfolio() {
-    return portfolio;
-  }
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
 
-  public double getBalance() {
-    return balance;
-  }
+    public double getBalance() {
+        return balance;
+    }
 }

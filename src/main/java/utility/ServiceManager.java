@@ -9,52 +9,52 @@ import java.util.Map;
  */
 public class ServiceManager {
 
-  // Private static instance of the class
-  private static volatile ServiceManager instance;
+    // Private static instance of the class
+    private static volatile ServiceManager instance;
 
-  // Private map to store services
-  private final Map<Class<?>, Object> services;
+    // Private map to store services
+    private final Map<Class<?>, Object> services;
 
-  // Private constructor to prevent instantiation
-  private ServiceManager() {
-    services = new HashMap<>();
-  }
-
-  /**
-   * Gets the singleton instance of ServiceManager Uses double-checked locking for thread safety
-   *
-   * @return The singleton instance
-   */
-  public static ServiceManager Instance() {
-    if (instance == null) {
-      synchronized (ServiceManager.class) {
-        if (instance == null) {
-          instance = new ServiceManager();
-        }
-      }
+    // Private constructor to prevent instantiation
+    private ServiceManager() {
+        services = new HashMap<>();
     }
-    return instance;
-  }
 
-  /**
-   * Registers a service instance for the given type
-   *
-   * @param key     The interface or class type of the service
-   * @param service The service instance
-   * @param <T>     The type of the service
-   */
-  public <T> void registerService(Class<T> key, T service) {
-    services.put(key, service);
-  }
+    /**
+     * Gets the singleton instance of ServiceManager Uses double-checked locking for thread safety
+     *
+     * @return The singleton instance
+     */
+    public static ServiceManager Instance() {
+        if (instance == null) {
+            synchronized (ServiceManager.class) {
+                if (instance == null) {
+                    instance = new ServiceManager();
+                }
+            }
+        }
+        return instance;
+    }
 
-  /**
-   * Retrieves a service instance for the given type
-   *
-   * @param key The interface or class type of the service to retrieve
-   * @param <T> The type of the service
-   * @return The service instance
-   */
-  public <T> T getService(Class<T> key) {
-    return key.cast(services.get(key));
-  }
+    /**
+     * Registers a service instance for the given type
+     *
+     * @param key     The interface or class type of the service
+     * @param service The service instance
+     * @param <T>     The type of the service
+     */
+    public <T> void registerService(Class<T> key, T service) {
+        services.put(key, service);
+    }
+
+    /**
+     * Retrieves a service instance for the given type
+     *
+     * @param key The interface or class type of the service to retrieve
+     * @param <T> The type of the service
+     * @return The service instance
+     */
+    public <T> T getService(Class<T> key) {
+        return key.cast(services.get(key));
+    }
 }

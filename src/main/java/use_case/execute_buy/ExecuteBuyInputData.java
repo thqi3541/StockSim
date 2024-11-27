@@ -7,6 +7,7 @@ package use_case.execute_buy;
  * @param ticker     the ticker of the stock
  * @param quantity   the quantity of the stock to buy
  */
-public record ExecuteBuyInputData(String credential, String ticker, int quantity) {
+public record ExecuteBuyInputData(String credential, String ticker,
+                                  int quantity) {
 
 }

@@ -8,41 +8,44 @@ import view.view_events.UpdateAssetEvent;
 
 public class MarketObserver {
 
-  private static volatile MarketObserver instance = null;
-  private boolean initialized = false;
-  private UserDataAccessInterface dataAccess;
+    private static volatile MarketObserver instance = null;
+    private boolean initialized = false;
+    private UserDataAccessInterface dataAccess;
 
-  private MarketObserver() {
-  }
+    private MarketObserver() {
+    }
 
-  public static MarketObserver Instance() {
-    if (instance == null) {
-      synchronized (MarketObserver.class) {
+    public static MarketObserver Instance() {
         if (instance == null) {
-          instance = new MarketObserver();
+            synchronized (MarketObserver.class) {
+                if (instance == null) {
+                    instance = new MarketObserver();
+                }
+            }
         }
-      }
+        return instance;
     }
-    return instance;
-  }
 
-  public synchronized void initialize(UserDataAccessInterface dataAccess) {
-    if (this.initialized) {
-      throw new IllegalStateException("MarketTracker is already initialized.");
+    public synchronized void initialize(UserDataAccessInterface dataAccess) {
+        if (this.initialized) {
+            throw new IllegalStateException(
+                    "MarketTracker is already initialized.");
+        }
+        this.dataAccess = dataAccess;
+        this.initialized = true;
     }
-    this.dataAccess = dataAccess;
-    this.initialized = true;
-  }
 
-  public void onMarketUpdate() {
-    try {
-      User user = dataAccess.getUserWithCredential(ClientSessionManager.Instance().getCredential());
+    public void onMarketUpdate() {
+        try {
+            User user = dataAccess.getUserWithCredential(
+                    ClientSessionManager.Instance().getCredential());
 
-      System.out.println("Current user: " + user.getUsername());
-      ViewManager.Instance()
-                 .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
-    } catch (ValidationException e) {
-      System.out.println("Failed to find current user.");
+            System.out.println("Current user: " + user.getUsername());
+            ViewManager.Instance()
+                       .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(),
+                                                            user.getBalance()));
+        } catch (ValidationException e) {
+            System.out.println("Failed to find current user.");
+        }
     }
-  }
 }

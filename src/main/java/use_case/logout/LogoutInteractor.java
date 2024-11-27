@@ -6,17 +6,18 @@ import utility.SessionManager;
 
 public class LogoutInteractor implements LogoutInputBoundary {
 
-  private final LogoutOutputBoundary outputPresenter;
+    private final LogoutOutputBoundary outputPresenter;
 
-  public LogoutInteractor(LogoutOutputBoundary outputPresenter) {
-    this.outputPresenter = outputPresenter;
-    ServiceManager.Instance().registerService(LogoutInputBoundary.class, this);
-  }
+    public LogoutInteractor(LogoutOutputBoundary outputPresenter) {
+        this.outputPresenter = outputPresenter;
+        ServiceManager.Instance()
+                      .registerService(LogoutInputBoundary.class, this);
+    }
 
-  @Override
-  public void execute(LogoutInputData data) {
-    SessionManager.Instance().endSession(data.credential());
-    ClientSessionManager.Instance().clearCredential();
-    outputPresenter.prepareSuccessView();
-  }
+    @Override
+    public void execute(LogoutInputData data) {
+        SessionManager.Instance().endSession(data.credential());
+        ClientSessionManager.Instance().clearCredential();
+        outputPresenter.prepareSuccessView();
+    }
 }

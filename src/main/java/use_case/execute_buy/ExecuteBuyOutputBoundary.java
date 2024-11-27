@@ -2,15 +2,15 @@ package use_case.execute_buy;
 
 public interface ExecuteBuyOutputBoundary {
 
-  void prepareSuccessView(ExecuteBuyOutputData outputData);
+    void prepareSuccessView(ExecuteBuyOutputData outputData);
 
-  void prepareInsufficientBalanceExceptionView();
+    void prepareInsufficientBalanceExceptionView();
 
-  void prepareStockNotFoundExceptionView();
+    void prepareStockNotFoundExceptionView();
 
-  void prepareValidationExceptionView();
+    void prepareValidationExceptionView();
 
-  void prepareInvalidQuantityExceptionView(String errorMessage);
+    void prepareInvalidQuantityExceptionView(String errorMessage);
 
-  void prepareServerErrorView();
+    void prepareServerErrorView();
 }
