@@ -22,4 +22,15 @@ public interface ExecuteSellOutputBoundary {
      * Prepare the view for a validation exception.
      */
     void prepareValidationExceptionView();
+
+    /**
+     * Prepare the view for an invalid quantity exception.
+     * @param s The error message.
+     */
+    void prepareInvalidQuantityExceptionView(String s);
+
+    /**
+     * Prepare the view for a server exception.
+     */
+    void prepareServerErrorView();
 }

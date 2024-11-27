@@ -1,11 +1,11 @@
 package use_case.execute_sell;
 
 import entity.*;
-import use_case.execute_sell.*;
 import utility.MarketTracker;
 import utility.ServiceManager;
 import utility.exceptions.ValidationException;
 
+import java.rmi.ServerException;
 import java.util.Date;
 
 /**
@@ -52,6 +52,11 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
             double totalProfit = currentPrice * quantity;
             double totalAssets = currentUser.getTotalAssetsValue();
 
+            // check if the input quantity is invalid
+            if (quantity <= 0) {
+                throw new InvalidQuantityException("Quantity must be greater than 0");
+            }
+
             if (totalProfit <= totalAssets) {
                 // Add balance
                 currentUser.addBalance(totalProfit);
@@ -65,6 +70,9 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "SELL");
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
+                // update user data
+                dataAccess.updateUserData(currentUser);
+
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteSellOutputData(
                         currentUser.getBalance(),
@@ -76,10 +84,14 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
             }
         } catch (ValidationException e) {
             outputPresenter.prepareValidationExceptionView();
+        } catch (ServerException e) {
+            outputPresenter.prepareServerErrorView();
         } catch (ExecuteSellInteractor.StockNotFoundException e) {
             outputPresenter.prepareStockNotFoundExceptionView();
         } catch (ExecuteSellInteractor.InsufficientMarginCallException e) {
             outputPresenter.prepareInsufficientMarginCallExceptionView();
+        } catch (InvalidQuantityException e) {
+            outputPresenter.prepareInvalidQuantityExceptionView("Quantity must be greater than 0");
         }
     }
 
@@ -88,5 +100,11 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
     }
 
     static class StockNotFoundException extends Exception {
+    }
+
+    static class InvalidQuantityException extends Exception {
+        public InvalidQuantityException(String message) {
+            super(message);
+        }
     }
 }
