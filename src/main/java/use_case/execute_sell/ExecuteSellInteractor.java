@@ -54,7 +54,7 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
 
             // check if the input quantity is invalid
             if (quantity <= 0) {
-                throw new InvalidQuantityException("Quantity must be greater than 0");
+                throw new InvalidQuantityException();
             }
 
             if (totalProfit <= totalAssets) {
@@ -66,8 +66,7 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
                 portfolio.updatePortfolio(stock, -quantity, currentPrice);
 
                 // Add transaction
-                Date timestamp = new Date();
-                Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "SELL");
+                Transaction transaction = new Transaction(new Date(), ticker, quantity, currentPrice, "SELL");
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
                 // update user data
@@ -103,8 +102,5 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
     }
 
     static class InvalidQuantityException extends Exception {
-        public InvalidQuantityException(String message) {
-            super(message);
-        }
     }
 }
