@@ -27,7 +27,7 @@ public interface ExecuteSellOutputBoundary {
      * Prepare the view for an invalid quantity exception.
      * @param s The error message.
      */
-    void prepareInvalidQuantityExceptionView(String s);
+    void prepareInvalidQuantityExceptionView();
 
     /**
      * Prepare the view for a server exception.

@@ -90,7 +90,7 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
         } catch (ExecuteSellInteractor.InsufficientMarginCallException e) {
             outputPresenter.prepareInsufficientMarginCallExceptionView();
         } catch (InvalidQuantityException e) {
-            outputPresenter.prepareInvalidQuantityExceptionView("Quantity must be greater than 0");
+            outputPresenter.prepareInvalidQuantityExceptionView();
         }
     }
 
