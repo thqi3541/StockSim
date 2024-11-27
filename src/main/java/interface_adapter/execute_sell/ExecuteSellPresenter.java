@@ -8,6 +8,8 @@ import view.view_events.DialogEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
+import javax.swing.text.View;
+
 public class ExecuteSellPresenter implements ExecuteSellOutputBoundary {
 
     public ExecuteSellPresenter() {
@@ -40,5 +42,15 @@ public class ExecuteSellPresenter implements ExecuteSellOutputBoundary {
     @Override
     public void prepareValidationExceptionView() {
         ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You are not authorized to do this."));
+    }
+
+    @Override
+    public void prepareInvalidQuantityExceptionView(String errorMessage) {
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "Quantity must be greater than 0"));
+    }
+
+    @Override
+    public void prepareServerErrorView() {
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "Server Internal Error."));
     }
 }

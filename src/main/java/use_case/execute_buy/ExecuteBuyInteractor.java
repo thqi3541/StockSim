@@ -52,7 +52,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
             // check if the input quantity is invalid
             if (quantity <= 0) {
-                throw new InvalidQuantityException("Quantity must be greater than 0");
+                throw new InvalidQuantityException();
             }
 
             if (currentUser.getBalance() >= totalCost) {
@@ -88,7 +88,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         } catch (InsufficientBalanceException e) {
             outputPresenter.prepareInsufficientBalanceExceptionView();
         } catch (InvalidQuantityException e) {
-            outputPresenter.prepareInvalidQuantityExceptionView("Quantity must be greater than zero");
+            outputPresenter.prepareInvalidQuantityExceptionView();
         } // TODO： may add a document parsing exception
     }
 
@@ -100,8 +100,5 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     }
 
     static class InvalidQuantityException extends Exception {
-        public InvalidQuantityException(String message) {
-            super(message);
-        }
     }
 }
