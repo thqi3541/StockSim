@@ -41,13 +41,20 @@ Once you're done with the bug/feature you're working on, push this change to you
 After pushing changes to your remote repository, you can make a pull request.
 
 1. Name your pull request following the naming convention of semantic versioning:
+
    1. `feat:` This change adds or modifies functionality. Example: `feat: implement buying stocks feature`
    2. `fix:` This change fixes a bug in the codebase. Example: `fix: fix an error that leads to incorrect calculation of stock prices`
    3. `refactor:` This change modifies the codebase without changing functionality. Example: `refactor: separate calculation of stock prices to a separate class`
    4. `docs:` This change ONLY changes project documentation. Example: `docs: update README`
    5. `test:` This change ONLY modifies tests. Example: `test: update unit tests for BuyStockInteractor`
    6. `ci:` This change ONLY modifies CI/CD workflow. Example: `ci: set up automated CI testing for pull requests`
-   7. `chores:` Trivial changes that do not fit into the above categories. Example: `chores: fix CheckStyle issues`
+   7. `chore:` Trivial changes that do not fit into the above categories. Example: `chore: fix CheckStyle issues`
+   8. `build:` Changes to build system or external dependencies. Example: `build: update Maven dependencies to latest versions`
+   9. `perf:` Performance improvements. Example: `perf: optimize stock price calculation algorithm`
+   10. `style:` Changes that don't affect code meaning. Example: `style: format code according to style guide`
+   11. `revert:` Reverts a previous commit. Example: `revert: feat: implement buying stocks feature`
+   12. For breaking changes, add a `!` after the type. Example: `feat!: change stock price calculation API`
+
 2. Summarize the proposed changes in a few bullet points in the pull request message
 3. Review and complete the checklist in the pull request template
 4. Request a review from another team member. The reviewer should ideally be the previous member working on the feature and should have a good understanding of the relevant part of the codebase

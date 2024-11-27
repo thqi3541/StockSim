@@ -116,7 +116,7 @@ Steps:
 - If the login is successful, the LoginInteractor loads the user data and directs the LoginView to the trading interface (Interactor -> Presenter).
 - If the login fails, the LoginInteractor instructs the LoginView to display an error message (Interactor -> Presenter).
 
-### Use Case 4: Execute Trades BUY
+### Use Case 3: Execute Trades BUY
 
 User Story: As a user, I want to buy shares of a stock so that I can hold a long position in it. For example, I can buy 10 shares of AAPL (Apple Inc.) at $5 per share.
 
@@ -126,7 +126,7 @@ Steps:
 - The ExecuteBuyInteractor processes the order and updates the account balance and portfolio (Interactor).
 - The ExecuteBuyInteractor returns the trade results to the TradeView, displaying success or error messages (Interactor -> Presenter).
 
-### Use Case 5: Execute Trades SELL
+### Use Case 4: Execute Trades SELL
 
 User Story: As a user, I want to sell shares of a stock that I am currently holding so that the position of the stock will decrease and I will get money in return. For example, I have 10 shares of AAPL (Apple Inc.), so I can sell 5 shares.
 
@@ -182,7 +182,7 @@ Steps:
 - The RankingController retrieves the current user's rank by comparing their portfolio's total value with other users and formats all users' assets and portfolio values by ranking.
 - The RankingController sends the data to the RankingView and provides optional details, such as viewing the top 3 or top 5 users listed in descending order.
 
-### Use Case 8: Password Reset + Email Verification
+### Use Case 9: Password Reset + Email Verification
 
 User Story: As a trader, I want to reset my password securely using email verification so I can regain access to my account if I forget my password.
 

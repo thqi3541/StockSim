@@ -39,15 +39,23 @@ The platform offers real-time market data integration through Finnhub API and su
 ### Build from Source
 
 1. Clone this repository
-2. Apply for a API from [Finnhub](https://finnhub.io/)
+2. Apply for an API key from [Finnhub](https://finnhub.io/)
 3. Set up `STOCK_API_KEY` in `.env.local`
 4. Request for MongoDB token via issues, then set up `MONGODB_API_KEY` in `.env.local`
-5. Run the main app
+5. Run the main app:
+   ```bash
+   mvn clean install
+   java -jar target/StockSim.jar
+   ```
 
 ### Download
 
 1. Download the latest release from [here](https://github.com/ivorkchan/StockSim/releases)
-2. To run the jar file, run `java -jar StockSim.jar`
+2. Create `.env.local` file with your API keys (see Build from Source steps 2-4)
+3. Run the jar file:
+   ```bash
+   java -jar StockSim.jar
+   ```
 
 ## Key Features
 
