@@ -17,11 +17,16 @@
 
 ## Overview
 
-StockSim is a sophisticated desktop trading simulator designed to replicate real-world market conditions with high fidelity.
+StockSim is a sophisticated desktop trading simulator designed to replicate
+real-world market conditions with high fidelity.
 
-Built with a focus on educational value and practical experience, it provides business students, aspiring traders, and financial professionals with a risk-free environment to develop and refine their trading strategies.
+Built with a focus on educational value and practical experience, it provides
+business students, aspiring traders, and financial professionals with a
+risk-free environment to develop and refine their trading strategies.
 
-The platform offers real-time market data integration through Finnhub API and supports various trading operations including long positions, short selling, and portfolio management.
+The platform offers real-time market data integration through Finnhub API and
+supports various trading operations including long positions, short selling, and
+portfolio management.
 
 ## Requirements
 
@@ -41,7 +46,8 @@ The platform offers real-time market data integration through Finnhub API and su
 1. Clone this repository
 2. Apply for an API key from [Finnhub](https://finnhub.io/)
 3. Set up `STOCK_API_KEY` in `.env.local`
-4. Request for MongoDB token via issues, then set up `MONGODB_API_KEY` in `.env.local`
+4. Request for MongoDB token via issues, then set up `MONGODB_API_KEY` in
+   `.env.local`
 5. Run the main app:
    ```bash
    mvn clean install
@@ -50,7 +56,8 @@ The platform offers real-time market data integration through Finnhub API and su
 
 ### Download
 
-1. Download the latest release from [here](https://github.com/ivorkchan/StockSim/releases)
+1. Download the latest release from
+   [here](https://github.com/ivorkchan/StockSim/releases)
 2. Run the jar file:
    ```bash
    java -jar StockSim.jar
@@ -58,7 +65,8 @@ The platform offers real-time market data integration through Finnhub API and su
 
 ## Key Features
 
-For detailed information about use cases and user stories, please refer to [this page](/docs/Project%20Overview.md).
+For detailed information about use cases and user stories, please refer to
+[this page](/docs/Project%20Overview.md).
 
 1. Sign Up
 
@@ -85,7 +93,8 @@ For detailed information about use cases and user stories, please refer to [this
 1. SOLID and Clean Architecture
 2. Scheduled Market Update
 3. Multi-user Support and Persistent Data in MongoDB
-4. UI and UX Design: [View Prototype in Figma](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=89%3A589&node-id=89-603&node-type=canvas&viewport=351%2C190%2C0.14&t=2N4BKpzFNg0XUjDq-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=89%3A603)
+4. UI and UX Design:
+   [View Prototype in Figma](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=89%3A589&node-id=89-603&node-type=canvas&viewport=351%2C190%2C0.14&t=2N4BKpzFNg0XUjDq-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=89%3A603)
 
 ## Credits
 
