@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
+import utility.ServiceManager;
 import utility.exceptions.RateLimitExceededException;
 
 import java.io.IOException;
@@ -58,6 +59,9 @@ public class ExternalStockDataAccessObject implements StockDataAccessInterface {
         } catch (IOException e) {
             throw new RuntimeException("Error loading configuration file", e);
         }
+
+        ServiceManager.Instance()
+                      .registerService(StockDataAccessInterface.class, this);
 
     }
 

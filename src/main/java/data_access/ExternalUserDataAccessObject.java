@@ -29,13 +29,14 @@ public class ExternalUserDataAccessObject implements
 
     public ExternalUserDataAccessObject() {
         ServiceManager.Instance()
-                      .registerService(ExternalUserDataAccessObject.class,
+                      .registerService(UserDataAccessInterface.class,
                                        this);
         ServiceManager.Instance()
                       .registerService(RegistrationDataAccessInterface.class,
                                        this);
         ServiceManager.Instance()
                       .registerService(LoginDataAccessInterface.class, this);
+
         ServiceManager.Instance()
                       .registerService(ExecuteBuyDataAccessInterface.class,
                                        this);

@@ -1,7 +1,7 @@
 package app;
 
+import data_access.ExternalStockDataAccessObject;
 import data_access.ExternalUserDataAccessObject;
-import data_access.InMemoryStockDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import interface_adapter.login.LoginController;
@@ -143,7 +143,7 @@ public class AppBuilder {
         MarketObserver.Instance()
                       .initialize(new ExternalUserDataAccessObject());
         MarketTracker.Instance()
-                     .initialize(new InMemoryStockDataAccessObject());
+                     .initialize(new ExternalStockDataAccessObject());
 
         // 2. Initialize Presenters
         new RegistrationPresenter();
