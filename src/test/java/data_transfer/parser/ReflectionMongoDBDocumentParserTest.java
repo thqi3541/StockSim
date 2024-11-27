@@ -1,7 +1,5 @@
-package utility;
+package data_transfer.parser;
 
-import data_transfer.parser.DocumentParsingException;
-import data_transfer.parser.ReflectionMongoDBDocumentParser;
 import entity.Portfolio;
 import entity.Stock;
 import entity.Transaction;
