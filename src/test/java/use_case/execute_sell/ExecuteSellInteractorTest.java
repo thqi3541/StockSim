@@ -109,7 +109,7 @@ class ExecuteSellInteractorTest {
             assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to insufficient margin call");
             assertEquals(-500.0, mockUser.getBalance(), "Balance should remain unchanged");
-            assertTrue(mockUser.getTransactionHistory().getAllTransactions().isEmpty(),
+            assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
                     "No transaction should be recorded");
         }
     }
@@ -134,7 +134,7 @@ class ExecuteSellInteractorTest {
             assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to stock not found");
             assertEquals(10000.0, mockUser.getBalance(), "Balance should remain unchanged");
-            assertTrue(mockUser.getTransactionHistory().getAllTransactions().isEmpty(),
+            assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
                     "No transaction should be recorded");
         }
     }
