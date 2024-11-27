@@ -106,7 +106,6 @@ public class Portfolio {
     public boolean isEmpty() {
         return userStocks.isEmpty();
     }
-}
 
 
     /** When a transaction is made
