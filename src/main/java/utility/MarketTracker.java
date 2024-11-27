@@ -29,7 +29,7 @@ public class MarketTracker {
             = Long.parseLong(MarketTrackerConfigLoader.getMarketTrackerProperty("UPDATE_INTERVAL_ADJUSTMENT_RATE"));
     // number of rounds without rate limit
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
-            = Integer.parseInt(MarketTrackerConfigLoader.getMarketTrackerProperty("ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));;
+            = Integer.parseInt(MarketTrackerConfigLoader.getMarketTrackerProperty("ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));
 
     // thread-safe Singleton instance
     private static volatile MarketTracker instance = null;
@@ -139,8 +139,6 @@ public class MarketTracker {
             currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
             roundsWithoutRateLimit = 0;
             restartScheduler(); // restart scheduler with new interval
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             lock.writeLock().unlock();
         }

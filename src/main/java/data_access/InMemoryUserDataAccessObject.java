@@ -3,24 +3,32 @@ package data_access;
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
+import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
 import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
+import java.rmi.ServerException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * A class that implements the ExecuteBuyDataAccessInterface interface
  * This class is used to get the user with the given credential
  */
-public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, ExecuteBuyDataAccessInterface, ViewHistoryDataAccessInterface {
+public class InMemoryUserDataAccessObject implements
+        LoginDataAccessInterface,
+        ExecuteBuyDataAccessInterface,
+        ViewHistoryDataAccessInterface,
+        RegistrationDataAccessInterface
+{
     private static final String DEFAULT_PASSWORD = "0";
 
     private final Map<String, User> users;
 
     public InMemoryUserDataAccessObject() {
-        this.users = new java.util.HashMap<>();
+        this.users = new HashMap<>();
 
         // Initialize with predefined users
         User user1 = new User("1", DEFAULT_PASSWORD);
@@ -36,6 +44,7 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
         users.put("3", user3);
 
         ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, this);
+        ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
@@ -46,6 +55,11 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
         SessionManager sessionManager = SessionManager.Instance();
         String username = sessionManager.getUsername(credential).orElseThrow(ValidationException::new);
         return getUserWithUsername(username);
+    }
+
+    @Override
+    public void updateUserData(User user) throws ServerException {
+        // in memory data access does not need to explicit update user as User objects are modified by interactor directly.
     }
 
     // TODO: should we throw a different exception if the user is not found?
@@ -71,5 +85,15 @@ public class InMemoryUserDataAccessObject implements LoginDataAccessInterface, E
         }
 
         return user;
+    }
+
+    @Override
+    public boolean hasUsername(String username) {
+        return users.containsKey(username);
+    }
+
+    @Override
+    public void createUser(User user) {
+        users.put(user.getUsername(), user);
     }
 }

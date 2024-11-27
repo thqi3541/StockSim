@@ -3,8 +3,10 @@ package use_case.execute_buy;
 import entity.*;
 import utility.MarketTracker;
 import utility.ServiceManager;
+import utility.exceptions.DocumentParsingException;
 import utility.exceptions.ValidationException;
 
+import java.rmi.ServerException;
 import java.util.Date;
 
 /**
@@ -61,6 +63,9 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
                 Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "BUY");
                 currentUser.getTransactionHistory().addTransaction(transaction);
 
+                // update user data
+                dataAccess.updateUserData(currentUser);
+
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
                         currentUser.getBalance(),
@@ -76,6 +81,8 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
             outputPresenter.prepareStockNotFoundExceptionView();
         } catch (InsufficientBalanceException e) {
             outputPresenter.prepareInsufficientBalanceExceptionView();
+        } catch (ServerException e) {
+            outputPresenter.prepareServerErrorView();
         }
     }
 
@@ -84,5 +91,11 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
     }
 
     static class StockNotFoundException extends Exception {
+    }
+
+    static class InvalidQuantityException extends Exception {
+        public InvalidQuantityException(String message) {
+            super(message);
+        }
     }
 }

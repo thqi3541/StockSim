@@ -123,6 +123,10 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         ExecuteBuyController controller = ServiceManager.Instance()
                 .getService(ExecuteBuyController.class);
         controller.execute(ticker, quantity);
+
+        // Clear input fields
+        tickerInput.clear();
+        quantityInput.clear();
     }
 
     private void handleSellAction() {
