@@ -1,10 +1,10 @@
-name: Code Format Check
+name: Format with Spotless
 
 on:
   push:
-    branches: ["neo"]
+    branches: ['neo']
   pull_request:
-    branches: ["neo"]
+    branches: ['neo']
 
 jobs:
   format-check:
@@ -19,8 +19,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: "21"
-          distribution: "temurin"
+          java-version: '21'
+          distribution: 'temurin'
           cache: maven
 
       - name: Run Spotless Check
