@@ -1,7 +1,6 @@
-package utility;
+package data_transfer.parser;
 
 import org.bson.Document;
-import utility.exceptions.DocumentParsingException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

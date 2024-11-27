@@ -1,5 +1,7 @@
 package utility;
 
+import data_transfer.parser.DocumentParsingException;
+import data_transfer.parser.ReflectionMongoDBDocumentParser;
 import entity.Portfolio;
 import entity.Stock;
 import entity.Transaction;
@@ -8,7 +10,6 @@ import entity.User;
 import entity.UserStock;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
-import utility.exceptions.DocumentParsingException;
 
 import java.util.Date;
 import java.util.List;

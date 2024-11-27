@@ -1,10 +1,10 @@
 package use_case.registration;
 
+import data_transfer.parser.DocumentParsingException;
 import entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import utility.exceptions.DocumentParsingException;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;

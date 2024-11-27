@@ -11,7 +11,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.util.concurrent.TimeUnit;
 
 
-public class MongoDBClientManager {
+public class MongoDBManager {
 
     private static final long DATABASE_CONNECTION_TIMEOUT = 10;
 
@@ -20,7 +20,7 @@ public class MongoDBClientManager {
     static {
         // Close MongoClient at shutdown
         Runtime.getRuntime().addShutdownHook(
-                new Thread(MongoDBClientManager::closeMongoClient));
+                new Thread(MongoDBManager::closeMongoClient));
     }
 
     private static MongoClient createInstance() {

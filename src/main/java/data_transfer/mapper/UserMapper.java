@@ -1,5 +1,11 @@
-package utility.data_transfer;
+package data_transfer.mapper;
 
+import data_transfer.PortfolioDTO;
+import data_transfer.StockDTO;
+import data_transfer.TransactionDTO;
+import data_transfer.TransactionHistoryDTO;
+import data_transfer.UserDTO;
+import data_transfer.UserStockDTO;
 import entity.Portfolio;
 import entity.Stock;
 import entity.Transaction;

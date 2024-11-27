@@ -1,8 +1,7 @@
-package utility;
+package data_transfer.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.Document;
-import utility.exceptions.DocumentParsingException;
 
 /**
  * Utility class for parsing objects to and from BSON Documents.

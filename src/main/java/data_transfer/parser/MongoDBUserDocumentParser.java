@@ -1,10 +1,9 @@
-package utility;
+package data_transfer.parser;
 
+import data_transfer.UserDTO;
+import data_transfer.mapper.UserMapper;
 import entity.User;
 import org.bson.Document;
-import utility.data_transfer.UserDTO;
-import utility.data_transfer.UserMapper;
-import utility.exceptions.DocumentParsingException;
 
 /**
  * Utility class for converting between MongoDB {@link Document} objects and {@link User} entities.

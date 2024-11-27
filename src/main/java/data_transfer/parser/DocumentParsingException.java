@@ -1,4 +1,4 @@
-package utility.exceptions;
+package data_transfer.parser;
 
 public class DocumentParsingException extends Exception {
 

@@ -2,6 +2,8 @@ package data_access;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import data_transfer.parser.DocumentParsingException;
+import data_transfer.parser.MongoDBUserDocumentParser;
 import entity.User;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
@@ -9,11 +11,9 @@ import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
-import utility.MongoDBClientManager;
-import utility.MongoDBUserDocumentParser;
+import utility.MongoDBManager;
 import utility.ServiceManager;
 import utility.SessionManager;
-import utility.exceptions.DocumentParsingException;
 import utility.exceptions.ValidationException;
 
 import java.rmi.ServerException;
@@ -21,15 +21,15 @@ import java.rmi.ServerException;
 import static com.mongodb.client.model.Filters.eq;
 
 
-public class DatabaseUserDataAccessObject implements
+public class ExternalUserDataAccessObject implements
                                           RegistrationDataAccessInterface,
                                           LoginDataAccessInterface,
                                           ExecuteBuyDataAccessInterface,
                                           ViewHistoryDataAccessInterface {
 
-    public DatabaseUserDataAccessObject() {
+    public ExternalUserDataAccessObject() {
         ServiceManager.Instance()
-                      .registerService(DatabaseUserDataAccessObject.class,
+                      .registerService(ExternalUserDataAccessObject.class,
                                        this);
         ServiceManager.Instance()
                       .registerService(RegistrationDataAccessInterface.class,
@@ -47,7 +47,7 @@ public class DatabaseUserDataAccessObject implements
     @NotNull
     private static MongoCollection<Document> getUserCollection() {
         MongoDatabase database =
-                MongoDBClientManager.Instance().getDatabase("StockSimDB");
+                MongoDBManager.Instance().getDatabase("StockSimDB");
         return database.getCollection("users");
     }
 

@@ -1,12 +1,12 @@
 package use_case.registration;
 
+import data_transfer.parser.DocumentParsingException;
 import entity.Portfolio;
 import entity.TransactionHistory;
 import entity.User;
 import utility.ServiceManager;
-import utility.exceptions.DocumentParsingException;
-import utility.validations.PasswordValidator;
-import utility.validations.UsernameValidator;
+import validations.PasswordValidator;
+import validations.UsernameValidator;
 
 /**
  * The Registration Interactor.

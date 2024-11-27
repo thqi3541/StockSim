@@ -1,6 +1,6 @@
 package app;
 
-import data_access.DatabaseUserDataAccessObject;
+import data_access.ExternalUserDataAccessObject;
 import data_access.InMemoryStockDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
@@ -141,7 +141,7 @@ public class AppBuilder {
     private void initializeServices() {
         // 1. Initialize DAOs first
         MarketObserver.Instance()
-                      .initialize(new DatabaseUserDataAccessObject());
+                      .initialize(new ExternalUserDataAccessObject());
         MarketTracker.Instance()
                      .initialize(new InMemoryStockDataAccessObject());
 

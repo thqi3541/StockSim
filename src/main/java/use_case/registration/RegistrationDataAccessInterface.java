@@ -1,7 +1,7 @@
 package use_case.registration;
 
+import data_transfer.parser.DocumentParsingException;
 import entity.User;
-import utility.exceptions.DocumentParsingException;
 
 /**
  * The interface of the DAO for the Registration Use Case.

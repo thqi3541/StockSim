@@ -1,4 +1,4 @@
-package utility.data_transfer;
+package data_transfer;
 
 public record UserStockDTO(
         StockDTO stock,

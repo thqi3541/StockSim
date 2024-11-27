@@ -1,4 +1,4 @@
-package utility.validations;
+package validations;
 
 public class UsernameValidator {
 
