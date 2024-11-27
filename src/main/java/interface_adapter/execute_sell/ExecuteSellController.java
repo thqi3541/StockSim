@@ -15,11 +15,15 @@ public class ExecuteSellController {
     }
 
     public void execute(String ticker, String quantity) {
-        final ExecuteSellInputData data = new ExecuteSellInputData(
-                ClientSessionManager.Instance().getCredential(),
-                ticker,
-                Integer.parseInt(quantity));
+        try {
+            final ExecuteSellInputData data = new ExecuteSellInputData(
+                    ClientSessionManager.Instance().getCredential(),
+                    ticker,
+                    Integer.parseInt(quantity));
 
-        interactor.execute(data);
+            interactor.execute(data);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid quantity");
+        }
     }
 }
