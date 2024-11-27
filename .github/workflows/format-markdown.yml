@@ -1,0 +1,49 @@
+name: Format Markdown Files
+
+on:
+  push:
+    branches: ["neo"]
+    paths:
+      - "**.md"
+  pull_request:
+    branches: ["neo"]
+    paths:
+      - "**.md"
+  workflow_dispatch:
+
+jobs:
+  format-markdown:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install Prettier
+        run: npm install -g prettier
+
+      - name: Format Markdown files
+        run: prettier --write "**/*.md"
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add "*.md"
+          git commit -m "Format markdown files with Prettier"
+          git push
