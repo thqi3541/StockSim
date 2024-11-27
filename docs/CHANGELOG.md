@@ -3,6 +3,7 @@
 ## Tags
 
 - [Unreleased](#Unreleased)
+- [0.2.1](#0.2.1)
 - [0.2.0](#0.2.0)
 - [0.1.0](#0.1.0)
 
@@ -12,13 +13,39 @@
 
 - Implemented the `execute_buy` and `execute_sell` use cases (invalid inputs are not yet handled)
 - Implemented MarketObserver to update user data when stock market changes
+- Implemented `DatabaseUserDataAcces` with MongoDB database
+- Implemented database integration with sign up and log in
+- Added writing to database for `execute_buy` use case
+
+### Internal Changes
+
+- Implemented DTO objects for database data transfer
+
+### Bug Fixes
+
+- Fixed issues with converting between entities and MongoDB `Document`
+- Fixed input fields not cleared after executing
+
+## 0.2.1
+
+### New Features
+
+- Implemented `MarketObserver` to update user data when stock market changes
 - Implemented `FontManager` to set custom font for GUI components
+- Implemented logout use case
+- Implemented registration use case
 
 ### Internal Changes
 
 - Refactored `StockMarket` to `MarketTracker`
 - Refined all ui components to have a consistent style
+- Changed `StockDataAccessInterface` to have two methods to do different api calls
+- Implemented new methods from `StockDataAccessInterface` in `InMemoryStockDataAccessObject` and `StockDataAccessObject`
 - Separate API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
+- Separated API update config into `market-tracker-config` file and implement `ConfigLoader` to load static configuration
+- Updated stock data provider from Alpha Vantage to Finnhub
+- Removed references to Alpha Vantage in documentation and codebase
+- Added service manager for `RegistrationController`, `RegistrationInteractor`, and `RegistrationPresenter`
 
 ### Bug Fixes
 

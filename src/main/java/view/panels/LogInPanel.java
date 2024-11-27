@@ -108,6 +108,10 @@ public class LogInPanel extends JPanel implements IComponent {
             char[] passwordChars = passwordField.getPassword();
             String password = new String(passwordChars);
             ServiceManager.Instance().getService(LoginController.class).execute(username, password);
+            
+            // clear input fields
+            usernameField.clear();
+            passwordField.clear();
         });
 
         signUpButton.addActionListener(e -> {

@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import utility.MarketTracker;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
-import view.ViewManager;
 
 import java.util.Optional;
 
@@ -31,7 +30,6 @@ class ExecuteBuyInteractorTest {
         dataAccess = mock(ExecuteBuyDataAccessInterface.class);
         outputPresenter = mock(ExecuteBuyOutputBoundary.class);
         marketTrackerMock = mock(MarketTracker.class);
-        viewManagerMock = mock(ViewManager.class);
     }
 
     @Test
@@ -109,7 +107,7 @@ class ExecuteBuyInteractorTest {
             assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to insufficient funds");
             assertEquals(500.0, mockUser.getBalance(), "Balance should remain unchanged");
-            assertTrue(mockUser.getTransactionHistory().getAllTransactions().isEmpty(),
+            assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
                     "No transaction should be recorded");
         }
     }
