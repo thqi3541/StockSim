@@ -81,11 +81,16 @@ public class User {
         }
         this.balance -= amount;
     }
-
+    
+    /**
+     * Adds a transaction to the user's transaction history.
+     *
+     * @param transaction the transaction to add
+     */
     public void addTransaction(Transaction transaction) {
         transactionHistory.addTransaction(transaction);
     }
-
+    
     public String getUsername() {
         return username;
     }
@@ -109,7 +114,12 @@ public class User {
     public double getTotalAssetsValue() {
         return balance + portfolio.getTotalValue();
     }
-
+    
+    /**
+     * Returns a string representation of the user.
+     *
+     * @return a string representation of the user
+     */
     @Override
     public String toString() {
         return "User{" +
