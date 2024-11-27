@@ -65,7 +65,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
                 // Add transaction
                 Transaction transaction = new Transaction(new Date(), ticker, quantity, currentPrice, "BUY");
-                currentUser.getTransactionHistory().addTransaction(transaction);
+                currentUser.addTransaction(transaction);
 
                 // update user data
                 dataAccess.updateUserData(currentUser);

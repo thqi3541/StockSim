@@ -82,6 +82,10 @@ public class User {
         this.balance -= amount;
     }
 
+    public void addTransaction(Transaction transaction) {
+        transactionHistory.addTransaction(transaction);
+    }
+
     public String getUsername() {
         return username;
     }
@@ -102,9 +106,9 @@ public class User {
         return transactionHistory;
     }
 
-
     public double getTotalAssetsValue() {
         return balance + portfolio.getTotalValue();
+    }
 
     @Override
     public String toString() {
@@ -114,6 +118,5 @@ public class User {
                 ", portfolio=" + portfolio +
                 ", transactionHistory=" + transactionHistory +
                 '}';
-
     }
 }
