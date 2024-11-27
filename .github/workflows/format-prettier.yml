@@ -1,14 +1,18 @@
-name: Format Markdown with Prettier
+name: Format with Prettier
 
 on:
   push:
     branches: ['neo']
     paths:
       - '**.md'
+      - '**.yml'
+      - '**.yaml'
   pull_request:
     branches: ['neo']
     paths:
       - '**.md'
+      - '**.yml'
+      - '**.yaml'
   workflow_dispatch:
 
 jobs:
@@ -30,8 +34,8 @@ jobs:
       - name: Install Prettier
         run: npm install -g prettier
 
-      - name: Format Markdown files
-        run: prettier --write "**/*.md"
+      - name: Format files
+        run: prettier --write "**/*.{md,yml,yaml}"
 
       - name: Check for changes
         id: git-check
@@ -43,6 +47,6 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add "*.md"
-          git commit -m "Format markdown files with Prettier"
+          git add "*.md" "*.yml" "*.yaml"
+          git commit -m "chore: format files with Prettier"
           git push

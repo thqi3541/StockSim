@@ -5,6 +5,7 @@ on:
     branches: ['neo']
   pull_request:
     branches: ['neo']
+  workflow_dispatch:
 
 jobs:
   format-check:
@@ -33,5 +34,5 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "Apply spotless formatting"
+          git commit -m "chore: apply spotless formatting"
           git push
