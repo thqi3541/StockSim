@@ -19,13 +19,10 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
      * @param dataAccess     the data access
      * @param outputBoundary the output boundary
      */
-    public ViewHistoryInteractor(
-            ViewHistoryDataAccessInterface dataAccess,
-            ViewHistoryOutputBoundary outputBoundary) {
+    public ViewHistoryInteractor(ViewHistoryDataAccessInterface dataAccess, ViewHistoryOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
-        ServiceManager.Instance()
-                      .registerService(ViewHistoryInputBoundary.class, this);
+        ServiceManager.Instance().registerService(ViewHistoryInputBoundary.class, this);
     }
 
     /**
@@ -37,12 +34,9 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
     public void execute(ViewHistoryInputData data) {
         try {
             // Get current user
-            User currentUser =
-                    dataAccess.getUserWithCredential(data.credential());
+            User currentUser = dataAccess.getUserWithCredential(data.credential());
             // Prepare output data to feed into presenter
-            outputPresenter.prepareSuccessView(
-                    new ViewHistoryOutputData(
-                            currentUser.getTransactionHistory()));
+            outputPresenter.prepareSuccessView(new ViewHistoryOutputData(currentUser.getTransactionHistory()));
         } catch (ValidationException e) {
             outputPresenter.prepareValidationExceptionView();
         }

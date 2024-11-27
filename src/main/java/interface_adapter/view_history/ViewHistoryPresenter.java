@@ -13,8 +13,7 @@ import view.view_events.UpdateTransactionHistoryEvent;
 public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
 
     public ViewHistoryPresenter() {
-        ServiceManager.Instance()
-                      .registerService(ViewHistoryOutputBoundary.class, this);
+        ServiceManager.Instance().registerService(ViewHistoryOutputBoundary.class, this);
     }
 
     /**
@@ -24,9 +23,7 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
      */
     @Override
     public void prepareSuccessView(ViewHistoryOutputData outputData) {
-        ViewManager.Instance()
-                   .broadcastEvent(new UpdateTransactionHistoryEvent(
-                           outputData.transactionHistory()));
+        ViewManager.Instance().broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
     }
 
     /**
@@ -34,8 +31,6 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
      */
     @Override
     public void prepareValidationExceptionView() {
-        ViewManager.Instance().broadcastEvent(
-                new DialogEvent("Failed", "You are not authorized to do this.")
-        );
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You are not authorized to do this."));
     }
 }

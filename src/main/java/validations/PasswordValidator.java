@@ -28,8 +28,7 @@ public class PasswordValidator {
         boolean hasDigit = password.matches(".*\\d.*");
 
         // Check for at least one special character
-        boolean hasSpecialCharacter =
-                password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+        boolean hasSpecialCharacter = password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
 
         return hasUppercase && hasLowercase && hasDigit && hasSpecialCharacter;
     }

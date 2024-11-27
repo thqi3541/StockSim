@@ -6,12 +6,8 @@ import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 
 public class DialogComponent implements IComponent {
 

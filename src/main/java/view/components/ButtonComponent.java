@@ -2,10 +2,8 @@ package view.components;
 
 import view.FontManager;
 
-import javax.swing.JButton;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 
 public class ButtonComponent extends JButton {
 

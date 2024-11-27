@@ -11,12 +11,7 @@ import utility.exceptions.RateLimitExceededException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * A DataAccessObject that retrieves real time stock data
@@ -41,11 +36,9 @@ public class ExternalStockDataAccessObject implements StockDataAccessInterface {
         this.apiKey = dotenv.get("STOCK_API_KEY");
 
         // Fetch ticker data from resource file and store in list
-        try (InputStream inputStream = getClass().getResourceAsStream(
-                TICKERS_FILE)) {
+        try (InputStream inputStream = getClass().getResourceAsStream(TICKERS_FILE)) {
             if (inputStream == null) {
-                throw new RuntimeException(
-                        "Unable to find configuration file: " + TICKERS_FILE);
+                throw new RuntimeException("Unable to find configuration file: " + TICKERS_FILE);
             } else {
                 // Reads content in config/tickers text file
                 try (Scanner scanner = new Scanner(inputStream)) {
@@ -60,8 +53,7 @@ public class ExternalStockDataAccessObject implements StockDataAccessInterface {
             throw new RuntimeException("Error loading configuration file", e);
         }
 
-        ServiceManager.Instance()
-                      .registerService(StockDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(StockDataAccessInterface.class, this);
 
     }
 
@@ -87,32 +79,22 @@ public class ExternalStockDataAccessObject implements StockDataAccessInterface {
             // Profile2 api call to get company name and industry
             try {
                 // Creates new request with Profile2 url
-                String profileUrl =
-                        String.format("%s/stock/profile2?symbol=%s&token=%s",
-                                      BASE_URL, ticker,
-                                      apiKey);
-                Request profileRequest =
-                        new Request.Builder().url(profileUrl).build();
+                String profileUrl = String.format("%s/stock/profile2?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
+                Request profileRequest = new Request.Builder().url(profileUrl).build();
 
                 // Initiates API call request
-                try (Response profileResponse = client.newCall(profileRequest)
-                                                      .execute()) {
+                try (Response profileResponse = client.newCall(profileRequest).execute()) {
                     if (profileResponse.isSuccessful()) {
-                        JSONObject jsonObject =
-                                new JSONObject(profileResponse.body().string());
+                        JSONObject jsonObject = new JSONObject(profileResponse.body().string());
                         // Gets the ticker company "name" or returns default company name if unavailable
                         company = jsonObject.optString("name", company);
                         // Gets the company's industry "finnhubIndustry" based on finnhub's classification or returns default industry if unavailable
-                        industry = jsonObject.optString("finnhubIndustry",
-                                                        industry);
-                    } else if (profileResponse.code() ==
-                            LIMIT_EXCEED_ERROR_CODE) {
+                        industry = jsonObject.optString("finnhubIndustry", industry);
+                    } else if (profileResponse.code() == LIMIT_EXCEED_ERROR_CODE) {
                         throw new RateLimitExceededException();
                     } else {
                         // Error message for errors other than exceed rate limit
-                        System.out.println(
-                                "Failed to fetch profile data for ticker: " +
-                                        ticker);
+                        System.out.println("Failed to fetch profile data for ticker: " + ticker);
                     }
                 }
 
@@ -141,8 +123,7 @@ public class ExternalStockDataAccessObject implements StockDataAccessInterface {
      * @return a hashmap with the stock ticker as the key and the updated market price as the value.
      */
     @Override
-    public Map<String, Double> getUpdatedPrices()
-            throws RateLimitExceededException {
+    public Map<String, Double> getUpdatedPrices() throws RateLimitExceededException {
         HashMap<String, Double> updatedPrices = new HashMap<>();
 
         // Calls helper function to get current market price for each ticker and stores it in updatedPrice
@@ -160,31 +141,25 @@ public class ExternalStockDataAccessObject implements StockDataAccessInterface {
      * @param ticker the stock ticker
      * @return the updated price
      */
-    private double getMarketPrice(String ticker)
-            throws RateLimitExceededException {
+    private double getMarketPrice(String ticker) throws RateLimitExceededException {
 
         // Quote api call to get current market price
         try {
             // Creates new request with Quote url
-            String quoteUrl =
-                    String.format("%s/quote?symbol=%s&token=%s", BASE_URL,
-                                  ticker, apiKey);
+            String quoteUrl = String.format("%s/quote?symbol=%s&token=%s", BASE_URL, ticker, apiKey);
             Request quoteRequest = new Request.Builder().url(quoteUrl).build();
 
             // Initiates API call request
-            try (Response quoteResponse = client.newCall(quoteRequest)
-                                                .execute()) {
+            try (Response quoteResponse = client.newCall(quoteRequest).execute()) {
                 if (quoteResponse.isSuccessful()) {
-                    JSONObject jsonObject =
-                            new JSONObject(quoteResponse.body().string());
+                    JSONObject jsonObject = new JSONObject(quoteResponse.body().string());
                     // Gets the current market price "c"
                     return jsonObject.getDouble("c");
                 } else if (quoteResponse.code() == LIMIT_EXCEED_ERROR_CODE) {
                     throw new RateLimitExceededException();
                 } else {
                     // Error message for errors other than exceed rate limit
-                    System.out.println(
-                            "Failed to fetch quote data for ticker: " + ticker);
+                    System.out.println("Failed to fetch quote data for ticker: " + ticker);
                 }
             }
         } catch (IOException e) {

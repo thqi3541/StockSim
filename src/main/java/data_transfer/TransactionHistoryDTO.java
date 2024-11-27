@@ -2,8 +2,4 @@ package data_transfer;
 
 import java.util.List;
 
-public record TransactionHistoryDTO(
-        List<TransactionDTO> transactions
-) {
-
-}
+public record TransactionHistoryDTO(List<TransactionDTO> transactions) {}

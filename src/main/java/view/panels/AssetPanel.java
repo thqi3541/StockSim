@@ -6,16 +6,8 @@ import view.ViewManager;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 
 public class AssetPanel extends JPanel implements IComponent {
 

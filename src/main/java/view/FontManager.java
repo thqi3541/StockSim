@@ -1,8 +1,7 @@
 package view;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;

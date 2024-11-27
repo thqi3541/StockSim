@@ -2,6 +2,7 @@ package data_access;
 
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.execute_sell.ExecuteSellDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class InMemoryUserDataAccessObject implements
                                           LoginDataAccessInterface,
                                           ExecuteBuyDataAccessInterface,
+                                          ExecuteSellDataAccessInterface,
                                           ViewHistoryDataAccessInterface,
                                           RegistrationDataAccessInterface {
 
@@ -43,20 +45,12 @@ public class InMemoryUserDataAccessObject implements
         user3.addBalance(300000.00);
         users.put("3", user3);
 
-        ServiceManager.Instance()
-                      .registerService(InMemoryUserDataAccessObject.class,
-                                       this);
-        ServiceManager.Instance()
-                      .registerService(RegistrationDataAccessInterface.class,
-                                       this);
-        ServiceManager.Instance()
-                      .registerService(LoginDataAccessInterface.class, this);
-        ServiceManager.Instance()
-                      .registerService(ExecuteBuyDataAccessInterface.class,
-                                       this);
-        ServiceManager.Instance()
-                      .registerService(ViewHistoryDataAccessInterface.class,
-                                       this);
+        ServiceManager.Instance().registerService(InMemoryUserDataAccessObject.class, this);
+        ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ExecuteSellDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
     }
 
     @Override

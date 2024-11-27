@@ -14,8 +14,7 @@ public class ViewHistoryController {
 
     public ViewHistoryController(ViewHistoryInputBoundary interactor) {
         this.interactor = interactor;
-        ServiceManager.Instance()
-                      .registerService(ViewHistoryController.class, this);
+        ServiceManager.Instance().registerService(ViewHistoryController.class, this);
     }
 
     /**
@@ -23,8 +22,7 @@ public class ViewHistoryController {
      */
     public void execute() {
         final ViewHistoryInputData data =
-                new ViewHistoryInputData(
-                        ClientSessionManager.Instance().getCredential());
+                new ViewHistoryInputData(ClientSessionManager.Instance().getCredential());
 
         interactor.execute(data);
     }

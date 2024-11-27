@@ -9,8 +9,7 @@ public class ClientSessionManager {
     private String credential;
 
     // singleton constructor
-    private ClientSessionManager() {
-    }
+    private ClientSessionManager() {}
 
     public static synchronized ClientSessionManager Instance() {
         if (instance == null) {

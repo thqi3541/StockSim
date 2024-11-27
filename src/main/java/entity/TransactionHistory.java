@@ -28,8 +28,7 @@ public class TransactionHistory {
      */
     public TransactionHistory(List<Transaction> transactions) {
         if (transactions == null) {
-            throw new IllegalArgumentException(
-                    "Transaction list cannot be null.");
+            throw new IllegalArgumentException("Transaction list cannot be null.");
         }
         this.transactions = new ArrayList<>(transactions);
     }
@@ -57,8 +56,6 @@ public class TransactionHistory {
 
     @Override
     public String toString() {
-        return "TransactionHistory{" +
-                "transactions=" + transactions +
-                '}';
+        return "TransactionHistory{" + "transactions=" + transactions + '}';
     }
 }

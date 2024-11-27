@@ -1,6 +1,7 @@
 package view.panels;
 
 import interface_adapter.execute_buy.ExecuteBuyController;
+import interface_adapter.execute_sell.ExecuteSellController;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -9,16 +10,8 @@ import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.ViewEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class OrderEntryPanel extends JPanel implements IComponent {
 
@@ -93,9 +86,8 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
         // Configure ticker input
         FontManager.Instance().useRegular(tickerInput, 14f);
-        tickerInput.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE,
-                              tickerInput.getPreferredSize().height));
+        tickerInput.setMaximumSize(new Dimension(Integer.MAX_VALUE,
+                                                 tickerInput.getPreferredSize().height));
         tickerInput.setAlignmentX(Component.LEFT_ALIGNMENT);
         inputPanel.add(tickerInput);
 
@@ -104,9 +96,8 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
         // Configure quantity input
         FontManager.Instance().useRegular(quantityInput, 14f);
-        quantityInput.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE,
-                              quantityInput.getPreferredSize().height));
+        quantityInput.setMaximumSize(new Dimension(Integer.MAX_VALUE,
+                                                   quantityInput.getPreferredSize().height));
         quantityInput.setAlignmentX(Component.LEFT_ALIGNMENT);
         inputPanel.add(quantityInput);
 
@@ -121,9 +112,9 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         buttonPanel.add(buyButton);
         buyButton.addActionListener(e -> handleBuyAction());
 
-        // TODO: add listener to call sell controller
         FontManager.Instance().useRegular(sellButton, 14f);
         buttonPanel.add(sellButton);
+        sellButton.addActionListener(e -> handleSellAction());
 
         return buttonPanel;
     }
@@ -133,9 +124,22 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         String quantity = quantityInput.getText();
 
         // Execute buy action
-        ExecuteBuyController controller = ServiceManager.Instance()
-                                                        .getService(
-                                                                ExecuteBuyController.class);
+        ExecuteBuyController controller = ServiceManager.Instance().getService(
+                ExecuteBuyController.class);
+        controller.execute(ticker, quantity);
+
+        // Clear input fields
+        tickerInput.clear();
+        quantityInput.clear();
+    }
+
+    private void handleSellAction() {
+        String ticker = tickerInput.getText();
+        String quantity = quantityInput.getText();
+
+        // Execute sell action
+        ExecuteSellController controller = ServiceManager.Instance().getService(
+                ExecuteSellController.class);
         controller.execute(ticker, quantity);
 
         // Clear input fields

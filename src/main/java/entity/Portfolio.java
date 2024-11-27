@@ -39,7 +39,8 @@ public class Portfolio {
      */
     public double getTotalValue() {
         return userStocks.values().stream()
-                         .mapToDouble(UserStock::getMarketValue).sum();
+                .mapToDouble(UserStock::getMarketValue)
+                .sum();
     }
 
     /**
@@ -62,8 +63,7 @@ public class Portfolio {
      * @return a map of all UserStock objects keyed by ticker
      */
     public Map<String, UserStock> getUserStocks() {
-        return new HashMap<>(
-                userStocks); // Return a copy to maintain immutability
+        return new HashMap<>(userStocks); // Return a copy to maintain immutability
     }
 
     /**
@@ -75,8 +75,7 @@ public class Portfolio {
         return userStocks.values();
     }
 
-    public void updatePortfolio(Stock stock, int quantity,
-                                double currentPrice) {
+    public void updatePortfolio(Stock stock, int quantity, double currentPrice) {
         // find the stock in the portfolio
         UserStock userStock = userStocks.get(stock.getTicker());
         if (userStock != null) {
@@ -91,11 +90,9 @@ public class Portfolio {
             }
         } else {
             // add the stock to the portfolio
-            userStocks.put(stock.getTicker(),
-                           new UserStock(stock, currentPrice, quantity));
+            userStocks.put(stock.getTicker(), new UserStock(stock, currentPrice, quantity));
         }
     }
-
 
     /**
      * Checks if the portfolio is empty.

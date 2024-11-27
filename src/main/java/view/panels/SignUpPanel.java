@@ -11,16 +11,8 @@ import view.components.PasswordInputComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class SignUpPanel extends JPanel implements IComponent {
 

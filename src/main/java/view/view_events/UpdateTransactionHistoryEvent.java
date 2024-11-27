@@ -15,8 +15,7 @@ public class UpdateTransactionHistoryEvent extends ViewEvent {
      *
      * @param transactionHistory The transaction history to display
      */
-    public UpdateTransactionHistoryEvent(
-            TransactionHistory transactionHistory) {
+    public UpdateTransactionHistoryEvent(TransactionHistory transactionHistory) {
         this.transactionHistory = transactionHistory;
     }
 

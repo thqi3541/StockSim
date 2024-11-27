@@ -11,14 +11,8 @@ import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateUsernameEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class DashboardPanel extends JPanel implements IComponent {
 

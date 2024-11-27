@@ -5,11 +5,7 @@ import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 import utility.ServiceManager;
 import view.ViewManager;
-import view.view_events.DialogEvent;
-import view.view_events.SwitchPanelEvent;
-import view.view_events.UpdateAssetEvent;
-import view.view_events.UpdateTransactionHistoryEvent;
-import view.view_events.UpdateUsernameEvent;
+import view.view_events.*;
 
 public class LoginPresenter implements LoginOutputBoundary {
 

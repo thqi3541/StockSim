@@ -2,12 +2,8 @@ package view.components;
 
 import view.FontManager;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 
 public class InputComponent extends JPanel {
 

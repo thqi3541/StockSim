@@ -11,11 +11,7 @@ import utility.exceptions.ValidationException;
 
 import java.util.concurrent.Executor;
 
-import static org.mockito.Mockito.argThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class LoginInteractorTest {
 

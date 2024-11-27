@@ -10,8 +10,7 @@ import java.util.Properties;
  */
 public class MarketTrackerConfigLoader {
 
-    private static final String MARKET_TRACKER_CONFIG =
-            "config/market-tracker-config.txt";
+    private static final String MARKET_TRACKER_CONFIG = "config/market-tracker-config.txt";
 
     private static final Properties marketTrackerProperties = new Properties();
 
@@ -28,14 +27,10 @@ public class MarketTrackerConfigLoader {
     private static void loadMarketTrackerConfig() {
         try (InputStream input = MarketTrackerConfigLoader.class
                 .getClassLoader()
-                .getResourceAsStream(
-                        MarketTrackerConfigLoader.MARKET_TRACKER_CONFIG)
-        ) {
+                .getResourceAsStream(MarketTrackerConfigLoader.MARKET_TRACKER_CONFIG)) {
             if (input == null) {
                 throw new RuntimeException(
-                        "Unable to find configuration file: "
-                                +
-                                MarketTrackerConfigLoader.MARKET_TRACKER_CONFIG);
+                        "Unable to find configuration file: " + MarketTrackerConfigLoader.MARKET_TRACKER_CONFIG);
             }
             marketTrackerProperties.load(input);
         } catch (IOException e) {

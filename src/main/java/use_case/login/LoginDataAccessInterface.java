@@ -16,6 +16,5 @@ public interface LoginDataAccessInterface {
      * @return the user associated with the provided credentials
      * @throws ValidationException if the username or password is invalid
      */
-    User getUserWithPassword(String username, String password)
-            throws ValidationException;
+    User getUserWithPassword(String username, String password) throws ValidationException;
 }

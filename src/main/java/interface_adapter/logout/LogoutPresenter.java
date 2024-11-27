@@ -8,13 +8,11 @@ import view.view_events.SwitchPanelEvent;
 public class LogoutPresenter implements LogoutOutputBoundary {
 
     public LogoutPresenter() {
-        ServiceManager.Instance()
-                      .registerService(LogoutOutputBoundary.class, this);
+        ServiceManager.Instance().registerService(LogoutOutputBoundary.class, this);
     }
 
     @Override
     public void prepareSuccessView() {
-        ViewManager.Instance()
-                   .broadcastEvent(new SwitchPanelEvent("LogInPanel"));
+        ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"));
     }
 }

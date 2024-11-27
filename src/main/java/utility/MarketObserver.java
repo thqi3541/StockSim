@@ -12,8 +12,7 @@ public class MarketObserver {
     private boolean initialized = false;
     private UserDataAccessInterface dataAccess;
 
-    private MarketObserver() {
-    }
+    private MarketObserver() {}
 
     public static MarketObserver Instance() {
         if (instance == null) {
@@ -28,8 +27,7 @@ public class MarketObserver {
 
     public synchronized void initialize(UserDataAccessInterface dataAccess) {
         if (this.initialized) {
-            throw new IllegalStateException(
-                    "MarketTracker is already initialized.");
+            throw new IllegalStateException("MarketTracker is already initialized.");
         }
         this.dataAccess = dataAccess;
         this.initialized = true;
@@ -41,9 +39,7 @@ public class MarketObserver {
                     ClientSessionManager.Instance().getCredential());
 
             System.out.println("Current user: " + user.getUsername());
-            ViewManager.Instance()
-                       .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(),
-                                                            user.getBalance()));
+            ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
         } catch (ValidationException e) {
             System.out.println("Failed to find current user.");
         }

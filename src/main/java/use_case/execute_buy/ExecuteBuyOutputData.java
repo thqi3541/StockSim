@@ -10,7 +10,4 @@ import entity.TransactionHistory;
  * @param newPortfolio the new portfolio of the user
  */
 public record ExecuteBuyOutputData(
-        double newBalance, Portfolio newPortfolio,
-        TransactionHistory newTransactionHistory) {
-
-}
+        double newBalance, Portfolio newPortfolio, TransactionHistory newTransactionHistory) {}

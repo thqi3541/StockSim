@@ -1,11 +1,11 @@
 package app;
 
-import data_access.ExternalStockDataAccessObject;
-import data_access.ExternalUserDataAccessObject;
 import data_access.InMemoryStockDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
+import interface_adapter.execute_sell.ExecuteSellController;
+import interface_adapter.execute_sell.ExecuteSellPresenter;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.logout.LogoutController;
@@ -18,6 +18,10 @@ import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_buy.ExecuteBuyInputBoundary;
 import use_case.execute_buy.ExecuteBuyInteractor;
 import use_case.execute_buy.ExecuteBuyOutputBoundary;
+import use_case.execute_sell.ExecuteSellDataAccessInterface;
+import use_case.execute_sell.ExecuteSellInputBoundary;
+import use_case.execute_sell.ExecuteSellInteractor;
+import use_case.execute_sell.ExecuteSellOutputBoundary;
 import use_case.login.LoginDataAccessInterface;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
@@ -38,16 +42,10 @@ import utility.MarketTracker;
 import utility.ServiceManager;
 import view.ViewManager;
 import view.components.DialogComponent;
-import view.panels.DashboardPanel;
-import view.panels.LogInPanel;
-import view.panels.SignUpPanel;
-import view.panels.TradeSimulationPanel;
-import view.panels.TransactionHistoryPanel;
+import view.panels.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-import java.awt.CardLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,8 +130,7 @@ public class AppBuilder {
      * Adds the dialog component
      */
     public AppBuilder addDialogComponent() {
-        ServiceManager.Instance().registerService(DialogComponent.class,
-                                                  new DialogComponent());
+        ServiceManager.Instance().registerService(DialogComponent.class, new DialogComponent());
         return this;
     }
 
@@ -142,53 +139,37 @@ public class AppBuilder {
      */
     private void initializeServices() {
         // 1. Initialize DAOs first
-        MarketObserver.Instance()
-                      .initialize(new InMemoryUserDataAccessObject());
-        MarketTracker.Instance()
-                     .initialize(new InMemoryStockDataAccessObject());
+        MarketObserver.Instance().initialize(new InMemoryUserDataAccessObject());
+        MarketTracker.Instance().initialize(new InMemoryStockDataAccessObject());
 
         // 2. Initialize Presenters
         new RegistrationPresenter();
         new LoginPresenter();
         new LogoutPresenter();
         new ExecuteBuyPresenter();
+        new ExecuteSellPresenter();
         new ViewHistoryPresenter();
 
         // 3. Initialize Interactors
-        new RegistrationInteractor(
-                ServiceManager.Instance()
-                              .getService(RegistrationOutputBoundary.class),
-                ServiceManager.Instance().getService(
-                        RegistrationDataAccessInterface.class));
-        new LoginInteractor(ServiceManager.Instance().getService(
-                LoginDataAccessInterface.class),
-                            ServiceManager.Instance().getService(
-                                    LoginOutputBoundary.class));
-        new LogoutInteractor(ServiceManager.Instance().getService(
-                LogoutOutputBoundary.class));
-        new ExecuteBuyInteractor(
-                ServiceManager.Instance()
-                              .getService(ExecuteBuyDataAccessInterface.class),
-                ServiceManager.Instance()
-                              .getService(ExecuteBuyOutputBoundary.class));
-        new ViewHistoryInteractor(
-                ServiceManager.Instance()
-                              .getService(ViewHistoryDataAccessInterface.class),
-                ServiceManager.Instance()
-                              .getService(ViewHistoryOutputBoundary.class));
+        new RegistrationInteractor(ServiceManager.Instance().getService(RegistrationOutputBoundary.class),
+                                   ServiceManager.Instance().getService(RegistrationDataAccessInterface.class));
+        new LoginInteractor(ServiceManager.Instance().getService(LoginDataAccessInterface.class),
+                            ServiceManager.Instance().getService(LoginOutputBoundary.class));
+        new LogoutInteractor(ServiceManager.Instance().getService(LogoutOutputBoundary.class));
+        new ExecuteBuyInteractor(ServiceManager.Instance().getService(ExecuteBuyDataAccessInterface.class),
+                                 ServiceManager.Instance().getService(ExecuteBuyOutputBoundary.class));
+        new ExecuteSellInteractor(ServiceManager.Instance().getService(ExecuteSellDataAccessInterface.class),
+                                  ServiceManager.Instance().getService(ExecuteSellOutputBoundary.class));
+        new ViewHistoryInteractor(ServiceManager.Instance().getService(ViewHistoryDataAccessInterface.class),
+                                  ServiceManager.Instance().getService(ViewHistoryOutputBoundary.class));
 
         // 4. Initialize Controllers
-        new RegistrationController(
-                ServiceManager.Instance()
-                              .getService(RegistrationInputBoundary.class));
-        new LoginController(
-                ServiceManager.Instance().getService(LoginInputBoundary.class));
-        new LogoutController(ServiceManager.Instance().getService(
-                LogoutInputBoundary.class));
-        new ExecuteBuyController(ServiceManager.Instance().getService(
-                ExecuteBuyInputBoundary.class));
-        new ViewHistoryController(ServiceManager.Instance().getService(
-                ViewHistoryInputBoundary.class));
+        new RegistrationController(ServiceManager.Instance().getService(RegistrationInputBoundary.class));
+        new LoginController(ServiceManager.Instance().getService(LoginInputBoundary.class));
+        new LogoutController(ServiceManager.Instance().getService(LogoutInputBoundary.class));
+        new ExecuteBuyController(ServiceManager.Instance().getService(ExecuteBuyInputBoundary.class));
+        new ExecuteSellController(ServiceManager.Instance().getService(ExecuteSellInputBoundary.class));
+        new ViewHistoryController(ServiceManager.Instance().getService(ViewHistoryInputBoundary.class));
     }
 
     /**

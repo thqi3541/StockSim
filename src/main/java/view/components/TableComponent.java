@@ -2,13 +2,11 @@ package view.components;
 
 import view.FontManager;
 
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 
 public class TableComponent extends JTable {
 

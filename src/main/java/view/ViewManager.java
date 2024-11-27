@@ -3,8 +3,8 @@ package view;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.JPanel;
-import java.awt.CardLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

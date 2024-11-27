@@ -8,6 +8,7 @@ import entity.User;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.execute_sell.ExecuteSellDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
@@ -25,30 +26,21 @@ public class ExternalUserDataAccessObject implements
                                           RegistrationDataAccessInterface,
                                           LoginDataAccessInterface,
                                           ExecuteBuyDataAccessInterface,
+                                          ExecuteSellDataAccessInterface,
                                           ViewHistoryDataAccessInterface {
 
     public ExternalUserDataAccessObject() {
-        ServiceManager.Instance()
-                      .registerService(UserDataAccessInterface.class,
-                                       this);
-        ServiceManager.Instance()
-                      .registerService(RegistrationDataAccessInterface.class,
-                                       this);
-        ServiceManager.Instance()
-                      .registerService(LoginDataAccessInterface.class, this);
-
-        ServiceManager.Instance()
-                      .registerService(ExecuteBuyDataAccessInterface.class,
-                                       this);
-        ServiceManager.Instance()
-                      .registerService(ViewHistoryDataAccessInterface.class,
-                                       this);
+        ServiceManager.Instance().registerService(UserDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ExecuteSellDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
     }
 
     @NotNull
     private static MongoCollection<Document> getUserCollection() {
-        MongoDatabase database =
-                MongoDBManager.Instance().getDatabase("StockSimDB");
+        MongoDatabase database = MongoDBManager.Instance().getDatabase("StockSimDB");
         return database.getCollection("users");
     }
 
@@ -86,9 +78,7 @@ public class ExternalUserDataAccessObject implements
             throws ValidationException {
         // retrieve user data from database
         try {
-            return getUserByQuery(
-                    new Document("username", username).append("password",
-                                                              password));
+            return getUserByQuery(new Document("username", username).append("password", password));
         } catch (DocumentParsingException e) {
             // TODO: use a more robust logging approach than printStackTrace
             e.printStackTrace();

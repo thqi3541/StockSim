@@ -68,19 +68,17 @@ public class UserStock {
      * @param quantity the quantity of the stock to add (can be negative to represent selling)
      */
     public void updateUserStock(double price, int quantity) {
-        this.avgCost = (this.avgCost * this.quantity + price * quantity) /
-                (quantity + this.quantity);
+        this.avgCost = (this.avgCost * this.quantity + price * quantity) / (quantity + this.quantity);
         this.quantity += quantity;
     }
 
     @Override
     public String toString() {
-        return "UserStock{" +
-                "stock=" + stock.getTicker() +
-                ", avgCost=" + avgCost +
-                ", quantity=" + quantity +
-                ", totalCost=" + getTotalCost() +
-                ", marketValue=" + getMarketValue() +
-                '}';
+        return "UserStock{" + "stock="
+                + stock.getTicker() + ", avgCost="
+                + avgCost + ", quantity="
+                + quantity + ", totalCost="
+                + getTotalCost() + ", marketValue="
+                + getMarketValue() + '}';
     }
 }

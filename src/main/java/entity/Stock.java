@@ -20,23 +20,18 @@ public class Stock {
      * @throws IllegalArgumentException if ticker, company, or industry is null/empty or if
      *                                  marketPrice is negative
      */
-    public Stock(String ticker, String company, String industry,
-                 double marketPrice) {
+    public Stock(String ticker, String company, String industry, double marketPrice) {
         if (ticker == null || ticker.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Ticker cannot be null or empty.");
+            throw new IllegalArgumentException("Ticker cannot be null or empty.");
         }
         if (company == null || company.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Company name cannot be null or empty.");
+            throw new IllegalArgumentException("Company name cannot be null or empty.");
         }
         if (industry == null || industry.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Industry cannot be null or empty.");
+            throw new IllegalArgumentException("Industry cannot be null or empty.");
         }
         if (marketPrice < 0) {
-            throw new IllegalArgumentException(
-                    "Market price cannot be negative.");
+            throw new IllegalArgumentException("Market price cannot be negative.");
         }
 
         this.ticker = ticker;
@@ -97,8 +92,6 @@ public class Stock {
     @Override
     public String toString() {
         return String.format(
-                "Stock[ticker=%s, company=%s, industry=%s, marketPrice=%.2f]",
-                ticker, company, industry, marketPrice
-        );
+                "Stock[ticker=%s, company=%s, industry=%s, marketPrice=%.2f]", ticker, company, industry, marketPrice);
     }
 }

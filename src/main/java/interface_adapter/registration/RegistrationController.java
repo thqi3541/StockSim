@@ -12,15 +12,11 @@ public class RegistrationController {
         this.interactor = interactor;
 
         // Register the controller with ServiceManager
-        ServiceManager.Instance()
-                      .registerService(RegistrationController.class, this);
+        ServiceManager.Instance().registerService(RegistrationController.class, this);
     }
 
-    public void execute(String username, String password,
-                        String confirmPassword) {
-        RegistrationInputData inputData =
-                new RegistrationInputData(username, password,
-                                          confirmPassword);
+    public void execute(String username, String password, String confirmPassword) {
+        RegistrationInputData inputData = new RegistrationInputData(username, password, confirmPassword);
         interactor.execute(inputData);
     }
 }

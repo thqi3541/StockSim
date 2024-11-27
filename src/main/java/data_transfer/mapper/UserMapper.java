@@ -1,17 +1,7 @@
 package data_transfer.mapper;
 
-import data_transfer.PortfolioDTO;
-import data_transfer.StockDTO;
-import data_transfer.TransactionDTO;
-import data_transfer.TransactionHistoryDTO;
-import data_transfer.UserDTO;
-import data_transfer.UserStockDTO;
-import entity.Portfolio;
-import entity.Stock;
-import entity.Transaction;
-import entity.TransactionHistory;
-import entity.User;
-import entity.UserStock;
+import data_transfer.*;
+import entity.*;
 
 import java.util.Map;
 import java.util.stream.Collectors;

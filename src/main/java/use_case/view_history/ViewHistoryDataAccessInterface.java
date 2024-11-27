@@ -7,8 +7,7 @@ import utility.exceptions.ValidationException;
 /**
  * The interface of the DAO for the View Transaction History Use Case.
  */
-public interface ViewHistoryDataAccessInterface
-        extends UserDataAccessInterface {
+public interface ViewHistoryDataAccessInterface extends UserDataAccessInterface {
 
     /**
      * Gets the current user from the user credential and throws ValidationException if credential is

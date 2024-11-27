@@ -11,12 +11,9 @@ import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.text.SimpleDateFormat;
 
 public class TransactionHistoryPanel extends JPanel implements IComponent {

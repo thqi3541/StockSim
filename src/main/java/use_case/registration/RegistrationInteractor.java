@@ -27,14 +27,12 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
      * @param presenter  The output boundary for displaying results to the user.
      * @param dataAccess The data access object for storing and retrieving users.
      */
-    public RegistrationInteractor(RegistrationOutputBoundary presenter,
-                                  RegistrationDataAccessInterface dataAccess) {
+    public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
 
         // Register the interactor with ServiceManager
-        ServiceManager.Instance()
-                      .registerService(RegistrationInputBoundary.class, this);
+        ServiceManager.Instance().registerService(RegistrationInputBoundary.class, this);
     }
 
     /**
@@ -54,24 +52,21 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             // Check if username exists
             if (!dataAccess.hasUsername(inputData.username())) {
                 // Create a new user
-                User newUser =
-                        new User(inputData.username(), inputData.password(),
-                                 INITIAL_BALANCE,
-                                 new Portfolio(),
-                                 new TransactionHistory());
+                User newUser = new User(
+                        inputData.username(),
+                        inputData.password(),
+                        INITIAL_BALANCE,
+                        new Portfolio(),
+                        new TransactionHistory());
 
                 // Save the user
                 dataAccess.createUser(newUser);
 
                 // Notify success
-                presenter.prepareSuccessView(
-                        new RegistrationOutputData(
-                                "Registration successful! Please log in."));
+                presenter.prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
             } else {
-                throw new DuplicateUsernameException(
-                        "Username already exists!");
+                throw new DuplicateUsernameException("Username already exists!");
             }
-
 
         } catch (InvalidInputException e) {
             presenter.prepareInvalidInputView(e.getMessage());
@@ -88,13 +83,11 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         }
     }
 
-    private void validateInput(
-            RegistrationInputData inputData)
-            throws InvalidInputException, PasswordsDoNotMatchException,
-            WeakPasswordException, InvalidUsernameException {
+    private void validateInput(RegistrationInputData inputData)
+            throws InvalidInputException, PasswordsDoNotMatchException, WeakPasswordException,
+                    InvalidUsernameException {
         if (inputData.username().isEmpty() || inputData.password().isEmpty()) {
-            throw new InvalidInputException(
-                    "Username and password cannot be empty.");
+            throw new InvalidInputException("Username and password cannot be empty.");
         } else if (!inputData.password().equals(inputData.confirmPassword())) {
             throw new PasswordsDoNotMatchException("Passwords do not match.");
         }
@@ -106,8 +99,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         }
 
         // Check if username is valid by calling UsernameValidator
-        String usernameValidationMessage =
-                UsernameValidator.validateUsername(inputData.username());
+        String usernameValidationMessage = UsernameValidator.validateUsername(inputData.username());
         if (!usernameValidationMessage.isEmpty()) {
             throw new InvalidUsernameException(usernameValidationMessage);
         }
@@ -148,4 +140,3 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         }
     }
 }
-

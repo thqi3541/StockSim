@@ -6,13 +6,7 @@ import java.util.Objects;
 /**
  * A record representing a transaction.
  */
-public record Transaction(
-        Date timestamp,
-        String ticker,
-        int quantity,
-        double executionPrice,
-        String type
-) {
+public record Transaction(Date timestamp, String ticker, int quantity, double executionPrice, String type) {
 
     /**
      * Constructs a new Transaction with validation for inputs.
@@ -27,23 +21,19 @@ public record Transaction(
     public Transaction {
         Objects.requireNonNull(timestamp, "Timestamp cannot be null.");
         Objects.requireNonNull(ticker, "Ticker cannot be null or empty.");
-        Objects.requireNonNull(type,
-                               "Transaction type cannot be null or empty.");
+        Objects.requireNonNull(type, "Transaction type cannot be null or empty.");
 
         if (ticker.isEmpty()) {
             throw new IllegalArgumentException("Ticker cannot be empty.");
         }
         if (quantity <= 0) {
-            throw new IllegalArgumentException(
-                    "Quantity must be greater than zero.");
+            throw new IllegalArgumentException("Quantity must be greater than zero.");
         }
         if (executionPrice < 0) {
-            throw new IllegalArgumentException(
-                    "Execution price cannot be negative.");
+            throw new IllegalArgumentException("Execution price cannot be negative.");
         }
         if (!type.equalsIgnoreCase("buy") && !type.equalsIgnoreCase("sell")) {
-            throw new IllegalArgumentException(
-                    "Transaction type must be either 'buy' or 'sell'.");
+            throw new IllegalArgumentException("Transaction type must be either 'buy' or 'sell'.");
         }
     }
 
@@ -51,7 +41,6 @@ public record Transaction(
     public String toString() {
         return String.format(
                 "Transaction[timestamp=%s, ticker=%s, quantity=%d, executionPrice=%.2f, type=%s]",
-                timestamp, ticker, quantity, executionPrice, type
-        );
+                timestamp, ticker, quantity, executionPrice, type);
     }
 }

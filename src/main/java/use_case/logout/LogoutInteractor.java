@@ -10,8 +10,7 @@ public class LogoutInteractor implements LogoutInputBoundary {
 
     public LogoutInteractor(LogoutOutputBoundary outputPresenter) {
         this.outputPresenter = outputPresenter;
-        ServiceManager.Instance()
-                      .registerService(LogoutInputBoundary.class, this);
+        ServiceManager.Instance().registerService(LogoutInputBoundary.class, this);
     }
 
     @Override

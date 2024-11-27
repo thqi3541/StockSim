@@ -1,7 +1,7 @@
-package interface_adapter.execute_buy;
+package interface_adapter.execute_sell;
 
-import use_case.execute_buy.ExecuteBuyInputBoundary;
-import use_case.execute_buy.ExecuteBuyInputData;
+import use_case.execute_sell.ExecuteSellInputBoundary;
+import use_case.execute_sell.ExecuteSellInputData;
 import utility.ClientSessionManager;
 import utility.ServiceManager;
 import validations.QuantityValidator;
@@ -9,13 +9,13 @@ import validations.TickerValidator;
 import view.ViewManager;
 import view.view_events.DialogEvent;
 
-public class ExecuteBuyController {
+public class ExecuteSellController {
 
-    private final ExecuteBuyInputBoundary interactor;
+    private final ExecuteSellInputBoundary interactor;
 
-    public ExecuteBuyController(ExecuteBuyInputBoundary interactor) {
+    public ExecuteSellController(ExecuteSellInputBoundary interactor) {
         this.interactor = interactor;
-        ServiceManager.Instance().registerService(ExecuteBuyController.class, this);
+        ServiceManager.Instance().registerService(ExecuteSellController.class, this);
     }
 
     public void execute(String ticker, String quantity) {
@@ -27,7 +27,7 @@ public class ExecuteBuyController {
             ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "Quantity is invalid"));
         }
 
-        final ExecuteBuyInputData data = new ExecuteBuyInputData(
+        final ExecuteSellInputData data = new ExecuteSellInputData(
                 ClientSessionManager.Instance().getCredential(), ticker, Integer.parseInt(quantity));
 
         interactor.execute(data);

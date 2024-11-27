@@ -22,10 +22,8 @@ public class MongoDBUserDocumentParser {
      * @throws DocumentParsingException if there is an error during the deserialization or mapping
      *                                  process.
      */
-    public static User fromDocument(Document document)
-            throws DocumentParsingException {
-        return UserMapper.fromDTO(
-                MongoDBDocumentParser.fromDocument(document, UserDTO.class));
+    public static User fromDocument(Document document) throws DocumentParsingException {
+        return UserMapper.fromDTO(MongoDBDocumentParser.fromDocument(document, UserDTO.class));
     }
 
     /**
@@ -36,8 +34,7 @@ public class MongoDBUserDocumentParser {
      * @throws DocumentParsingException if there is an error during the mapping or serialization
      *                                  process.
      */
-    public static Document toDocument(User user)
-            throws DocumentParsingException {
+    public static Document toDocument(User user) throws DocumentParsingException {
         return MongoDBDocumentParser.toDocument(UserMapper.toDTO(user));
     }
 }

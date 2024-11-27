@@ -15,7 +15,6 @@ public class LogoutController {
     }
 
     public void execute() {
-        interactor.execute(new LogoutInputData(
-                ClientSessionManager.Instance().getCredential()));
+        interactor.execute(new LogoutInputData(ClientSessionManager.Instance().getCredential()));
     }
 }
