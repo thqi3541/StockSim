@@ -110,7 +110,7 @@ public class Portfolio {
 
     /** When a transaction is made
      * this method updates the portfolio with the new stock and quantity
-     * If the stock is already in the portfolio, it updates the  and cost
+     * If the stock is already in the portfolio, it updates the quantity and cost
      * If the stock is not in the portfolio, it adds the stock to the portfolio
      *
      * @param stock        the stock the user buys
