@@ -1,7 +1,6 @@
 package data_access;
 
 import entity.Stock;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

@@ -3,19 +3,17 @@ package entity;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * A record representing a transaction.
- */
+/** A record representing a transaction. */
 public record Transaction(Date timestamp, String ticker, int quantity, double executionPrice, String type) {
 
     /**
      * Constructs a new Transaction with validation for inputs.
      *
-     * @param timestamp      the date and time of the transaction
-     * @param ticker         the stock ticker symbol
-     * @param quantity       the number of stocks involved in the transaction
+     * @param timestamp the date and time of the transaction
+     * @param ticker the stock ticker symbol
+     * @param quantity the number of stocks involved in the transaction
      * @param executionPrice the execution price per stock
-     * @param type           the type of transaction (e.g., "buy", "sell")
+     * @param type the type of transaction (e.g., "buy", "sell")
      * @throws IllegalArgumentException if any field is invalid
      */
     public Transaction {

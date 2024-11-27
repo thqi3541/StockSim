@@ -2,12 +2,10 @@ package use_case.execute_sell;
 
 import data_access.UserDataAccessInterface;
 import entity.User;
+import java.rmi.ServerException;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-
-public interface ExecuteSellDataAccessInterface
-        extends UserDataAccessInterface {
+public interface ExecuteSellDataAccessInterface extends UserDataAccessInterface {
 
     User getUserWithCredential(String credential) throws ValidationException;
 

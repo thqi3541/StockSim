@@ -1,6 +1,8 @@
 package view.panels;
 
 import interface_adapter.login.LoginController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -10,9 +12,6 @@ import view.components.InputComponent;
 import view.components.PasswordInputComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class LogInPanel extends JPanel implements IComponent {
 
@@ -90,10 +89,8 @@ public class LogInPanel extends JPanel implements IComponent {
         inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         inputPanel.add(passwordField);
 
-        usernameField.setMaximumSize(
-                new Dimension(300, usernameField.getPreferredSize().height));
-        passwordField.setMaximumSize(
-                new Dimension(300, passwordField.getPreferredSize().height));
+        usernameField.setMaximumSize(new Dimension(300, usernameField.getPreferredSize().height));
+        passwordField.setMaximumSize(new Dimension(300, passwordField.getPreferredSize().height));
 
         return inputPanel;
     }
@@ -110,22 +107,18 @@ public class LogInPanel extends JPanel implements IComponent {
             String username = usernameField.getText();
             char[] passwordChars = passwordField.getPassword();
             String password = new String(passwordChars);
-            ServiceManager.Instance().getService(LoginController.class)
-                          .execute(username, password);
+            ServiceManager.Instance().getService(LoginController.class).execute(username, password);
 
             // clear input fields
             usernameField.clear();
             passwordField.clear();
         });
 
-        signUpButton.addActionListener(
-                e -> {
-                    ViewManager.Instance().broadcastEvent(
-                            new SwitchPanelEvent("SignUpPanel"));
-                });
+        signUpButton.addActionListener(e -> {
+            ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("SignUpPanel"));
+        });
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

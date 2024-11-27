@@ -2,13 +2,10 @@ package use_case.execute_buy;
 
 import data_access.UserDataAccessInterface;
 import entity.User;
+import java.rmi.ServerException;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-
-/**
- * The interface of the DAO for the Execute Buy Use Case.
- */
+/** The interface of the DAO for the Execute Buy Use Case. */
 public interface ExecuteBuyDataAccessInterface extends UserDataAccessInterface {
 
     /**

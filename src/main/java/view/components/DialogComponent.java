@@ -1,13 +1,12 @@
 package view.components;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class DialogComponent implements IComponent {
 
@@ -33,9 +32,7 @@ public class DialogComponent implements IComponent {
             // Set dialogShown to true to indicate that a dialog is open
             dialogShown = true;
             // Show dialog and reset dialogShown once the dialog is closed
-            SwingUtilities.invokeLater(
-                    () -> showDialog(dialogEvent.getTitle(),
-                                     dialogEvent.getMessage()));
+            SwingUtilities.invokeLater(() -> showDialog(dialogEvent.getTitle(), dialogEvent.getMessage()));
         }
     }
 

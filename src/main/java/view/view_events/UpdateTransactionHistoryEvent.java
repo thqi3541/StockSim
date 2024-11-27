@@ -2,16 +2,14 @@ package view.view_events;
 
 import entity.TransactionHistory;
 
-/**
- * This class handles the ViewEvent for the ViewHistory use case
- */
+/** This class handles the ViewEvent for the ViewHistory use case */
 public class UpdateTransactionHistoryEvent extends ViewEvent {
 
     private final TransactionHistory transactionHistory;
 
     /**
-     * Constructs a UpdateTransactionHistoryEvent with a specified transaction history, using only the
-     * VIEW_HISTORY event type
+     * Constructs a UpdateTransactionHistoryEvent with a specified transaction history, using only the VIEW_HISTORY
+     * event type
      *
      * @param transactionHistory The transaction history to display
      */

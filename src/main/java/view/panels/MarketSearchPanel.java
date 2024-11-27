@@ -1,6 +1,11 @@
 package view.panels;
 
 import entity.Stock;
+import java.awt.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
@@ -10,16 +15,9 @@ import view.components.TableComponent;
 import view.view_events.UpdateStockEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import java.awt.*;
-import java.util.List;
-
 public class MarketSearchPanel extends JPanel implements IComponent {
 
-    private static final String[] COLUMN_NAMES =
-            {"Ticker", "Company", "Industry", "Price"};
+    private static final String[] COLUMN_NAMES = {"Ticker", "Company", "Industry", "Price"};
     private static final double[] COLUMN_PROPORTIONS = {0.10, 0.40, 0.30, 0.20};
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
@@ -62,14 +60,12 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         searchButton.addActionListener(e -> performSearch());
 
         // Add resize listener
-        addComponentListener(
-                new java.awt.event.ComponentAdapter() {
-                    @Override
-                    public void componentResized(
-                            java.awt.event.ComponentEvent evt) {
-                        stockTable.adjustColumnWidths();
-                    }
-                });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                stockTable.adjustColumnWidths();
+            }
+        });
     }
 
     private JPanel createHeaderPanel() {
@@ -94,14 +90,9 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
 
         // Create search controls panel
-        JPanel searchControls =
-                new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        searchField.setPreferredSize(
-                new Dimension(searchField.getPreferredSize().width,
-                              HEADER_HEIGHT));
-        searchButton.setPreferredSize(
-                new Dimension(searchButton.getPreferredSize().width,
-                              HEADER_HEIGHT));
+        JPanel searchControls = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, HEADER_HEIGHT));
+        searchButton.setPreferredSize(new Dimension(searchButton.getPreferredSize().width, HEADER_HEIGHT));
         searchControls.add(searchField);
         searchControls.add(searchButton);
 
@@ -139,13 +130,12 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         model.setRowCount(0);
 
         for (Stock stock : stocks) {
-            model.addRow(
-                    new Object[] {
-                            stock.getTicker(),
-                            stock.getCompany(),
-                            stock.getIndustry(),
-                            String.format("$%.2f", stock.getMarketPrice())
-                    });
+            model.addRow(new Object[] {
+                stock.getTicker(),
+                stock.getCompany(),
+                stock.getIndustry(),
+                String.format("$%.2f", stock.getMarketPrice())
+            });
         }
     }
 

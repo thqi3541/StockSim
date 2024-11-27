@@ -8,11 +8,11 @@ public class UpdateAssetEvent extends ViewEvent {
     private final double balance;
 
     /**
-     * Constructs an UpdatePortfolioEvent with a specified portfolio and balance, using only the
-     * UPDATE_PORTFOLIO event type.
+     * Constructs an UpdatePortfolioEvent with a specified portfolio and balance, using only the UPDATE_PORTFOLIO event
+     * type.
      *
      * @param portfolio The portfolio to update.
-     * @param balance   The balance associated with the portfolio.
+     * @param balance The balance associated with the portfolio.
      */
     public UpdateAssetEvent(Portfolio portfolio, double balance) {
         this.portfolio = portfolio;

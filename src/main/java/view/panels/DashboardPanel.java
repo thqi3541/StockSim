@@ -1,6 +1,8 @@
 package view.panels;
 
 import interface_adapter.logout.LogoutController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -10,9 +12,6 @@ import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateUsernameEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class DashboardPanel extends JPanel implements IComponent {
 
@@ -35,8 +34,7 @@ public class DashboardPanel extends JPanel implements IComponent {
         ViewManager.Instance().registerComponent(this);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING,
-                                                  PADDING));
+        setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
 
         add(createHeaderSection());
         add(Box.createRigidArea(new Dimension(0, PADDING)));
@@ -69,11 +67,9 @@ public class DashboardPanel extends JPanel implements IComponent {
 
     private JPanel createDashboardSection() {
         JPanel dashboardSection = new JPanel();
-        dashboardSection.setLayout(
-                new BoxLayout(dashboardSection, BoxLayout.Y_AXIS));
+        dashboardSection.setLayout(new BoxLayout(dashboardSection, BoxLayout.Y_AXIS));
         dashboardSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        dashboardSection.setBorder(
-                BorderFactory.createTitledBorder("Dashboard"));
+        dashboardSection.setBorder(BorderFactory.createTitledBorder("Dashboard"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         FontManager.Instance().useRegular(tradeButton, 14f);
@@ -87,8 +83,7 @@ public class DashboardPanel extends JPanel implements IComponent {
 
     private JPanel createAccountSection() {
         JPanel accountSection = new JPanel();
-        accountSection.setLayout(
-                new BoxLayout(accountSection, BoxLayout.Y_AXIS));
+        accountSection.setLayout(new BoxLayout(accountSection, BoxLayout.Y_AXIS));
         accountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
         accountSection.setBorder(BorderFactory.createTitledBorder("Account"));
 
@@ -112,22 +107,18 @@ public class DashboardPanel extends JPanel implements IComponent {
     }
 
     private String formatAssetValue(double balance, double portfolio) {
-        return String.format("You have %s in balance and %s in portfolio.",
-                             String.format(CURRENCY_FORMAT, balance),
-                             String.format(CURRENCY_FORMAT, portfolio));
+        return String.format(
+                "You have %s in balance and %s in portfolio.",
+                String.format(CURRENCY_FORMAT, balance), String.format(CURRENCY_FORMAT, portfolio));
     }
 
     private void setupButtonActions() {
         tradeButton.addActionListener(
-                e -> ViewManager.Instance().broadcastEvent(
-                        new SwitchPanelEvent("TradeSimulationPanel")));
+                e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
         historyButton.addActionListener(
-                e -> ViewManager.Instance().broadcastEvent(
-                        new SwitchPanelEvent("TransactionHistoryPanel")));
-        logoutButton.addActionListener(
-                e -> ServiceManager.Instance()
-                                   .getService(LogoutController.class)
-                                   .execute());
+                e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel")));
+        logoutButton.addActionListener(e ->
+                ServiceManager.Instance().getService(LogoutController.class).execute());
     }
 
     @Override
@@ -135,8 +126,7 @@ public class DashboardPanel extends JPanel implements IComponent {
         if (event instanceof UpdateUsernameEvent userEvent) {
             updateUsername(userEvent.getUsername());
         } else if (event instanceof UpdateAssetEvent assetEvent) {
-            updateAsset(assetEvent.getBalance(),
-                        assetEvent.getPortfolio().getTotalValue());
+            updateAsset(assetEvent.getBalance(), assetEvent.getPortfolio().getTotalValue());
         }
     }
 

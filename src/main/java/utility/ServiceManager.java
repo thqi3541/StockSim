@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class manages all the service instances for global access e.g. controllers, presenters, and
- * interactors Implements the Singleton pattern to ensure only one instance exists
+ * This class manages all the service instances for global access e.g. controllers, presenters, and interactors
+ * Implements the Singleton pattern to ensure only one instance exists
  */
 public class ServiceManager {
 
@@ -39,9 +39,9 @@ public class ServiceManager {
     /**
      * Registers a service instance for the given type
      *
-     * @param key     The interface or class type of the service
+     * @param key The interface or class type of the service
      * @param service The service instance
-     * @param <T>     The type of the service
+     * @param <T> The type of the service
      */
     public <T> void registerService(Class<T> key, T service) {
         services.put(key, service);

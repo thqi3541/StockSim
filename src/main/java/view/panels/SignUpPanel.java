@@ -1,6 +1,8 @@
 package view.panels;
 
 import interface_adapter.registration.RegistrationController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -10,9 +12,6 @@ import view.components.InputComponent;
 import view.components.PasswordInputComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class SignUpPanel extends JPanel implements IComponent {
 
@@ -94,13 +93,9 @@ public class SignUpPanel extends JPanel implements IComponent {
         inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         inputPanel.add(repeatPasswordField);
 
-        usernameField.setMaximumSize(
-                new Dimension(300, usernameField.getPreferredSize().height));
-        passwordField.setMaximumSize(
-                new Dimension(300, passwordField.getPreferredSize().height));
-        repeatPasswordField.setMaximumSize(
-                new Dimension(300,
-                              repeatPasswordField.getPreferredSize().height));
+        usernameField.setMaximumSize(new Dimension(300, usernameField.getPreferredSize().height));
+        passwordField.setMaximumSize(new Dimension(300, passwordField.getPreferredSize().height));
+        repeatPasswordField.setMaximumSize(new Dimension(300, repeatPasswordField.getPreferredSize().height));
 
         return inputPanel;
     }
@@ -119,8 +114,9 @@ public class SignUpPanel extends JPanel implements IComponent {
             String password = new String(passwordChars);
             char[] repeatPasswordChars = repeatPasswordField.getPassword();
             String repeatPassword = new String(repeatPasswordChars);
-            ServiceManager.Instance().getService(RegistrationController.class)
-                          .execute(username, password, repeatPassword);
+            ServiceManager.Instance()
+                    .getService(RegistrationController.class)
+                    .execute(username, password, repeatPassword);
 
             // clear input fields
             usernameField.clear();
@@ -128,14 +124,11 @@ public class SignUpPanel extends JPanel implements IComponent {
             repeatPasswordField.clear();
         });
 
-        logInButton.addActionListener(
-                e -> {
-                    ViewManager.Instance().broadcastEvent(
-                            new SwitchPanelEvent("LogInPanel"));
-                });
+        logInButton.addActionListener(e -> {
+            ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("LogInPanel"));
+        });
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

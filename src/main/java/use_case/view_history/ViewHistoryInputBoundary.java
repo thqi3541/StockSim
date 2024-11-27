@@ -1,8 +1,6 @@
 package use_case.view_history;
 
-/**
- * Input Boundary for actions which are related to viewing the transaction history.
- */
+/** Input Boundary for actions which are related to viewing the transaction history. */
 public interface ViewHistoryInputBoundary {
 
     /**

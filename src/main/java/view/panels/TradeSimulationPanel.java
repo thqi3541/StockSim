@@ -1,14 +1,13 @@
 package view.panels;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
 import view.components.ButtonComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class TradeSimulationPanel extends JPanel implements IComponent {
 
@@ -21,14 +20,11 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         // Set up main panel with vertical BoxLayout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING,
-                                                  PADDING));
+        setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
 
         // Add header (fill width)
         JPanel headerPanel = createHeaderPanel();
-        headerPanel.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE,
-                              headerPanel.getPreferredSize().height));
+        headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, headerPanel.getPreferredSize().height));
         headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(headerPanel);
 
@@ -37,9 +33,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         // Add trading section (fixed height, fill width)
         JPanel tradingPanel = createTradingSection();
-        tradingPanel.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE,
-                              tradingPanel.getPreferredSize().height));
+        tradingPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, tradingPanel.getPreferredSize().height));
         tradingPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(tradingPanel);
 
@@ -48,8 +42,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         // Add portfolio section (automatic height, fill width)
         JPanel portfolioPanel = createAccountSection();
-        portfolioPanel.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        portfolioPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         portfolioPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(portfolioPanel);
     }
@@ -65,8 +58,7 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
         // Back button on the right
         ButtonComponent backButton = new ButtonComponent("Back to Home");
         backButton.addActionListener(
-                e -> ViewManager.Instance().broadcastEvent(
-                        new SwitchPanelEvent("DashboardPanel")));
+                e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
         headerPanel.add(backButton, BorderLayout.EAST);
 
         return headerPanel;
@@ -114,6 +106,5 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

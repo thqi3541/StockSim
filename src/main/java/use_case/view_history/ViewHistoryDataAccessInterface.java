@@ -4,14 +4,11 @@ import data_access.UserDataAccessInterface;
 import entity.User;
 import utility.exceptions.ValidationException;
 
-/**
- * The interface of the DAO for the View Transaction History Use Case.
- */
+/** The interface of the DAO for the View Transaction History Use Case. */
 public interface ViewHistoryDataAccessInterface extends UserDataAccessInterface {
 
     /**
-     * Gets the current user from the user credential and throws ValidationException if credential is
-     * invalid
+     * Gets the current user from the user credential and throws ValidationException if credential is invalid
      *
      * @param credential the user's credential
      * @return the user associated with the credential

@@ -10,8 +10,7 @@ import view.view_events.*;
 public class LoginPresenter implements LoginOutputBoundary {
 
     public LoginPresenter() {
-        ServiceManager.Instance()
-                      .registerService(LoginOutputBoundary.class, this);
+        ServiceManager.Instance().registerService(LoginOutputBoundary.class, this);
     }
 
     @Override
@@ -19,27 +18,20 @@ public class LoginPresenter implements LoginOutputBoundary {
         User user = outputData.user();
 
         // Update username data
-        ViewManager.Instance()
-                   .broadcastEvent(new UpdateUsernameEvent(user.getUsername()));
+        ViewManager.Instance().broadcastEvent(new UpdateUsernameEvent(user.getUsername()));
 
         // Update user asset data
-        ViewManager.Instance()
-                   .broadcastEvent(new UpdateAssetEvent(user.getPortfolio(),
-                                                        user.getBalance()));
+        ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
 
         // Update history data
-        ViewManager.Instance()
-                   .broadcastEvent(new UpdateTransactionHistoryEvent(
-                           user.getTransactionHistory()));
+        ViewManager.Instance().broadcastEvent(new UpdateTransactionHistoryEvent(user.getTransactionHistory()));
 
         // Switch to dashboard - stock data will be updated by MarketTracker automatically
-        ViewManager.Instance()
-                   .broadcastEvent(new SwitchPanelEvent("DashboardPanel"));
+        ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel"));
     }
 
     @Override
     public void prepareValidationExceptionView() {
-        ViewManager.Instance().broadcastEvent(
-                new DialogEvent("Sorry", "Please try again."));
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Sorry", "Please try again."));
     }
 }

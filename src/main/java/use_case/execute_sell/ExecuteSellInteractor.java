@@ -4,33 +4,27 @@ import entity.Portfolio;
 import entity.Stock;
 import entity.Transaction;
 import entity.User;
+import java.rmi.ServerException;
+import java.util.Date;
 import utility.MarketTracker;
 import utility.ServiceManager;
 import utility.exceptions.ValidationException;
-
-import java.rmi.ServerException;
-import java.util.Date;
 
 public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
     private final ExecuteSellDataAccessInterface dataAccess;
     private final ExecuteSellOutputBoundary outputPresenter;
 
-    public ExecuteSellInteractor(ExecuteSellDataAccessInterface dataAccess,
-                                 ExecuteSellOutputBoundary outputPresenter) {
+    public ExecuteSellInteractor(ExecuteSellDataAccessInterface dataAccess, ExecuteSellOutputBoundary outputPresenter) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputPresenter;
-        ServiceManager.Instance()
-                      .registerService(ExecuteSellInputBoundary.class, this);
+        ServiceManager.Instance().registerService(ExecuteSellInputBoundary.class, this);
     }
 
     @Override
     public void execute(ExecuteSellInputData data) {
         try {
-            User currentUser =
-                    dataAccess.getUserWithCredential(data.credential());
-            Stock stock = MarketTracker.Instance().getStock(data.ticker())
-                                       .orElseThrow(
-                                               StockNotFoundException::new);
+            User currentUser = dataAccess.getUserWithCredential(data.credential());
+            Stock stock = MarketTracker.Instance().getStock(data.ticker()).orElseThrow(StockNotFoundException::new);
 
             double currentPrice = stock.getMarketPrice();
             double totalCost = currentPrice * data.quantity();
@@ -44,17 +38,13 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
             Portfolio portfolio = currentUser.getPortfolio();
             portfolio.updatePortfolio(stock, -data.quantity(), currentPrice);
 
-            Transaction transaction =
-                    new Transaction(new Date(), data.ticker(), data.quantity(),
-                                    currentPrice, "SELL");
+            Transaction transaction = new Transaction(new Date(), data.ticker(), data.quantity(), currentPrice, "SELL");
             currentUser.getTransactionHistory().addTransaction(transaction);
 
             dataAccess.updateUserData(currentUser);
 
-            outputPresenter.prepareSuccessView(
-                    new ExecuteSellOutputData(currentUser.getBalance(),
-                                              currentUser.getPortfolio(),
-                                              currentUser.getTransactionHistory()));
+            outputPresenter.prepareSuccessView(new ExecuteSellOutputData(
+                    currentUser.getBalance(), currentUser.getPortfolio(), currentUser.getTransactionHistory()));
         } catch (ValidationException e) {
             outputPresenter.prepareValidationExceptionView();
         } catch (StockNotFoundException e) {
@@ -66,12 +56,7 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
         }
     }
 
-    static class InsufficientMarginCallException extends Exception {
+    static class InsufficientMarginCallException extends Exception {}
 
-    }
-
-    static class StockNotFoundException extends Exception {
-
-    }
-
+    static class StockNotFoundException extends Exception {}
 }

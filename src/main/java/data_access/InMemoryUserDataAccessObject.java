@@ -1,6 +1,9 @@
 package data_access;
 
 import entity.User;
+import java.rmi.ServerException;
+import java.util.HashMap;
+import java.util.Map;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_sell.ExecuteSellDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
@@ -10,20 +13,16 @@ import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * A class that implements the ExecuteBuyDataAccessInterface interface This class is used to get the
- * user with the given credential
+ * A class that implements the ExecuteBuyDataAccessInterface interface This class is used to get the user with the given
+ * credential
  */
-public class InMemoryUserDataAccessObject implements
-                                          LoginDataAccessInterface,
-                                          ExecuteBuyDataAccessInterface,
-                                          ExecuteSellDataAccessInterface,
-                                          ViewHistoryDataAccessInterface,
-                                          RegistrationDataAccessInterface {
+public class InMemoryUserDataAccessObject
+        implements LoginDataAccessInterface,
+                ExecuteBuyDataAccessInterface,
+                ExecuteSellDataAccessInterface,
+                ViewHistoryDataAccessInterface,
+                RegistrationDataAccessInterface {
 
     private static final String DEFAULT_PASSWORD = "0";
 
@@ -54,22 +53,20 @@ public class InMemoryUserDataAccessObject implements
     }
 
     @Override
-    public User getUserWithCredential(String credential)
-            throws ValidationException {
+    public User getUserWithCredential(String credential) throws ValidationException {
         SessionManager sessionManager = SessionManager.Instance();
-        String username = sessionManager.getUsername(credential)
-                                        .orElseThrow(ValidationException::new);
+        String username = sessionManager.getUsername(credential).orElseThrow(ValidationException::new);
         return getUserWithUsername(username);
     }
 
     @Override
     public void updateUserData(User user) throws ServerException {
-        // in memory data access does not need to explicit update user as User objects are modified by interactor directly.
+        // in memory data access does not need to explicit update user as User objects are modified by interactor
+        // directly.
     }
 
     // TODO: should we throw a different exception if the user is not found?
-    private User getUserWithUsername(String username)
-            throws ValidationException {
+    private User getUserWithUsername(String username) throws ValidationException {
         User user = users.get(username);
         if (user == null) {
             throw new ValidationException();
@@ -78,8 +75,7 @@ public class InMemoryUserDataAccessObject implements
     }
 
     @Override
-    public User getUserWithPassword(String username, String password)
-            throws ValidationException {
+    public User getUserWithPassword(String username, String password) throws ValidationException {
         User user = users.get(username);
 
         if (user == null) {

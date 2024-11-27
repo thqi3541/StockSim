@@ -1,12 +1,11 @@
 package view.components;
 
-import view.FontManager;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import java.awt.*;
+import view.FontManager;
 
 public class TableComponent extends JTable {
 
@@ -33,8 +32,7 @@ public class TableComponent extends JTable {
 
     private void setupHeaderStyle() {
         JTableHeader header = getTableHeader();
-        header.setPreferredSize(
-                new Dimension(header.getPreferredSize().width, HEADER_HEIGHT));
+        header.setPreferredSize(new Dimension(header.getPreferredSize().width, HEADER_HEIGHT));
         FontManager.Instance().useBold(header, 14f);
         header.setOpaque(false);
         header.setBackground(new Color(245, 245, 245));
@@ -43,13 +41,11 @@ public class TableComponent extends JTable {
 
     public void adjustColumnWidths() {
         int totalWidth = getParent().getWidth();
-        for (int i = 0; i < getColumnCount() && i < columnProportions.length;
-             i++) {
+        for (int i = 0; i < getColumnCount() && i < columnProportions.length; i++) {
             TableColumn column = getColumnModel().getColumn(i);
             int width = (int) (totalWidth * columnProportions[i]);
             column.setPreferredWidth(width);
-            column.setMinWidth(
-                    50); // Set minimum width to prevent columns from disappearing
+            column.setMinWidth(50); // Set minimum width to prevent columns from disappearing
         }
     }
 }

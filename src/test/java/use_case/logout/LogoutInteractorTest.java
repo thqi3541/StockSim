@@ -1,5 +1,8 @@
 package use_case.logout;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -7,9 +10,6 @@ import org.mockito.Mockito;
 import utility.ClientSessionManager;
 import utility.ServiceManager;
 import utility.SessionManager;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class LogoutInteractorTest {
 
@@ -35,36 +35,31 @@ class LogoutInteractorTest {
         LogoutInputData inputData = new LogoutInputData(TEST_CREDENTIAL);
 
         // Mock static methods of the managers
-        try (MockedStatic<SessionManager> sessionManagerStatic = Mockito.mockStatic(
-                SessionManager.class);
-             MockedStatic<ClientSessionManager> clientSessionManagerStatic = Mockito.mockStatic(
-                     ClientSessionManager.class);
-             MockedStatic<ServiceManager> serviceManagerStatic = Mockito.mockStatic(
-                     ServiceManager.class)) {
+        try (MockedStatic<SessionManager> sessionManagerStatic = Mockito.mockStatic(SessionManager.class);
+                MockedStatic<ClientSessionManager> clientSessionManagerStatic =
+                        Mockito.mockStatic(ClientSessionManager.class);
+                MockedStatic<ServiceManager> serviceManagerStatic = Mockito.mockStatic(ServiceManager.class)) {
 
             // Setup static method mocks
-            sessionManagerStatic.when(SessionManager::Instance)
-                                .thenReturn(sessionManagerMock);
-            clientSessionManagerStatic.when(ClientSessionManager::Instance)
-                                      .thenReturn(clientSessionManagerMock);
-            serviceManagerStatic.when(ServiceManager::Instance)
-                                .thenReturn(serviceManagerMock);
+            sessionManagerStatic.when(SessionManager::Instance).thenReturn(sessionManagerMock);
+            clientSessionManagerStatic.when(ClientSessionManager::Instance).thenReturn(clientSessionManagerMock);
+            serviceManagerStatic.when(ServiceManager::Instance).thenReturn(serviceManagerMock);
 
             // Setup response for isValidSession and getCredential
-            when(sessionManagerMock.isValidSession(TEST_CREDENTIAL)).thenReturn(
-                    true).thenReturn(false);
-            when(clientSessionManagerMock.getCredential()).thenReturn(
-                    TEST_CREDENTIAL).thenReturn(null);
+            when(sessionManagerMock.isValidSession(TEST_CREDENTIAL))
+                    .thenReturn(true)
+                    .thenReturn(false);
+            when(clientSessionManagerMock.getCredential())
+                    .thenReturn(TEST_CREDENTIAL)
+                    .thenReturn(null);
 
             // Create the interactor
             LogoutInteractor interactor = new LogoutInteractor(outputPresenter);
 
             // Verify initial state
-            assertTrue(sessionManagerMock.isValidSession(TEST_CREDENTIAL),
-                       "Session should be valid before logout");
-            assertEquals(TEST_CREDENTIAL,
-                         clientSessionManagerMock.getCredential(),
-                         "Credential should exist before logout");
+            assertTrue(sessionManagerMock.isValidSession(TEST_CREDENTIAL), "Session should be valid before logout");
+            assertEquals(
+                    TEST_CREDENTIAL, clientSessionManagerMock.getCredential(), "Credential should exist before logout");
 
             // Execute logout
             interactor.execute(inputData);
@@ -75,10 +70,8 @@ class LogoutInteractorTest {
             verify(outputPresenter).prepareSuccessView();
 
             // Verify post-logout state
-            assertFalse(sessionManagerMock.isValidSession(TEST_CREDENTIAL),
-                        "Session should be invalid after logout");
-            assertNull(clientSessionManagerMock.getCredential(),
-                       "Credential should be null after logout");
+            assertFalse(sessionManagerMock.isValidSession(TEST_CREDENTIAL), "Session should be invalid after logout");
+            assertNull(clientSessionManagerMock.getCredential(), "Credential should be null after logout");
         }
     }
 }

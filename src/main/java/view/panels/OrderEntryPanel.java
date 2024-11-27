@@ -2,6 +2,8 @@ package view.panels;
 
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_sell.ExecuteSellController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -9,9 +11,6 @@ import view.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class OrderEntryPanel extends JPanel implements IComponent {
 
@@ -51,8 +50,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         contentPanel.add(inputPanel, BorderLayout.NORTH);
 
         // Add gap
-        contentPanel.add(
-                Box.createRigidArea(new Dimension(0, Integer.MAX_VALUE)));
+        contentPanel.add(Box.createRigidArea(new Dimension(0, Integer.MAX_VALUE)));
 
         // Add button section at the bottom
         JPanel buttonPanel = createButtonPanel();
@@ -86,8 +84,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
         // Configure ticker input
         FontManager.Instance().useRegular(tickerInput, 14f);
-        tickerInput.setMaximumSize(new Dimension(Integer.MAX_VALUE,
-                                                 tickerInput.getPreferredSize().height));
+        tickerInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, tickerInput.getPreferredSize().height));
         tickerInput.setAlignmentX(Component.LEFT_ALIGNMENT);
         inputPanel.add(tickerInput);
 
@@ -96,8 +93,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
 
         // Configure quantity input
         FontManager.Instance().useRegular(quantityInput, 14f);
-        quantityInput.setMaximumSize(new Dimension(Integer.MAX_VALUE,
-                                                   quantityInput.getPreferredSize().height));
+        quantityInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, quantityInput.getPreferredSize().height));
         quantityInput.setAlignmentX(Component.LEFT_ALIGNMENT);
         inputPanel.add(quantityInput);
 
@@ -124,8 +120,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         String quantity = quantityInput.getText();
 
         // Execute buy action
-        ExecuteBuyController controller = ServiceManager.Instance().getService(
-                ExecuteBuyController.class);
+        ExecuteBuyController controller = ServiceManager.Instance().getService(ExecuteBuyController.class);
         controller.execute(ticker, quantity);
 
         // Clear input fields
@@ -138,8 +133,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         String quantity = quantityInput.getText();
 
         // Execute sell action
-        ExecuteSellController controller = ServiceManager.Instance().getService(
-                ExecuteSellController.class);
+        ExecuteSellController controller = ServiceManager.Instance().getService(ExecuteSellController.class);
         controller.execute(ticker, quantity);
 
         // Clear input fields
@@ -148,6 +142,5 @@ public class OrderEntryPanel extends JPanel implements IComponent {
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

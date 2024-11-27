@@ -1,8 +1,6 @@
 package use_case.view_history;
 
-/**
- * The output boundary for the ViewHistory use case.
- */
+/** The output boundary for the ViewHistory use case. */
 public interface ViewHistoryOutputBoundary {
 
     /**
@@ -12,8 +10,6 @@ public interface ViewHistoryOutputBoundary {
      */
     void prepareSuccessView(ViewHistoryOutputData outputData);
 
-    /**
-     * Prepares the ValidationException view for the ViewHistory use case
-     */
+    /** Prepares the ValidationException view for the ViewHistory use case */
     void prepareValidationExceptionView();
 }

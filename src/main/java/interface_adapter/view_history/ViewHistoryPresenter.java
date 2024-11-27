@@ -7,9 +7,7 @@ import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
-/**
- * Presenter for the ViewHistory Use Case
- */
+/** Presenter for the ViewHistory Use Case */
 public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
 
     public ViewHistoryPresenter() {
@@ -26,9 +24,7 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
         ViewManager.Instance().broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
     }
 
-    /**
-     * Prepares the ValidationException view for the ViewHistory use case
-     */
+    /** Prepares the ValidationException view for the ViewHistory use case */
     @Override
     public void prepareValidationExceptionView() {
         ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You are not authorized to do this."));

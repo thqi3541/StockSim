@@ -1,13 +1,10 @@
 package view.components;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 
-import javax.swing.*;
-import java.awt.*;
-
-/**
- * A component that wraps a JPasswordField with optional label
- */
+/** A component that wraps a JPasswordField with optional label */
 public class PasswordInputComponent extends JPanel {
 
     private final JPasswordField passwordField;
@@ -16,11 +13,10 @@ public class PasswordInputComponent extends JPanel {
      * Constructor with label on top
      *
      * @param labelText text for the label
-     * @param columns   number of columns for the password field
+     * @param columns number of columns for the password field
      */
     public PasswordInputComponent(String labelText, int columns) {
-        setLayout(new BorderLayout(0,
-                                   5)); // Add a vertical gap between label and field
+        setLayout(new BorderLayout(0, 5)); // Add a vertical gap between label and field
         JLabel label = new JLabel(labelText);
         passwordField = new JPasswordField(columns);
 
@@ -29,10 +25,8 @@ public class PasswordInputComponent extends JPanel {
         fontManager.useRegular(label, 14f);
         fontManager.useRegular(passwordField, 14f);
 
-        label.setHorizontalAlignment(
-                SwingConstants.LEFT); // Align label to the left
-        passwordField.setPreferredSize(
-                new Dimension(passwordField.getPreferredSize().width, 40));
+        label.setHorizontalAlignment(SwingConstants.LEFT); // Align label to the left
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
 
         add(label, BorderLayout.NORTH);
         add(passwordField, BorderLayout.CENTER);
@@ -48,8 +42,7 @@ public class PasswordInputComponent extends JPanel {
         passwordField = new JPasswordField(columns);
         FontManager fontManager = FontManager.Instance();
         fontManager.useRegular(passwordField, 14f);
-        passwordField.setPreferredSize(
-                new Dimension(passwordField.getPreferredSize().width, 40));
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
         add(passwordField, BorderLayout.CENTER);
     }
 
@@ -63,34 +56,28 @@ public class PasswordInputComponent extends JPanel {
         passwordField = new JPasswordField();
         FontManager fontManager = FontManager.Instance();
         fontManager.useRegular(passwordField, 14f);
-        passwordField.setEchoChar(
-                (char) 0); // Temporarily show the placeholder text
+        passwordField.setEchoChar((char) 0); // Temporarily show the placeholder text
         passwordField.setText(placeholderText);
-        passwordField.setPreferredSize(
-                new Dimension(passwordField.getPreferredSize().width, 40));
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
 
         // Add focus listener to handle placeholder behavior
-        passwordField.addFocusListener(
-                new java.awt.event.FocusAdapter() {
-                    @Override
-                    public void focusGained(java.awt.event.FocusEvent evt) {
-                        if (String.valueOf(passwordField.getPassword())
-                                  .equals(placeholderText)) {
-                            passwordField.setText("");
-                            passwordField.setEchoChar(
-                                    '●'); // Set back to password dots
-                        }
-                    }
+        passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (String.valueOf(passwordField.getPassword()).equals(placeholderText)) {
+                    passwordField.setText("");
+                    passwordField.setEchoChar('●'); // Set back to password dots
+                }
+            }
 
-                    @Override
-                    public void focusLost(java.awt.event.FocusEvent evt) {
-                        if (passwordField.getPassword().length == 0) {
-                            passwordField.setText(placeholderText);
-                            passwordField.setEchoChar(
-                                    (char) 0); // Show placeholder text
-                        }
-                    }
-                });
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (passwordField.getPassword().length == 0) {
+                    passwordField.setText(placeholderText);
+                    passwordField.setEchoChar((char) 0); // Show placeholder text
+                }
+            }
+        });
 
         add(passwordField, BorderLayout.CENTER);
     }
@@ -113,9 +100,7 @@ public class PasswordInputComponent extends JPanel {
         passwordField.setText(text);
     }
 
-    /**
-     * Clears the password field
-     */
+    /** Clears the password field */
     public void clear() {
         passwordField.setText("");
     }

@@ -1,10 +1,13 @@
 package data_access;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import data_transfer.parser.DocumentParsingException;
 import data_transfer.parser.MongoDBUserDocumentParser;
 import entity.User;
+import java.rmi.ServerException;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
@@ -17,17 +20,12 @@ import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-
-import static com.mongodb.client.model.Filters.eq;
-
-
-public class ExternalUserDataAccessObject implements
-                                          RegistrationDataAccessInterface,
-                                          LoginDataAccessInterface,
-                                          ExecuteBuyDataAccessInterface,
-                                          ExecuteSellDataAccessInterface,
-                                          ViewHistoryDataAccessInterface {
+public class ExternalUserDataAccessObject
+        implements RegistrationDataAccessInterface,
+                LoginDataAccessInterface,
+                ExecuteBuyDataAccessInterface,
+                ExecuteSellDataAccessInterface,
+                ViewHistoryDataAccessInterface {
 
     public ExternalUserDataAccessObject() {
         ServiceManager.Instance().registerService(UserDataAccessInterface.class, this);
@@ -45,11 +43,9 @@ public class ExternalUserDataAccessObject implements
     }
 
     @Override
-    public User getUserWithCredential(String credential)
-            throws ValidationException {
+    public User getUserWithCredential(String credential) throws ValidationException {
         // get username from credential
-        String username = SessionManager.Instance().getUsername(credential)
-                                        .orElseThrow(ValidationException::new);
+        String username = SessionManager.Instance().getUsername(credential).orElseThrow(ValidationException::new);
         // retrieve user data from database
         try {
             return getUserByQuery(new Document("username", username));
@@ -64,18 +60,14 @@ public class ExternalUserDataAccessObject implements
     public void updateUserData(User user) throws ServerException {
         try {
             MongoCollection<Document> collection = getUserCollection();
-            collection.replaceOne(
-                    eq("username", user.getUsername()),
-                    MongoDBUserDocumentParser.toDocument(user)
-            );
+            collection.replaceOne(eq("username", user.getUsername()), MongoDBUserDocumentParser.toDocument(user));
         } catch (DocumentParsingException e) {
             throw new ServerException("Parsing document error", e);
         }
     }
 
     @Override
-    public User getUserWithPassword(String username, String password)
-            throws ValidationException {
+    public User getUserWithPassword(String username, String password) throws ValidationException {
         // retrieve user data from database
         try {
             return getUserByQuery(new Document("username", username).append("password", password));
@@ -86,8 +78,7 @@ public class ExternalUserDataAccessObject implements
         }
     }
 
-    private User getUserByQuery(Document query)
-            throws ValidationException, DocumentParsingException {
+    private User getUserByQuery(Document query) throws ValidationException, DocumentParsingException {
         MongoCollection<Document> collection = getUserCollection();
         Document result = collection.find(query).first();
         if (result == null) {

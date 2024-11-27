@@ -1,12 +1,9 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-
 import java.util.Objects;
 
-/**
- * A class representing a user.
- */
+/** A class representing a user. */
 public class User {
 
     private final String username;
@@ -22,10 +19,8 @@ public class User {
      * @param password the user's password (should be hashed/encrypted)
      */
     public User(String username, String password) {
-        this.username =
-                Objects.requireNonNull(username, "Username cannot be null.");
-        this.password =
-                Objects.requireNonNull(password, "Password cannot be null.");
+        this.username = Objects.requireNonNull(username, "Username cannot be null.");
+        this.password = Objects.requireNonNull(password, "Password cannot be null.");
         this.balance = 0.0;
         this.portfolio = new Portfolio();
         this.transactionHistory = new TransactionHistory();
@@ -34,10 +29,10 @@ public class User {
     /**
      * Full constructor for creating a user with all details.
      *
-     * @param username           the username of the user
-     * @param password           the user's password
-     * @param balance            the user's initial balance
-     * @param portfolio          the user's portfolio
+     * @param username the username of the user
+     * @param password the user's password
+     * @param balance the user's initial balance
+     * @param portfolio the user's portfolio
      * @param transactionHistory the user's transaction history
      */
     @JsonCreator
@@ -62,8 +57,7 @@ public class User {
      */
     public void addBalance(double amount) {
         if (amount < 0) {
-            throw new IllegalArgumentException(
-                    "Amount to add cannot be negative.");
+            throw new IllegalArgumentException("Amount to add cannot be negative.");
         }
         this.balance += amount;
     }
@@ -76,8 +70,7 @@ public class User {
      */
     public void deductBalance(double amount) {
         if (amount < 0) {
-            throw new IllegalArgumentException(
-                    "Amount to deduct cannot be negative.");
+            throw new IllegalArgumentException("Amount to deduct cannot be negative.");
         }
         if (amount > this.balance) {
             throw new IllegalArgumentException("Insufficient balance.");
@@ -107,11 +100,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", balance=" + balance +
-                ", portfolio=" + portfolio +
-                ", transactionHistory=" + transactionHistory +
-                '}';
+        return "User{" + "username='"
+                + username + '\'' + ", balance="
+                + balance + ", portfolio="
+                + portfolio + ", transactionHistory="
+                + transactionHistory + '}';
     }
 }

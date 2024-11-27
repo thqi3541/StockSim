@@ -8,9 +8,7 @@ import utility.ServiceManager;
 import validations.PasswordValidator;
 import validations.UsernameValidator;
 
-/**
- * The Registration Interactor.
- */
+/** The Registration Interactor. */
 public class RegistrationInteractor implements RegistrationInputBoundary {
 
     // Default initial balance for new users
@@ -21,10 +19,9 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     private final RegistrationDataAccessInterface dataAccess;
 
     /**
-     * Constructs a RegistrationInteractor with dependencies on presenter, data access, and user
-     * factory.
+     * Constructs a RegistrationInteractor with dependencies on presenter, data access, and user factory.
      *
-     * @param presenter  The output boundary for displaying results to the user.
+     * @param presenter The output boundary for displaying results to the user.
      * @param dataAccess The data access object for storing and retrieving users.
      */
     public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess) {
@@ -36,10 +33,9 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     }
 
     /**
-     * Processes the registration input data to register a new user. Checks if the username and
-     * password are valid and unique. If registration is successful, it creates and saves a new user
-     * and sends success feedback to the presenter. Otherwise, it sends an error message to the
-     * presenter.
+     * Processes the registration input data to register a new user. Checks if the username and password are valid and
+     * unique. If registration is successful, it creates and saves a new user and sends success feedback to the
+     * presenter. Otherwise, it sends an error message to the presenter.
      *
      * @param inputData The input data containing the username and password for registration.
      */

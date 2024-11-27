@@ -5,23 +5,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * A class representing the transaction history of a user.
- */
+/** A class representing the transaction history of a user. */
 public class TransactionHistory {
 
     private final List<Transaction> transactions;
 
-    /**
-     * Default constructor for TransactionHistory class. Initializes an empty transaction history.
-     */
+    /** Default constructor for TransactionHistory class. Initializes an empty transaction history. */
     public TransactionHistory() {
         this.transactions = new ArrayList<>();
     }
 
     /**
-     * Constructor for TransactionHistory class. Takes in existing transactions when there are already
-     * some.
+     * Constructor for TransactionHistory class. Takes in existing transactions when there are already some.
      *
      * @param transactions the list of existing transactions
      * @throws IllegalArgumentException if the transactions list is null
@@ -45,8 +40,8 @@ public class TransactionHistory {
     }
 
     /**
-     * Retrieves all transactions in the transaction history. Returns an unmodifiable view of the
-     * transactions list to ensure immutability.
+     * Retrieves all transactions in the transaction history. Returns an unmodifiable view of the transactions list to
+     * ensure immutability.
      *
      * @return an unmodifiable list of all transactions
      */

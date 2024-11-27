@@ -3,9 +3,7 @@ package data_transfer.parser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.Document;
 
-/**
- * Utility class for parsing objects to and from BSON Documents.
- */
+/** Utility class for parsing objects to and from BSON Documents. */
 public class MongoDBDocumentParser {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -14,8 +12,8 @@ public class MongoDBDocumentParser {
      * Parses a BSON Document into an instance of the specified class.
      *
      * @param document the BSON Document to parse
-     * @param clazz    the class to map the Document to
-     * @param <T>      the type parameter of the class
+     * @param clazz the class to map the Document to
+     * @param <T> the type parameter of the class
      * @return the parsed object
      * @throws DocumentParsingException if parsing fails
      */

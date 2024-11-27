@@ -5,16 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * A class representing a user's portfolio.
- */
+/** A class representing a user's portfolio. */
 public class Portfolio {
 
     private final Map<String, UserStock> userStocks;
 
-    /**
-     * Default constructor for creating an empty portfolio.
-     */
+    /** Default constructor for creating an empty portfolio. */
     public Portfolio() {
         this.userStocks = new HashMap<>();
     }

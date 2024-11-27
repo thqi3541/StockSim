@@ -2,6 +2,9 @@ package view.panels;
 
 import entity.Portfolio;
 import entity.UserStock;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
@@ -9,25 +12,20 @@ import view.components.TableComponent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-
 public class PortfolioPanel extends JPanel implements IComponent {
 
     private static final String TITLE = "Portfolio Overview";
     private static final String[] COLUMN_NAMES = {
-            "Ticker", "Company", "Quantity", "Avg Cost", "Market Price",
-            "Total Value", "Profit"
+        "Ticker", "Company", "Quantity", "Avg Cost", "Market Price", "Total Value", "Profit"
     };
     private static final double[] COLUMN_PROPORTIONS = {
-            0.10, // Ticker
-            0.25, // Company
-            0.10, // Quantity
-            0.15, // Avg Cost
-            0.15, // Market Price
-            0.15, // Total Value
-            0.10 // Profit
+        0.10, // Ticker
+        0.25, // Company
+        0.10, // Quantity
+        0.15, // Avg Cost
+        0.15, // Market Price
+        0.15, // Total Value
+        0.10 // Profit
     };
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
@@ -57,14 +55,12 @@ public class PortfolioPanel extends JPanel implements IComponent {
         add(scrollPane, BorderLayout.CENTER);
 
         // Add resize listener
-        addComponentListener(
-                new java.awt.event.ComponentAdapter() {
-                    @Override
-                    public void componentResized(
-                            java.awt.event.ComponentEvent evt) {
-                        portfolioTable.adjustColumnWidths();
-                    }
-                });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                portfolioTable.adjustColumnWidths();
+            }
+        });
     }
 
     private DefaultTableModel createTableModel() {
@@ -107,17 +103,15 @@ public class PortfolioPanel extends JPanel implements IComponent {
                 double totalCost = userStock.getTotalCost();
                 double totalProfit = marketValue - totalCost;
 
-                model.addRow(
-                        new Object[] {
-                                userStock.getStock().getTicker(),
-                                userStock.getStock().getCompany(),
-                                userStock.getQuantity(),
-                                String.format("$%.2f", userStock.getAvgCost()),
-                                String.format("$%.2f", userStock.getStock()
-                                                                .getMarketPrice()),
-                                String.format("$%.2f", marketValue),
-                                String.format("$%.2f", totalProfit)
-                        });
+                model.addRow(new Object[] {
+                    userStock.getStock().getTicker(),
+                    userStock.getStock().getCompany(),
+                    userStock.getQuantity(),
+                    String.format("$%.2f", userStock.getAvgCost()),
+                    String.format("$%.2f", userStock.getStock().getMarketPrice()),
+                    String.format("$%.2f", marketValue),
+                    String.format("$%.2f", totalProfit)
+                });
             }
         }
     }

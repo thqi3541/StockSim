@@ -1,9 +1,8 @@
 package view.components;
 
-import view.FontManager;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import view.FontManager;
 
 public class InputComponent extends JPanel {
 
@@ -11,8 +10,7 @@ public class InputComponent extends JPanel {
 
     // Constructor with label on top
     public InputComponent(String labelText, int columns) {
-        setLayout(new BorderLayout(0,
-                                   5)); // Add a vertical gap between label and field
+        setLayout(new BorderLayout(0, 5)); // Add a vertical gap between label and field
         JLabel label = new JLabel(labelText);
         textField = new JTextField(columns);
 
@@ -22,8 +20,7 @@ public class InputComponent extends JPanel {
         fontManager.useRegular(textField, 14f);
 
         label.setHorizontalAlignment(SwingConstants.LEFT);
-        textField.setPreferredSize(
-                new Dimension(textField.getPreferredSize().width, 40));
+        textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
 
         add(label, BorderLayout.NORTH);
         add(textField, BorderLayout.CENTER);
@@ -34,8 +31,7 @@ public class InputComponent extends JPanel {
         setLayout(new BorderLayout());
         textField = new JTextField(columns);
         FontManager.Instance().useRegular(textField, 14f);
-        textField.setPreferredSize(
-                new Dimension(textField.getPreferredSize().width, 40));
+        textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
         add(textField, BorderLayout.CENTER);
     }
 
@@ -45,8 +41,7 @@ public class InputComponent extends JPanel {
         textField = new JTextField();
         FontManager.Instance().useRegular(textField, 14f);
         textField.setText(placeholderText);
-        textField.setPreferredSize(
-                new Dimension(textField.getPreferredSize().width, 40));
+        textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
         add(textField, BorderLayout.CENTER);
     }
 

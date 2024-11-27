@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Utility class for loading and accessing market tracker configuration properties. The
- * configuration is loaded from a properties file at "config/market-tracker-config.txt".
+ * Utility class for loading and accessing market tracker configuration properties. The configuration is loaded from a
+ * properties file at "config/market-tracker-config.txt".
  */
 public class MarketTrackerConfigLoader {
 
@@ -19,8 +19,8 @@ public class MarketTrackerConfigLoader {
     }
 
     /**
-     * Loads the market tracker configuration from the specified file. This method is called once when
-     * the class is initialized.
+     * Loads the market tracker configuration from the specified file. This method is called once when the class is
+     * initialized.
      *
      * @throws RuntimeException if the configuration file is not found or cannot be loaded.
      */

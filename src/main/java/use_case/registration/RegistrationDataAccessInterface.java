@@ -3,9 +3,7 @@ package use_case.registration;
 import data_transfer.parser.DocumentParsingException;
 import entity.User;
 
-/**
- * The interface of the DAO for the Registration Use Case.
- */
+/** The interface of the DAO for the Registration Use Case. */
 public interface RegistrationDataAccessInterface {
 
     /**

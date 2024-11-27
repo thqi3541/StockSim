@@ -1,13 +1,12 @@
 package view.panels;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class AssetPanel extends JPanel implements IComponent {
 
@@ -120,18 +119,15 @@ public class AssetPanel extends JPanel implements IComponent {
     }
 
     private void updateValues(double balance, double portfolioValue) {
-        assetLabel.setText(
-                String.format("Total Assets: $%.2f", balance + portfolioValue));
+        assetLabel.setText(String.format("Total Assets: $%.2f", balance + portfolioValue));
         balanceLabel.setText(String.format("Balance: $%.2f", balance));
-        portfolioLabel.setText(
-                String.format("Portfolio Value: $%.2f", portfolioValue));
+        portfolioLabel.setText(String.format("Portfolio Value: $%.2f", portfolioValue));
     }
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof UpdateAssetEvent assetEvent) {
-            updateValues(assetEvent.getBalance(),
-                         assetEvent.getPortfolio().getTotalValue());
+            updateValues(assetEvent.getBalance(), assetEvent.getPortfolio().getTotalValue());
         }
     }
 }

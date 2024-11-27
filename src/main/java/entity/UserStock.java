@@ -1,8 +1,6 @@
 package entity;
 
-/**
- * A class representing a stock owned by a user.
- */
+/** A class representing a stock owned by a user. */
 public class UserStock {
 
     private final Stock stock;
@@ -20,8 +18,8 @@ public class UserStock {
     /**
      * Constructor for UserStock class.
      *
-     * @param stock    the stock object (must not be null)
-     * @param avgCost  the average cost of the stock
+     * @param stock the stock object (must not be null)
+     * @param avgCost the average cost of the stock
      * @param quantity the quantity of the stock owned by the user
      */
     public UserStock(Stock stock, double avgCost, int quantity) {
@@ -64,7 +62,7 @@ public class UserStock {
     /**
      * Updates the average cost and quantity of the stock.
      *
-     * @param price    the execution price of the stock (must be non-negative)
+     * @param price the execution price of the stock (must be non-negative)
      * @param quantity the quantity of the stock to add (can be negative to represent selling)
      */
     public void updateUserStock(double price, int quantity) {
