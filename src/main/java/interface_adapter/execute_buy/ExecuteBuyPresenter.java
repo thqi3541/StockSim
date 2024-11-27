@@ -17,43 +17,29 @@ public class ExecuteBuyPresenter implements ExecuteBuyOutputBoundary {
 
     @Override
     public void prepareSuccessView(ExecuteBuyOutputData outputData) {
-        ViewManager.Instance()
-                   .broadcastEvent(
-                           new UpdateAssetEvent(outputData.newPortfolio(),
-                                                outputData.newBalance()));
-        ViewManager.Instance()
-                   .broadcastEvent(
-                           new UpdateTransactionHistoryEvent(
-                                   outputData.newTransactionHistory()));
+        ViewManager.Instance().broadcastEvent(
+                new UpdateAssetEvent(outputData.newPortfolio(),
+                                     outputData.newBalance()));
+        ViewManager.Instance().broadcastEvent(new UpdateTransactionHistoryEvent(
+                outputData.newTransactionHistory()));
     }
 
     @Override
     public void prepareInsufficientBalanceExceptionView() {
-        ViewManager.Instance()
-                   .broadcastEvent(
-                           new DialogEvent("Failed",
-                                           "You have insufficient balance to buy this stock."));
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed",
+                                                              "You have insufficient balance to buy this stock."));
     }
 
     @Override
     public void prepareStockNotFoundExceptionView() {
-        ViewManager.Instance()
-                   .broadcastEvent(
-                           new DialogEvent("Failed",
-                                           "The stock you are trying to buy does not exist."));
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed",
+                                                              "The stock you are trying to buy does not exist."));
     }
 
     @Override
     public void prepareValidationExceptionView() {
-        ViewManager.Instance()
-                   .broadcastEvent(new DialogEvent("Failed",
-                                                   "You are not authorized to do this."));
-    }
-
-    @Override
-    public void prepareInvalidQuantityExceptionView(String errorMessage) {
-        ViewManager.Instance()
-                   .broadcastEvent(new DialogEvent("Failed", errorMessage));
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed",
+                                                              "You are not authorized to do this."));
     }
 
     @Override

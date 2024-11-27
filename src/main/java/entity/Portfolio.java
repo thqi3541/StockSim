@@ -75,33 +75,27 @@ public class Portfolio {
         return userStocks.values();
     }
 
-    /**
-     * Adds or updates a stock in the portfolio.
-     *
-     * @param userStock the UserStock to add or update
-     * @throws IllegalArgumentException if userStock is null
-     */
-    public void addUserStock(UserStock userStock) {
-        if (userStock == null || userStock.getStock() == null) {
-            throw new IllegalArgumentException(
-                    "userStock or its Stock cannot be null.");
+    public void updatePortfolio(Stock stock, int quantity,
+                                double currentPrice) {
+        // find the stock in the portfolio
+        UserStock userStock = userStocks.get(stock.getTicker());
+        if (userStock != null) {
+            // update the stock in the portfolio
+            // if the new quantity is 0, remove the userStock from the portfolio
+            if (userStock.getQuantity() + quantity == 0) {
+                userStocks.remove(stock.getTicker());
+            } else
+            // if the new quantity is not 0, simply update the stock in the portfolio
+            {
+                userStock.updateUserStock(currentPrice, quantity);
+            }
+        } else {
+            // add the stock to the portfolio
+            userStocks.put(stock.getTicker(),
+                           new UserStock(stock, currentPrice, quantity));
         }
-        userStocks.put(userStock.getStock().getTicker(), userStock);
     }
 
-    /**
-     * Removes a stock from the portfolio.
-     *
-     * @param userStock the UserStock to remove
-     * @throws IllegalArgumentException if userStock is null
-     */
-    public void removeUserStock(UserStock userStock) {
-        if (userStock == null || userStock.getStock() == null) {
-            throw new IllegalArgumentException(
-                    "userStock or its Stock cannot be null.");
-        }
-        userStocks.remove(userStock.getStock().getTicker());
-    }
 
     /**
      * Checks if the portfolio is empty.
