@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * A class representing a user's portfolio.
- */
 public class Portfolio {
 
     private Map<String, UserStock> userStocks;
