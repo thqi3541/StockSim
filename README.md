@@ -51,8 +51,7 @@ The platform offers real-time market data integration through Finnhub API and su
 ### Download
 
 1. Download the latest release from [here](https://github.com/ivorkchan/StockSim/releases)
-2. Create `.env.local` file with your API keys (see Build from Source steps 2-4)
-3. Run the jar file:
+2. Run the jar file:
    ```bash
    java -jar StockSim.jar
    ```
