@@ -1,19 +1,35 @@
-# StockSim
+<div align="center">
+	<h1>StockSim</h1>
+</div>
+
+<div align="center">
+	<code><img width="36" src="https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png" alt="Java" title="Java"/></code>
+	<code><img width="36" src="https://user-images.githubusercontent.com/25181517/117207242-07d5a700-adf4-11eb-975e-be04e62b984b.png" alt="Maven" title="Maven"/></code>
+	<code><img width="36" src="https://user-images.githubusercontent.com/25181517/182884177-d48a8579-2cd0-447a-b9a6-ffc7cb02560e.png" alt="mongoDB" title="mongoDB"/></code>
+	<code><img width="36" src="https://user-images.githubusercontent.com/25181517/189715289-df3ee512-6eca-463f-a0f4-c10d94a06b2f.png" alt="Figma" title="Figma"/></code>
+	<code><img width="36" src="https://user-images.githubusercontent.com/25181517/192108374-8da61ba1-99ec-41d7-80b8-fb2f7c0a4948.png" alt="GitHub" title="GitHub"/></code>
+	<code><img width="36" src="https://user-images.githubusercontent.com/25181517/183868728-b2e11072-00a5-47e2-8a4e-4ebbb2b8c554.png" alt="CI/CD" title="CI/CD"/></code>
+</div>
 
 ## Table of Contents
 
-- [StockSim](#stocksim)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Requirements](#requirements)
-    - [Development Requirements](#development-requirements)
-    - [System Requirements](#system-requirements)
-  - [How to Install](#how-to-install)
-    - [Build from Source](#build-from-source)
-    - [Download](#download)
-  - [Key Features](#key-features)
-  - [Highlights](#highlights)
-  - [Credits](#credits)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Requirements](#requirements)
+  - [Development Requirements](#development-requirements)
+  - [System Requirements](#system-requirements)
+- [How to Install](#how-to-install)
+  - [Build from Source](#build-from-source)
+  - [Download](#download)
+- [Key Features](#key-features)
+  - [Sign Up](#sign-up)
+  - [Log In](#log-in)
+  - [Dashboard](#dashboard)
+  - [Trade Simulation](#trade-simulation)
+  - [Transaction History](#transaction-history)
+- [Highlights](#highlights)
+- [How to Contribute](#how-to-contribute)
+- [Credits](#credits)
 
 ## Overview
 
@@ -48,16 +64,16 @@ portfolio management.
 3. Set up `STOCK_API_KEY` in `.env.local`
 4. Request for MongoDB token via issues, then set up `MONGODB_API_KEY` in
    `.env.local`
-5. Run the main app:
+5. Build the main app
    ```bash
-   mvn clean install
+   mvn clean package
    java -jar target/StockSim.jar
    ```
 
 ### Download
 
 1. Download the latest release from
-   [here](https://github.com/ivorkchan/StockSim/releases)
+   [releases](https://github.com/StockSim/StockSim/releases)
 2. Run the jar file:
    ```bash
    java -jar StockSim.jar
@@ -68,23 +84,30 @@ portfolio management.
 For detailed information about use cases and user stories, please refer to
 [this page](/docs/Project%20Overview.md).
 
-1. Sign Up
+### Sign Up
 
 ![sign-up](/assets/images/3.0-snapshot-sign-up.png)
 
-2. Log In
+### Log In
 
 ![log-in](/assets/images/3.0-snapshot-log-in.png)
 
-3. Dashboard
+### Dashboard
 
 ![dashboard](/assets/images/3.0-snapshot-dashboard.png)
 
-4. Trade Simulation
+### Trade Simulation
+
+On this view, user can view real-time stock information, sort and filter them by
+ticker, company, and industry, then execute trades.
+
+User's assets and portfolio will be displayed to provide information.
 
 ![trade-simulation](/assets/images/3.0-snapshot-trade-simulation.png)
 
-5. Transaction History
+### Transaction History
+
+This view shows all transactions of the user.
 
 ![history](/assets/images/3.0-snapshot-history.png)
 
@@ -95,6 +118,14 @@ For detailed information about use cases and user stories, please refer to
 3. Multi-user Support and Persistent Data in MongoDB
 4. UI and UX Design:
    [View Prototype in Figma](https://www.figma.com/proto/tm5D32ALPuOvfL2lvpir9c/StockSim?page-id=89%3A589&node-id=89-603&node-type=canvas&viewport=351%2C190%2C0.14&t=2N4BKpzFNg0XUjDq-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=89%3A603)
+
+## How to Contribute
+
+1. Fork the repository
+2. Open issues for api keys
+3. Create a new branch
+4. Make changes and commit
+5. Create a pull request
 
 ## Credits
 
