@@ -2,6 +2,7 @@ package data_access;
 
 import entity.User;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.execute_sell.ExecuteSellDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
@@ -14,12 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A class that implements the ExecuteBuyDataAccessInterface interface
+ * A class that implements the data access interfaces for different use cases
  * This class is used to get the user with the given credential
  */
 public class InMemoryUserDataAccessObject implements
         LoginDataAccessInterface,
         ExecuteBuyDataAccessInterface,
+        ExecuteSellDataAccessInterface,
         ViewHistoryDataAccessInterface,
         RegistrationDataAccessInterface
 {
@@ -47,6 +49,7 @@ public class InMemoryUserDataAccessObject implements
         ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ExecuteSellDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
     }
 

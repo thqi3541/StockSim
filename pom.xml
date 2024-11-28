@@ -2,13 +2,118 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.stocksim</groupId>
     <artifactId>simulator</artifactId>
-    <version>3.0-SNAPSHOT</version>
 
     <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.8.8,)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <id>enforce-maven</id>
+                    </execution>
+                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.5.0</version>
+            </plugin>
+            <plugin>
+                <artifactId>versions-maven-plugin</artifactId>
+                <configuration>
+                    <processAllModules>true</processAllModules>
+                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <version>2.18.0</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.13.0</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <mainClass>app.Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Build-Jdk-Spec>21</Build-Jdk-Spec>
+                            <Multi-Release>true</Multi-Release>
+                        </manifestEntries>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <finalName>StockSim</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <version>3.7.1</version>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>.gitattributes</include>
+                                <include>.gitignore</include>
+                            </includes>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <tabs>true</tabs>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+                    <java>
+                        <removeUnusedImports/>
+                        <palantirJavaFormat>
+                            <version>2.39.0</version>
+                            <style>PALANTIR</style>
+                            <formatJavadoc>true</formatJavadoc>
+                        </palantirJavaFormat>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -20,138 +125,89 @@
                 </includes>
             </resource>
         </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.17.1</version>
-                <configuration>
-                    <processAllModules>true</processAllModules>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
-                    <source>21</source>
-                    <target>21</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <finalName>StockSim</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <archive>
-                        <manifest>
-                            <mainClass>app.Main</mainClass>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Multi-Release>true</Multi-Release>
-                            <Build-Jdk-Spec>21</Build-Jdk-Spec>
-                        </manifestEntries>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
     </build>
-
     <dependencies>
         <dependency>
-            <groupId>org.json</groupId>
             <artifactId>json</artifactId>
+            <groupId>org.json</groupId>
             <version>20240303</version>
         </dependency>
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
+            <groupId>com.squareup.okhttp3</groupId>
             <version>5.0.0-alpha.14</version>
         </dependency>
-
         <dependency>
-            <groupId>io.github.cdimascio</groupId>
             <artifactId>java-dotenv</artifactId>
+            <groupId>io.github.cdimascio</groupId>
             <version>5.2.2</version>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <scope>test</scope>
             <version>5.11.3</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <groupId>org.mockito</groupId>
+            <scope>test</scope>
             <version>5.14.2</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>2.0.2-beta</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>5.2.0</version>
             <scope>test</scope>
+            <version>2.0.2-beta</version>
         </dependency>
         <dependency>
-            <groupId>org.mongodb</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <groupId>org.mockito</groupId>
+            <scope>test</scope>
+            <version>5.2.0</version>
+        </dependency>
+        <dependency>
             <artifactId>mongodb-driver-sync</artifactId>
+            <groupId>org.mongodb</groupId>
             <version>5.2.0</version>
         </dependency>
         <dependency>
-            <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-core</artifactId>
-            <version>5.2.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>bson</artifactId>
             <version>5.2.0</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>bson</artifactId>
+            <groupId>org.mongodb</groupId>
+            <version>5.2.0</version>
+        </dependency>
+        <dependency>
             <artifactId>jackson-databind</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
             <version>2.18.1</version>
         </dependency>
         <!-- For macOS -->
         <dependency>
-            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <groupId>org.slf4j</groupId>
             <version>2.0.9</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
+            <groupId>org.slf4j</groupId>
             <version>2.0.9</version>
         </dependency>
     </dependencies>
+    <groupId>com.stocksim</groupId>
+
+    <modelVersion>4.0.0</modelVersion>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <version>3.0-SNAPSHOT</version>
 
 </project>
