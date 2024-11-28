@@ -6,6 +6,7 @@ import entity.User;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
+import use_case.execute_sell.ExecuteSellDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
 import use_case.registration.RegistrationDataAccessInterface;
 import use_case.view_history.ViewHistoryDataAccessInterface;
@@ -22,6 +23,7 @@ public class DatabaseUserDataAccessObject implements
         RegistrationDataAccessInterface,
         LoginDataAccessInterface,
         ExecuteBuyDataAccessInterface,
+        ExecuteSellDataAccessInterface,
         ViewHistoryDataAccessInterface
 {
 
@@ -30,6 +32,7 @@ public class DatabaseUserDataAccessObject implements
         ServiceManager.Instance().registerService(RegistrationDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(LoginDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ExecuteBuyDataAccessInterface.class, this);
+        ServiceManager.Instance().registerService(ExecuteSellDataAccessInterface.class, this);
         ServiceManager.Instance().registerService(ViewHistoryDataAccessInterface.class, this);
     }
 
