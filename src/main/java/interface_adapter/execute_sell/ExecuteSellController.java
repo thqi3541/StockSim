@@ -4,6 +4,8 @@ import use_case.execute_sell.ExecuteSellInputBoundary;
 import use_case.execute_sell.ExecuteSellInputData;
 import utility.ClientSessionManager;
 import utility.ServiceManager;
+import view.ViewManager;
+import view.view_events.DialogEvent;
 
 public class ExecuteSellController {
 
@@ -23,7 +25,7 @@ public class ExecuteSellController {
 
             interactor.execute(data);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid quantity");
+            ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "Invalid quantity"));
         }
     }
 }
