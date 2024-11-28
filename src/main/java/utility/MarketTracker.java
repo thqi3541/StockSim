@@ -6,7 +6,6 @@ import utility.exceptions.RateLimitExceededException;
 import view.ViewManager;
 import view.view_events.UpdateStockEvent;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,15 +20,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class MarketTracker {
 
     // market information update interval in milliseconds
-    // initial interval in milliseconds
+    // Initial interval in milliseconds
     private static final long INITIAL_UPDATE_MARKET_INTERVAL
-            = Long.parseLong(MarketTrackerConfigLoader.getMarketTrackerProperty("INITIAL_UPDATE_MARKET_INTERVAL"));
-    // interval adjustment rate in milliseconds
+            = Long.parseLong(ConfigLoader.getProperty("config/market-tracker-config.txt", "INITIAL_UPDATE_MARKET_INTERVAL"));
+
+    // Interval adjustment rate in milliseconds
     private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE
-            = Long.parseLong(MarketTrackerConfigLoader.getMarketTrackerProperty("UPDATE_INTERVAL_ADJUSTMENT_RATE"));
-    // number of rounds without rate limit
+            = Long.parseLong(ConfigLoader.getProperty("config/market-tracker-config.txt", "UPDATE_INTERVAL_ADJUSTMENT_RATE"));
+
+    // Number of rounds without rate limit
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
-            = Integer.parseInt(MarketTrackerConfigLoader.getMarketTrackerProperty("ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));
+            = Integer.parseInt(ConfigLoader.getProperty("config/market-tracker-config.txt", "ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));
 
     // thread-safe Singleton instance
     private static volatile MarketTracker instance = null;
