@@ -1,7 +1,7 @@
 package app;
 
+import data_access.CachedExternalUserDataAccessObject;
 import data_access.ExternalStockDataAccessObject;
-import data_access.ExternalUserDataAccessObject;
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_buy.ExecuteBuyPresenter;
 import interface_adapter.execute_sell.ExecuteSellController;
@@ -121,7 +121,7 @@ public class AppBuilder {
     /** Initializes all required services */
     private void initializeServices() {
         // 1. Initialize DAOs first
-        MarketObserver.Instance().initialize(new ExternalUserDataAccessObject());
+        MarketObserver.Instance().initialize(new CachedExternalUserDataAccessObject());
         MarketTracker.Instance().initialize(new ExternalStockDataAccessObject());
 
         // 2. Initialize Presenters

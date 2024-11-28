@@ -2,10 +2,12 @@ package utility;
 
 import data_access.StockDataAccessInterface;
 import entity.Stock;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,15 +21,17 @@ import view.view_events.UpdateStockEvent;
 public class MarketTracker {
 
     // market information update interval in milliseconds
-    // initial interval in milliseconds
-    private static final long INITIAL_UPDATE_MARKET_INTERVAL =
-            Long.parseLong(MarketTrackerConfigLoader.getMarketTrackerProperty("INITIAL_UPDATE_MARKET_INTERVAL"));
-    // interval adjustment rate in milliseconds
-    private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE =
-            Long.parseLong(MarketTrackerConfigLoader.getMarketTrackerProperty("UPDATE_INTERVAL_ADJUSTMENT_RATE"));
-    // number of rounds without rate limit
+    // Initial interval in milliseconds
+    private static final long INITIAL_UPDATE_MARKET_INTERVAL = Long.parseLong(
+            ConfigLoader.getProperty("config/market-tracker-config.txt", "INITIAL_UPDATE_MARKET_INTERVAL"));
+
+    // Interval adjustment rate in milliseconds
+    private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE = Long.parseLong(
+            ConfigLoader.getProperty("config/market-tracker-config.txt", "UPDATE_INTERVAL_ADJUSTMENT_RATE"));
+
+    // Number of rounds without rate limit
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = Integer.parseInt(
-            MarketTrackerConfigLoader.getMarketTrackerProperty("ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));
+            ConfigLoader.getProperty("config/market-tracker-config.txt", "ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));
 
     // thread-safe Singleton instance
     private static volatile MarketTracker instance = null;
@@ -62,8 +66,9 @@ public class MarketTracker {
             throw new IllegalStateException("MarketTracker is already initialized.");
         }
         this.dataAccess = dataAccess;
-        this.initialized = true;
         updateStocks(); // First update
+        this.initialized = true;
+
         startUpdatingStockPrices(); // Then start periodic updates
     }
 
@@ -93,52 +98,100 @@ public class MarketTracker {
      * ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE, decrease update interval by UPDATE_INTERVAL_ADJUSTMENT_RATE until reaching
      * INITIAL_UPDATE_MARKET_INTERVAL
      */
-    public void updateStocks() {
-        lock.writeLock().lock();
-        try {
-            if (dataAccess == null) {
-                throw new IllegalStateException("MarketTracker has not been initialized with a data access object.");
-            }
-
-            // retrieve stock information from data access object
-            Map<String, Stock> newStocks = dataAccess.getStocks();
-            for (Map.Entry<String, Stock> entry : newStocks.entrySet()) {
-                String ticker = entry.getKey();
-                Stock newStock = entry.getValue();
-                Stock existingStock = stocks.get(ticker);
-                if (existingStock != null) {
-                    existingStock.updatePrice(newStock.getMarketPrice());
-                } else {
-                    stocks.put(ticker, newStock);
-                }
-            }
-
-            // if no exception, increment the rounds counter
-            roundsWithoutRateLimit++;
-            // check if it's time to reduce the interval
-            if (roundsWithoutRateLimit >= ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
-                    && currentUpdateInterval > INITIAL_UPDATE_MARKET_INTERVAL) {
-                currentUpdateInterval = Math.max(
-                        currentUpdateInterval - UPDATE_INTERVAL_ADJUSTMENT_RATE, INITIAL_UPDATE_MARKET_INTERVAL);
-                roundsWithoutRateLimit = 0; // reset counter after adjustment
-                restartScheduler(); // restart the scheduler with new interval
-            }
-
-            // broadcast stock update to view
-            System.out.println("Broadcasting stock update...");
-            ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
-
-            // notify observer of executionPrice update
-            System.out.println("Notifying observers...");
-            MarketObserver.Instance().onMarketUpdate();
-        } catch (RateLimitExceededException e) {
-            // on rate limit, increase the update interval and reset the rounds counter
-            currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
-            roundsWithoutRateLimit = 0;
-            restartScheduler(); // restart scheduler with new interval
-        } finally {
-            lock.writeLock().unlock();
+    public CompletableFuture<Void> updateStocks() {
+        if (dataAccess == null) {
+            throw new IllegalStateException("MarketTracker has not been initialized with a data access object.");
         }
+
+        return CompletableFuture.supplyAsync(() -> {
+                    try {
+                        return dataAccess.getStocks();
+                    } catch (RateLimitExceededException e) {
+                        synchronized (this) {
+                            return stocks;
+                        }
+                    }
+                })
+                .thenAccept(newStocks -> {
+                    lock.writeLock().lock();
+                    try {
+                        for (Map.Entry<String, Stock> entry : newStocks.entrySet()) {
+                            String ticker = entry.getKey();
+                            Stock newStock = entry.getValue();
+                            Stock existingStock = stocks.get(ticker);
+                            if (existingStock != null) {
+                                existingStock.updatePrice(newStock.getMarketPrice());
+                            } else {
+                                stocks.put(ticker, newStock);
+                            }
+                        }
+                    } finally {
+                        lock.writeLock().unlock();
+                    }
+                });
+    }
+
+    public CompletableFuture<Void> updateStockPrices() {
+        if (dataAccess == null) {
+            throw new IllegalStateException("MarketTracker has not been initialized with a data access object.");
+        }
+
+        return CompletableFuture.supplyAsync(() -> {
+                    // fetch stock data from API
+                    try {
+                        return dataAccess.getUpdatedPrices();
+                    } catch (RateLimitExceededException e) {
+                        synchronized (this) {
+                            // on rate limit, increase update interval and reset rounds counter
+                            currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
+                            roundsWithoutRateLimit = 0;
+                            restartScheduler();
+                            Map<String, Double> currentPrices = new HashMap<>();
+                            for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
+                                currentPrices.put(
+                                        entry.getKey(), entry.getValue().getMarketPrice());
+                            }
+                            return currentPrices;
+                        }
+                    }
+                })
+                .thenAccept(newPrices -> {
+                    lock.writeLock().lock();
+                    try {
+                        for (Map.Entry<String, Double> entry : newPrices.entrySet()) {
+                            String ticker = entry.getKey();
+                            double newPrice = entry.getValue();
+                            Stock existingStock = stocks.get(ticker);
+                            if (existingStock != null) {
+                                existingStock.updatePrice(newPrice);
+                            }
+                        }
+
+                        roundsWithoutRateLimit++;
+                        if (roundsWithoutRateLimit >= ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
+                                && currentUpdateInterval > INITIAL_UPDATE_MARKET_INTERVAL) {
+                            currentUpdateInterval = Math.max(
+                                    currentUpdateInterval - UPDATE_INTERVAL_ADJUSTMENT_RATE,
+                                    INITIAL_UPDATE_MARKET_INTERVAL);
+                            roundsWithoutRateLimit = 0;
+                            restartScheduler();
+                        }
+                    } finally {
+                        lock.writeLock().unlock();
+                    }
+                    // broadcast update to view
+                    System.out.println("Broadcasting price update...");
+                    ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
+
+                    System.out.println("Notifying observers...");
+                    MarketObserver.Instance().onMarketUpdate();
+                })
+                .exceptionally(e -> {
+                    // Log the exception and handle any cleanup
+                    System.err.println("Error updating stocks: " + e.getMessage());
+                    e.printStackTrace();
+                    return null;
+                });
     }
 
     /** Starts a background thread to update stock prices at fixed intervals. */
@@ -148,7 +201,7 @@ public class MarketTracker {
         }
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(
-                this::updateStocks, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
+                this::updateStockPrices, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
     }
 
     /** Stops the periodic stock price updates. */
