@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * A DataAccessObject that retrieves real time stock data
  */
-public class StockDataAccessObject implements StockDataAccessInterface {
+public class FinnhubStockDataAccessObject implements StockDataAccessInterface {
     private static final String BASE_URL = "https://finnhub.io/api/v1";
     private static final String TICKERS_FILE = "/config/tickers.txt";
     // Rate limit exceeded error code provided by Finnhub documentation
@@ -25,7 +25,7 @@ public class StockDataAccessObject implements StockDataAccessInterface {
     private final String apiKey;
     private final List<String> tickers;
 
-    public StockDataAccessObject() {
+    public FinnhubStockDataAccessObject() {
         this.client = new OkHttpClient();
         this.tickers = new ArrayList<>();
 
