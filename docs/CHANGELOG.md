@@ -23,6 +23,7 @@
 - Added a statement that can throw `NumberFormatException` in `execute_buy` and `execute_sell` controllers
 - Added a new `addTransaction` method in `User.java`
 - Implemented DTO objects for database data transfer
+- Implemented asynchronous stock data update for performance enhancement
 
 ### Bug Fixes
 
