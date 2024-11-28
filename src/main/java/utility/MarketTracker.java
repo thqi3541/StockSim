@@ -7,10 +7,7 @@ import view.ViewManager;
 import view.view_events.UpdateStockEvent;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -61,8 +58,9 @@ public class MarketTracker {
             throw new IllegalStateException("MarketTracker is already initialized.");
         }
         this.dataAccess = dataAccess;
-        this.initialized = true;
         updateStocks();  // First update
+        this.initialized = true;
+
         startUpdatingStockPrices();  // Then start periodic updates
     }
 
@@ -99,16 +97,10 @@ public class MarketTracker {
         }
 
         return CompletableFuture.supplyAsync(() -> {
-            // fetch stock data from API
             try {
                 return dataAccess.getStocks();
             } catch (RateLimitExceededException e) {
                 synchronized (this) {
-                    // on rate limit, increase update interval and reset rounds counter
-                    currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
-                    roundsWithoutRateLimit = 0;
-                    restartScheduler();
-                    // do not update stock on this round
                     return stocks;
                 }
             }
@@ -125,6 +117,46 @@ public class MarketTracker {
                         stocks.put(ticker, newStock);
                     }
                 }
+            } finally {
+                lock.writeLock().unlock();
+            }
+        });
+    }
+
+
+    public CompletableFuture<Void> updateStockPrices() {
+        if (dataAccess == null) {
+            throw new IllegalStateException("MarketTracker has not been initialized with a data access object.");
+        }
+
+        return CompletableFuture.supplyAsync(() -> {
+            // fetch stock data from API
+            try {
+                return dataAccess.getUpdatedPrices();
+            } catch (RateLimitExceededException e) {
+                synchronized (this) {
+                    // on rate limit, increase update interval and reset rounds counter
+                    currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
+                    roundsWithoutRateLimit = 0;
+                    restartScheduler();
+                    Map<String, Double> currentPrices = new HashMap<>();
+                    for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
+                        currentPrices.put(entry.getKey(), entry.getValue().getMarketPrice());
+                    }
+                    return currentPrices;
+                }
+            }
+        }).thenAccept(newPrices -> {
+            lock.writeLock().lock();
+            try {
+                for (Map.Entry<String, Double> entry : newPrices.entrySet()) {
+                    String ticker = entry.getKey();
+                    double newPrice = entry.getValue();
+                    Stock existingStock = stocks.get(ticker);
+                    if (existingStock != null) {
+                        existingStock.updatePrice(newPrice);
+                    }
+                }
 
                 roundsWithoutRateLimit++;
                 if (roundsWithoutRateLimit >= ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE &&
@@ -138,7 +170,7 @@ public class MarketTracker {
                 lock.writeLock().unlock();
             }
             // broadcast update to view
-            System.out.println("Broadcasting stock update...");
+            System.out.println("Broadcasting price update...");
             ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
 
             System.out.println("Notifying observers...");
@@ -160,7 +192,7 @@ public class MarketTracker {
             throw new IllegalStateException("Stock executionPrice updating is already running.");
         }
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateStocks, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::updateStockPrices, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
     }
 
     /**
