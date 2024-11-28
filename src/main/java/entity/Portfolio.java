@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * A class representing a user's portfolio.
- */
 public class Portfolio {
 
     private Map<String, UserStock> userStocks;
@@ -108,5 +105,32 @@ public class Portfolio {
      */
     public boolean isEmpty() {
         return userStocks.isEmpty();
+    }
+
+
+    /** When a transaction is made
+     * this method updates the portfolio with the new stock and quantity
+     * If the stock is already in the portfolio, it updates the quantity and cost
+     * If the stock is not in the portfolio, it adds the stock to the portfolio
+     *
+     * @param stock        the stock the user buys
+     * @param quantity     the quantity the user buys
+     * @param currentPrice the current executionPrice of the stock
+     */
+    public void updatePortfolio(Stock stock, int quantity, double currentPrice) {
+        // find the stock in the portfolio
+        UserStock userStock = userStocks.get(stock.getTicker());
+        if (userStock != null) {
+            // update the stock in the portfolio
+            // if the new quantity is 0, remove the userStock from the portfolio
+            if (userStock.getQuantity() + quantity == 0) {
+                userStocks.remove(stock.getTicker());
+            } else
+                // if the new quantity is not 0, simply update the stock in the portfolio
+                userStock.updateUserStock(currentPrice, quantity);
+        } else {
+            // add the stock to the portfolio
+            userStocks.put(stock.getTicker(), new UserStock(stock, currentPrice, quantity));
+        }
     }
 }

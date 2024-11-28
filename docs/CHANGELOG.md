@@ -11,16 +11,22 @@
 
 ### New Features
 
+- Implemented the `execute_buy` and `execute_sell` use cases
+- Implemented `FontManager` to set custom font for GUI components
 - Implemented `DatabaseUserDataAcces` with MongoDB database
 - Implemented database integration with sign up and log in
 - Added writing to database for `execute_buy` use case
+- Added writing to database for `execute_sell` use case
 
 ### Internal Changes
 
+- Added a statement that can throw `NumberFormatException` in `execute_buy` and `execute_sell` controllers
+- Added a new `addTransaction` method in `User.java`
 - Implemented DTO objects for database data transfer
 
 ### Bug Fixes
 
+- Fixed issues handling the invalid inputs in the `execute_buy` and `execute_sell` use cases
 - Fixed issues with converting between entities and MongoDB `Document`
 - Fixed input fields not cleared after executing
 
@@ -29,7 +35,6 @@
 ### New Features
 
 - Implemented `MarketObserver` to update user data when stock market changes
-- Implemented `FontManager` to set custom font for GUI components
 - Implemented logout use case
 - Implemented registration use case
 

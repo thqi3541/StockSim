@@ -1,4 +1,4 @@
-package use_case.execute_buy;
+package use_case.execute_sell;
 
 import entity.Stock;
 import entity.User;
@@ -18,19 +18,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class ExecuteBuyInteractorTest {
+class ExecuteSellInteractorTest {
 
-    private ExecuteBuyDataAccessInterface dataAccess;
-    private ExecuteBuyOutputBoundary outputPresenter;
+    private ExecuteSellDataAccessInterface dataAccess;
+    private ExecuteSellOutputBoundary outputPresenter;
     private MarketTracker marketTrackerMock;
     private ViewManager viewManagerMock;
     private SessionManager sessionManagerMock;
 
     @BeforeEach
     void setUp() {
-        dataAccess = mock(ExecuteBuyDataAccessInterface.class);
-        outputPresenter = mock(ExecuteBuyOutputBoundary.class);
+        dataAccess = mock(ExecuteSellDataAccessInterface.class);
+        outputPresenter = mock(ExecuteSellOutputBoundary.class);
         marketTrackerMock = mock(MarketTracker.class);
+        viewManagerMock = mock(ViewManager.class);
     }
 
     @Test
@@ -42,21 +43,21 @@ class ExecuteBuyInteractorTest {
             stockMarketMockedStatic.when(MarketTracker::Instance).thenReturn(marketTrackerMock);
             when(marketTrackerMock.getStock("AAPL")).thenReturn(Optional.of(stock));
 
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
-            ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
+            ExecuteSellInputData inputData = new ExecuteSellInputData("dummy", "AAPL", 10);
+            ExecuteSellInteractor interactor = new ExecuteSellInteractor(dataAccess, outputPresenter);
 
             interactor.execute(inputData);
 
             // Verify success view was prepared with updated data
-            verify(outputPresenter).prepareSuccessView(any(ExecuteBuyOutputData.class));
+            verify(outputPresenter).prepareSuccessView(any(ExecuteSellOutputData.class));
 
             // Verify portfolio was updated
             Optional<UserStock> userStockOpt = mockUser.getPortfolio().getUserStock("AAPL");
             assertTrue(userStockOpt.isPresent(), "Portfolio should contain the ticker AAPL");
-            assertEquals(10, userStockOpt.get().getQuantity(), "Stock quantity should match");
+            assertEquals(-10, userStockOpt.get().getQuantity(), "Stock quantity should match");
 
-            // Verify balance was deducted
-            assertEquals(8500.0, mockUser.getBalance(), "Balance should be reduced by total cost");
+            // Verify balance should increase
+            assertEquals(11500, mockUser.getBalance(), "Balance should be increased by total earnings");
         }
     }
 
@@ -69,8 +70,8 @@ class ExecuteBuyInteractorTest {
             stockMarketMockedStatic.when(MarketTracker::Instance).thenReturn(marketTrackerMock);
             when(marketTrackerMock.getStock("AAPL")).thenReturn(Optional.of(stock));
 
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", -10);
-            ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
+            ExecuteSellInputData inputData = new ExecuteSellInputData("dummy", "AAPL", -10);
+            ExecuteSellInteractor interactor = new ExecuteSellInteractor(dataAccess, outputPresenter);
 
             interactor.execute(inputData);
 
@@ -87,26 +88,26 @@ class ExecuteBuyInteractorTest {
     }
 
     @Test
-    void insufficientBalanceTest() throws ValidationException {
-        User mockUser = createMockUserWithBalance(500.0);
+    void insufficientMarginCallTest() throws ValidationException {
+        User mockUser = createMockUserWithBalance(10000.0);
         Stock stock = new Stock("AAPL", "Apple Inc.", "Technology", 150.0);
 
         try (MockedStatic<MarketTracker> stockMarketMockedStatic = Mockito.mockStatic(MarketTracker.class)) {
             stockMarketMockedStatic.when(MarketTracker::Instance).thenReturn(marketTrackerMock);
             when(marketTrackerMock.getStock("AAPL")).thenReturn(Optional.of(stock));
 
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
-            ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
+            ExecuteSellInputData inputData = new ExecuteSellInputData("dummy", "AAPL", 1000);
+            ExecuteSellInteractor interactor = new ExecuteSellInteractor(dataAccess, outputPresenter);
 
             interactor.execute(inputData);
 
             // Verify error view was prepared
-            verify(outputPresenter).prepareInsufficientBalanceExceptionView();
+            verify(outputPresenter).prepareInsufficientMarginCallExceptionView();
 
             // Verify no changes were made
             assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
-                    "Stock should not be in portfolio due to insufficient funds");
-            assertEquals(500.0, mockUser.getBalance(), "Balance should remain unchanged");
+                    "Stock should not be in portfolio due to insufficient margin call");
+            assertEquals(10000.0, mockUser.getBalance(), "Balance should remain unchanged");
             assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
                     "No transaction should be recorded");
         }
@@ -120,8 +121,8 @@ class ExecuteBuyInteractorTest {
             stockMarketMockedStatic.when(MarketTracker::Instance).thenReturn(marketTrackerMock);
             when(marketTrackerMock.getStock("AAPL")).thenReturn(Optional.empty());
 
-            ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", 10);
-            ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
+            ExecuteSellInputData inputData = new ExecuteSellInputData("dummy", "AAPL", 10);
+            ExecuteSellInteractor interactor = new ExecuteSellInteractor(dataAccess, outputPresenter);
 
             interactor.execute(inputData);
 
@@ -142,8 +143,8 @@ class ExecuteBuyInteractorTest {
 //    void validationExceptionTest() throws ValidationException {
 //        User mockUser = createMockUserWithBalance(10000.0);
 //
-//        ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", -10);
-//        ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
+//        ExecuteSellInputData inputData = new ExecuteSellInputData("dummy", "AAPL", -10);
+//        ExecuteSellInteractor interactor = new ExecuteSellInteractor(dataAccess, outputPresenter);
 //
 //        interactor.execute(inputData);
 //

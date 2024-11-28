@@ -1,17 +1,17 @@
-package use_case.execute_buy;
+package use_case.execute_sell;
 
-public interface ExecuteBuyOutputBoundary {
-
-    /**
-     * Prepare the view for a successful buy.
-     * @param outputData The output data from the buy.
-     */
-    void prepareSuccessView(ExecuteBuyOutputData outputData);
+public interface ExecuteSellOutputBoundary {
 
     /**
-     * Prepare the view for an insufficient balance exception.
+     * Prepare the view for a successful sell.
+     * @param outputData The output data from the sell.
      */
-    void prepareInsufficientBalanceExceptionView();
+    void prepareSuccessView(ExecuteSellOutputData outputData);
+
+    /**
+     * Prepare the view for an insufficient margin call.
+     */
+    void prepareInsufficientMarginCallExceptionView();
 
     /**
      * Prepare the view for a stock not found exception.
