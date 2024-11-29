@@ -3,6 +3,7 @@ package use_case.view_history;
 import entity.User;
 import utility.ServiceManager;
 import utility.exceptions.ValidationException;
+import view.view_events.SwitchPanelEvent;
 
 /**
  * The View History Interactor.

@@ -10,7 +10,7 @@ The Finnhub API returns responses in JSON format.
 
 ## API Usage Examples
 
-### Time Series Intraday
+### Quote
 
 **Parameters:**
 
@@ -38,7 +38,7 @@ https://finnhub.io/api/v1/quote?symbol=AAPL&token=YOUR_API_TOKEN
 }
 ```
 
-### Company Profile
+### Company Profile 2
 
 **Parameters:**
 
