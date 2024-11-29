@@ -118,5 +118,6 @@
 - Removed outdated classes and methods that are incompatible with current codebase version
 - Updated maven configuration with unit test and api request dependencies
 - Implemented the frontend framework
+- Modified the readme.md document
 
 ### Bug Fixes
