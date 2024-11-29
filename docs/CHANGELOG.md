@@ -25,6 +25,7 @@
 - Implemented DTO objects for database data transfer
 - Implemented asynchronous stock data update for performance enhancement
 - Renamed stock DAO to specify which API is used
+- Rebased ViewHistory's dashboard button to interact with `ViewHistoryController`
 
 ### Bug Fixes
 
