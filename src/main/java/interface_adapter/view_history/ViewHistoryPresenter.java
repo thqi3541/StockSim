@@ -33,7 +33,7 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
         );
         ViewManager.Instance().broadcastEvent(
                 new SwitchPanelEvent(
-                        "TradeSimulationPanel"
+                        "TransactionHistoryPanel"
                 )
         );
     }
