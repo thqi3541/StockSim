@@ -24,6 +24,8 @@
 - Added a new `addTransaction` method in `User.java`
 - Implemented DTO objects for database data transfer
 - Implemented asynchronous stock data update for performance enhancement
+- Implemented cache for database user DTO
+- Changed `MarketTrackerConfigLoader` to `ConfigLoader` to handle different types of property loading from config.
 
 ### Bug Fixes
 
