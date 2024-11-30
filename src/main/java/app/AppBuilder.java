@@ -1,5 +1,6 @@
 package app;
 
+import data_access.CachedDatabaseUserDataAccessObject;
 import data_access.DatabaseUserDataAccessObject;
 import data_access.FinnhubStockDataAccessObject;
 import interface_adapter.execute_buy.*;
@@ -130,7 +131,7 @@ public class AppBuilder {
      */
     private void initializeServices() {
         // 1. Initialize DAOs first
-        MarketObserver.Instance().initialize(new DatabaseUserDataAccessObject());
+        MarketObserver.Instance().initialize(new CachedDatabaseUserDataAccessObject());
         MarketTracker.Instance().initialize(new FinnhubStockDataAccessObject());
 
         // 2. Initialize Presenters
