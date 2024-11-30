@@ -22,17 +22,21 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class MarketTracker {
 
     // market information update interval in milliseconds
+    private static final long DEFAULT_INITIAL_UPDATE_MARKET_INTERVAL = 60000;
+    private static final String MARKET_TRACKER_CONFIG_PATH = "config/market-tracker-config.txt";
     // Initial interval in milliseconds
     private static final long INITIAL_UPDATE_MARKET_INTERVAL
-            = Long.parseLong(ConfigLoader.getProperty("config/market-tracker-config.txt", "INITIAL_UPDATE_MARKET_INTERVAL"));
+            = Long.parseLong(ConfigLoader.getProperty(MARKET_TRACKER_CONFIG_PATH, "INITIAL_UPDATE_MARKET_INTERVAL", String.valueOf(DEFAULT_INITIAL_UPDATE_MARKET_INTERVAL)));
 
     // Interval adjustment rate in milliseconds
+    private static final long DEFAULT_UPDATE_INTERVAL_ADJUSTMENT_RATE = 60000;
     private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE
-            = Long.parseLong(ConfigLoader.getProperty("config/market-tracker-config.txt", "UPDATE_INTERVAL_ADJUSTMENT_RATE"));
+            = Long.parseLong(ConfigLoader.getProperty(MARKET_TRACKER_CONFIG_PATH, "UPDATE_INTERVAL_ADJUSTMENT_RATE", String.valueOf(DEFAULT_UPDATE_INTERVAL_ADJUSTMENT_RATE)));
 
     // Number of rounds without rate limit
+    private static final int DEFAULT_ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = 5;
     private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
-            = Integer.parseInt(ConfigLoader.getProperty("config/market-tracker-config.txt", "ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE"));
+            = Integer.parseInt(ConfigLoader.getProperty(MARKET_TRACKER_CONFIG_PATH, "ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE", String.valueOf(DEFAULT_ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE)));
 
     // thread-safe Singleton instance
     private static volatile MarketTracker instance = null;
@@ -67,6 +71,7 @@ public class MarketTracker {
             throw new IllegalStateException("MarketTracker is already initialized.");
         }
         this.dataAccess = dataAccess;
+        System.out.println("Initialize stock data...");
         updateStocks();  // First update
         this.initialized = true;
 
@@ -129,6 +134,7 @@ public class MarketTracker {
             } finally {
                 lock.writeLock().unlock();
             }
+            broadcastStockUpdate();
         });
     }
 
@@ -178,18 +184,22 @@ public class MarketTracker {
             } finally {
                 lock.writeLock().unlock();
             }
-            // broadcast update to view
-            System.out.println("Broadcasting price update...");
-            ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
-
-            System.out.println("Notifying observers...");
-            MarketObserver.Instance().onMarketUpdate();
+            broadcastStockUpdate();
         }).exceptionally(e -> {
             // Log the exception and handle any cleanup
             System.err.println("Error updating stocks: " + e.getMessage());
             e.printStackTrace();
             return null;
         });
+    }
+
+    private void broadcastStockUpdate() {
+        // broadcast update to view
+        System.out.println("Broadcasting price update...");
+        ViewManager.Instance().broadcastEvent(new UpdateStockEvent(getStocks()));
+
+        System.out.println("Notifying observers...");
+        MarketObserver.Instance().onMarketUpdate();
     }
 
 

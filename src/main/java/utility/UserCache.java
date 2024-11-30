@@ -17,7 +17,12 @@ public class UserCache {
 
     public UserCache(int maxCapacity) {
         MAX_CAPACITY = maxCapacity;
-        users = new LinkedHashMap<>();
+        users = new LinkedHashMap<>(MAX_CAPACITY, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, User> eldest) {
+                return size() > MAX_CAPACITY;
+            }
+        };
     }
 
     // add a new user
@@ -25,10 +30,6 @@ public class UserCache {
         lock.writeLock().lock();
         try {
             users.put(user.getUsername(), user);
-            if (users.size() > MAX_CAPACITY) {
-                // remove the least recently used user from the tail of the list
-                users.remove(users.entrySet().iterator().next().getKey());
-            }
         } finally {
             lock.writeLock().unlock();
         }
@@ -38,17 +39,7 @@ public class UserCache {
     public void updateUser(User user) {
         lock.writeLock().lock();
         try {
-            if (users.containsKey(user.getUsername())) {
-                // remove the user and re-insert it to update its position (move to head)
-                users.remove(user.getUsername());
-            }
-            // add the updated user to the head of the list
             users.put(user.getUsername(), user);
-
-            if (users.size() > MAX_CAPACITY) {
-                // remove the least recently used user (at the tail)
-                users.remove(users.entrySet().iterator().next().getKey());
-            }
         } finally {
             lock.writeLock().unlock();
         }

@@ -10,7 +10,6 @@ import utility.ConfigLoader;
 import utility.ServiceManager;
 import utility.SessionManager;
 import utility.UserCache;
-import utility.exceptions.DocumentParsingException;
 import utility.exceptions.ValidationException;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,8 +22,11 @@ public class CachedDatabaseUserDataAccessObject implements
         ExecuteSellDataAccessInterface,
         ViewHistoryDataAccessInterface {
 
+    private static final String CONFIG_FILE_PATH = "config/database-config.txt";
+    private static final int DEFAULT_USER_CACHE_MAX_CAPACITY = 10;
     private static final int USER_CACHE_MAX_CAPACITY =
-            Integer.parseInt(ConfigLoader.getProperty("config/database-config.txt", "USER_CACHE_MAX_CAPACITY"));
+            Integer.parseInt(ConfigLoader.getProperty(CONFIG_FILE_PATH, "USER_CACHE_MAX_CAPACITY", String.valueOf(DEFAULT_USER_CACHE_MAX_CAPACITY)));
+
 
     private final UserCache cachedUsers = new UserCache(USER_CACHE_MAX_CAPACITY);
     private DatabaseUserDataAccessObject database;
@@ -71,7 +73,7 @@ public class CachedDatabaseUserDataAccessObject implements
             System.err.println("Error occurred while updating user data: " + ex.getMessage());
             ex.printStackTrace();
             return null;
-        });
+        }).thenRun(() -> System.out.println("Updated user data in database"));
     }
 
     @Override
@@ -92,7 +94,7 @@ public class CachedDatabaseUserDataAccessObject implements
     }
 
     @Override
-    public void createUser(User user) throws DocumentParsingException {
+    public void createUser(User user) {
         // Asynchronously write data to the database
         CompletableFuture.runAsync(() -> {
             try {

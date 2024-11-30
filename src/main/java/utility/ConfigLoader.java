@@ -14,6 +14,11 @@ public class ConfigLoader {
 
     // Cache to store loaded configurations
     private static final Map<String, Properties> configCache = new ConcurrentHashMap<>();
+    // Paths to load configurations
+    private static final String[] configPaths = new String[] {
+            "config/market-tracker-config.txt",
+            "config/database-config.txt"
+    };
 
     /**
      * Loads the configuration file dynamically.
@@ -46,12 +51,14 @@ public class ConfigLoader {
      * @return The value of the property, or {@code null} if the key does not exist.
      * @throws RuntimeException if the configuration file has not been loaded yet.
      */
-    public static String getProperty(String configFilePath, String key) {
-        Properties properties = configCache.get(configFilePath);
-        if (properties == null) {
-            throw new RuntimeException("Configuration file not loaded: " + configFilePath);
+    public static String getProperty(String configFilePath, String key, String defaultValue) {
+        try {
+            Properties properties = configCache.get(configFilePath);
+            return properties.getProperty(key);
+        } catch (Exception e) {
+            System.err.println("Configuration file not loaded: " + configFilePath);
+            return defaultValue;
         }
-        return properties.getProperty(key);
     }
 
     /**
@@ -65,7 +72,8 @@ public class ConfigLoader {
     }
 
     static {
-        ConfigLoader.loadConfig("config/market-tracker-config.txt");
-        ConfigLoader.loadConfig("config/database-config.txt");
+        for (String configFilePath : configPaths) {
+            loadConfig(configFilePath);
+        }
     }
 }
