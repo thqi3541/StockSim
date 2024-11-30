@@ -26,6 +26,8 @@
 - Implemented asynchronous stock data update for performance enhancement
 - Implemented cache for database user DTO
 - Changed `MarketTrackerConfigLoader` to `ConfigLoader` to handle different types of property loading from config.
+- Rebased ViewHistory's dashboard button to interact with `ViewHistoryController` instead of directly initiating switch panel event
+- Renamed `StockDataAccessObject` to `FinnhubStockDataAccessObject` to specify stock dao's api
 
 ### Bug Fixes
 
