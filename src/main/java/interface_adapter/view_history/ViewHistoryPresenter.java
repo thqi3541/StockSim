@@ -8,7 +8,6 @@ import view.view_events.DialogEvent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
-import javax.swing.text.View;
 
 /**
  * Presenter for the ViewHistory Use Case
