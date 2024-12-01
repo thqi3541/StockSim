@@ -13,8 +13,11 @@ import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class TransactionHistoryPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
@@ -33,6 +36,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     private final TableComponent historyTable;
     private final DefaultTableModel tableModel;
+    private final TableRowSorter<TableModel> rowSorter;
 
     public TransactionHistoryPanel() {
         ViewManager.Instance().registerComponent(this);
@@ -45,6 +49,11 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         tableModel = createTableModel();
         historyTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
         FontManager.Instance().useRegular(historyTable, 14f);
+
+        // Enable sorting
+        rowSorter = new TableRowSorter<>(tableModel);
+        historyTable.setRowSorter(rowSorter);
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.DESCENDING)));
 
         // Create and add header
         add(createHeaderPanel(), BorderLayout.NORTH);
@@ -104,6 +113,9 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
                 });
             }
         }
+
+        // Reset table sorting to default sort by date
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.DESCENDING)));
     }
 
     @Override

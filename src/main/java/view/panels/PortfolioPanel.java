@@ -11,7 +11,10 @@ import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.util.Comparator;
+import java.util.List;
 
 public class PortfolioPanel extends JPanel implements IComponent {
     private static final String TITLE = "Portfolio Overview";
@@ -31,6 +34,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
 
     private final TableComponent portfolioTable;
+    private final TableRowSorter<DefaultTableModel> rowSorter;
 
     public PortfolioPanel() {
         ViewManager.Instance().registerComponent(this);
@@ -39,6 +43,9 @@ public class PortfolioPanel extends JPanel implements IComponent {
         DefaultTableModel tableModel = createTableModel();
         portfolioTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
         FontManager.Instance().useRegular(portfolioTable, 14f);
+        rowSorter = new TableRowSorter<>(tableModel);
+        portfolioTable.setRowSorter(rowSorter);
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
 
         // Set up panel layout
         setLayout(new BorderLayout(0, PADDING));
@@ -114,6 +121,9 @@ public class PortfolioPanel extends JPanel implements IComponent {
                 });
             }
         }
+
+        // Reset table sorting to default sort by date
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
     }
 
     @Override
