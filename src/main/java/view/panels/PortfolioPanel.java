@@ -45,6 +45,7 @@ public class PortfolioPanel extends JPanel implements IComponent {
         FontManager.Instance().useRegular(portfolioTable, 14f);
         rowSorter = new TableRowSorter<>(tableModel);
         portfolioTable.setRowSorter(rowSorter);
+        setupNumericComparators();
         rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
 
         // Set up panel layout
@@ -67,6 +68,52 @@ public class PortfolioPanel extends JPanel implements IComponent {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 portfolioTable.adjustColumnWidths();
             }
+        });
+    }
+
+    private double parsePrice(String priceStr) {
+        // Removes decorative parts of the string to sort numerically
+        try {
+            return Double.parseDouble(priceStr.replace("$", "").replace(",", ""));
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
+    private void setupNumericComparators() {
+        // Sorts the quantity column numerically
+        rowSorter.setComparator(2, (qty1Str, qty2Str) -> {
+            int qty1 = Integer.parseInt(qty1Str.toString());
+            int qty2 = Integer.parseInt(qty2Str.toString());
+            return Integer.compare(qty1, qty2);
+        });
+
+        // Sorts the average price per share column numerically
+        rowSorter.setComparator(3, (cost1Str, cost2Str) -> {
+            double cost1 = parsePrice(cost1Str.toString());
+            double cost2 = parsePrice(cost2Str.toString());
+            return Double.compare(cost1, cost2);
+        });
+
+        // Sorts the market price per share column numerically
+        rowSorter.setComparator(4, (price1Str, price2Str) -> {
+            double price1 = parsePrice(price1Str.toString());
+            double price2 = parsePrice(price2Str.toString());
+            return Double.compare(price1, price2);
+        });
+
+        // Sorts the total value column numerically
+        rowSorter.setComparator(5, (total1Str, total2Str) -> {
+            double total1 = parsePrice(total1Str.toString());
+            double total2 = parsePrice(total2Str.toString());
+            return Double.compare(total1, total2);
+        });
+
+        // Sorts the profit column numerically
+        rowSorter.setComparator(6, (profit1Str, profit2Str) -> {
+            double profit1 = parsePrice(profit1Str.toString());
+            double profit2 = parsePrice(profit2Str.toString());
+            return Double.compare(profit1, profit2);
         });
     }
 
