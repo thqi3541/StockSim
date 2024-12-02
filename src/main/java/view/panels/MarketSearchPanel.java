@@ -45,6 +45,8 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         FontManager.Instance().useRegular(stockTable, 14f);
         rowSorter = new TableRowSorter<>(tableModel);
         stockTable.setRowSorter(rowSorter);
+        setupNumericComparators();
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
 
         // Set up panel layout
         setLayout(new BorderLayout(0, PADDING));
@@ -69,6 +71,24 @@ public class MarketSearchPanel extends JPanel implements IComponent {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 stockTable.adjustColumnWidths();
             }
+        });
+    }
+
+    private double parsePrice(String priceStr) {
+        // Removes decorative parts of the string to sort numerically
+        try {
+            return Double.parseDouble(priceStr.replace("$", "").replace(",", ""));
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
+    private void setupNumericComparators() {
+        // Sorts the market price per share column numerically
+        rowSorter.setComparator(3, (price1Str, price2Str) -> {
+            double price1 = parsePrice(price1Str.toString());
+            double price2 = parsePrice(price2Str.toString());
+            return Double.compare(price1, price2);
         });
     }
 
@@ -141,6 +161,9 @@ public class MarketSearchPanel extends JPanel implements IComponent {
                     String.format("$%.2f", stock.getMarketPrice())
             });
         }
+
+        // Reset sorting to default sort by Ticker
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
     }
 
     @Override
