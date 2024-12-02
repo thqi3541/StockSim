@@ -13,8 +13,11 @@ import view.view_events.ViewEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class TransactionHistoryPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
@@ -33,6 +36,7 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
 
     private final TableComponent historyTable;
     private final DefaultTableModel tableModel;
+    private final TableRowSorter<TableModel> rowSorter;
 
     public TransactionHistoryPanel() {
         ViewManager.Instance().registerComponent(this);
@@ -45,6 +49,12 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         tableModel = createTableModel();
         historyTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
         FontManager.Instance().useRegular(historyTable, 14f);
+
+        // Enable sorting
+        rowSorter = new TableRowSorter<>(tableModel);
+        historyTable.setRowSorter(rowSorter);
+        setupNumericComparators();
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.DESCENDING)));
 
         // Create and add header
         add(createHeaderPanel(), BorderLayout.NORTH);
@@ -59,6 +69,38 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 historyTable.adjustColumnWidths();
             }
+        });
+    }
+
+    private double parsePrice(String priceStr) {
+        // Removes decorative parts of the string to sort numerically
+        try {
+            return Double.parseDouble(priceStr.replace("$", "").replace(",", ""));
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
+    private void setupNumericComparators() {
+        // Sorts the price per stock column numerically
+        rowSorter.setComparator(3, (price1Str, price2Str) -> {
+            double price1 = parsePrice(price1Str.toString());
+            double price2 = parsePrice(price2Str.toString());
+            return Double.compare(price1, price2);
+        });
+
+        // Sorts the quantity column numerically
+        rowSorter.setComparator(4, (qty1Str, qty2Str) -> {
+            int qty1 = Integer.parseInt(qty1Str.toString());
+            int qty2 = Integer.parseInt(qty2Str.toString());
+            return Integer.compare(qty1, qty2);
+        });
+
+        // Sorts the total price column numerically
+        rowSorter.setComparator(5, (total1Str, total2Str) -> {
+            double total1 = parsePrice(total1Str.toString());
+            double total2 = parsePrice(total2Str.toString());
+            return Double.compare(total1, total2);
         });
     }
 
@@ -104,6 +146,9 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
                 });
             }
         }
+
+        // Reset table sorting to default sort by date
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.DESCENDING)));
     }
 
     @Override
