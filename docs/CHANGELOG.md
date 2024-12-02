@@ -70,6 +70,7 @@
 - Implemented periodic update of stock information from data access interface in `StockMarket` that self-adjust based on API rate limit
 - Changed API to Finnhub API
 - Implemented integration of `StockMarket` and `StockDataAccessObject`
+- Added accessibility report in doc.
 
 ### Internal Changes
 
