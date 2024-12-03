@@ -51,17 +51,17 @@ User Story: As a new user, I want to create a new account, so that I can log int
 - Presenter: `RegistrationView`
 - Steps:
   - The user selects "Sign Up" and types in the required information (View -> Controller).
-  - The RegistrationController loads the registration info to the Interactor. The Interactor verifies data compliance and creates a new account (Controller -> Interactor).
-  - If registration is successful, the RegistrationInteractor instructs the RegistrationView to display a success message and guide the user to log in (Controller -> Presenter).
-  - If registration fails, the RegistrationController instructs the RegistrationView to display an error message (Controller -> Presenter).
+  - The Registration Controller loads the registration info to the Interactor. The Interactor verifies data compliance and creates a new account (Controller -> Interactor).
+  - If registration is successful, the RegistrationInteractor instructs the RegistrationView to display a success message and guide the user to log in (Interactor -> Presenter).
+  - If registration fails, the RegistrationInteractor instructs the RegistrationView to display an error message (Interactor -> Presenter).
 
 ### Use Case 2: User Login
 
 User Story: As a returning user, I want to log into my account with my username, and password (credentials), so that I can resume all trading activities, balance, etc.
 
-- Interactor: LoginInteractor
-- Controller: LoginController
-- Presenter: LoginView
+- Interactor: `LoginInteractor`
+- Controller: `LoginController`
+- Presenter: `LoginPresenter`
 - Steps:
   - The user inputs their login information(username and password) and submits (View -> Controller).
   - The LoginController verifies credentials and processes the login (Interactor).
@@ -72,9 +72,9 @@ User Story: As a returning user, I want to log into my account with my username,
 
 User Story: As a user, I want to buy some shares of a stock so that I can hold a long position in it. For example, I can buy 10 shares of APPL (Apple Inc.) at $5 per share.
 
-- Interactor: ExecuteBuyInteractor
-- Controller: ExecuteBuyController
-- Presenter: TradeView
+- Interactor: `ExecuteBuyInteractor`
+- Controller: `ExecuteBuyController`
+- Presenter: `ExecuteBuyPresenter`
 - Steps:
   - The user selects a ticker(symbol of the stock) and quantity to buy, and submits a buy order in the trading window (Controller -> Interactor).
   - The ExecuteBuyInteractor processes the order and updates the account balance and portfolio (Interactor).
@@ -84,9 +84,9 @@ User Story: As a user, I want to buy some shares of a stock so that I can hold a
 
 User Story: As a user, I want to sell some shares of a stock that I am currently holding, so that the position of the stock will decrease and I will get some money. For example, I have 10 shares of APPL (Apple Inc.), so I can sell 5 shares.
 
-- Interactor: ExecuteSellInteractor
-- Controller: ExecuteSellController
-- Presenter: TradeView
+- Interactor: `ExecuteSellInteractor`
+- Controller: `ExecuteSellController`
+- Presenter: `ExecuteSellPresenter`
 - Steps:
   - The user selects a ticker(symbol of the stock) and quantity to buy, and submits a sell order in the trading window (Controller -> Interactor).
   - The ExecuteSellInteractor processes the order and updates the account balance and portfolio (Interactor).
@@ -99,16 +99,16 @@ User Story: As a user, I want to sell some shares of a stock that I am currently
 ### Use Case 6: View Transaction History
 
 - User Story:
-  - As a trader, I want to access my transaction history and check bought and/or sold price, quantity, current market price, profit/loss per share, total profit/loss, and [Optional for sold stocks] current mp profit/loss per share, current mp total profit/loss so I can learn from past trades.
+  - As a trader, I want to access my transaction history and so that I can make more informed decisions and learn from past trades.
   - (Optional) As a trader, I want to sort by column and filter my current stock holdings to display select rows and quantities so I can view certain trades.
 - Implementation:
-  - Interactor: ViewHistoryInteractor
-  - Controller: ViewHistoryController
-  - Presenter: ViewHistoryPresenter
+  - Interactor: `ViewHistoryInteractor`
+  - Controller: `ViewHistoryController`
+  - Presenter: `ViewHistoryPresenter`
 - Steps:
-  - The user selects a page and/or rows per page for pagination-based item selection from the selection provided near the bottom (Interactor to Controller).
-  - The HistoryController filters all user trades to the select rows, quantity, and column sort (Controller).
-  - The HistoryController returns the filtered data to the HistoryView, displaying the new view of current stock holdings and its respective information.
+  - The user clicks on the Transaction History button on the dashboard and the event is listened to and sent to the Controller. (View -> Controller).
+  - The TransactionHistoryController gets the users' credentials and sends the data to the Interactor. (Controller -> Interactor)
+  - The HistoryInteractor then prepares the view, so the panel is switched to the TransactionHistoryPanel. (Interactor -> Presenter)
 
 **Below are some other use cases we might consider implementing:**
 
