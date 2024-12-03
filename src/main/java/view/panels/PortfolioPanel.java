@@ -4,7 +4,10 @@ import entity.Portfolio;
 import entity.UserStock;
 import java.awt.*;
 import javax.swing.*;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;

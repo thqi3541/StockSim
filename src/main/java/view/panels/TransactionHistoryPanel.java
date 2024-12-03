@@ -3,9 +3,13 @@ package view.panels;
 import entity.Transaction;
 import entity.TransactionHistory;
 import java.awt.*;
+import java.util.List;
 import java.text.SimpleDateFormat;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;

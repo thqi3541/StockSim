@@ -32,6 +32,7 @@ __📑Table of Contents__
     - [Use Case 8: Password Reset + Email Verification](#use-case-8-password-reset--email-verification)
     - [Use Case 9: Feedback / Support](#use-case-9-feedback--support)
     - [Use Case 10: Minimum number of trades](#use-case-10-minimum-number-of-trades)
+  - [Installation Guide](#installation-guide)
   - [Financial Terminologies](#financial-terminologies)
   - [Accessibility](#accessibility)
   - [UI Design](#ui-design)
@@ -180,6 +181,30 @@ User Story: As a user, I want to sell some shares of a stock that I am currently
   - Order Entry： You send `buy` or `sell` orders to the market
     - `Buy`(`+`): when you buy shares of stocks, you pay cash, and the stock's quantity increases.
     - `Sell`(`-`): when you sell shares of stocks, you get cash, and the stock's quantity decreases.
+
+## API Keys Setup
+To run this program locally, you need to set up two API keys in a `.env.local` file located in the project's root directory:
+
+### STOCK_API_KEY
+
+- Purpose: Used to access stock market data via the Finnhub API.
+- Instructions to Obtain:
+  - Create a Finnhub account at https://finnhub.io/.
+  - Click "Get free API key" to generate your API key.
+  - Add the key to your `.env.local` file as:
+  ```STOCK_API_KEY=your_finnhub_api_key```
+
+### MONGODB_API_KEY
+
+- Purpose: Used to connect to our project's MongoDB cluster.
+- Instructions to Obtain:
+  - Create a MongoDB Atlas account at https://www.mongodb.com/.
+  - Share your MongoDB username and IP address with our team to be added to the project's cluster.
+    (Note: All University of Toronto IP addresses are pre-whitelisted.)
+  - Once added, you'll receive the MongoDB API key.
+  - Add the key to your `.env.local` file as:
+  ```MONGODB_API_KEY=your_mongodb_api_key```
+
 
 ## Accessibility
 
