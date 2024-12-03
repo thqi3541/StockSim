@@ -28,6 +28,7 @@
 - Changed `MarketTrackerConfigLoader` to `ConfigLoader` to handle different types of property loading from config.
 - Rebased ViewHistory's dashboard button to interact with `ViewHistoryController` instead of directly initiating switch panel event
 - Renamed `StockDataAccessObject` to `FinnhubStockDataAccessObject` to specify stock dao's api
+- Implemented numeric sorting for tables in `MarketSearchPanel`, `PortfolioPanel`, and `TransactionHistoryPanel`
 
 ### Bug Fixes
 
