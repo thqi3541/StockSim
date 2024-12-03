@@ -8,8 +8,6 @@ import view.view_events.DialogEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 
-import javax.swing.text.View;
-
 public class ExecuteSellPresenter implements ExecuteSellOutputBoundary {
 
     public ExecuteSellPresenter() {
@@ -18,25 +16,20 @@ public class ExecuteSellPresenter implements ExecuteSellOutputBoundary {
 
     @Override
     public void prepareSuccessView(ExecuteSellOutputData outputData) {
-        ViewManager.Instance().broadcastEvent(
-                new UpdateAssetEvent(
-                        outputData.newPortfolio(),
-                        outputData.newBalance()
-                )
-        );
-        ViewManager.Instance().broadcastEvent(
-                new UpdateTransactionHistoryEvent(outputData.newTransactionHistory())
-        );
+        ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(outputData.newPortfolio(), outputData.newBalance()));
+        ViewManager.Instance().broadcastEvent(new UpdateTransactionHistoryEvent(outputData.newTransactionHistory()));
     }
 
     @Override
     public void prepareInsufficientMarginCallExceptionView() {
-        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You do not have enough margin call to sell this stock."));
+        ViewManager.Instance()
+                .broadcastEvent(new DialogEvent("Failed", "You do not have enough margin call to sell this stock."));
     }
 
     @Override
     public void prepareStockNotFoundExceptionView() {
-        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "The stock you are trying to sell does not exist."));
+        ViewManager.Instance()
+                .broadcastEvent(new DialogEvent("Failed", "The stock you are trying to sell does not exist."));
     }
 
     @Override

@@ -2,6 +2,10 @@ package view.panels;
 
 import entity.Transaction;
 import entity.TransactionHistory;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
@@ -11,24 +15,17 @@ import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateTransactionHistoryEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.text.SimpleDateFormat;
-
 public class TransactionHistoryPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-    private static final String[] COLUMN_NAMES = {
-            "Date", "Ticker", "Action", "Price", "Quantity", "Total Price"
-    };
+    private static final String[] COLUMN_NAMES = {"Date", "Ticker", "Action", "Price", "Quantity", "Total Price"};
     private static final double[] COLUMN_PROPORTIONS = {
-            0.25,  // Date
-            0.15,  // Ticker
-            0.10,  // Action
-            0.15,  // Price
-            0.15,  // Quantity
-            0.20   // Total Price
+        0.25, // Date
+        0.15, // Ticker
+        0.10, // Action
+        0.15, // Price
+        0.15, // Quantity
+        0.20 // Total Price
     };
 
     private final TableComponent historyTable;
@@ -73,8 +70,8 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         // Back button on the right
         ButtonComponent backButton = new ButtonComponent("Back to Home");
         FontManager.Instance().useRegular(backButton, 14f);
-        backButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
+        backButton.addActionListener(
+                e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
         headerPanel.add(backButton, BorderLayout.EAST);
 
         return headerPanel;
@@ -94,13 +91,13 @@ public class TransactionHistoryPanel extends JPanel implements IComponent {
         if (history != null) {
             for (Transaction transaction : history.getTransactions()) {
                 double totalPrice = transaction.executionPrice() * transaction.quantity();
-                tableModel.addRow(new Object[]{
-                        DATE_FORMAT.format(transaction.timestamp()),
-                        transaction.ticker(),
-                        transaction.type(),
-                        String.format("$%.2f", transaction.executionPrice()),
-                        transaction.quantity(),
-                        String.format("$%.2f", totalPrice)
+                tableModel.addRow(new Object[] {
+                    DATE_FORMAT.format(transaction.timestamp()),
+                    transaction.ticker(),
+                    transaction.type(),
+                    String.format("$%.2f", transaction.executionPrice()),
+                    transaction.quantity(),
+                    String.format("$%.2f", totalPrice)
                 });
             }
         }

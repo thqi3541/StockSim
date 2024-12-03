@@ -9,9 +9,9 @@ import utility.exceptions.DocumentParsingException;
 /**
  * Utility class for converting between MongoDB {@link Document} objects and {@link User} entities.
  *
- * <p>It uses {@link UserMapper} for converting between the {@link User} entity and {@link UserDTO},
- * and {@link MongoDBDocumentParser} for handling the lower-level serialization and deserialization
- * between {@link Document} and the {@link UserDTO}.
+ * <p>It uses {@link UserMapper} for converting between the {@link User} entity and {@link UserDTO}, and
+ * {@link MongoDBDocumentParser} for handling the lower-level serialization and deserialization between {@link Document}
+ * and the {@link UserDTO}.
  */
 public class MongoDBUserDocumentParser {
 

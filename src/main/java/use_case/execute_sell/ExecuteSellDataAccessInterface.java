@@ -2,14 +2,10 @@ package use_case.execute_sell;
 
 import data_access.UserDataAccessInterface;
 import entity.User;
-import utility.exceptions.DocumentParsingException;
+import java.rmi.ServerException;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-
-/**
- * The interface of the DAO for the Execute Sell Use Case.
- */
+/** The interface of the DAO for the Execute Sell Use Case. */
 public interface ExecuteSellDataAccessInterface extends UserDataAccessInterface {
 
     /**

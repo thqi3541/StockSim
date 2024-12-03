@@ -2,22 +2,21 @@ package utility;
 
 import data_access.StockDataAccessInterface;
 import entity.Stock;
-import utility.exceptions.RateLimitExceededException;
-import view.ViewManager;
-import view.view_events.UpdateStockEvent;
-
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.*;
-import java.util.concurrent.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import utility.exceptions.RateLimitExceededException;
+import view.ViewManager;
+import view.view_events.UpdateStockEvent;
 
 public class MarketTracker {
 
@@ -25,18 +24,24 @@ public class MarketTracker {
     private static final long DEFAULT_INITIAL_UPDATE_MARKET_INTERVAL = 60000;
     private static final String MARKET_TRACKER_CONFIG_PATH = "config/market-tracker-config.txt";
     // Initial interval in milliseconds
-    private static final long INITIAL_UPDATE_MARKET_INTERVAL
-            = Long.parseLong(ConfigLoader.getProperty(MARKET_TRACKER_CONFIG_PATH, "INITIAL_UPDATE_MARKET_INTERVAL", String.valueOf(DEFAULT_INITIAL_UPDATE_MARKET_INTERVAL)));
+    private static final long INITIAL_UPDATE_MARKET_INTERVAL = Long.parseLong(ConfigLoader.getProperty(
+            MARKET_TRACKER_CONFIG_PATH,
+            "INITIAL_UPDATE_MARKET_INTERVAL",
+            String.valueOf(DEFAULT_INITIAL_UPDATE_MARKET_INTERVAL)));
 
     // Interval adjustment rate in milliseconds
     private static final long DEFAULT_UPDATE_INTERVAL_ADJUSTMENT_RATE = 60000;
-    private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE
-            = Long.parseLong(ConfigLoader.getProperty(MARKET_TRACKER_CONFIG_PATH, "UPDATE_INTERVAL_ADJUSTMENT_RATE", String.valueOf(DEFAULT_UPDATE_INTERVAL_ADJUSTMENT_RATE)));
+    private static final long UPDATE_INTERVAL_ADJUSTMENT_RATE = Long.parseLong(ConfigLoader.getProperty(
+            MARKET_TRACKER_CONFIG_PATH,
+            "UPDATE_INTERVAL_ADJUSTMENT_RATE",
+            String.valueOf(DEFAULT_UPDATE_INTERVAL_ADJUSTMENT_RATE)));
 
     // Number of rounds without rate limit
     private static final int DEFAULT_ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = 5;
-    private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
-            = Integer.parseInt(ConfigLoader.getProperty(MARKET_TRACKER_CONFIG_PATH, "ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE", String.valueOf(DEFAULT_ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE)));
+    private static final int ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE = Integer.parseInt(ConfigLoader.getProperty(
+            MARKET_TRACKER_CONFIG_PATH,
+            "ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE",
+            String.valueOf(DEFAULT_ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE)));
 
     // thread-safe Singleton instance
     private static volatile MarketTracker instance = null;
@@ -72,10 +77,10 @@ public class MarketTracker {
         }
         this.dataAccess = dataAccess;
         System.out.println("Initialize stock data...");
-        updateStocks();  // First update
+        updateStocks(); // First update
         this.initialized = true;
 
-        startUpdatingStockPrices();  // Then start periodic updates
+        startUpdatingStockPrices(); // Then start periodic updates
     }
 
     public Optional<Stock> getStock(String ticker) {
@@ -98,12 +103,11 @@ public class MarketTracker {
 
     /**
      * Update the stock information periodically based on API rate limit
-     * <p>
-     * The update rate initially INITIAL_UPDATE_MARKET_INTERVAL
-     * When the API rate limit exceeds, increase update interval by UPDATE_INTERVAL_ADJUSTMENT_RATE
-     * If API rate limit not exceeded in consecutive ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE,
-     * decrease update interval by UPDATE_INTERVAL_ADJUSTMENT_RATE until reaching INITIAL_UPDATE_MARKET_INTERVAL
-     * </p>
+     *
+     * <p>The update rate initially INITIAL_UPDATE_MARKET_INTERVAL When the API rate limit exceeds, increase update
+     * interval by UPDATE_INTERVAL_ADJUSTMENT_RATE If API rate limit not exceeded in consecutive
+     * ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE, decrease update interval by UPDATE_INTERVAL_ADJUSTMENT_RATE until reaching
+     * INITIAL_UPDATE_MARKET_INTERVAL
      */
     public CompletableFuture<Void> updateStocks() {
         if (dataAccess == null) {
@@ -111,33 +115,33 @@ public class MarketTracker {
         }
 
         return CompletableFuture.supplyAsync(() -> {
-            try {
-                return dataAccess.getStocks();
-            } catch (RateLimitExceededException e) {
-                synchronized (this) {
-                    return stocks;
-                }
-            }
-        }).thenAccept(newStocks -> {
-            lock.writeLock().lock();
-            try {
-                for (Map.Entry<String, Stock> entry : newStocks.entrySet()) {
-                    String ticker = entry.getKey();
-                    Stock newStock = entry.getValue();
-                    Stock existingStock = stocks.get(ticker);
-                    if (existingStock != null) {
-                        existingStock.updatePrice(newStock.getMarketPrice());
-                    } else {
-                        stocks.put(ticker, newStock);
+                    try {
+                        return dataAccess.getStocks();
+                    } catch (RateLimitExceededException e) {
+                        synchronized (this) {
+                            return stocks;
+                        }
                     }
-                }
-            } finally {
-                lock.writeLock().unlock();
-            }
-            broadcastStockUpdate();
-        });
+                })
+                .thenAccept(newStocks -> {
+                    lock.writeLock().lock();
+                    try {
+                        for (Map.Entry<String, Stock> entry : newStocks.entrySet()) {
+                            String ticker = entry.getKey();
+                            Stock newStock = entry.getValue();
+                            Stock existingStock = stocks.get(ticker);
+                            if (existingStock != null) {
+                                existingStock.updatePrice(newStock.getMarketPrice());
+                            } else {
+                                stocks.put(ticker, newStock);
+                            }
+                        }
+                    } finally {
+                        lock.writeLock().unlock();
+                    }
+                    broadcastStockUpdate();
+                });
     }
-
 
     public CompletableFuture<Void> updateStockPrices() {
         if (dataAccess == null) {
@@ -145,52 +149,56 @@ public class MarketTracker {
         }
 
         return CompletableFuture.supplyAsync(() -> {
-            // fetch stock data from API
-            try {
-                return dataAccess.getUpdatedPrices();
-            } catch (RateLimitExceededException e) {
-                synchronized (this) {
-                    // on rate limit, increase update interval and reset rounds counter
-                    currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
-                    roundsWithoutRateLimit = 0;
-                    restartScheduler();
-                    Map<String, Double> currentPrices = new HashMap<>();
-                    for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
-                        currentPrices.put(entry.getKey(), entry.getValue().getMarketPrice());
+                    // fetch stock data from API
+                    try {
+                        return dataAccess.getUpdatedPrices();
+                    } catch (RateLimitExceededException e) {
+                        synchronized (this) {
+                            // on rate limit, increase update interval and reset rounds counter
+                            currentUpdateInterval += UPDATE_INTERVAL_ADJUSTMENT_RATE;
+                            roundsWithoutRateLimit = 0;
+                            restartScheduler();
+                            Map<String, Double> currentPrices = new HashMap<>();
+                            for (Map.Entry<String, Stock> entry : stocks.entrySet()) {
+                                currentPrices.put(
+                                        entry.getKey(), entry.getValue().getMarketPrice());
+                            }
+                            return currentPrices;
+                        }
                     }
-                    return currentPrices;
-                }
-            }
-        }).thenAccept(newPrices -> {
-            lock.writeLock().lock();
-            try {
-                for (Map.Entry<String, Double> entry : newPrices.entrySet()) {
-                    String ticker = entry.getKey();
-                    double newPrice = entry.getValue();
-                    Stock existingStock = stocks.get(ticker);
-                    if (existingStock != null) {
-                        existingStock.updatePrice(newPrice);
-                    }
-                }
+                })
+                .thenAccept(newPrices -> {
+                    lock.writeLock().lock();
+                    try {
+                        for (Map.Entry<String, Double> entry : newPrices.entrySet()) {
+                            String ticker = entry.getKey();
+                            double newPrice = entry.getValue();
+                            Stock existingStock = stocks.get(ticker);
+                            if (existingStock != null) {
+                                existingStock.updatePrice(newPrice);
+                            }
+                        }
 
-                roundsWithoutRateLimit++;
-                if (roundsWithoutRateLimit >= ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE &&
-                        currentUpdateInterval > INITIAL_UPDATE_MARKET_INTERVAL) {
-                    currentUpdateInterval = Math.max(currentUpdateInterval - UPDATE_INTERVAL_ADJUSTMENT_RATE,
-                            INITIAL_UPDATE_MARKET_INTERVAL);
-                    roundsWithoutRateLimit = 0;
-                    restartScheduler();
-                }
-            } finally {
-                lock.writeLock().unlock();
-            }
-            broadcastStockUpdate();
-        }).exceptionally(e -> {
-            // Log the exception and handle any cleanup
-            System.err.println("Error updating stocks: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        });
+                        roundsWithoutRateLimit++;
+                        if (roundsWithoutRateLimit >= ROUNDS_WITHOUT_RATE_LIMIT_TO_DECREASE
+                                && currentUpdateInterval > INITIAL_UPDATE_MARKET_INTERVAL) {
+                            currentUpdateInterval = Math.max(
+                                    currentUpdateInterval - UPDATE_INTERVAL_ADJUSTMENT_RATE,
+                                    INITIAL_UPDATE_MARKET_INTERVAL);
+                            roundsWithoutRateLimit = 0;
+                            restartScheduler();
+                        }
+                    } finally {
+                        lock.writeLock().unlock();
+                    }
+                    broadcastStockUpdate();
+                })
+                .exceptionally(e -> {
+                    // Log the exception and handle any cleanup
+                    System.err.println("Error updating stocks: " + e.getMessage());
+                    e.printStackTrace();
+                    return null;
+                });
     }
 
     private void broadcastStockUpdate() {
@@ -202,21 +210,17 @@ public class MarketTracker {
         MarketObserver.Instance().onMarketUpdate();
     }
 
-
-    /**
-     * Starts a background thread to update stock prices at fixed intervals.
-     */
+    /** Starts a background thread to update stock prices at fixed intervals. */
     public synchronized void startUpdatingStockPrices() {
         if (scheduler != null && !scheduler.isShutdown()) {
             throw new IllegalStateException("Stock executionPrice updating is already running.");
         }
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateStockPrices, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(
+                this::updateStockPrices, currentUpdateInterval, currentUpdateInterval, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     * Stops the periodic stock executionPrice updates.
-     */
+    /** Stops the periodic stock executionPrice updates. */
     public synchronized void stopUpdatingStockPrices() {
         if (scheduler != null) {
             scheduler.shutdown();
@@ -231,9 +235,7 @@ public class MarketTracker {
         }
     }
 
-    /**
-     * Restarts the scheduler with the current update interval.
-     */
+    /** Restarts the scheduler with the current update interval. */
     private synchronized void restartScheduler() {
         stopUpdatingStockPrices();
         startUpdatingStockPrices();

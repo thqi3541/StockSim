@@ -7,18 +7,16 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Utility class for loading and accessing configuration properties.
- * Configuration is dynamically loaded from properties files under resources/config.
+ * Utility class for loading and accessing configuration properties. Configuration is dynamically loaded from properties
+ * files under resources/config.
  */
 public class ConfigLoader {
 
     // Cache to store loaded configurations
     private static final Map<String, Properties> configCache = new ConcurrentHashMap<>();
     // Paths to load configurations
-    private static final String[] configPaths = new String[] {
-            "config/market-tracker-config.txt",
-            "config/database-config.txt"
-    };
+    private static final String[] configPaths =
+            new String[] {"config/market-tracker-config.txt", "config/database-config.txt"};
 
     /**
      * Loads the configuration file dynamically.
@@ -47,7 +45,7 @@ public class ConfigLoader {
      * Retrieves the value of a property from a loaded configuration.
      *
      * @param configFilePath The relative path of the configuration file (e.g., "config/market-tracker-config.txt").
-     * @param key            The property key to retrieve.
+     * @param key The property key to retrieve.
      * @return The value of the property, or {@code null} if the key does not exist.
      * @throws RuntimeException if the configuration file has not been loaded yet.
      */

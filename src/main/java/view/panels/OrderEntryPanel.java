@@ -2,6 +2,8 @@ package view.panels;
 
 import interface_adapter.execute_buy.ExecuteBuyController;
 import interface_adapter.execute_sell.ExecuteSellController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -9,9 +11,6 @@ import view.ViewManager;
 import view.components.ButtonComponent;
 import view.components.InputComponent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class OrderEntryPanel extends JPanel implements IComponent {
     private static final int HEADER_HEIGHT = 40;
@@ -107,7 +106,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         FontManager.Instance().useRegular(buyButton, 14f);
         buttonPanel.add(buyButton);
         buyButton.addActionListener(e -> handleBuyAction());
-        
+
         FontManager.Instance().useRegular(sellButton, 14f);
         buttonPanel.add(sellButton);
         sellButton.addActionListener(e -> handleSellAction());
@@ -120,8 +119,7 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         String quantity = quantityInput.getText();
 
         // Execute buy action
-        ExecuteBuyController controller = ServiceManager.Instance()
-                .getService(ExecuteBuyController.class);
+        ExecuteBuyController controller = ServiceManager.Instance().getService(ExecuteBuyController.class);
         controller.execute(ticker, quantity);
 
         // Clear input fields
@@ -134,12 +132,10 @@ public class OrderEntryPanel extends JPanel implements IComponent {
         String quantity = quantityInput.getText();
 
         // Execute sell action
-        ExecuteSellController controller = ServiceManager.Instance()
-                .getService(ExecuteSellController.class);
+        ExecuteSellController controller = ServiceManager.Instance().getService(ExecuteSellController.class);
         controller.execute(ticker, quantity);
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

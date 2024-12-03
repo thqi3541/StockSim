@@ -3,9 +3,7 @@ package use_case.login;
 import entity.User;
 import utility.exceptions.ValidationException;
 
-/**
- * The interface of the DAO for the Login Use Case.
- */
+/** The interface of the DAO for the Login Use Case. */
 public interface LoginDataAccessInterface {
 
     /**

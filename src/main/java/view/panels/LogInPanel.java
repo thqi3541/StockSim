@@ -1,6 +1,8 @@
 package view.panels;
 
 import interface_adapter.login.LoginController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -10,9 +12,6 @@ import view.components.InputComponent;
 import view.components.PasswordInputComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class LogInPanel extends JPanel implements IComponent {
     private final InputComponent usernameField;
@@ -108,7 +107,7 @@ public class LogInPanel extends JPanel implements IComponent {
             char[] passwordChars = passwordField.getPassword();
             String password = new String(passwordChars);
             ServiceManager.Instance().getService(LoginController.class).execute(username, password);
-            
+
             // clear input fields
             usernameField.clear();
             passwordField.clear();
@@ -120,6 +119,5 @@ public class LogInPanel extends JPanel implements IComponent {
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

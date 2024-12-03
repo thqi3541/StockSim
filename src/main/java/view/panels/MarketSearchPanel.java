@@ -1,6 +1,11 @@
 package view.panels;
 
 import entity.Stock;
+import java.awt.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
@@ -10,19 +15,9 @@ import view.components.TableComponent;
 import view.view_events.UpdateStockEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import java.awt.*;
-import java.util.List;
-
 public class MarketSearchPanel extends JPanel implements IComponent {
-    private static final String[] COLUMN_NAMES = {
-            "Ticker", "Company", "Industry", "Price"
-    };
-    private static final double[] COLUMN_PROPORTIONS = {
-            0.10, 0.40, 0.30, 0.20
-    };
+    private static final String[] COLUMN_NAMES = {"Ticker", "Company", "Industry", "Price"};
+    private static final double[] COLUMN_PROPORTIONS = {0.10, 0.40, 0.30, 0.20};
     private static final int HEADER_HEIGHT = 40;
     private static final int PADDING = 20;
 
@@ -134,11 +129,11 @@ public class MarketSearchPanel extends JPanel implements IComponent {
         model.setRowCount(0);
 
         for (Stock stock : stocks) {
-            model.addRow(new Object[]{
-                    stock.getTicker(),
-                    stock.getCompany(),
-                    stock.getIndustry(),
-                    String.format("$%.2f", stock.getMarketPrice())
+            model.addRow(new Object[] {
+                stock.getTicker(),
+                stock.getCompany(),
+                stock.getIndustry(),
+                String.format("$%.2f", stock.getMarketPrice())
             });
         }
     }

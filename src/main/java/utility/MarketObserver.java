@@ -12,8 +12,7 @@ public class MarketObserver {
     private boolean initialized = false;
     private UserDataAccessInterface dataAccess;
 
-    private MarketObserver() {
-    }
+    private MarketObserver() {}
 
     public static MarketObserver Instance() {
         if (instance == null) {
@@ -36,13 +35,11 @@ public class MarketObserver {
 
     public void onMarketUpdate() {
         try {
-            User user = dataAccess.getUserWithCredential(ClientSessionManager.Instance().getCredential());
+            User user = dataAccess.getUserWithCredential(
+                    ClientSessionManager.Instance().getCredential());
 
             System.out.println("Current user: " + user.getUsername());
-            ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(
-                    user.getPortfolio(),
-                    user.getBalance()
-            ));
+            ViewManager.Instance().broadcastEvent(new UpdateAssetEvent(user.getPortfolio(), user.getBalance()));
         } catch (ValidationException e) {
             System.out.println("Failed to find current user.");
         }

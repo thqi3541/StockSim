@@ -8,9 +8,7 @@ import utility.exceptions.DocumentParsingException;
 import utility.validations.PasswordValidator;
 import utility.validations.UsernameValidator;
 
-/**
- * The Registration Interactor.
- */
+/** The Registration Interactor. */
 public class RegistrationInteractor implements RegistrationInputBoundary {
 
     // Default initial balance for new users
@@ -23,7 +21,7 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     /**
      * Constructs a RegistrationInteractor with dependencies on presenter, data access, and user factory.
      *
-     * @param presenter  The output boundary for displaying results to the user.
+     * @param presenter The output boundary for displaying results to the user.
      * @param dataAccess The data access object for storing and retrieving users.
      */
     public RegistrationInteractor(RegistrationOutputBoundary presenter, RegistrationDataAccessInterface dataAccess) {
@@ -35,10 +33,9 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
     }
 
     /**
-     * Processes the registration input data to register a new user.
-     * Checks if the username and password are valid and unique. If registration is successful,
-     * it creates and saves a new user and sends success feedback to the presenter.
-     * Otherwise, it sends an error message to the presenter.
+     * Processes the registration input data to register a new user. Checks if the username and password are valid and
+     * unique. If registration is successful, it creates and saves a new user and sends success feedback to the
+     * presenter. Otherwise, it sends an error message to the presenter.
      *
      * @param inputData The input data containing the username and password for registration.
      */
@@ -51,7 +48,12 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             // Check if username exists
             if (!dataAccess.hasUsername(inputData.username())) {
                 // Create a new user
-                User newUser = new User(inputData.username(), inputData.password(), INITIAL_BALANCE, new Portfolio(), new TransactionHistory());
+                User newUser = new User(
+                        inputData.username(),
+                        inputData.password(),
+                        INITIAL_BALANCE,
+                        new Portfolio(),
+                        new TransactionHistory());
 
                 // Save the user
                 dataAccess.createUser(newUser);
@@ -61,7 +63,6 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
             } else {
                 throw new DuplicateUsernameException("Username already exists!");
             }
-
 
         } catch (InvalidInputException e) {
             presenter.prepareInvalidInputView(e.getMessage());
@@ -78,7 +79,9 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         }
     }
 
-    private void validateInput(RegistrationInputData inputData) throws InvalidInputException, PasswordsDoNotMatchException, WeakPasswordException, InvalidUsernameException {
+    private void validateInput(RegistrationInputData inputData)
+            throws InvalidInputException, PasswordsDoNotMatchException, WeakPasswordException,
+                    InvalidUsernameException {
         if (inputData.username().isEmpty() || inputData.password().isEmpty()) {
             throw new InvalidInputException("Username and password cannot be empty.");
         } else if (!inputData.password().equals(inputData.confirmPassword())) {
@@ -87,7 +90,8 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
 
         // Use PasswordValidator here
         else if (!PasswordValidator.isStrongPassword(inputData.password())) {
-            throw new WeakPasswordException("Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
+            throw new WeakPasswordException(
+                    "Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
         }
 
         // Check if username is valid by calling UsernameValidator
@@ -127,4 +131,3 @@ public class RegistrationInteractor implements RegistrationInputBoundary {
         }
     }
 }
-

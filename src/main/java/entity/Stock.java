@@ -1,8 +1,6 @@
 package entity;
 
-/**
- * A stock entity representing a publicly traded stock.
- */
+/** A stock entity representing a publicly traded stock. */
 public class Stock {
 
     private final String ticker;
@@ -13,9 +11,9 @@ public class Stock {
     /**
      * Constructs a new Stock instance.
      *
-     * @param ticker      the stock ticker symbol
-     * @param company     the company name
-     * @param industry    the industry the company belongs to
+     * @param ticker the stock ticker symbol
+     * @param company the company name
+     * @param industry the industry the company belongs to
      * @param marketPrice the current market price of the stock
      * @throws IllegalArgumentException if ticker, company, or industry is null/empty or if marketPrice is negative
      */
@@ -91,8 +89,6 @@ public class Stock {
     @Override
     public String toString() {
         return String.format(
-                "Stock[ticker=%s, company=%s, industry=%s, marketPrice=%.2f]",
-                ticker, company, industry, marketPrice
-        );
+                "Stock[ticker=%s, company=%s, industry=%s, marketPrice=%.2f]", ticker, company, industry, marketPrice);
     }
 }

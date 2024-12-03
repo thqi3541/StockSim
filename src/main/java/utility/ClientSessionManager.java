@@ -3,14 +3,13 @@ package utility;
 public class ClientSessionManager {
 
     // singleton instance
-    private volatile static ClientSessionManager instance;
+    private static volatile ClientSessionManager instance;
 
     // credential for the session
     private String credential;
 
     // singleton constructor
-    private ClientSessionManager() {
-    }
+    private ClientSessionManager() {}
 
     public static synchronized ClientSessionManager Instance() {
         if (instance == null) {
@@ -30,5 +29,4 @@ public class ClientSessionManager {
     public void clearCredential() {
         this.credential = null;
     }
-
 }

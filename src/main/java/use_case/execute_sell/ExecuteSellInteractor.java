@@ -1,26 +1,22 @@
 package use_case.execute_sell;
 
 import entity.*;
+import java.rmi.ServerException;
+import java.util.Date;
 import utility.MarketTracker;
 import utility.ServiceManager;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-import java.util.Date;
-
-/**
- * The interactor for the Sell Stock use case
- */
+/** The interactor for the Sell Stock use case */
 public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
 
     private final ExecuteSellDataAccessInterface dataAccess;
     private final ExecuteSellOutputBoundary outputPresenter;
 
     /**
-     * This is the constructor of the ExecuteSellInteractor class.
-     * It instantiates a new Execute Sell Interactor.
+     * This is the constructor of the ExecuteSellInteractor class. It instantiates a new Execute Sell Interactor.
      *
-     * @param dataAccess     the data access
+     * @param dataAccess the data access
      * @param outputBoundary the output boundary
      */
     public ExecuteSellInteractor(ExecuteSellDataAccessInterface dataAccess, ExecuteSellOutputBoundary outputBoundary) {
@@ -43,7 +39,9 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
             // Get stock and quantity the user wants to sell
             String ticker = data.ticker();
             int quantity = data.quantity();
-            Stock stock = MarketTracker.Instance().getStock(ticker).orElseThrow(ExecuteSellInteractor.StockNotFoundException::new);
+            Stock stock = MarketTracker.Instance()
+                    .getStock(ticker)
+                    .orElseThrow(ExecuteSellInteractor.StockNotFoundException::new);
 
             // Calculate some values for this transaction
             // totalProfit is the money you get from selling the stock
@@ -74,10 +72,7 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
 
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteSellOutputData(
-                        currentUser.getBalance(),
-                        currentUser.getPortfolio(),
-                        currentUser.getTransactionHistory()
-                ));
+                        currentUser.getBalance(), currentUser.getPortfolio(), currentUser.getTransactionHistory()));
             } else {
                 throw new ExecuteSellInteractor.InsufficientMarginCallException();
             }
@@ -94,13 +89,9 @@ public class ExecuteSellInteractor implements ExecuteSellInputBoundary {
         }
     }
 
+    static class InsufficientMarginCallException extends Exception {}
 
-    static class InsufficientMarginCallException extends Exception {
-    }
+    static class StockNotFoundException extends Exception {}
 
-    static class StockNotFoundException extends Exception {
-    }
-
-    static class InvalidQuantityException extends Exception {
-    }
+    static class InvalidQuantityException extends Exception {}
 }
