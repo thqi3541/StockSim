@@ -29,7 +29,7 @@ public class CachedDatabaseUserDataAccessObject implements
 
 
     private final UserCache cachedUsers = new UserCache(USER_CACHE_MAX_CAPACITY);
-    private DatabaseUserDataAccessObject database;
+    private final DatabaseUserDataAccessObject database;
 
 
     public CachedDatabaseUserDataAccessObject() {
