@@ -1,11 +1,10 @@
 package view.components;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import view.FontManager;
 
-/**
- * A component that wraps a JPasswordField with optional label
- */
+/** A component that wraps a JPasswordField with optional label */
 public class PasswordInputComponent extends JPanel {
     private final JPasswordField passwordField;
 
@@ -13,15 +12,20 @@ public class PasswordInputComponent extends JPanel {
      * Constructor with label on top
      *
      * @param labelText text for the label
-     * @param columns   number of columns for the password field
+     * @param columns number of columns for the password field
      */
     public PasswordInputComponent(String labelText, int columns) {
         setLayout(new BorderLayout(0, 5)); // Add a vertical gap between label and field
         JLabel label = new JLabel(labelText);
         passwordField = new JPasswordField(columns);
 
+        // Set font for both label and password field
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(label, 14f);
+        fontManager.useRegular(passwordField, 14f);
+
         label.setHorizontalAlignment(SwingConstants.LEFT); // Align label to the left
-        passwordField.setPreferredSize(new Dimension(0, passwordField.getPreferredSize().height));
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
 
         add(label, BorderLayout.NORTH);
         add(passwordField, BorderLayout.CENTER);
@@ -35,6 +39,9 @@ public class PasswordInputComponent extends JPanel {
     public PasswordInputComponent(int columns) {
         setLayout(new BorderLayout());
         passwordField = new JPasswordField(columns);
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(passwordField, 14f);
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
         add(passwordField, BorderLayout.CENTER);
     }
 
@@ -46,9 +53,11 @@ public class PasswordInputComponent extends JPanel {
     public PasswordInputComponent(String placeholderText) {
         setLayout(new BorderLayout());
         passwordField = new JPasswordField();
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(passwordField, 14f);
         passwordField.setEchoChar((char) 0); // Temporarily show the placeholder text
         passwordField.setText(placeholderText);
-        passwordField.setPreferredSize(new Dimension(0, passwordField.getPreferredSize().height));
+        passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
 
         // Add focus listener to handle placeholder behavior
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -90,9 +99,7 @@ public class PasswordInputComponent extends JPanel {
         passwordField.setText(text);
     }
 
-    /**
-     * Clears the password field
-     */
+    /** Clears the password field */
     public void clear() {
         passwordField.setText("");
     }

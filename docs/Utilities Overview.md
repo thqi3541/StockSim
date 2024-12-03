@@ -18,3 +18,7 @@ There're three manager utilities which handle global access stuff.
    4. We say register to mean that a panel or component is created and add to the manager. The manager use something called CardLayout in Java Swing to handle which component should be visible. So the SwitchPanel event is not handled by component, it's handle by the manager.
    5. You may want to define a new event. First you should choose one type or add one in the EventType enum, the set up the XXXEvent class. Also you need to go to the specific ui component and modify its code, so that it can support this type, as well as define how the ui component should change according to the new data.
    6. New panels need to register itself to ViewManager through `AppBuilder` file, and you also need to set it up in `Main` file to make sure that this build method is called when the app runs.
+4. `StockMarket`
+   1. This is a singleton instance which runs when the app runs, and updates the stock data automatically.
+   2. It will update the stock data every 2 minutes, ensure that the stock data is always up-to-date.
+   3. This will not exceed the limit of API calls to Finnhub.

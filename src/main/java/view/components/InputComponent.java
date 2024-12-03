@@ -1,7 +1,8 @@
 package view.components;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import view.FontManager;
 
 public class InputComponent extends JPanel {
     private final JTextField textField;
@@ -12,8 +13,13 @@ public class InputComponent extends JPanel {
         JLabel label = new JLabel(labelText);
         textField = new JTextField(columns);
 
-        label.setHorizontalAlignment(SwingConstants.LEFT); // Align label to the left
-        textField.setPreferredSize(new Dimension(0, textField.getPreferredSize().height));
+        // Set font for both label and text field
+        FontManager fontManager = FontManager.Instance();
+        fontManager.useRegular(label, 14f);
+        fontManager.useRegular(textField, 14f);
+
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+        textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
 
         add(label, BorderLayout.NORTH);
         add(textField, BorderLayout.CENTER);
@@ -23,6 +29,8 @@ public class InputComponent extends JPanel {
     public InputComponent(int columns) {
         setLayout(new BorderLayout());
         textField = new JTextField(columns);
+        FontManager.Instance().useRegular(textField, 14f);
+        textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
         add(textField, BorderLayout.CENTER);
     }
 
@@ -30,8 +38,9 @@ public class InputComponent extends JPanel {
     public InputComponent(String placeholderText) {
         setLayout(new BorderLayout());
         textField = new JTextField();
+        FontManager.Instance().useRegular(textField, 14f);
         textField.setText(placeholderText);
-        textField.setPreferredSize(new Dimension(0, textField.getPreferredSize().height));
+        textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, 40));
         add(textField, BorderLayout.CENTER);
     }
 
@@ -41,5 +50,9 @@ public class InputComponent extends JPanel {
 
     public void setText(String text) {
         textField.setText(text);
+    }
+
+    public void clear() {
+        textField.setText("");
     }
 }

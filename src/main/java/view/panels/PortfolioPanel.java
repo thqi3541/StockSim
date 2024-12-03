@@ -2,174 +2,178 @@ package view.panels;
 
 import entity.Portfolio;
 import entity.UserStock;
-import utility.ViewManager;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
+import view.components.TableComponent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class PortfolioPanel extends JPanel implements IComponent {
-    // Layout Constants
-    private static final int BORDER_PADDING = 10; // Padding around the panel content
-    private static final int PANEL_HEIGHT = 300; // Height of the panel
-    private static final int TABLE_HEIGHT = 200; // Height of the table
-    private static final int ROW_HEIGHT = 30;    // Height of each row in the table
-    private static final int HEADER_HEIGHT = 30; // Height of the table header
-
-    // Font Constants
-    private static final String FONT_FAMILY = "Lucida Sans";
-    private static final int TITLE_FONT_SIZE = 16;
-    private static final int TABLE_FONT_SIZE = 14;
-
-    // Format Constants
-    private static final String CURRENCY_FORMAT = "%.2f";
-    private static final String NEGATIVE_PROFIT_FORMAT = "▼ %.2f";
-    private static final String POSITIVE_PROFIT_FORMAT = "▲ %.2f";
-
-    // Column Constants
+    private static final String TITLE = "Portfolio Overview";
     private static final String[] COLUMN_NAMES = {
-            "Ticker",
-            "Average Cost",
-            "Quantity",
-            "Market Price",
-            "Profit / Share",
-            "Total Profit"
+        "Ticker", "Company", "Quantity", "Avg Cost", "Market Price", "Total Value", "Profit"
     };
+    private static final double[] COLUMN_PROPORTIONS = {
+        0.10, // Ticker
+        0.25, // Company
+        0.10, // Quantity
+        0.15, // Avg Cost
+        0.15, // Market Price
+        0.15, // Total Value
+        0.10 // Profit
+    };
+    private static final int HEADER_HEIGHT = 40;
+    private static final int PADDING = 20;
 
-    private final JTable portfolioTable;
-    private final DefaultTableModel tableModel;
-    private JLabel titleLabel;
+    private final TableComponent portfolioTable;
+    private final TableRowSorter<DefaultTableModel> rowSorter;
 
     public PortfolioPanel() {
         ViewManager.Instance().registerComponent(this);
-        setupPanelLayout();
 
-        // Initialize table model
-        tableModel = new DefaultTableModel(new Object[][]{}, COLUMN_NAMES) {
+        // Initialize table
+        DefaultTableModel tableModel = createTableModel();
+        portfolioTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
+        FontManager.Instance().useRegular(portfolioTable, 14f);
+        rowSorter = new TableRowSorter<>(tableModel);
+        portfolioTable.setRowSorter(rowSorter);
+        setupNumericComparators();
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+
+        // Set up panel layout
+        setLayout(new BorderLayout(0, PADDING));
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        // Add header
+        JPanel headerPanel = createHeaderPanel();
+        headerPanel.setPreferredSize(new Dimension(0, HEADER_HEIGHT));
+        add(headerPanel, BorderLayout.NORTH);
+
+        // Add table
+        JScrollPane scrollPane = new JScrollPane(portfolioTable);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Add resize listener
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                portfolioTable.adjustColumnWidths();
+            }
+        });
+    }
+
+    private double parsePrice(String priceStr) {
+        // Removes decorative parts of the string to sort numerically
+        try {
+            return Double.parseDouble(priceStr.replace("$", "").replace(",", ""));
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
+    private void setupNumericComparators() {
+        // Sorts the quantity column numerically
+        rowSorter.setComparator(2, (qty1Str, qty2Str) -> {
+            int qty1 = Integer.parseInt(qty1Str.toString());
+            int qty2 = Integer.parseInt(qty2Str.toString());
+            return Integer.compare(qty1, qty2);
+        });
+
+        // Sorts the average price per share column numerically
+        rowSorter.setComparator(3, (cost1Str, cost2Str) -> {
+            double cost1 = parsePrice(cost1Str.toString());
+            double cost2 = parsePrice(cost2Str.toString());
+            return Double.compare(cost1, cost2);
+        });
+
+        // Sorts the market price per share column numerically
+        rowSorter.setComparator(4, (price1Str, price2Str) -> {
+            double price1 = parsePrice(price1Str.toString());
+            double price2 = parsePrice(price2Str.toString());
+            return Double.compare(price1, price2);
+        });
+
+        // Sorts the total value column numerically
+        rowSorter.setComparator(5, (total1Str, total2Str) -> {
+            double total1 = parsePrice(total1Str.toString());
+            double total2 = parsePrice(total2Str.toString());
+            return Double.compare(total1, total2);
+        });
+
+        // Sorts the profit column numerically
+        rowSorter.setComparator(6, (profit1Str, profit2Str) -> {
+            double profit1 = parsePrice(profit1Str.toString());
+            double profit2 = parsePrice(profit2Str.toString());
+            return Double.compare(profit1, profit2);
+        });
+    }
+
+    private DefaultTableModel createTableModel() {
+        return new DefaultTableModel(COLUMN_NAMES, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
-        // Setup header panel
-        add(createHeaderPanel(), BorderLayout.NORTH);
-
-        // Setup table
-        portfolioTable = createPortfolioTable();
-        JScrollPane tableScrollPane = new JScrollPane(portfolioTable);
-        tableScrollPane.setPreferredSize(new Dimension(0, TABLE_HEIGHT)); // Let width adjust to parent
-        add(tableScrollPane, BorderLayout.CENTER);
-
-        // Add resize listener to adjust column widths dynamically
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                adjustColumnWidths(portfolioTable);
-            }
-        });
-
-        // Initial column width adjustment
-        adjustColumnWidths(portfolioTable);
-    }
-
-    private void setupPanelLayout() {
-        setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(0, PANEL_HEIGHT)); // Let width adjust to parent
-        setBorder(BorderFactory.createEmptyBorder(
-                BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
     }
 
     private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(
-                0, 0, BORDER_PADDING, 0));
+        // Create main header panel with fixed height
+        JPanel headerPanel = new JPanel(new BorderLayout(PADDING, 0));
+        headerPanel.setPreferredSize(new Dimension(0, HEADER_HEIGHT));
 
-        titleLabel = new JLabel("Portfolio Overview");
-        titleLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, TITLE_FONT_SIZE));
-        titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        headerPanel.add(titleLabel, BorderLayout.WEST);
+        // Title with vertical centering
+        JLabel titleLabel = new JLabel(TITLE);
+        FontManager.Instance().useBold(titleLabel, 18f);
+
+        // Center the title vertically
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+        titlePanel.add(Box.createVerticalGlue());
+        titlePanel.add(titleLabel);
+        titlePanel.add(Box.createVerticalGlue());
+
+        headerPanel.add(titlePanel, BorderLayout.WEST);
 
         return headerPanel;
     }
 
-    private JTable createPortfolioTable() {
-        JTable table = new JTable(tableModel);
+    private void updateTableData(Portfolio portfolio) {
+        DefaultTableModel model = (DefaultTableModel) portfolioTable.getModel();
+        model.setRowCount(0);
 
-        // Table properties
-        table.setFillsViewportHeight(true);
-        table.setRowHeight(ROW_HEIGHT);
-        table.setFont(new Font(FONT_FAMILY, Font.PLAIN, TABLE_FONT_SIZE));
+        if (portfolio != null) {
+            for (UserStock userStock : portfolio.getAllUserStocks()) {
+                double marketValue = userStock.getMarketValue();
+                double totalCost = userStock.getTotalCost();
+                double totalProfit = marketValue - totalCost;
 
-        // Header properties
-        JTableHeader header = table.getTableHeader();
-        header.setFont(new Font(FONT_FAMILY, Font.BOLD, TABLE_FONT_SIZE));
-        header.setForeground(Color.GRAY);
-        header.setPreferredSize(new Dimension(header.getPreferredSize().width, HEADER_HEIGHT));
-
-        // Column properties
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Disable automatic resizing
-
-        return table;
-    }
-
-    private void adjustColumnWidths(JTable table) {
-        int parentWidth = this.getWidth(); // Get the parent container's width
-
-        // Proportions for each column
-        double[] columnProportions = {0.10, 0.15, 0.10, 0.15, 0.25, 0.25}; // 10%, 15%, etc.
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            int columnWidth = (int) (columnProportions[col] * parentWidth);
-            TableColumn column = table.getColumnModel().getColumn(col);
-            column.setPreferredWidth(columnWidth);
+                model.addRow(new Object[] {
+                    userStock.getStock().getTicker(),
+                    userStock.getStock().getCompany(),
+                    userStock.getQuantity(),
+                    String.format("$%.2f", userStock.getAvgCost()),
+                    String.format("$%.2f", userStock.getStock().getMarketPrice()),
+                    String.format("$%.2f", marketValue),
+                    String.format("$%.2f", totalProfit)
+                });
+            }
         }
+
+        // Reset table sorting to default sort by date
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
     }
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof UpdateAssetEvent assetEvent) {
-            Portfolio portfolio = assetEvent.getPortfolio();
-            tableModel.setRowCount(0);
-
-            portfolio.getAllStocks().forEach(userStock -> {
-                Object[] rowData = createRowData(userStock);
-                tableModel.addRow(rowData);
-            });
-
-            // Adjust column widths after updating the data
-            adjustColumnWidths(portfolioTable);
+            updateTableData(assetEvent.getPortfolio());
         }
-    }
-
-    private Object[] createRowData(UserStock userStock) {
-        String ticker = userStock.getStock().getTicker();
-        double avgCost = userStock.getCost();
-        int quantity = userStock.getQuantity();
-        double marketPrice = userStock.getStock().getPrice();
-        double profitPerShare = marketPrice - avgCost;
-        double totalProfit = profitPerShare * quantity;
-
-        return new Object[]{
-                ticker,
-                String.format("$" + CURRENCY_FORMAT, avgCost),
-                quantity,
-                String.format("$" + CURRENCY_FORMAT, marketPrice),
-                formatProfit(profitPerShare),
-                formatProfit(totalProfit)
-        };
-    }
-
-    private String formatProfit(double profit) {
-        if (profit < 0) {
-            return String.format(NEGATIVE_PROFIT_FORMAT, Math.abs(profit));
-        }
-        return String.format(POSITIVE_PROFIT_FORMAT, profit);
     }
 }

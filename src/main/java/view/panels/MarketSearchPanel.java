@@ -1,270 +1,170 @@
 package view.panels;
 
 import entity.Stock;
-import org.jetbrains.annotations.NotNull;
-import utility.ViewManager;
+import java.awt.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import view.FontManager;
 import view.IComponent;
+import view.ViewManager;
+import view.components.ButtonComponent;
+import view.components.InputComponent;
+import view.components.TableComponent;
 import view.view_events.UpdateStockEvent;
 import view.view_events.ViewEvent;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableRowSorter;
-import java.awt.*;
-import java.util.List;
-
 public class MarketSearchPanel extends JPanel implements IComponent {
-    // Layout Constants
-    private static final int BORDER_PADDING = 10;
-    private static final int PANEL_HEIGHT = 400;
-    private static final int ROW_HEIGHT = 30;
-    private static final int HEADER_HEIGHT = 30;
-    private static final int SEARCH_FIELD_COLUMNS = 20;
+    private static final String[] COLUMN_NAMES = {"Ticker", "Company", "Industry", "Price"};
+    private static final double[] COLUMN_PROPORTIONS = {0.10, 0.40, 0.30, 0.20};
+    private static final int HEADER_HEIGHT = 40;
+    private static final int PADDING = 20;
 
-    // Column Width Constants
-    private static final double[] COLUMN_PROPORTIONS = {0.20, 0.40, 0.30, 0.10};
-
-    // Font Constants
-    private static final Font TITLE_FONT = new Font("Lucida Sans", Font.BOLD, 24);
-    private static final Font SEARCH_FONT = new Font("Lucida Sans", Font.PLAIN, 14);
-
-    // Text Constants
-    private static final String TITLE_TEXT = "Market Overview";
-    private static final String SEARCH_BUTTON_TEXT = "Search";
-    private static final String SEARCH_PLACEHOLDER = "Ticker, company, or industry";
-    private static final String[] COLUMN_NAMES = {"Ticker", "Company Name", "Industry", "Price"};
-
-    private final JTextField searchField;
-    private final JButton searchButton;
-    private final JLabel titleLabel;
-    private final JTable stockTable;
-    private TableRowSorter<DefaultTableModel> rowSorter;
+    private final InputComponent searchField;
+    private final ButtonComponent searchButton;
+    private final TableComponent stockTable;
+    private final TableRowSorter<DefaultTableModel> rowSorter;
 
     public MarketSearchPanel() {
         ViewManager.Instance().registerComponent(this);
-        setupPanel();
 
         // Initialize components
-        titleLabel = createTitleLabel();
-        searchField = createSearchField();
-        searchButton = createSearchButton();
-        stockTable = createStockTable();
-        rowSorter = new TableRowSorter<>((DefaultTableModel) stockTable.getModel());
-        stockTable.setRowSorter(rowSorter);
+        searchField = new InputComponent(20);
+        FontManager.Instance().useRegular(searchField, 14f);
+        searchButton = new ButtonComponent("Search");
+        FontManager.Instance().useRegular(searchButton, 14f);
 
-        // Add components to panel
-        add(createHeaderPanel(), BorderLayout.NORTH);
-        add(createBodyPanel(), BorderLayout.CENTER);
+        DefaultTableModel tableModel = createTableModel();
+        stockTable = new TableComponent(tableModel, COLUMN_PROPORTIONS);
+        FontManager.Instance().useRegular(stockTable, 14f);
+        rowSorter = new TableRowSorter<>(tableModel);
+        stockTable.setRowSorter(rowSorter);
+        setupNumericComparators();
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+
+        // Set up panel layout
+        setLayout(new BorderLayout(0, PADDING));
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        // Create and add header
+        JPanel headerPanel = createHeaderPanel();
+        headerPanel.setPreferredSize(new Dimension(0, HEADER_HEIGHT));
+        add(headerPanel, BorderLayout.NORTH);
+
+        // Add table
+        JScrollPane scrollPane = new JScrollPane(stockTable);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Configure search action
+        searchButton.addActionListener(e -> performSearch());
 
         // Add resize listener
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
-            public void componentResized(java.awt.event.ComponentEvent e) {
-                adjustColumnWidths();
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                stockTable.adjustColumnWidths();
             }
         });
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Market Search Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-
-        MarketSearchPanel marketSearchPanel = new MarketSearchPanel();
-        frame.add(marketSearchPanel);
-        frame.setVisible(true);
-    }
-
-    @NotNull
-    private static DefaultTableModel getTableModel(List<Stock> stocks) {
-        DefaultTableModel newModel = new DefaultTableModel(COLUMN_NAMES, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return String.class;
-            }
-        };
-
-        // 2. Add data to model
-        for (Stock stock : stocks) {
-            Object[] row = new Object[]{
-                    stock.getTicker(),
-                    stock.getCompany(),
-                    stock.getIndustry(),
-                    String.format("%.2f", stock.getPrice())
-            };
-            newModel.addRow(row);
+    private double parsePrice(String priceStr) {
+        // Removes decorative parts of the string to sort numerically
+        try {
+            return Double.parseDouble(priceStr.replace("$", "").replace(",", ""));
+        } catch (NumberFormatException e) {
+            return 0.0;
         }
-        return newModel;
     }
 
-    private void setupPanel() {
-        setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(0, PANEL_HEIGHT));
-        setBorder(BorderFactory.createEmptyBorder(BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
-    }
-
-    private JLabel createTitleLabel() {
-        JLabel label = new JLabel(TITLE_TEXT);
-        label.setFont(TITLE_FONT);
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-        return label;
-    }
-
-    private JTextField createSearchField() {
-        JTextField field = new JTextField(SEARCH_FIELD_COLUMNS);
-        field.setFont(SEARCH_FONT);
-        field.setText(SEARCH_PLACEHOLDER);
-        field.setForeground(Color.GRAY);
-
-        // Add placeholder text behavior
-        field.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (field.getText().equals(SEARCH_PLACEHOLDER)) {
-                    field.setText("");
-                    field.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (field.getText().isEmpty()) {
-                    field.setText(SEARCH_PLACEHOLDER);
-                    field.setForeground(Color.GRAY);
-                }
-            }
+    private void setupNumericComparators() {
+        // Sorts the market price per share column numerically
+        rowSorter.setComparator(3, (price1Str, price2Str) -> {
+            double price1 = parsePrice(price1Str.toString());
+            double price2 = parsePrice(price2Str.toString());
+            return Double.compare(price1, price2);
         });
-
-        // Add search on Enter key
-        field.addActionListener(e -> performSearch());
-
-        return field;
-    }
-
-    private JButton createSearchButton() {
-        JButton button = new JButton(SEARCH_BUTTON_TEXT);
-        button.setFont(SEARCH_FONT);
-        button.addActionListener(e -> performSearch());
-        return button;
     }
 
     private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, BORDER_PADDING, 0));
+        // Create main header panel with fixed height
+        JPanel headerPanel = new JPanel(new BorderLayout(PADDING, 0));
+        headerPanel.setPreferredSize(new Dimension(0, HEADER_HEIGHT));
 
-        headerPanel.add(titleLabel, BorderLayout.WEST);
-        headerPanel.add(createSearchPanel(), BorderLayout.EAST);
+        // Title with vertical centering
+        JLabel titleLabel = new JLabel("Market Overview");
+        FontManager.Instance().useBold(titleLabel, 18f);
+
+        // Center the title vertically
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+
+        titlePanel.add(Box.createVerticalGlue());
+        titlePanel.add(titleLabel);
+        titlePanel.add(Box.createVerticalGlue());
+
+        // Search panel with vertical centering
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+
+        // Create search controls panel
+        JPanel searchControls = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, HEADER_HEIGHT));
+        searchButton.setPreferredSize(new Dimension(searchButton.getPreferredSize().width, HEADER_HEIGHT));
+        searchControls.add(searchField);
+        searchControls.add(searchButton);
+
+        // Center the search controls vertically
+        searchPanel.add(Box.createVerticalGlue());
+        searchPanel.add(searchControls);
+        searchPanel.add(Box.createVerticalGlue());
+
+        headerPanel.add(titlePanel, BorderLayout.WEST);
+        headerPanel.add(searchPanel, BorderLayout.EAST);
 
         return headerPanel;
     }
 
-    private JPanel createSearchPanel() {
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        searchPanel.add(searchField);
-        searchPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        searchPanel.add(searchButton);
-
-        return searchPanel;
-    }
-
-    private JPanel createBodyPanel() {
-        JPanel bodyPanel = new JPanel(new BorderLayout());
-        JScrollPane tableScrollPane = new JScrollPane(stockTable);
-        bodyPanel.add(tableScrollPane, BorderLayout.CENTER);
-        return bodyPanel;
-    }
-
-    private JTable createStockTable() {
-        DefaultTableModel model = new DefaultTableModel(new Object[0][COLUMN_NAMES.length], COLUMN_NAMES) {
+    private DefaultTableModel createTableModel() {
+        return new DefaultTableModel(COLUMN_NAMES, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return String.class;
-            }
         };
-
-        JTable table = new JTable(model);
-        table.setFillsViewportHeight(true);
-        table.setRowHeight(ROW_HEIGHT);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setFont(SEARCH_FONT);
-        table.getTableHeader().setFont(SEARCH_FONT);
-        table.getTableHeader().setPreferredSize(
-                new Dimension(table.getTableHeader().getPreferredSize().width, HEADER_HEIGHT));
-
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-        return table;
-    }
-
-    private void adjustColumnWidths() {
-        int availableWidth = getWidth() - (2 * BORDER_PADDING);
-        if (availableWidth <= 0) return;
-
-        for (int col = 0; col < stockTable.getColumnCount(); col++) {
-            TableColumn column = stockTable.getColumnModel().getColumn(col);
-            int columnWidth = (int) (COLUMN_PROPORTIONS[col] * availableWidth);
-            column.setPreferredWidth(columnWidth);
-        }
     }
 
     private void performSearch() {
-        String searchText = searchField.getText().trim();
-        if (searchText.equals(SEARCH_PLACEHOLDER) || searchText.isEmpty()) {
+        String searchText = searchField.getText().toLowerCase();
+        if (searchText.isEmpty()) {
             rowSorter.setRowFilter(null);
         } else {
             rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
         }
     }
 
-    private void updateStockTable(List<Stock> stocks) {
-        SwingUtilities.invokeLater(() -> {
-            if (stocks == null || stocks.isEmpty()) {
-                System.err.println("No stocks available to update.");
-                return;
-            }
+    private void updateTableData(List<Stock> stocks) {
+        DefaultTableModel model = (DefaultTableModel) stockTable.getModel();
+        model.setRowCount(0);
 
-            // 1. Create new table model with data
-            DefaultTableModel newModel = getTableModel(stocks);
+        for (Stock stock : stocks) {
+            model.addRow(new Object[] {
+                stock.getTicker(),
+                stock.getCompany(),
+                stock.getIndustry(),
+                String.format("$%.2f", stock.getMarketPrice())
+            });
+        }
 
-            // 3. Update table model
-            stockTable.setModel(newModel);
-
-            // 4. Create and set new row sorter
-            rowSorter = new TableRowSorter<>(newModel);
-            stockTable.setRowSorter(rowSorter);
-
-            // 5. Reapply current search filter if exists
-            String searchText = searchField.getText().trim();
-            if (!searchText.equals(SEARCH_PLACEHOLDER) && !searchText.isEmpty()) {
-                rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
-            }
-
-            // 6. Reapply column widths
-            adjustColumnWidths();
-
-            // 7. Repaint the table to ensure visual update
-            stockTable.revalidate();
-            stockTable.repaint();
-        });
+        // Reset sorting to default sort by Ticker
+        rowSorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
     }
 
     @Override
     public void receiveViewEvent(ViewEvent event) {
         if (event instanceof UpdateStockEvent stockEvent) {
-            System.out.println("MarketSearchPanel received UpdateStockEvent with stocks: " +
-                    (stockEvent.getStocks() != null ? stockEvent.getStocks().size() : "null"));
-            updateStockTable(stockEvent.getStocks());
+            updateTableData(stockEvent.getStocks());
         }
     }
 }

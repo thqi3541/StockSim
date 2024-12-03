@@ -3,60 +3,54 @@ package entity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * A class representing the transaction history of a user
- */
+/** A class representing the transaction history of a user. */
 public class TransactionHistory {
 
     private final List<Transaction> transactions;
 
-    /**
-     * Constructor for TransactionHistory class
-     */
+    /** Default constructor for TransactionHistory class. Initializes an empty transaction history. */
     public TransactionHistory() {
         this.transactions = new ArrayList<>();
     }
 
     /**
-     * Constructor for TransactionHistory class
+     * Constructor for TransactionHistory class. Takes in existing transactions when there are already some.
      *
-     * @param existingTransactions take in the existing transactions when there are already some
+     * @param transactions the list of existing transactions
+     * @throws IllegalArgumentException if the transactions list is null
      */
-    public TransactionHistory(List<Transaction> existingTransactions) {
-        this.transactions = new ArrayList<>(existingTransactions);
+    public TransactionHistory(List<Transaction> transactions) {
+        if (transactions == null) {
+            throw new IllegalArgumentException("Transaction list cannot be null.");
+        }
+        this.transactions = new ArrayList<>(transactions);
     }
 
     /**
-     * When a transaction is successfully made, add a new transaction to the transaction history.
+     * Adds a new transaction to the transaction history.
      *
      * @param transaction the transaction to add
+     * @throws NullPointerException if the transaction is null
      */
-    public void addTransaction(Transaction transaction) {
+    public synchronized void addTransaction(Transaction transaction) {
+        Objects.requireNonNull(transaction, "Transaction cannot be null.");
         this.transactions.add(transaction);
     }
 
     /**
-     * This is the getter of the TransactionHistory class.
+     * Retrieves all transactions in the transaction history. Returns an unmodifiable view of the transactions list to
+     * ensure immutability.
      *
-     * @return all transactions
+     * @return an unmodifiable list of all transactions
      */
-    public List<Transaction> getAllTransactions() {
+    public List<Transaction> getTransactions() {
         return Collections.unmodifiableList(transactions);
     }
 
-    /**
-     * Get the most recent transactions by count
-     *
-     * @param count the number of transactions to get
-     * @return the most recent transactions
-     */
-    public List<Transaction> getRecentTransactions(int count) {
-        if (count <= 0) {
-            return Collections.emptyList();
-        }
-
-        int start = Math.max(transactions.size() - count, 0);
-        return new ArrayList<>(transactions.subList(start, transactions.size()));
+    @Override
+    public String toString() {
+        return "TransactionHistory{" + "transactions=" + transactions + '}';
     }
 }

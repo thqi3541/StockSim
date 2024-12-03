@@ -8,7 +8,7 @@ import java.util.UUID;
 public class SessionManager {
 
     // singleton instance
-    private volatile static SessionManager instance;
+    private static volatile SessionManager instance;
 
     // map to store session credentials and associated usernames
     private final Map<String, String> sessions;

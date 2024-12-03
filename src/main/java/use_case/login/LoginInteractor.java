@@ -1,8 +1,8 @@
 package use_case.login;
 
-import entity.StockMarket;
 import entity.User;
 import utility.ClientSessionManager;
+import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
@@ -14,6 +14,7 @@ public class LoginInteractor implements LoginInputBoundary {
     public LoginInteractor(LoginDataAccessInterface dataAccess, LoginOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
+        ServiceManager.Instance().registerService(LoginInputBoundary.class, this);
     }
 
     @Override
@@ -23,10 +24,7 @@ public class LoginInteractor implements LoginInputBoundary {
             String credential = SessionManager.Instance().createSession(data.username());
             // TODO: when we go to multi-client app, passing credential to client through output data
             ClientSessionManager.Instance().setCredential(credential);
-            outputPresenter.prepareSuccessView(new LoginOutputData(
-                    currentUser,
-                    StockMarket.Instance().getStocks()
-            ));
+            outputPresenter.prepareSuccessView(new LoginOutputData(currentUser));
         } catch (ValidationException e) {
             outputPresenter.prepareValidationExceptionView();
         }

@@ -1,28 +1,28 @@
 package use_case.execute_buy;
 
 import entity.*;
+import java.rmi.ServerException;
+import java.util.Date;
+import utility.MarketTracker;
+import utility.ServiceManager;
 import utility.exceptions.ValidationException;
 
-import java.util.Date;
-
-/**
- * The Execute Buy Interactor.
- */
+/** The interactor for the Buy Stock use case */
 public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
     private final ExecuteBuyDataAccessInterface dataAccess;
     private final ExecuteBuyOutputBoundary outputPresenter;
 
     /**
-     * This is the constructor of the ExecuteBuyInteractor class.
-     * It instantiates a new Execute Buy Interactor.
+     * This is the constructor of the ExecuteBuyInteractor class. It instantiates a new Execute Buy Interactor.
      *
-     * @param dataAccess     the data access
+     * @param dataAccess the data access
      * @param outputBoundary the output boundary
      */
     public ExecuteBuyInteractor(ExecuteBuyDataAccessInterface dataAccess, ExecuteBuyOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputPresenter = outputBoundary;
+        ServiceManager.Instance().registerService(ExecuteBuyInputBoundary.class, this);
     }
 
     /**
@@ -32,20 +32,23 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
      */
     @Override
     public void execute(ExecuteBuyInputData data) {
-        // TODO: after the transaction is successful, the updated date should be saved in the database
         try {
             // Get current user
             User currentUser = dataAccess.getUserWithCredential(data.credential());
 
             // Get stock and quantity
             String ticker = data.ticker();
-
             int quantity = data.quantity();
-            Stock stock = StockMarket.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
+            Stock stock = MarketTracker.Instance().getStock(ticker).orElseThrow(StockNotFoundException::new);
 
             // Calculate some values for this transaction
-            double currentPrice = stock.getPrice();
+            double currentPrice = stock.getMarketPrice();
             double totalCost = currentPrice * quantity;
+
+            // check if the input quantity is invalid
+            if (quantity <= 0) {
+                throw new InvalidQuantityException();
+            }
 
             if (currentUser.getBalance() >= totalCost) {
                 // Deduct balance
@@ -53,49 +56,37 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
                 // Update portfolio
                 Portfolio portfolio = currentUser.getPortfolio();
-                updateOrAddStockToPortfolio(portfolio, stock, quantity, currentPrice);
+                portfolio.updatePortfolio(stock, quantity, currentPrice);
 
                 // Add transaction
-                Date timestamp = new Date();
-                Transaction transaction = new Transaction(timestamp, ticker, quantity, currentPrice, "buy");
-                currentUser.getTransactionHistory().addTransaction(transaction);
+                Transaction transaction = new Transaction(new Date(), ticker, quantity, currentPrice, "BUY");
+                currentUser.addTransaction(transaction);
+
+                // update user data
+                dataAccess.updateUserData(currentUser);
 
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
-                        currentUser.getBalance(),
-                        currentUser.getPortfolio()
-                ));
+                        currentUser.getBalance(), currentUser.getPortfolio(), currentUser.getTransactionHistory()));
             } else {
                 throw new InsufficientBalanceException();
             }
         } catch (ValidationException e) {
             outputPresenter.prepareValidationExceptionView();
+        } catch (ServerException e) {
+            outputPresenter.prepareServerErrorView();
         } catch (StockNotFoundException e) {
             outputPresenter.prepareStockNotFoundExceptionView();
         } catch (InsufficientBalanceException e) {
             outputPresenter.prepareInsufficientBalanceExceptionView();
-        }
+        } catch (InvalidQuantityException e) {
+            outputPresenter.prepareInvalidQuantityExceptionView();
+        } // TODO： may add a document parsing exception
     }
 
-    /**
-     * This method updates the stock in the portfolio or adds a stock to the user's portfolio.
-     *
-     * @param portfolio    the portfolio of the user
-     * @param stock        the stock the user buys
-     * @param quantity     the quantity the user buys
-     * @param currentPrice the current price of the stock
-     */
-    private void updateOrAddStockToPortfolio(Portfolio portfolio, Stock stock, int quantity, double currentPrice) {
-        portfolio.getUserStock(stock.getTicker())
-                .ifPresentOrElse(
-                        existingStock -> existingStock.updateUserStock(currentPrice, quantity),
-                        () -> portfolio.addStock(new UserStock(stock, currentPrice, quantity))
-                );
-    }
+    static class InsufficientBalanceException extends Exception {}
 
-    static class InsufficientBalanceException extends Exception {
-    }
+    static class StockNotFoundException extends Exception {}
 
-    static class StockNotFoundException extends Exception {
-    }
+    static class InvalidQuantityException extends Exception {}
 }
