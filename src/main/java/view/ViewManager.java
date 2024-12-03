@@ -1,12 +1,11 @@
 package view;
 
-import view.view_events.SwitchPanelEvent;
-import view.view_events.ViewEvent;
-
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import view.view_events.SwitchPanelEvent;
+import view.view_events.ViewEvent;
 
 public class ViewManager {
     private static ViewManager instance;
@@ -14,8 +13,7 @@ public class ViewManager {
     private CardLayout cardLayout;
     private JPanel cardPanel;
 
-    private ViewManager() {
-    }
+    private ViewManager() {}
 
     // Ensure thread-safety for singleton instance creation
     public static synchronized ViewManager Instance() {
@@ -38,7 +36,8 @@ public class ViewManager {
         }
 
         if (!eventHandled) {
-            System.out.println("Warning: Event " + event.getClass().getSimpleName() + " was broadcasted but not handled by any component.");
+            System.out.println("Warning: Event " + event.getClass().getSimpleName()
+                    + " was broadcasted but not handled by any component.");
         }
     }
 

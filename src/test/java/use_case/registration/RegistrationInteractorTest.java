@@ -1,16 +1,14 @@
 package use_case.registration;
 
+import static org.mockito.Mockito.*;
+
 import entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import utility.exceptions.DocumentParsingException;
 
-import static org.mockito.Mockito.*;
-
-/**
- * Unit test for RegistrationInteractor.
- */
+/** Unit test for RegistrationInteractor. */
 class RegistrationInteractorTest {
 
     private RegistrationOutputBoundary outputPresenter;
@@ -39,7 +37,8 @@ class RegistrationInteractorTest {
         interactor.execute(inputData);
 
         // Verify that success view is prepared
-        verify(outputPresenter).prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
+        verify(outputPresenter)
+                .prepareSuccessView(new RegistrationOutputData("Registration successful! Please log in."));
     }
 
     @Test
@@ -87,7 +86,9 @@ class RegistrationInteractorTest {
         interactor.execute(inputData);
 
         // Verify that weak password view is prepared
-        verify(outputPresenter).prepareWeakPasswordView("Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
+        verify(outputPresenter)
+                .prepareWeakPasswordView(
+                        "Password must be at least 8 characters long and include a mix of uppercase, lowercase, numbers, and special characters.");
     }
 
     @Test
@@ -104,7 +105,8 @@ class RegistrationInteractorTest {
 
     @Test
     void invalidUsernameLongTest() {
-        RegistrationInputData inputData = new RegistrationInputData("thisisaverylongusernameexceedinglimit", "Password123!", "Password123!");
+        RegistrationInputData inputData =
+                new RegistrationInputData("thisisaverylongusernameexceedinglimit", "Password123!", "Password123!");
 
         // Create interactor
         RegistrationInteractor interactor = new RegistrationInteractor(outputPresenter, dataAccess);
@@ -123,7 +125,9 @@ class RegistrationInteractorTest {
         interactor.execute(inputData);
 
         // Verify that invalid username view is prepared
-        verify(outputPresenter).prepareInvalidUsernameView("Username must start with a letter and contain only letters, digits, or underscores.");
+        verify(outputPresenter)
+                .prepareInvalidUsernameView(
+                        "Username must start with a letter and contain only letters, digits, or underscores.");
     }
 
     @Test
@@ -135,7 +139,8 @@ class RegistrationInteractorTest {
         interactor.execute(inputData);
 
         // Verify that invalid username view is prepared
-        verify(outputPresenter).prepareInvalidUsernameView("Username cannot contain restricted words such as 'admin' or 'root'.");
+        verify(outputPresenter)
+                .prepareInvalidUsernameView("Username cannot contain restricted words such as 'admin' or 'root'.");
     }
 
     @Test

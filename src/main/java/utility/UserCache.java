@@ -1,14 +1,11 @@
 package utility;
 
 import entity.User;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * A user cache with thread-safe LRU algorithm.
- */
+/** A user cache with thread-safe LRU algorithm. */
 public class UserCache {
 
     private final int MAX_CAPACITY;

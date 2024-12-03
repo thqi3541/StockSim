@@ -1,13 +1,9 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Objects;
 
-/**
- * A class representing a user.
- */
+/** A class representing a user. */
 public class User {
 
     private final String username;
@@ -33,10 +29,10 @@ public class User {
     /**
      * Full constructor for creating a user with all details.
      *
-     * @param username           the username of the user
-     * @param password           the user's password
-     * @param balance            the user's initial balance
-     * @param portfolio          the user's portfolio
+     * @param username the username of the user
+     * @param password the user's password
+     * @param balance the user's initial balance
+     * @param portfolio the user's portfolio
      * @param transactionHistory the user's transaction history
      */
     @JsonCreator
@@ -81,7 +77,7 @@ public class User {
         }
         this.balance -= amount;
     }
-    
+
     /**
      * Adds a transaction to the user's transaction history.
      *
@@ -90,7 +86,7 @@ public class User {
     public void addTransaction(Transaction transaction) {
         transactionHistory.addTransaction(transaction);
     }
-    
+
     public String getUsername() {
         return username;
     }
@@ -114,7 +110,7 @@ public class User {
     public double getTotalAssetsValue() {
         return balance + portfolio.getTotalValue();
     }
-    
+
     /**
      * Returns a string representation of the user.
      *
@@ -122,11 +118,10 @@ public class User {
      */
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", balance=" + balance +
-                ", portfolio=" + portfolio +
-                ", transactionHistory=" + transactionHistory +
-                '}';
+        return "User{" + "username='"
+                + username + '\'' + ", balance="
+                + balance + ", portfolio="
+                + portfolio + ", transactionHistory="
+                + transactionHistory + '}';
     }
 }

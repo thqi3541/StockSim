@@ -1,9 +1,8 @@
 package view.components;
 
-import view.FontManager;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import view.FontManager;
 
 public class InputComponent extends JPanel {
     private final JTextField textField;

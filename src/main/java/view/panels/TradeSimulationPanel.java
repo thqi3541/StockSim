@@ -1,14 +1,13 @@
 package view.panels;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
 import view.components.ButtonComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class TradeSimulationPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
@@ -57,8 +56,8 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
 
         // Back button on the right
         ButtonComponent backButton = new ButtonComponent("Back to Home");
-        backButton.addActionListener(e ->
-                ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
+        backButton.addActionListener(
+                e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("DashboardPanel")));
         headerPanel.add(backButton, BorderLayout.EAST);
 
         return headerPanel;
@@ -106,6 +105,5 @@ public class TradeSimulationPanel extends JPanel implements IComponent {
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

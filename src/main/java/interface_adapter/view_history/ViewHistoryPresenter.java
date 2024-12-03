@@ -25,25 +25,13 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
      */
     @Override
     public void prepareSuccessView(ViewHistoryOutputData outputData) {
-        ViewManager.Instance().broadcastEvent(
-                new UpdateTransactionHistoryEvent(
-                        outputData.transactionHistory()
-                )
-        );
-        ViewManager.Instance().broadcastEvent(
-                new SwitchPanelEvent(
-                        "TransactionHistoryPanel"
-                )
-        );
+        ViewManager.Instance().broadcastEvent(new UpdateTransactionHistoryEvent(outputData.transactionHistory()));
+        ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TransactionHistoryPanel"));
     }
 
-    /**
-     * Prepares the ValidationException view for the ViewHistory use case
-     */
+    /** Prepares the ValidationException view for the ViewHistory use case */
     @Override
     public void prepareValidationExceptionView() {
-        ViewManager.Instance().broadcastEvent(
-                new DialogEvent("Failed", "You are not authorized to do this.")
-        );
+        ViewManager.Instance().broadcastEvent(new DialogEvent("Failed", "You are not authorized to do this."));
     }
 }

@@ -1,6 +1,9 @@
 package data_access;
 
 import entity.User;
+import java.rmi.ServerException;
+import java.util.HashMap;
+import java.util.Map;
 import use_case.execute_buy.ExecuteBuyDataAccessInterface;
 import use_case.execute_sell.ExecuteSellDataAccessInterface;
 import use_case.login.LoginDataAccessInterface;
@@ -10,21 +13,16 @@ import utility.ServiceManager;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 
-import java.rmi.ServerException;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * A class that implements the data access interfaces for different use cases
- * This class is used to get the user with the given credential
+ * A class that implements the data access interfaces for different use cases This class is used to get the user with
+ * the given credential
  */
-public class InMemoryUserDataAccessObject implements
-        LoginDataAccessInterface,
-        ExecuteBuyDataAccessInterface,
-        ExecuteSellDataAccessInterface,
-        ViewHistoryDataAccessInterface,
-        RegistrationDataAccessInterface
-{
+public class InMemoryUserDataAccessObject
+        implements LoginDataAccessInterface,
+                ExecuteBuyDataAccessInterface,
+                ExecuteSellDataAccessInterface,
+                ViewHistoryDataAccessInterface,
+                RegistrationDataAccessInterface {
     private static final String DEFAULT_PASSWORD = "0";
 
     private final Map<String, User> users;
@@ -62,7 +60,8 @@ public class InMemoryUserDataAccessObject implements
 
     @Override
     public void updateUserData(User user) throws ServerException {
-        // in memory data access does not need to explicit update user as User objects are modified by interactor directly.
+        // in memory data access does not need to explicit update user as User objects are modified by interactor
+        // directly.
     }
 
     // TODO: should we throw a different exception if the user is not found?

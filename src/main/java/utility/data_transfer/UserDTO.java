@@ -5,6 +5,4 @@ public record UserDTO(
         String password,
         double balance,
         PortfolioDTO portfolio,
-        TransactionHistoryDTO transactionHistory
-) {
-}
+        TransactionHistoryDTO transactionHistory) {}

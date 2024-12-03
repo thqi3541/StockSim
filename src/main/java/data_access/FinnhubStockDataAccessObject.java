@@ -2,19 +2,16 @@ package data_access;
 
 import entity.Stock;
 import io.github.cdimascio.dotenv.Dotenv;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
 import utility.exceptions.RateLimitExceededException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-
-/**
- * A DataAccessObject that retrieves real time stock data
- */
+/** A DataAccessObject that retrieves real time stock data */
 public class FinnhubStockDataAccessObject implements StockDataAccessInterface {
     private static final String BASE_URL = "https://finnhub.io/api/v1";
     private static final String TICKERS_FILE = "/config/tickers.txt";
@@ -50,15 +47,13 @@ public class FinnhubStockDataAccessObject implements StockDataAccessInterface {
         } catch (IOException e) {
             throw new RuntimeException("Error loading configuration file", e);
         }
-
     }
-
 
     /**
      * Get all stock information
      *
-     * @return a hashmap with the stock ticker as the key and the Stock entity as the value.
-     * It should contain all stocks in the database.
+     * @return a hashmap with the stock ticker as the key and the Stock entity as the value. It should contain all
+     *     stocks in the database.
      */
     @Override
     public Map<String, Stock> getStocks() throws RateLimitExceededException {
@@ -81,13 +76,15 @@ public class FinnhubStockDataAccessObject implements StockDataAccessInterface {
                 // Initiates API call request
                 try (Response profileResponse = client.newCall(profileRequest).execute()) {
                     if (profileResponse.isSuccessful()) {
-                        JSONObject jsonObject = new JSONObject(profileResponse.body().string());
+                        JSONObject jsonObject =
+                                new JSONObject(profileResponse.body().string());
                         // Gets the ticker company "name" or returns default company name if unavailable
                         company = jsonObject.optString("name", company);
-                        // Gets the company's industry "finnhubIndustry" based on finnhub's classification or returns default industry if unavailable
+                        // Gets the company's industry "finnhubIndustry" based on finnhub's classification or returns
+                        // default industry if unavailable
                         industry = jsonObject.optString("finnhubIndustry", industry);
                     } else if (profileResponse.code() == LIMIT_EXCEED_ERROR_CODE) {
-                            throw new RateLimitExceededException();
+                        throw new RateLimitExceededException();
                     } else {
                         // Error message for errors other than exceed rate limit
                         System.out.println("Failed to fetch profile data for ticker: " + ticker);

@@ -9,9 +9,7 @@ public class Portfolio {
 
     private Map<String, UserStock> userStocks;
 
-    /**
-     * Default constructor for creating an empty portfolio.
-     */
+    /** Default constructor for creating an empty portfolio. */
     public Portfolio() {
         this.userStocks = new HashMap<>();
     }
@@ -107,14 +105,13 @@ public class Portfolio {
         return userStocks.isEmpty();
     }
 
-
-    /** When a transaction is made
-     * this method updates the portfolio with the new stock and quantity
-     * If the stock is already in the portfolio, it updates the quantity and cost
-     * If the stock is not in the portfolio, it adds the stock to the portfolio
+    /**
+     * When a transaction is made this method updates the portfolio with the new stock and quantity If the stock is
+     * already in the portfolio, it updates the quantity and cost If the stock is not in the portfolio, it adds the
+     * stock to the portfolio
      *
-     * @param stock        the stock the user buys
-     * @param quantity     the quantity the user buys
+     * @param stock the stock the user buys
+     * @param quantity the quantity the user buys
      * @param currentPrice the current executionPrice of the stock
      */
     public void updatePortfolio(Stock stock, int quantity, double currentPrice) {

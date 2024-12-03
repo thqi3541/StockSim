@@ -1,7 +1,6 @@
 package view.view_events;
 
 import entity.Stock;
-
 import java.util.List;
 
 public class UpdateStockEvent extends ViewEvent {

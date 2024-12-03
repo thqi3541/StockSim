@@ -1,23 +1,19 @@
 package use_case.view_history;
 
-import entity.Transaction;
-import entity.TransactionHistory;
-import entity.User;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import utility.SessionManager;
-import utility.exceptions.ValidationException;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import entity.Transaction;
+import entity.TransactionHistory;
+import entity.User;
+import java.util.Date;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import utility.exceptions.ValidationException;
 
 class ViewHistoryInteractorTest {
 
@@ -49,24 +45,32 @@ class ViewHistoryInteractorTest {
         verify(outputPresenter).prepareSuccessView(new ViewHistoryOutputData(mockUserTransactionHistory));
 
         // Check the initial empty state of TransactionHistory
-        assertTrue(mockUserTransactionHistory.getTransactions().isEmpty(), "The transaction History of a new user should be empty");
+        assertTrue(
+                mockUserTransactionHistory.getTransactions().isEmpty(),
+                "The transaction History of a new user should be empty");
 
         // Create a mock buy transaction
-        Date mockBuyTimestamp = new Date(2024 - 1900, 11, 22,13, 5, 55);
+        Date mockBuyTimestamp = new Date(2024 - 1900, 11, 22, 13, 5, 55);
         Transaction mockBuyTransaction = new Transaction(mockBuyTimestamp, "XXXX", 10, 100.0, "BUY");
         mockUserTransactionHistory.addTransaction(mockBuyTransaction);
 
         // Check if the TransactionHistory contains the mock buy transaction
-        assertEquals(List.of(mockBuyTransaction), mockUserTransactionHistory.getTransactions(), "Transaction History should contain the mockBuyTransaction");
+        assertEquals(
+                List.of(mockBuyTransaction),
+                mockUserTransactionHistory.getTransactions(),
+                "Transaction History should contain the mockBuyTransaction");
 
         // Create a mock sell transaction
-        Date mockSellTimestamp = new Date(2024 - 1900, 11, 23,3, 5, 25);
+        Date mockSellTimestamp = new Date(2024 - 1900, 11, 23, 3, 5, 25);
         Transaction mockSellTransaction = new Transaction(mockSellTimestamp, "XXXX", 5, 100.0, "SELL");
         mockUserTransactionHistory.addTransaction(mockSellTransaction);
 
         // Check if the TransactionHistory contains both the mock buy and mock sell transaction
         List<Transaction> expectedTransactions = List.of(mockBuyTransaction, mockSellTransaction);
-        assertEquals(expectedTransactions, mockUserTransactionHistory.getTransactions(), "Transaction History should contain both the mockBuyTransaction and the mockSellTransaction");
+        assertEquals(
+                expectedTransactions,
+                mockUserTransactionHistory.getTransactions(),
+                "Transaction History should contain both the mockBuyTransaction and the mockSellTransaction");
     }
 
     @Test
@@ -84,5 +88,4 @@ class ViewHistoryInteractorTest {
         // Check if the view correctly handles the validation error
         verify(outputPresenter).prepareValidationExceptionView();
     }
-
 }

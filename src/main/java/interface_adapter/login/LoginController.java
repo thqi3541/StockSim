@@ -14,10 +14,7 @@ public class LoginController {
     }
 
     public void execute(String username, String password) {
-        final LoginInputData data = new LoginInputData(
-                username,
-                password
-        );
+        final LoginInputData data = new LoginInputData(username, password);
         interactor.execute(data);
     }
 }

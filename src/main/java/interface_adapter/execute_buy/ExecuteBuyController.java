@@ -19,9 +19,7 @@ public class ExecuteBuyController {
     public void execute(String ticker, String quantity) {
         try {
             final ExecuteBuyInputData data = new ExecuteBuyInputData(
-                ClientSessionManager.Instance().getCredential(),
-                ticker,
-                Integer.parseInt(quantity));
+                    ClientSessionManager.Instance().getCredential(), ticker, Integer.parseInt(quantity));
 
             interactor.execute(data);
         } catch (NumberFormatException e) {

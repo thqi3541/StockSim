@@ -7,9 +7,7 @@ import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import io.github.cdimascio.dotenv.Dotenv;
-
 import java.util.concurrent.TimeUnit;
-
 
 public class MongoDBClientManager {
 
@@ -25,13 +23,11 @@ public class MongoDBClientManager {
     private static MongoClient createInstance() {
         Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
         String connectionString = dotenv.get("MONGODB_API_KEY");
-        ServerApi serverApi = ServerApi.builder()
-                .version(ServerApiVersion.V1)
-                .build();
+        ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
-                .applyToClusterSettings(builder ->
-                        builder.serverSelectionTimeout(DATABASE_CONNECTION_TIMEOUT, TimeUnit.SECONDS))
+                .applyToClusterSettings(
+                        builder -> builder.serverSelectionTimeout(DATABASE_CONNECTION_TIMEOUT, TimeUnit.SECONDS))
                 .serverApi(serverApi)
                 .build();
         return MongoClients.create(settings);

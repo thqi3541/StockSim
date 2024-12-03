@@ -1,8 +1,13 @@
 package use_case.execute_buy;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import entity.Stock;
 import entity.User;
 import entity.UserStock;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -11,12 +16,6 @@ import utility.MarketTracker;
 import utility.SessionManager;
 import utility.exceptions.ValidationException;
 import view.ViewManager;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class ExecuteBuyInteractorTest {
 
@@ -78,11 +77,12 @@ class ExecuteBuyInteractorTest {
             verify(outputPresenter).prepareInvalidQuantityExceptionView();
 
             // Verify no changes were made
-            assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
+            assertFalse(
+                    mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to negative quantity");
             assertEquals(10000.0, mockUser.getBalance(), "Balance should remain unchanged");
-            assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
-                    "No transaction should be recorded");
+            assertTrue(
+                    mockUser.getTransactionHistory().getTransactions().isEmpty(), "No transaction should be recorded");
         }
     }
 
@@ -104,11 +104,12 @@ class ExecuteBuyInteractorTest {
             verify(outputPresenter).prepareInsufficientBalanceExceptionView();
 
             // Verify no changes were made
-            assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
+            assertFalse(
+                    mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to insufficient funds");
             assertEquals(500.0, mockUser.getBalance(), "Balance should remain unchanged");
-            assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
-                    "No transaction should be recorded");
+            assertTrue(
+                    mockUser.getTransactionHistory().getTransactions().isEmpty(), "No transaction should be recorded");
         }
     }
 
@@ -129,34 +130,35 @@ class ExecuteBuyInteractorTest {
             verify(outputPresenter).prepareStockNotFoundExceptionView();
 
             // Verify no changes were made
-            assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
+            assertFalse(
+                    mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
                     "Stock should not be in portfolio due to stock not found");
             assertEquals(10000.0, mockUser.getBalance(), "Balance should remain unchanged");
-            assertTrue(mockUser.getTransactionHistory().getTransactions().isEmpty(),
-                    "No transaction should be recorded");
+            assertTrue(
+                    mockUser.getTransactionHistory().getTransactions().isEmpty(), "No transaction should be recorded");
         }
     }
 
-//    // TODO: Fail the test
-//    @Test
-//    void validationExceptionTest() throws ValidationException {
-//        User mockUser = createMockUserWithBalance(10000.0);
-//
-//        ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", -10);
-//        ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
-//
-//        interactor.execute(inputData);
-//
-//        // Verify error view was prepared
-//        verify(outputPresenter).prepareValidationExceptionView();
-//
-//        // Verify no changes were made
-//        assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
-//                "Stock should not be in portfolio due to validation exception");
-//        assertEquals(10000.0, mockUser.getBalance(), "Balance should remain unchanged");
-//        assertTrue(mockUser.getTransactionHistory().getAllTransactions().isEmpty(),
-//                "No transaction should be recorded");
-//    }
+    //    // TODO: Fail the test
+    //    @Test
+    //    void validationExceptionTest() throws ValidationException {
+    //        User mockUser = createMockUserWithBalance(10000.0);
+    //
+    //        ExecuteBuyInputData inputData = new ExecuteBuyInputData("dummy", "AAPL", -10);
+    //        ExecuteBuyInteractor interactor = new ExecuteBuyInteractor(dataAccess, outputPresenter);
+    //
+    //        interactor.execute(inputData);
+    //
+    //        // Verify error view was prepared
+    //        verify(outputPresenter).prepareValidationExceptionView();
+    //
+    //        // Verify no changes were made
+    //        assertFalse(mockUser.getPortfolio().getUserStock("AAPL").isPresent(),
+    //                "Stock should not be in portfolio due to validation exception");
+    //        assertEquals(10000.0, mockUser.getBalance(), "Balance should remain unchanged");
+    //        assertTrue(mockUser.getTransactionHistory().getAllTransactions().isEmpty(),
+    //                "No transaction should be recorded");
+    //    }
 
     private User createMockUserWithBalance(double balance) throws ValidationException {
         User user = new User("testUser", "password");
@@ -164,5 +166,4 @@ class ExecuteBuyInteractorTest {
         when(dataAccess.getUserWithCredential("dummy")).thenReturn(user);
         return user;
     }
-
 }

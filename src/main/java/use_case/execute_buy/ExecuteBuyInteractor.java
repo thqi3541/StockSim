@@ -1,27 +1,22 @@
 package use_case.execute_buy;
 
 import entity.*;
-import utility.MarketTracker;
-import utility.ServiceManager;
-import utility.exceptions.DocumentParsingException;
-import utility.exceptions.ValidationException;
-
 import java.rmi.ServerException;
 import java.util.Date;
+import utility.MarketTracker;
+import utility.ServiceManager;
+import utility.exceptions.ValidationException;
 
-/**
- * The interactor for the Buy Stock use case
- */
+/** The interactor for the Buy Stock use case */
 public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
     private final ExecuteBuyDataAccessInterface dataAccess;
     private final ExecuteBuyOutputBoundary outputPresenter;
 
     /**
-     * This is the constructor of the ExecuteBuyInteractor class.
-     * It instantiates a new Execute Buy Interactor.
+     * This is the constructor of the ExecuteBuyInteractor class. It instantiates a new Execute Buy Interactor.
      *
-     * @param dataAccess     the data access
+     * @param dataAccess the data access
      * @param outputBoundary the output boundary
      */
     public ExecuteBuyInteractor(ExecuteBuyDataAccessInterface dataAccess, ExecuteBuyOutputBoundary outputBoundary) {
@@ -72,10 +67,7 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
 
                 // Prepare success view
                 outputPresenter.prepareSuccessView(new ExecuteBuyOutputData(
-                        currentUser.getBalance(),
-                        currentUser.getPortfolio(),
-                        currentUser.getTransactionHistory()
-                ));
+                        currentUser.getBalance(), currentUser.getPortfolio(), currentUser.getTransactionHistory()));
             } else {
                 throw new InsufficientBalanceException();
             }
@@ -92,13 +84,9 @@ public class ExecuteBuyInteractor implements ExecuteBuyInputBoundary {
         } // TODO： may add a document parsing exception
     }
 
+    static class InsufficientBalanceException extends Exception {}
 
-    static class InsufficientBalanceException extends Exception {
-    }
+    static class StockNotFoundException extends Exception {}
 
-    static class StockNotFoundException extends Exception {
-    }
-
-    static class InvalidQuantityException extends Exception {
-    }
+    static class InvalidQuantityException extends Exception {}
 }

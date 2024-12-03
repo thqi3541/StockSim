@@ -1,6 +1,8 @@
 package view.panels;
 
 import interface_adapter.registration.RegistrationController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -10,9 +12,6 @@ import view.components.InputComponent;
 import view.components.PasswordInputComponent;
 import view.view_events.SwitchPanelEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class SignUpPanel extends JPanel implements IComponent {
     private final InputComponent usernameField;
@@ -114,8 +113,10 @@ public class SignUpPanel extends JPanel implements IComponent {
             String password = new String(passwordChars);
             char[] repeatPasswordChars = repeatPasswordField.getPassword();
             String repeatPassword = new String(repeatPasswordChars);
-            ServiceManager.Instance().getService(RegistrationController.class).execute(username, password, repeatPassword);
-            
+            ServiceManager.Instance()
+                    .getService(RegistrationController.class)
+                    .execute(username, password, repeatPassword);
+
             // clear input fields
             usernameField.clear();
             passwordField.clear();
@@ -128,6 +129,5 @@ public class SignUpPanel extends JPanel implements IComponent {
     }
 
     @Override
-    public void receiveViewEvent(ViewEvent event) {
-    }
+    public void receiveViewEvent(ViewEvent event) {}
 }

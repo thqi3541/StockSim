@@ -1,13 +1,12 @@
 package view.components;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
 import view.view_events.DialogEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class DialogComponent implements IComponent {
 
@@ -39,13 +38,11 @@ public class DialogComponent implements IComponent {
     // Helper method to show dialog with title and message
     private void showDialog(String title, String message) {
         JOptionPane.showMessageDialog(
-                null,  // Parent component (null centers it on the screen)
+                null, // Parent component (null centers it on the screen)
                 message,
                 title,
-                JOptionPane.INFORMATION_MESSAGE
-        );
+                JOptionPane.INFORMATION_MESSAGE);
         // Reset the flag after the dialog is closed
         dialogShown = false;
     }
-
 }

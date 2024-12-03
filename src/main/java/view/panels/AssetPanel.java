@@ -1,13 +1,12 @@
 package view.panels;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 import view.IComponent;
 import view.ViewManager;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class AssetPanel extends JPanel implements IComponent {
     private static final String TITLE = "Assets Overview";
@@ -77,7 +76,7 @@ public class AssetPanel extends JPanel implements IComponent {
 
         // Style and add detail labels
         int labelIndex = 0;
-        for (JLabel label : new JLabel[]{balanceLabel, portfolioLabel}) {
+        for (JLabel label : new JLabel[] {balanceLabel, portfolioLabel}) {
             FontManager.Instance().useRegular(label, 14f);
             detailsGbc.gridy = labelIndex++;
             detailsGbc.insets = new Insets(0, 0, 5, 0);

@@ -1,13 +1,10 @@
 package view.components;
 
+import java.awt.*;
+import javax.swing.*;
 import view.FontManager;
 
-import javax.swing.*;
-import java.awt.*;
-
-/**
- * A component that wraps a JPasswordField with optional label
- */
+/** A component that wraps a JPasswordField with optional label */
 public class PasswordInputComponent extends JPanel {
     private final JPasswordField passwordField;
 
@@ -15,7 +12,7 @@ public class PasswordInputComponent extends JPanel {
      * Constructor with label on top
      *
      * @param labelText text for the label
-     * @param columns   number of columns for the password field
+     * @param columns number of columns for the password field
      */
     public PasswordInputComponent(String labelText, int columns) {
         setLayout(new BorderLayout(0, 5)); // Add a vertical gap between label and field
@@ -102,9 +99,7 @@ public class PasswordInputComponent extends JPanel {
         passwordField.setText(text);
     }
 
-    /**
-     * Clears the password field
-     */
+    /** Clears the password field */
     public void clear() {
         passwordField.setText("");
     }

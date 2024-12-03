@@ -2,6 +2,8 @@ package view.panels;
 
 import interface_adapter.logout.LogoutController;
 import interface_adapter.view_history.ViewHistoryController;
+import java.awt.*;
+import javax.swing.*;
 import utility.ServiceManager;
 import view.FontManager;
 import view.IComponent;
@@ -11,9 +13,6 @@ import view.view_events.SwitchPanelEvent;
 import view.view_events.UpdateAssetEvent;
 import view.view_events.UpdateUsernameEvent;
 import view.view_events.ViewEvent;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class DashboardPanel extends JPanel implements IComponent {
     private static final int PADDING = 20;
@@ -108,13 +107,19 @@ public class DashboardPanel extends JPanel implements IComponent {
     }
 
     private String formatAssetValue(double balance, double portfolio) {
-        return String.format("You have %s in balance and %s in portfolio.", String.format(CURRENCY_FORMAT, balance), String.format(CURRENCY_FORMAT, portfolio));
+        return String.format(
+                "You have %s in balance and %s in portfolio.",
+                String.format(CURRENCY_FORMAT, balance), String.format(CURRENCY_FORMAT, portfolio));
     }
 
     private void setupButtonActions() {
-        tradeButton.addActionListener(e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
-        historyButton.addActionListener(e -> ServiceManager.Instance().getService(ViewHistoryController.class).execute());
-        logoutButton.addActionListener(e -> ServiceManager.Instance().getService(LogoutController.class).execute());
+        tradeButton.addActionListener(
+                e -> ViewManager.Instance().broadcastEvent(new SwitchPanelEvent("TradeSimulationPanel")));
+        historyButton.addActionListener(e -> ServiceManager.Instance()
+                .getService(ViewHistoryController.class)
+                .execute());
+        logoutButton.addActionListener(e ->
+                ServiceManager.Instance().getService(LogoutController.class).execute());
     }
 
     @Override
