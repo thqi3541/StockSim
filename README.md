@@ -9,10 +9,6 @@ To learn about our latest update and new features we are working on, please chec
 ## 📈 StockSim
 StockSim is a desktop trading application designed to simulate real-world market conditions. It provides business students and traders with a risk-free setting to learn, practice, and polish their trading skills.
 
-## 🌟 Highlights
-1. real-time stock data: we use the Finnhub API, commonly used by data engineers in financial institutions, to fetch real-time US stock data every 2 minutes.
-2. 
-
 ## ✍ Authors
 | Name          | GitHub Username                                         |
 | ------------- | ------------------------------------------------------- |
